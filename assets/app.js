@@ -54,9 +54,12 @@ addEventListener('hashchange', () => go(location.hash.slice(1), { push: false })
 const lb = $('#lightbox'), lbImg = $('#lbImg'), lbCap = $('#lbCap');
 let lbSet = [], lbAt = 0, lbFrom = null;
 $$('.thumbs').forEach(box => {
-  const set = box.dataset.imgs.split(';').map(s => { const [f, c] = s.split('|'); return { f: f.trim(), c: (c || '').trim() }; });
+  const set = box.dataset.imgs.split(';').map(s => { const [f, c, ar] = s.split('|'); return { f: f.trim(), c: (c || '').trim(), ar: +ar || 0 }; });
+  const row = box.classList.contains('row');
+  // A row keeps each image's proportions; capped so two phone screenshots do not grow huge.
+  if (row) box.style.maxWidth = Math.round(set.reduce((t, s) => t + (s.ar || 1), 0) * 420) + 'px';
   box.innerHTML = set.map((s, k) => s.f
-    ? `<button class="thumb" type="button" data-k="${k}" aria-label="Open image: ${s.c}"><img src="assets/img/projects/thumbs/${s.f}.jpg" alt="${s.c}" loading="lazy" decoding="async"></button>`
+    ? `<button class="thumb" type="button" data-k="${k}"${row ? ` style="flex:${s.ar || 1} 1 0"` : ''} aria-label="Open image: ${s.c}"><img src="assets/img/projects/thumbs/${s.f}.jpg" alt="${s.c}" loading="lazy" decoding="async"></button>`
     : `<div class="thumb" aria-hidden="true"><span class="slot">Image to come</span></div>`).join('');
   box.addEventListener('click', e => {
     const b = e.target.closest('button.thumb'); if (!b) return;
@@ -157,6 +160,7 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
     prev.disabled = i === 0; next.disabled = i === n - 1;
     [...dots.children].forEach((d, j) => d.classList.toggle('on', j === i));
     slides.forEach((s, j) => s.setAttribute('aria-hidden', j !== i));
+    car.style.height = slides[i].offsetHeight + 'px';
     onChange && onChange(i, old, fromUser);
   }
   prev.addEventListener('click', () => show(i - 1));
@@ -193,6 +197,8 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
   car.addEventListener('pointerup', end);
   car.addEventListener('pointercancel', end);
   car.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+  new ResizeObserver(() => { car.style.height = slides[i].offsetHeight + 'px'; }).observe(trackEl);
+  slides.forEach(sl => new ResizeObserver(() => { if (sl === slides[i]) car.style.height = sl.offsetHeight + 'px'; }).observe(sl));
   show(0, false);
   return { show, get index() { return i; } };
 }
@@ -267,6 +273,10 @@ const poems = carousel({
     if (poemsReady) poemTypers[i].start();
   },
 });
+
+/* ================= architecture and design ================= */
+carousel({ car: $('#archCar'), trackEl: $('#archTrack'), prev: $('#archPrev'), next: $('#archNext'), count: $('#archCount'), dots: $('#archDots') });
+carousel({ car: $('#desCar'), trackEl: $('#desTrack'), prev: $('#desPrev'), next: $('#desNext'), count: $('#desCount'), dots: $('#desDots') });
 
 /* ================= apps ================= */
 carousel({
