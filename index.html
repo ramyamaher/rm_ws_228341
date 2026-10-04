@@ -152,6 +152,8 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .slide{flex:0 0 100%; min-width:0; padding:0 16px}
 
 /* ---------- writing ---------- */
+.appear{opacity:0; transform:translateY(12px); transition:opacity .9s var(--ease), transform .9s var(--ease)}
+.appear.in{opacity:1; transform:none}
 .award{display:flex; gap:18px; align-items:flex-start}
 .medal{flex:none; width:52px; height:52px; border-radius:17px; display:grid; place-items:center; color:#a16207; background:linear-gradient(135deg,#fde68a,#fbbf24); box-shadow:0 6px 18px -6px rgba(217,119,6,.55)}
 .medal svg{width:24px; height:24px}
@@ -356,12 +358,12 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
       <section class="panel" id="writing" role="tabpanel">
         <div class="wrap">
           <h1>Writing</h1>
-          <section class="glass card">
+          <section class="glass card appear" id="awardCard">
             <div class="award">
               <div class="medal"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div>
               <div>
                 <div class="k">Award</div>
-                <p id="awardText" data-text="First-prize laureate of the Limerick Contest at the First International Aphoristic Conference “Magnum in Parvo”."></p>
+                <p id="awardText">First-prize laureate of the Limerick Contest at the First International Aphoristic Conference “Magnum in Parvo”.</p>
               </div>
             </div>
           </section>
@@ -457,7 +459,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                   </div>
                   <div class="gallery">
                     <figure style="flex:.45"><img src="assets/img/bancanca-transactions.png" alt="Bancanca main screen with income, expenses and the transaction ledger" loading="lazy" width="822" height="1828"><figcaption>The ledger, with sample data</figcaption></figure>
-                    <figure style="flex:.45"><img src="assets/img/bancanca-mortgage.png" alt="Bancanca guide with historic mortgage rates in Switzerland" loading="lazy" width="822" height="1828"><figcaption>Historic mortgage rates by country</figcaption></figure>
+                    <figure style="flex:.45"><img src="assets/img/bancanca-investing.png" alt="Bancanca projection of an ETF portfolio over twenty years, principal and compound interest" loading="lazy" width="822" height="1828"><figcaption>An ETF projection over twenty years</figcaption></figure>
                   </div>
                 </div>
               </article>
