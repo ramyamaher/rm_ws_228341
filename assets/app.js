@@ -130,8 +130,8 @@ let entered = false;
   if (reduced) second();
   else {
     el.innerHTML = words('Hello.');
-    setTimeout(() => el.classList.add('out'), 1900);
-    setTimeout(second, 3100);
+    setTimeout(() => el.classList.add('out'), 1250);
+    setTimeout(second, 1950);
   }
   if (matchMedia('(hover: none)').matches) $('#greetHint').textContent = 'Tap anywhere to proceed';
 }
