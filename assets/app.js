@@ -39,6 +39,7 @@ function go(id, { push = true } = {}) {
   });
   panels[i].querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
   if (entered) setTimeout(() => flashNext(panels[i]), reduced ? 0 : 450);
+  if (changed) countView(id);
   fitHeight();
   if (push && location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
   if (changed) window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
@@ -158,12 +159,32 @@ $('#themeBtn').addEventListener('click', () => {
 });
 darkOS.addEventListener('change', e => { if (!['light', 'dark'].includes(savedTheme())) applyTheme(e.matches ? 'dark' : 'light'); });
 
-/* ================= contact popover ================= */
-const cBtn = $('#contactBtn'), pop = $('#contactPop');
-const setPop = open => { pop.classList.toggle('open', open); cBtn.setAttribute('aria-expanded', open); };
-cBtn.addEventListener('click', e => { e.stopPropagation(); setPop(!pop.classList.contains('open')); });
-document.addEventListener('click', e => { if (!pop.contains(e.target)) setPop(false); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') setPop(false); });
+/* ================= contact, privacy and cookies: one popover open at a time ================= */
+const pops = [[$('#contactBtn'), $('#contactPop')], [$('#cookieBtn'), $('#privacyPop')]];
+const setPop = (which, open) => pops.forEach(([b, p], k) => {
+  const on = open && k === which;
+  p.classList.toggle('open', on); b.setAttribute('aria-expanded', on);
+});
+pops.forEach(([b, p], k) => b.addEventListener('click', e => { e.stopPropagation(); setPop(k, !p.classList.contains('open')); }));
+document.addEventListener('click', e => { if (!pops.some(([, p]) => p.contains(e.target))) setPop(-1, false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') setPop(-1, false); });
+
+/* ================= visitor counts (GoatCounter: no cookies, no personal data) ================= */
+// Set GOATCOUNTER to the code chosen at goatcounter.com, e.g. 'ramymaher', to switch counting on.
+// Each tab is counted as its own page (/about, /archive ...), so the dashboard shows which
+// sections people open, how many visitors came and which countries they came from.
+const GOATCOUNTER = '';
+if (GOATCOUNTER && !/^(localhost|127\.)/.test(location.hostname)) {
+  window.goatcounter = { no_onload: true };
+  const gc = document.createElement('script');
+  gc.async = true; gc.src = 'https://gc.zgo.at/count.js';
+  gc.dataset.goatcounter = `https://${GOATCOUNTER}.goatcounter.com/count`;
+  gc.onload = () => countView(current);
+  document.head.appendChild(gc);
+}
+function countView(id) {
+  if (window.goatcounter && window.goatcounter.count && id) window.goatcounter.count({ path: '/' + id, title: id });
+}
 
 /* ================= carousel with swipe ================= */
 function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
