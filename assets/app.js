@@ -161,10 +161,23 @@ darkOS.addEventListener('change', e => { if (!['light', 'dark'].includes(savedTh
 
 /* ================= contact, privacy and cookies: one popover open at a time ================= */
 const pops = [[$('#contactBtn'), $('#contactPop')], [$('#cookieBtn'), $('#privacyPop')]];
+// Each menu drops from under its own button: right-aligned to the button where there is room,
+// kept 12px inside the screen otherwise, with the notch pointing at the button's centre.
+function placePop(b, p) {
+  const r = b.getBoundingClientRect(), w = p.offsetWidth, vw = document.documentElement.clientWidth;
+  let left = Math.min(r.right + 6, vw - 12) - w;
+  left = Math.max(12, Math.min(left, vw - 12 - w));
+  p.style.top = (r.bottom + 12) + 'px';
+  p.style.left = left + 'px';
+  p.style.right = 'auto';
+  p.style.setProperty('--ox', Math.round(r.left + r.width / 2 - left) + 'px');
+}
 const setPop = (which, open) => pops.forEach(([b, p], k) => {
   const on = open && k === which;
+  if (on) placePop(b, p);
   p.classList.toggle('open', on); b.setAttribute('aria-expanded', on);
 });
+addEventListener('resize', () => pops.forEach(([b, p]) => { if (p.classList.contains('open')) placePop(b, p); }));
 pops.forEach(([b, p], k) => b.addEventListener('click', e => { e.stopPropagation(); setPop(k, !p.classList.contains('open')); }));
 document.addEventListener('click', e => { if (!pops.some(([, p]) => p.contains(e.target))) setPop(-1, false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') setPop(-1, false); });
