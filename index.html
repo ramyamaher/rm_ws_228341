@@ -18,7 +18,8 @@
   --btn-bg:#fff; --btn-border:rgba(0,0,0,.1); --btn-hover:#f5f5f7;
   --land:#f2f2f2; --land-edge:#fff; --gold:#facc15; --gold-hi:#f5bd0b; --gold-2:#ca8a04; --red:#ef4444; --red-hi:#b91c1c;
   --ease:cubic-bezier(.65,0,.25,1);
-  --hdr:121px;   /* corrected from the real header height by app.js */
+  --hdr:121px;
+  --ftr:48px;   /* corrected from the real header height by app.js */
 }
 html[data-theme="dark"]{
   color-scheme:dark;
@@ -338,6 +339,41 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 .app .thumbs{margin-top:16px}
 .app .chips{margin-top:16px}
 
+/* ---------- project tabs: the title, then one container that fills the screen down to the
+   footer and scrolls inside itself ---------- */
+.panel.fit .wrap{height:calc(100dvh - var(--hdr) - var(--ftr)); display:flex; flex-direction:column; padding-top:clamp(16px,2.6vw,28px); padding-bottom:8px}
+.panel.fit h1{flex:none; margin-bottom:14px}
+.panel.fit .wrap > .glass.card{flex:1; min-height:0; display:flex; flex-direction:column; margin-bottom:0}
+.panel.fit .wrap > .glass.card > .card-head{flex:none; margin-bottom:12px}
+.panel.fit .wrap > .glass.card > .car{flex:1; min-height:0; height:auto !important; transition:none}
+.panel.fit .wrap > .glass.card > .car > .car-track{height:100%; align-items:stretch}
+.panel.fit .wrap > .glass.card > .car > .car-track > .slide{height:100%; overflow-y:auto; overscroll-behavior:contain; padding-bottom:12px}
+.panel.fit .wrap > .glass.card > .dots{flex:none; margin-top:12px}
+.panel.fit .card-scroll{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; margin:0 -6px; padding:0 6px}
+.panel.fit .card-scroll .lead{margin-top:0}
+.panel.fit .card-scroll .chips{margin-top:14px}
+
+/* the next-project button, ringed by a rainbow that goes round twice each time the tab opens
+   (the same ring as the Combine trips button in Shuin) */
+.arrow{position:relative}
+@keyframes rbSpin{to{transform:rotate(360deg)}}
+@keyframes rbFade{to{opacity:0}}
+.arrow.rainbow::after{
+  content:""; position:absolute; inset:-4px; border-radius:50%; pointer-events:none;
+  background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+  animation:rbSpin 1s linear 2, rbFade .5s 2s forwards; will-change:transform, opacity;
+}
+
+/* Writing: the limericks under the award, smaller than before */
+.limericks{margin-top:26px; padding-top:18px; border-top:1px solid var(--line)}
+.card-head.sub{margin-bottom:4px}
+.card-head.sub h3{margin:0; font-size:17px; font-weight:650; letter-spacing:-.01em}
+.arrow.sm{width:36px; height:36px}
+.limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
+.slide .thumbs.row{margin-top:18px; margin-bottom:6px}
+
 /* ---------- the greeting shown on arrival ---------- */
 .greet{
   position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px; cursor:pointer;
@@ -360,7 +396,7 @@ main{transition:opacity 1.1s var(--ease) .75s, transform 1.1s var(--ease) .75s}
 html.pre header{transform:translateY(-100%)}
 html.pre main{opacity:0; transform:translateY(28px)}
 
-footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3); font-size:12.5px}
+footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px); display:flex; align-items:center; justify-content:center; color:var(--ink-3); font-size:12.5px}
 
 /* ---------- phone: only the active pill keeps its words ---------- */
 @media (max-width:760px){
@@ -476,7 +512,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
         </div>
       </section>
 
-      <section class="panel" id="architecture" role="tabpanel">
+      <section class="panel fit" id="architecture" role="tabpanel">
         <div class="wrap">
           <h1>Architecture</h1>
           <section class="glass card">
@@ -534,7 +570,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
         </div>
       </section>
 
-      <section class="panel" id="design" role="tabpanel">
+      <section class="panel fit" id="design" role="tabpanel">
         <div class="wrap">
           <h1>Design</h1>
           <section class="glass card">
@@ -582,54 +618,72 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
         </div>
       </section>
 
-      <section class="panel" id="writing" role="tabpanel">
+      <section class="panel fit" id="writing" role="tabpanel">
         <div class="wrap">
           <h1>Writing</h1>
           <section class="glass card">
             <div class="card-head">
-              <div class="t"><div class="num" id="poemCount">1/5</div>
-                <div><h2>The five winning limericks</h2></div></div>
-              <div class="nav"><button class="arrow" id="poemPrev" aria-label="Previous limerick"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" id="poemNext" aria-label="Next limerick"><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
+              <div class="t"><div class="num" id="writCount">1/1</div></div>
+              <div class="nav"><button class="arrow" id="writPrev" aria-label="Previous project"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" id="writNext" aria-label="Next project"><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
             </div>
-            <div class="car" id="poemCar"><div class="car-track" id="poemTrack"></div></div>
-            <div class="dots" id="poemDots"></div>
-            <div class="hint">Swipe for the next one.</div>
-            <div class="award appear" id="awardCard">
-              <div class="medal"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div>
-              <div>
-                <div class="k">Award</div>
-                <p id="awardText">First-prize laureate of the Limerick Contest at the First International Aphoristic Conference “Magnum in Parvo”.</p>
-              </div>
-            </div>
+            <div class="car" id="writCar"><div class="car-track" id="writTrack">
+
+              <article class="slide project">
+                <div class="p-head">
+                  <h2>Limericks Contest</h2>
+                  <p class="p-meta">First International Aphoristic Conference “Magnum in Parvo” <i></i> Wrocław, Poland <i></i> October 2025</p>
+                </div>
+                <div class="prose">
+                  <p>Magnum in Parvo, “greatness in smallness”, was the First International Aphoristic Conference, held on 24 and 25 October 2025 at the Institute of German Philology of the University of Wrocław. Organised by the institute with the Wrocław chapter of the Societas Humboldtiana Polonorum and chaired by the writer Andrzej Majewski, it brought together scholars and aphorists from twelve countries.</p>
+                  <p>Alongside lectures on the aphorism, its translation and its history, the programme included exhibitions of historic editions, a chamber concert and a limerick contest judged by the linguist Jan Miodek.</p>
+                </div>
+                <div class="chips"><a class="chip" href="https://magnuminparvo.com/en.php" target="_blank" rel="noopener">The conference website</a></div>
+                <div class="thumbs row" data-imgs="mp-1|Reading the winning limericks|1.85;mp-2|Receiving the award|1.88;mp-3|The conference medal|0.826"></div>
+                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>First-prize laureate</b> of the Limerick Contest at the First International Aphoristic Conference “Magnum in Parvo” in October 2025.</p></div>
+
+                <div class="limericks">
+                  <div class="card-head sub">
+                    <div class="t"><div class="num" id="poemCount">1/5</div><div><h3>The five winning limericks</h3></div></div>
+                    <div class="nav"><button class="arrow sm" id="poemPrev" aria-label="Previous limerick"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow sm" id="poemNext" aria-label="Next limerick"><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
+                  </div>
+                  <div class="car" id="poemCar"><div class="car-track" id="poemTrack"></div></div>
+                  <div class="dots" id="poemDots"></div>
+                </div>
+              </article>
+
+            </div></div>
+            <div class="dots" id="writDots"></div>
           </section>
         </div>
       </section>
 
-      <section class="panel" id="archive" role="tabpanel">
+      <section class="panel fit" id="archive" role="tabpanel">
         <div class="wrap">
           <h1>Archive</h1>
-          <p class="lead">Places I have documented for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K.</p>
-          <div class="stats">
-            <div class="stat"><b id="sVideos">479</b><span>videos and shorts</span></div>
-            <div class="stat"><b id="sPlaces">0</b><span>places</span></div>
-            <div class="stat"><b id="sCountries">0</b><span>countries</span></div>
-          </div>
           <section class="glass card">
-            <div class="map" id="map">
-              <div class="loading">Loading the map…</div>
-              <div class="tip" id="mapTip"></div>
-              <div class="zoom">
-                <button class="arrow" id="zIn" aria-label="Zoom in"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
-                <button class="arrow" id="zOut" aria-label="Zoom out"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+            <div class="card-scroll">
+              <p class="lead">Places I have documented for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K.</p>
+              <div class="stats">
+                <div class="stat"><b id="sVideos">479</b><span>videos and shorts</span></div>
+                <div class="stat"><b id="sPlaces">0</b><span>places</span></div>
+                <div class="stat"><b id="sCountries">0</b><span>countries</span></div>
               </div>
+              <div class="map" id="map">
+                <div class="loading">Loading the map…</div>
+                <div class="tip" id="mapTip"></div>
+                <div class="zoom">
+                  <button class="arrow" id="zIn" aria-label="Zoom in"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+                  <button class="arrow" id="zOut" aria-label="Zoom out"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+                </div>
+              </div>
+              <p class="maphint">Hover over or tap a country to see the places documented there, and tap a red dot for the city. Drag to move; scroll, pinch or use the buttons to zoom.</p>
+              <div class="chips"><a class="chip" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Watch on YouTube</a></div>
             </div>
-            <p class="maphint">Hover over or tap a country to see the places documented there, and tap a red dot for the city. Drag to move; scroll, pinch or use the buttons to zoom.</p>
           </section>
-          <div class="chips"><a class="chip" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Watch on YouTube</a></div>
         </div>
       </section>
 
-      <section class="panel" id="apps" role="tabpanel">
+      <section class="panel fit" id="apps" role="tabpanel">
         <div class="wrap">
           <h1>Apps</h1>
           <section class="glass card">
