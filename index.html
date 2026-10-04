@@ -276,6 +276,9 @@ html.lb-lock body{overflow:hidden}
 @media (max-width:760px){
   .p-body{grid-template-columns:1fr}
   .thumbs{grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:110px; gap:8px}
+  .thumbs.wide{display:flex; grid-auto-columns:auto; overflow-x:auto; scroll-snap-type:x mandatory; gap:8px}
+  .thumbs.wide .thumb{flex:0 0 72%; height:180px; scroll-snap-align:start}
+  .thumbs.wide .thumb:nth-child(n+6){flex-basis:72%}
   .thumbs.phones{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding-bottom:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none}
   .thumbs.phones::-webkit-scrollbar{display:none}
   .thumbs.phones .thumb{flex:0 0 46%; scroll-snap-align:start}
@@ -296,6 +299,17 @@ html[data-theme="dark"] .prize-line b{color:var(--gold-hi)}
 .thumbs.phones{grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:auto; gap:16px}
 .thumbs.phones .thumb{grid-column:auto; grid-row:auto}
 .thumbs.phones .thumb img{height:auto}
+
+/* a gallery that keeps its layout and continues to the right: scroll sideways for more */
+.thumbs.wide{grid-template-columns:repeat(4,calc((100% - 36px) / 4)); grid-auto-columns:calc((100% - 36px) / 4); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x proximity; padding:6px 4px 10px; margin-left:-4px; margin-right:-4px; scrollbar-width:thin}
+.thumbs.wide .thumb:nth-child(6){grid-column:5 / span 2; grid-row:1 / span 2; scroll-snap-align:end}
+.thumbs.wide .thumb{scroll-snap-align:start}
+.thumbs.wide .thumb:hover{transform:scale(1.025)}
+/* a logo shown as it is: no frame, no zoom */
+.p-logo{display:block; width:100%; height:auto; border-radius:0; mix-blend-mode:multiply}
+html[data-theme="dark"] .p-logo{mix-blend-mode:normal; filter:invert(1) hue-rotate(180deg); opacity:.9}
+/* the award inside the Writing card, under the limericks */
+.card .award{margin-top:26px; padding-top:22px; border-top:1px solid var(--line)}
 
 /* award lines under a project's text */
 .prose p.prize{margin-top:18px; color:var(--ink); font-size:15.5px}
@@ -451,8 +465,8 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
             <div class="chips"><a class="chip" href="#apps" data-go="apps">See Revitesse</a></div>
 
             <h2>The archive</h2>
-            <p>I started it after a long time away from my home country. I realized that I had become a citizen of the world: a nomad in time as much as in space, who belonged to each place only at a particular moment. Nostalgia, for me, is conditional, because places change faster than anyone can grasp.</p>
-            <p>James Joyce is said to have asked his aunt to visit a house in Dublin and check whether an overweight man could plausibly climb over its railings. If the city were ever burned to the ground, he wanted it to be possible to rebuild it from <em>Ulysses</em>. That story is where my archive began.</p>
+            <p>I started it after a long time away from my home country. I realized that I had become a citizen of the world: a nomad in time as much as in space, who belonged to each place only at a particular moment. Nostalgia, for me, is conditional, because it refers to a snapshot of a place and a time rather than to a place or a time in general.</p>
+            <p>James Joyce is said to have asked his aunt to visit a house in Dublin and check whether an overweight man could plausibly climb over its railings. If the city were ever burned to the ground, he wanted it to be possible to rebuild it from <em>Ulysses</em>. The stark imagination of one of the best books ever written in English, together with its precision in describing a detail that may seem trivial, out of honesty towards the reader, is what inspired my archive.</p>
             <div class="chips"><a class="chip" href="#archive" data-go="archive">See the map</a></div>
           </div>
         </div>
@@ -533,13 +547,13 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale. The pavilion is a passage between two worlds. Visitors first find their way through a dark labyrinth whose walls are covered with photographs of Egypt's cities, quarries and crowds, and with texts on its ancient sites, while a short poem traces the way from frustration towards a distant light.</p>
-                    <p>The labyrinth opens into a bright hall under a luminous ceiling, where a large model of Greater Cairo and the Giza plateau lies on a single table. Virtual-reality headsets hang from above, and visitors move between the model and immersive views of the city.</p>
+                    <p>A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale. The pavilion is a passage through three phases of Egypt. The past, where visitors read about Egypt's architecture and its architects. The present: Egypt in 2016, in the middle of a turbulent time, as a labyrinth of dimly lit spaces and images of the suffering Egyptians had grown used to. And the future, Elysium: the bright room the passage finally leads to, where a large physical model of the city has an empty part on the map, and visitors use augmented reality to build Egypt's future.</p>
+                    <p>The design for that future unfolds in three phases. The first keeps the architecture of the existing city, with more green and public space. The second follows the city's main axes: buildings rise taller along them, and where they stay low, they make room for more green space. The third is a business district, to strengthen the city's chances of becoming a financial capital of North Africa and the Middle East.</p>
                   </div>
                   <div class="thumbs solo" data-imgs="vb-001|Layers of Egypt: Between Labyrinth and Elysium, the title of the entry"></div>
                 </div>
                 <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Second prize</b>, awarded by the Egyptian Ministry of Culture.</p></div>
-                <div class="thumbs" data-imgs="vb-002|The labyrinth;vb-005|The city model, explored in virtual reality;vb-003|Photographs on the labyrinth walls;vb-004|Texts on Egypt's ancient sites;vb-006|Plan and section"></div>
+                <div class="thumbs wide" data-imgs="vb-002|The present: the labyrinth;vb-005|Elysium: the city model, where visitors build the future in augmented reality;vb-003|Images on the labyrinth walls;vb-004|The past: texts on Egypt's architecture;vb-006|Plan and section;vb-007|The design for the city's future"></div>
               </article>
 
               <article class="slide project">
@@ -549,10 +563,10 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Extended Threads joins a philosophical reading of architecture with technology. It takes apart what architecture means, who builds, where and how, and puts it back together as a game.</p>
+                    <p>Extended Threads joins a philosophical reading of architecture with technology. It takes apart what architecture means, who builds, where and how, and puts it back together as a game. It is an inquiry into where architecture ends and design begins, stripping architecture down and dismantling it back to single syllables. Its result is a tool for building vernacularly, without professionally trained architects.</p>
                     <p>In a gesture-based video game played in virtual reality, players use their hands to control robots at a distance. The robots build by sintering, fusing loose material layer by layer into solid form, across a lunar landscape. The game runs on a computer and on a phone in a VR headset, and many players can build together from anywhere.</p>
                   </div>
-                  <div class="thumbs solo logo-board" data-imgs="et-logo|The Extended Threads logo, one of the building robots"></div>
+                  <img class="p-logo" src="assets/img/projects/thumbs/et-logo.jpg" alt="The Extended Threads logo, one of the building robots" width="900" height="627">
                 </div>
                 <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Honorable Mention</b> for the Robert Oxman Prize at the Dessau International Architecture Graduate School.</p></div>
                 <div class="thumbs" data-imgs="et-002|A sintered structure on the lunar surface;et-005|Robots at work;et-000|The game on a computer;et-003|Building in virtual reality on a phone;et-004|The stereo view for a VR headset"></div>
@@ -576,9 +590,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
             <div class="car" id="poemCar"><div class="car-track" id="poemTrack"></div></div>
             <div class="dots" id="poemDots"></div>
             <div class="hint">Swipe for the next one.</div>
-          </section>
-          <section class="glass card appear" id="awardCard">
-            <div class="award">
+            <div class="award appear" id="awardCard">
               <div class="medal"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div>
               <div>
                 <div class="k">Award</div>
