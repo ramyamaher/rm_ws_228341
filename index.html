@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ramy Maher</title>
-<meta name="description" content="Ramy Maher: architecture, design, writing, documentation and apps.">
+<meta name="description" content="Ramy Maher, architect: architecture, design, writing, documentation and apps.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%230f172a'/%3E%3Ctext x='32' y='42' font-family='Helvetica,Arial,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23fff'%3ERM%3C/text%3E%3C/svg%3E">
 <style>
 :root{
@@ -12,7 +12,7 @@
   --line:rgba(15,23,42,.08); --trough:#eef1f6; --soft:#f6f8fc;
   --gold:#facc15; --gold-2:#ca8a04; --red:#ef4444;
   --ease:cubic-bezier(.65,0,.25,1);
-  --hdr:68px;
+  --hdr:121px;   /* corrected from the real header height by app.js */
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -25,41 +25,41 @@ a{color:inherit}
 button{font-family:inherit}
 svg.i{width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
 
-/* ---------- header ---------- */
+/* ---------- header: name and contact, with the category bar on its own row below ---------- */
 header{
-  position:fixed; inset:0 0 auto; z-index:50; height:var(--hdr);
-  display:flex; align-items:center; justify-content:space-between; gap:16px;
-  padding:0 clamp(16px,3vw,32px); padding-top:env(safe-area-inset-top);
+  position:fixed; inset:0 0 auto; z-index:50;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  padding:calc(env(safe-area-inset-top) + 12px) clamp(16px,3vw,32px) 12px;
   background:rgba(255,255,255,.82); backdrop-filter:saturate(1.6) blur(18px); -webkit-backdrop-filter:saturate(1.6) blur(18px);
   border-bottom:1px solid var(--line);
 }
+.hrow{width:100%; max-width:1160px; display:flex; align-items:center; justify-content:space-between; gap:16px}
 .brand{font-weight:700; font-size:18px; letter-spacing:-.02em; text-decoration:none; white-space:nowrap}
 .contact{
-  appearance:none; border:0; cursor:pointer; font:600 14px/1 inherit; color:var(--ink);
-  padding:11px 18px; border-radius:999px; background:#f1f5f9; box-shadow:inset 0 0 0 1px var(--line);
-  transition:transform .2s, background .2s; white-space:nowrap;
+  appearance:none; border:0; background:none; cursor:pointer; font:600 14.5px/1 inherit; color:var(--ink);
+  padding:10px 2px; white-space:nowrap; text-decoration:underline; text-decoration-color:transparent;
+  text-underline-offset:5px; text-decoration-thickness:1.5px; transition:text-decoration-color .2s, color .2s;
 }
-.contact:hover{transform:translateY(-1px); background:#e8edf5}
-.contact[aria-expanded="true"]{background:var(--ink); color:#fff}
+.contact:hover, .contact[aria-expanded="true"]{text-decoration-color:currentColor}
 
-/* the category pills: a recessed track, the active one raised in white */
+/* the category pills: a recessed track, the active one raised in white. Text only on a computer. */
 .tabs{
-  position:absolute; left:50%; top:calc(50% + env(safe-area-inset-top)/2); transform:translate(-50%,-50%);
   display:flex; gap:2px; padding:4px; border-radius:999px; background:var(--trough);
-  box-shadow:inset 0 1px 3px rgba(15,23,42,.12);
+  box-shadow:inset 0 1px 3px rgba(15,23,42,.12); max-width:100%;
 }
 .tab{
-  appearance:none; border:0; cursor:pointer; display:flex; align-items:center; gap:8px;
-  height:38px; padding:0 16px; border-radius:999px; background:transparent; color:var(--ink-2);
+  appearance:none; border:0; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  height:38px; padding:0 18px; border-radius:999px; background:transparent; color:var(--ink-2);
   font:600 13.5px/1 inherit; white-space:nowrap; transition:background .3s, color .3s, box-shadow .3s, padding .35s var(--ease);
 }
+.tab svg{display:none}
 .tab:hover{color:var(--ink)}
 .tab.on{color:var(--ink); background:#fff; box-shadow:0 2px 8px rgba(15,23,42,.15)}
 .tab .lbl{display:inline-block; overflow:hidden; max-width:140px; transition:max-width .4s var(--ease), opacity .3s}
 
 /* contact popover */
 .pop{
-  position:fixed; z-index:60; top:calc(var(--hdr) + env(safe-area-inset-top) + 8px); right:clamp(16px,3vw,32px);
+  position:fixed; z-index:60; top:calc(env(safe-area-inset-top) + 58px); right:clamp(16px,3vw,32px);
   width:min(320px, calc(100vw - 32px)); padding:10px; border-radius:24px; background:#fff;
   border:1px solid var(--line); box-shadow:0 18px 44px -12px rgba(15,23,42,.28);
   opacity:0; transform:translateY(-6px) scale(.98); transform-origin:top right; pointer-events:none; transition:opacity .2s, transform .2s;
@@ -71,7 +71,7 @@ header{
 .pop .ico{width:36px; height:36px; border-radius:12px; display:grid; place-items:center; background:#f1f5f9; flex:none}
 
 /* ---------- panels that slide sideways ---------- */
-main{padding-top:calc(var(--hdr) + env(safe-area-inset-top))}
+main{padding-top:var(--hdr)}
 .viewport{overflow:hidden; transition:height .55s var(--ease)}
 .track{display:flex; align-items:flex-start; transition:transform .6s var(--ease); will-change:transform}
 .panel{flex:0 0 100%; min-width:0}
@@ -88,9 +88,14 @@ h1{margin:6px 0 26px; font-size:clamp(34px,6vw,64px); line-height:1.05; letter-s
 .card{padding:clamp(20px,3vw,34px); margin-bottom:26px}
 .card-head{display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-bottom:18px}
 .card-head .t{display:flex; gap:16px; align-items:center}
-.num{flex:none; min-width:44px; height:44px; padding:0 10px; border-radius:15px; display:grid; place-items:center; font-weight:700; font-size:16px; background:#f1f5f9; box-shadow:inset 0 0 0 1px var(--line)}
+.num{flex:none; font-weight:700; font-size:17px; color:var(--ink-2); letter-spacing:.02em}
 h2{margin:0; font-size:clamp(20px,2.4vw,26px); letter-spacing:-.02em; font-weight:650}
 .sub{margin:4px 0 0; color:var(--ink-2); font-size:15px; line-height:1.5}
+.prose p{margin:0 0 14px; max-width:760px; color:var(--ink-2); font-size:16px; line-height:1.7}
+.prose h2{margin-bottom:12px}
+.prose blockquote{margin:6px 0 20px; padding:2px 0 2px 18px; max-width:740px; border-left:3px solid var(--gold); color:var(--ink); font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:clamp(17px,2vw,20px); line-height:1.55}
+.prose .chips{margin-top:6px}
+.stat.word b{font-size:clamp(22px,3.6vw,40px); line-height:1.2}
 .empty{padding:56px 24px; text-align:center; color:var(--ink-3); font-size:15px; background:var(--soft); border-radius:24px}
 
 .chip{
@@ -183,12 +188,11 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
 
 /* ---------- phone: pills drop to their own row, only the active one keeps its words ---------- */
 @media (max-width:760px){
-  :root{--hdr:116px}
-  header{flex-wrap:wrap; align-content:center; row-gap:10px; padding-top:calc(env(safe-area-inset-top) + 6px); padding-bottom:6px}
+  header{gap:8px; padding-top:calc(env(safe-area-inset-top) + 8px); padding-bottom:10px}
   .brand{font-size:17px}
-  .contact{padding:10px 15px; font-size:13.5px}
-  .tabs{position:static; transform:none; order:3; margin:0 auto}
-  .tab{width:42px; height:42px; padding:0; justify-content:center; gap:0}
+  .contact{font-size:14px}
+  .tab{width:42px; height:42px; padding:0; gap:0}
+  .tab svg{display:block}
   .tab .lbl{max-width:0; opacity:0}
   .tab.on{width:auto; padding:0 16px; gap:8px}
   .tab.on .lbl{max-width:140px; opacity:1}
@@ -212,15 +216,18 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
 <body>
 
 <header>
-  <a class="brand" href="#documentation" data-go="documentation">Ramy Maher</a>
+  <div class="hrow">
+    <a class="brand" href="#about" data-go="about">Ramy Maher</a>
+    <button class="contact" id="contactBtn" aria-expanded="false" aria-controls="contactPop">Contact</button>
+  </div>
   <nav class="tabs" role="tablist" aria-label="Categories">
+    <button class="tab" role="tab" data-tab="about" aria-label="About"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="lbl">About</span></button>
     <button class="tab" role="tab" data-tab="architecture" aria-label="Architecture"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9.5 21v-6h5v6M9 10.5h.01M15 10.5h.01"/></svg><span class="lbl">Architecture</span></button>
     <button class="tab" role="tab" data-tab="design" aria-label="Design"><svg class="i" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg><span class="lbl">Design</span></button>
     <button class="tab" role="tab" data-tab="writing" aria-label="Writing"><svg class="i" viewBox="0 0 24 24"><path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg><span class="lbl">Writing</span></button>
     <button class="tab" role="tab" data-tab="documentation" aria-label="Documentation"><svg class="i" viewBox="0 0 24 24"><path d="M22 7.5l-6 4.5 6 4.5z"/><rect x="2" y="5" width="14" height="14" rx="3"/></svg><span class="lbl">Documentation</span></button>
     <button class="tab" role="tab" data-tab="apps" aria-label="Apps"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg><span class="lbl">Apps</span></button>
   </nav>
-  <button class="contact" id="contactBtn" aria-expanded="false" aria-controls="contactPop">Contact</button>
 </header>
 
 <div class="pop" id="contactPop" role="dialog" aria-label="Contact">
@@ -232,6 +239,33 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
 <main>
   <div class="viewport" id="viewport">
     <div class="track" id="track">
+
+      <section class="panel" id="about" role="tabpanel">
+        <div class="wrap">
+          <h1>About</h1>
+          <p class="lead">Ramy Maher is an architect with projects in several countries. He studied architectural engineering and is a LEED Accredited Professional. His interest in technology, programming, finance and other cultures led him to create several apps and to start a documentation project.</p>
+          <div class="stats">
+            <div class="stat"><b>3</b><span>countries lived in</span></div>
+            <div class="stat"><b>5</b><span>languages spoken</span></div>
+            <div class="stat word"><b>LEED AP</b><span>Accredited Professional</span></div>
+          </div>
+
+          <section class="glass card prose">
+            <h2>Revitesse</h2>
+            <p>Architecture and engineering software is built to serve 90 to 95 percent of the market. The remaining 5 to 10 percent is where the work becomes highly specific, and it is there that most of the time is lost.</p>
+            <p>Working in different offices, Ramy met the same problems again and again. Revitesse grew out of the wish to solve them for good, and to help other professionals spend less time on repetitive tasks in Revit.</p>
+            <div class="chips"><a class="chip" href="#apps" data-go="apps">See Revitesse</a></div>
+          </section>
+
+          <section class="glass card prose">
+            <h2>The documentation project</h2>
+            <p>The project began after a long time away from his home country. Ramy came to see himself as a citizen of the world: a nomad in time as much as in space, who belonged to each place only at a particular moment. For him, nostalgia is conditional, because places change faster than anyone can grasp.</p>
+            <p>James Joyce is said to have asked his aunt to visit a house in Dublin and check whether an overweight man could plausibly climb over its railings. If the city were ever burned to the ground, he wanted it to be possible to rebuild it from <em>Ulysses</em>.</p>
+            <blockquote>That story is where the documentation project began: a record of places as they are now, before they become something else.</blockquote>
+            <div class="chips"><a class="chip" href="#documentation" data-go="documentation">See the map</a></div>
+          </section>
+        </div>
+      </section>
 
       <section class="panel" id="architecture" role="tabpanel">
         <div class="wrap">
