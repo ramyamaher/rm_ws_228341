@@ -5,6 +5,10 @@ window.WW = {
  "channel": "https://www.youtube.com/@WanderingWayfarer",
  "updated": "2026-10-04",
  "total": 479,
+ "first": {
+  "id": "BLqtaKLkDlw",
+  "date": "2023-03-22"
+ },
  "places": [
   {
    "name": "Tokyo",
