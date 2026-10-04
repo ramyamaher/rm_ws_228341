@@ -245,7 +245,7 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .appear{opacity:0; transform:translateY(12px); transition:opacity .9s var(--ease), transform .9s var(--ease)}
 .appear.in{opacity:1; transform:none}
 .award{display:flex; gap:18px; align-items:flex-start}
-.medal{flex:none; width:52px; height:52px; border-radius:17px; display:grid; place-items:center; color:#a16207; background:linear-gradient(135deg,#fde68a,#fbbf24); box-shadow:0 6px 18px -6px rgba(217,119,6,.55)}
+.medal{flex:none; width:52px; height:52px; border-radius:50%; display:grid; place-items:center; color:#a16207; background:linear-gradient(135deg,#fde68a,#fbbf24); box-shadow:0 6px 18px -6px rgba(217,119,6,.55)}
 .medal svg{width:24px; height:24px}
 .award .k{font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); font-weight:650; margin-bottom:6px}
 .award p{margin:0; font-size:clamp(18px,2.2vw,23px); line-height:1.4; letter-spacing:-.01em; font-weight:600}
@@ -381,7 +381,14 @@ html.lb-lock body{overflow:hidden}
 .prize-line p{margin:0; font-size:15.5px; line-height:1.5; color:var(--ink)}
 .prize-line b{color:var(--gold-2); font-weight:650}
 html[data-theme="dark"] .prize-line b{color:var(--gold-hi)}
-.medal.sm{width:38px; height:38px; border-radius:13px}
+.medal.sm{width:38px; height:38px; border-radius:50%}
+/* second prize in silver; an honorable mention in a paler silver */
+.prize-line.silver .medal{color:#5b6573; background:linear-gradient(135deg,#f3f5f8,#c4cbd4); box-shadow:0 6px 18px -6px rgba(90,100,115,.5)}
+.prize-line.silver b{color:#6b7684}
+.prize-line.faded .medal{color:#8a94a1; background:linear-gradient(135deg,#f8f9fb,#dde2e8); box-shadow:0 6px 16px -8px rgba(120,130,145,.4)}
+.prize-line.faded b{color:#8d97a3}
+html[data-theme="dark"] .prize-line.silver b{color:#c3cad3}
+html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .medal.sm svg{width:19px; height:19px}
 .thumbs.solo.logo-board .thumb{aspect-ratio:1.43/1; background:#fff}
 .thumbs.solo.logo-board .thumb img{object-fit:contain; padding:8%}
@@ -734,7 +741,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </dl>
                   </div>
                 </div>
-                <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Second prize</b>, awarded by the Egyptian Ministry of Culture.</p></div>
+                <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Second prize</b>, awarded by the Egyptian Ministry of Culture.</p></div>
                 <div class="thumbs wide" data-imgs="vb-002|The present: the labyrinth;vb-005|Elysium: the city model, where visitors build the future in augmented reality;vb-003|Images on the labyrinth walls;vb-004|The past: texts on Egypt's architecture;vb-006|Plan and section;vb-007|The design for the city's future"></div>
               </article>
 
@@ -755,7 +762,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </dl>
                   </div>
                 </div>
-                <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Honorable Mention</b> for the Robert Oxman Prize at the Dessau International Architecture Graduate School.</p></div>
+                <div class="prize-line faded"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Honorable Mention</b> for the Robert Oxman Prize at the Dessau International Architecture Graduate School.</p></div>
                 <div class="thumbs" data-imgs="et-002|A sintered structure on the lunar surface;et-005|Robots at work;et-000|The game on a computer;et-003|Building in virtual reality on a phone;et-004|The stereo view for a VR headset"></div>
               </article>
 
