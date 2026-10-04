@@ -122,8 +122,18 @@ let entered = false;
 {
   const h = new Date().getHours();
   const hello = h >= 5 && h < 12 ? 'Good morning.' : h >= 12 && h < 18 ? 'Good afternoon.' : 'Good evening.';
-  $('#greetHello').innerHTML = hello.split(' ').map((w, k) => `<span style="animation-delay:${.15 + k * .22}s">${w}</span>`).join(' ');
-  if (matchMedia('(hover: none)').matches) $('#greetHint').textContent = 'Tap anywhere to enter';
+  // First "Hello.", which fades away; then the greeting for the visitor's time of day, then
+  // the name, the welcome and the hint. A click at any moment still enters.
+  const el = $('#greetHello');
+  const words = (t) => t.split(' ').map((w, k) => `<span style="animation-delay:${.15 + k * .22}s">${w}</span>`).join(' ');
+  const second = () => { el.classList.remove('out'); el.innerHTML = words(hello); greet.classList.add('p2'); };
+  if (reduced) second();
+  else {
+    el.innerHTML = words('Hello.');
+    setTimeout(() => el.classList.add('out'), 1900);
+    setTimeout(second, 3100);
+  }
+  if (matchMedia('(hover: none)').matches) $('#greetHint').textContent = 'Tap anywhere to proceed';
 }
 function enter() {
   if (entered) return;

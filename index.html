@@ -394,8 +394,12 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 .greet-in{text-align:center; transition:transform 1s var(--ease), opacity .8s var(--ease)}
 .g-hello{margin:0; font-size:clamp(38px,7vw,76px); font-weight:700; letter-spacing:-.04em; line-height:1.05}
 .g-hello span{display:inline-block; opacity:0; transform:translateY(14px); animation:rise .9s var(--ease) forwards}
-.g-sub{margin:18px 0 0; line-height:1.55; color:var(--ink-2); font-size:clamp(17px,2vw,21px); opacity:0; animation:fade 1s var(--ease) 1.1s forwards}
-.g-hint{margin:56px 0 0; color:var(--ink-3); font-size:13px; letter-spacing:.08em; text-transform:uppercase; opacity:0; animation:fade 1s var(--ease) 1.9s forwards, breathe 2.6s ease-in-out 2.9s infinite}
+/* "Hello." leaves slowly before the time-of-day greeting takes its place */
+.g-hello.out{opacity:0; transform:translateY(-10px); transition:opacity 1.1s ease, transform 1.1s ease}
+.g-sub{margin:18px 0 0; line-height:1.55; color:var(--ink-2); font-size:clamp(17px,2vw,21px); opacity:0}
+.greet.p2 .g-sub{animation:fade 1s var(--ease) 1.1s forwards}
+.g-hint{margin:56px 0 0; color:var(--ink-3); font-size:13px; letter-spacing:.08em; text-transform:uppercase; opacity:0}
+.greet.p2 .g-hint{animation:fade 1s var(--ease) 1.9s forwards, breathe 2.6s ease-in-out 2.9s infinite}
 @keyframes rise{to{opacity:1; transform:none}}
 @keyframes fade{to{opacity:1}}
 @keyframes breathe{50%{opacity:.45}}
@@ -461,9 +465,9 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
 <div class="greet" id="greet" role="button" tabindex="0" aria-label="Enter the website">
   <div class="greet-in">
-    <p class="g-hello" id="greetHello">Hello.</p>
+    <p class="g-hello" id="greetHello"></p>
     <p class="g-sub">I am Ramy Maher.<br>Welcome.</p>
-    <p class="g-hint" id="greetHint">Click anywhere to enter</p>
+    <p class="g-hint" id="greetHint">Click anywhere to proceed</p>
   </div>
 </div>
 
