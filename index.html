@@ -350,6 +350,8 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 .a-head{display:flex; gap:16px; align-items:center; margin-bottom:18px}
 .logo{width:64px; height:64px; border-radius:18px; flex:none; display:grid; place-items:center; overflow:hidden; background:#fff; box-shadow:0 0 0 1px var(--line), 0 8px 18px -10px rgba(0,0,0,.3)}
 .logo img{width:74%; height:74%; object-fit:contain}
+/* the Shuin icon carries its own white margin, so it gets more of the box to look the same size as the others */
+.logo img.roomy{width:86%; height:86%}
 .a-head h3{margin:0; font-size:clamp(22px,2.8vw,30px); letter-spacing:-.03em; font-weight:700}
 .a-head .tag{margin:4px 0 0; color:var(--ink-2); font-size:15.5px; font-weight:600}
 .sub-ja{font-weight:500; color:var(--ink-3)}
@@ -768,7 +770,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide app" style="--acc:#dc2626">
                 <div class="a-head">
-                  <span class="logo"><img src="assets/img/logos/shuin.png" alt="Shuin logo"></span>
+                  <span class="logo"><img class="roomy" src="assets/img/logos/shuin.png" alt="Shuin logo"></span>
                   <div><h3>Shuin <span class="sub-ja">朱印</span></h3><p class="tag">A world travel stamp.</p></div>
                 </div>
                 <div class="a-body">
