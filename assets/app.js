@@ -4,8 +4,12 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= categories: pills on top, panels slide sideways ================= */
-const ORDER = ['architecture', 'design', 'writing', 'documentation', 'apps'];
-const DEFAULT = 'documentation';
+const ORDER = ['about', 'architecture', 'design', 'writing', 'documentation', 'apps'];
+const DEFAULT = 'about';
+
+// The header is two rows whose height depends on the font and the safe area; measure it.
+const header = $('header');
+new ResizeObserver(() => document.documentElement.style.setProperty('--hdr', header.offsetHeight + 'px')).observe(header);
 const track = $('#track'), viewport = $('#viewport');
 const panels = ORDER.map(id => document.getElementById(id));
 const tabs = $$('.tab');
