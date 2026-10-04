@@ -1,0 +1,116 @@
+// Refreshes assets/data/places.js from the Wandering Wayfarer channel: the count of all
+// videos and shorts, how many titles name each place, one video per place, and the
+// playlist of each country. Run daily by .github/workflows/update-channel.yml, or by hand:
+//     node scripts/update-channel.mjs
+// No API key: it uses the same public endpoint the YouTube website itself calls.
+import { writeFile, readFile } from 'node:fs/promises';
+import { RULES, PLAYLIST_ALIASES } from './place-rules.mjs';
+
+const CHANNEL = 'UCDRz8yeFDCXvv6AOuUssFmg';
+const OUT = new URL('../assets/data/places.js', import.meta.url);
+const CONTEXT = { client: { clientName: 'WEB', clientVersion: '2.20261002.01.00', hl: 'en', gl: 'CH' } };
+
+async function browse(body) {
+  const r = await fetch('https://www.youtube.com/youtubei/v1/browse?prettyPrint=false', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', cookie: 'SOCS=CAI', 'user-agent': 'Mozilla/5.0' },
+    body: JSON.stringify({ context: CONTEXT, ...body }),
+  });
+  if (!r.ok) throw new Error(`YouTube answered ${r.status}`);
+  return r.json();
+}
+// The "load more" token. On the playlists page it sits in a continuationItemRenderer and a
+// second token belongs to the sort menu; on the uploads playlist it is the only token and is
+// not wrapped. So: the wrapped one if there is one, otherwise the first on the page.
+const TOKEN = /"continuationCommand":\{"token":"([^"]+)"/;
+function lastToken(o) {
+  let tok = null;
+  (function walk(x) {
+    if (tok || !x || typeof x !== 'object') return;
+    if (x.continuationItemRenderer) {
+      const m = JSON.stringify(x.continuationItemRenderer).match(TOKEN);
+      if (m) tok = m[1];
+    }
+    for (const k in x) walk(x[k]);
+  })(o);
+  return tok || (JSON.stringify(o).match(TOKEN) || [])[1] || null;
+}
+const text = (t) => (t?.runs ? t.runs.map((r) => r.text).join('') : t?.simpleText || t?.content || '');
+
+/* Every upload, videos and shorts alike, lives in the channel's "uploads" playlist (UU...). */
+async function uploads() {
+  const out = new Map();
+  const take = (o) => {
+    if (!o || typeof o !== 'object') return;
+    // YouTube serves either the older renderer or the newer "lockup"; accept both.
+    if (o.playlistVideoRenderer) out.set(o.playlistVideoRenderer.videoId, text(o.playlistVideoRenderer.title));
+    const l = o.lockupViewModel;
+    if (l && /^[\w-]{11}$/.test(l.contentId || '')) out.set(l.contentId, text(l.metadata?.lockupMetadataViewModel?.title));
+    for (const k in o) take(o[k]);
+  };
+  let r = await browse({ browseId: 'VLUU' + CHANNEL.slice(2) });
+  take(r);
+  for (let tok = lastToken(r), n = 0; tok && n < 60; n++) {
+    r = await browse({ continuation: tok });
+    const before = out.size; take(r);
+    const next = lastToken(r);
+    if (next === tok || out.size === before) break;
+    tok = next;
+  }
+  return [...out].map(([id, t]) => ({ id, t }));
+}
+
+async function playlists() {
+  const out = new Map();
+  const take = (o) => {
+    if (!o || typeof o !== 'object') return;
+    if (o.lockupViewModel?.contentId?.startsWith('PL')) out.set(o.lockupViewModel.contentId, text(o.lockupViewModel.metadata?.lockupMetadataViewModel?.title));
+    for (const k in o) take(o[k]);
+  };
+  let r = await browse({ browseId: CHANNEL, params: 'EglwbGF5bGlzdHPyBgoKCEIGCgIQaCIA' });
+  take(r);
+  for (let tok = lastToken(r), n = 0; tok && n < 20; n++) {
+    r = await browse({ continuation: tok });
+    const before = out.size; take(r);
+    if (out.size === before) break;
+    tok = lastToken(r);
+  }
+  return [...out].map(([id, t]) => ({ id, t }));
+}
+
+const videos = await uploads();
+// A sudden drop means YouTube changed its format or refused us, not that videos vanished.
+const previous = Number(((await readFile(OUT, 'utf8').catch(() => '')).match(/"?total"?: (\d+)/) || [])[1] || 0);
+if (videos.length < 100 || videos.length < previous * 0.9) throw new Error(`Only ${videos.length} uploads came back (last run: ${previous}); keeping the old data.`);
+
+const places = [];
+const matched = new Set();
+for (const [name, country, lat, lon, re, cs] of RULES) {
+  const ri = new RegExp(re, 'i'), rc = cs ? new RegExp(cs) : null;
+  const hits = videos.filter((v) => ri.test(v.t) || (rc && rc.test(v.t)));
+  hits.forEach((v) => matched.add(v.id));
+  if (hits.length) places.push({ name, country, lat, lon, n: hits.length, v: hits[0].id });
+}
+
+// A country playlist is one whose title, without flags and emoji, is exactly a country we film in.
+const countries = new Set(places.map((p) => p.country));
+const lists = {};
+for (const p of await playlists()) {
+  const clean = p.t.replace(/[^\p{L}\p{N} .|]/gu, '').trim();
+  const name = PLAYLIST_ALIASES[clean] || clean;
+  if (countries.has(name) && !lists[name]) lists[name] = p.id;
+}
+
+const unmatched = videos.filter((v) => !matched.has(v.id)).map((v) => v.t);
+const today = new Date().toISOString().slice(0, 10);
+const body = `/* Generated by scripts/update-channel.mjs on ${today}. Do not edit by hand; edit
+   scripts/place-rules.mjs and run it again.
+   ${videos.length} videos and shorts; ${unmatched.length} titles name no place and are not mapped. */
+window.WW = ${JSON.stringify({ channel: 'https://www.youtube.com/@WanderingWayfarer', updated: today, total: videos.length, places, playlists: lists }, null, 1)};
+`;
+
+const old = await readFile(OUT, 'utf8').catch(() => '');
+const strip = (s) => s.replace(/on \d{4}-\d{2}-\d{2}/, '').replace(/"updated": "[^"]+"/, '');
+if (strip(old) === strip(body)) console.log('No change on the channel.');
+else { await writeFile(OUT, body); console.log(`Updated: ${videos.length} uploads, ${places.length} places, ${countries.size} countries, ${Object.keys(lists).length} playlists.`); }
+if (unmatched.length) console.log(`Titles that name no place (${unmatched.length}):\n  ` + unmatched.join('\n  '));

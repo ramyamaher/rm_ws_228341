@@ -37,6 +37,7 @@ function go(id, { push = true } = {}) {
     t.classList.toggle('on', on);
     t.setAttribute('aria-selected', on);
   });
+  panels[i].querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
   fitHeight();
   if (push && location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
   if (changed) window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
@@ -46,6 +47,61 @@ function go(id, { push = true } = {}) {
 tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.tab)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.go); }));
 addEventListener('hashchange', () => go(location.hash.slice(1), { push: false }));
+
+/* ================= project images and the viewer ================= */
+// Each .thumbs lists its images as "file|caption;file|caption". Thumbnails load small;
+// the click opens the full image. An entry with no file is an empty slot for a later image.
+const lb = $('#lightbox'), lbImg = $('#lbImg'), lbCap = $('#lbCap');
+let lbSet = [], lbAt = 0, lbFrom = null;
+$$('.thumbs').forEach(box => {
+  const set = box.dataset.imgs.split(';').map(s => { const [f, c] = s.split('|'); return { f: f.trim(), c: (c || '').trim() }; });
+  box.innerHTML = set.map((s, k) => s.f
+    ? `<button class="thumb" type="button" data-k="${k}" aria-label="Open image: ${s.c}"><img src="assets/img/projects/thumbs/${s.f}.jpg" alt="${s.c}" loading="lazy" decoding="async"></button>`
+    : `<div class="thumb" aria-hidden="true"><span class="slot">Image to come</span></div>`).join('');
+  box.addEventListener('click', e => {
+    const b = e.target.closest('button.thumb'); if (!b) return;
+    openLb(set.filter(s => s.f), set.filter(s => s.f).indexOf(set[+b.dataset.k]), b);
+  });
+});
+function showLb(k) {
+  lbAt = (k + lbSet.length) % lbSet.length;
+  const s = lbSet[lbAt];
+  lbImg.src = `assets/img/projects/${s.f}.jpg`;
+  lbImg.alt = s.c;
+  lbCap.innerHTML = `${s.c}${lbSet.length > 1 ? `<span>${lbAt + 1}/${lbSet.length}</span>` : ''}`;
+  $('#lbPrev').hidden = $('#lbNext').hidden = lbSet.length < 2;
+}
+function openLb(set, k, from) {
+  lbSet = set; lbFrom = from; showLb(k);
+  lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false');
+  document.documentElement.classList.add('lb-lock');
+  $('#lbClose').focus();
+}
+function closeLb() {
+  lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true');
+  document.documentElement.classList.remove('lb-lock');
+  if (lbFrom) lbFrom.focus({ preventScroll: true });
+}
+$('#lbClose').addEventListener('click', closeLb);
+$('#lbPrev').addEventListener('click', e => { e.stopPropagation(); showLb(lbAt - 1); });
+$('#lbNext').addEventListener('click', e => { e.stopPropagation(); showLb(lbAt + 1); });
+lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('stage')) closeLb(); });
+addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLb();
+  else if (e.key === 'ArrowLeft') showLb(lbAt - 1);
+  else if (e.key === 'ArrowRight') showLb(lbAt + 1);
+});
+// swipe between images on a phone
+{
+  let x0 = null;
+  lb.addEventListener('pointerdown', e => { x0 = e.clientX; });
+  lb.addEventListener('pointerup', e => {
+    if (x0 === null || lbSet.length < 2) return;
+    const dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 50) showLb(lbAt + (dx < 0 ? 1 : -1));
+  });
+}
 
 /* ================= the greeting ================= */
 // Shown on every arrival. The first click, tap or key fades it out and the page rises in.
@@ -224,6 +280,10 @@ const byCountry = d3.group(W.places, p => p.country);
 $('#sPlaces').textContent = W.places.length;
 $('#sCountries').textContent = byCountry.size;
 $('#sVideos').textContent = W.total;
+if (W.updated) {
+  const d = new Date(W.updated + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  $('.maphint').insertAdjacentHTML('beforeend', ` The numbers are refreshed from the channel every day; last update ${d}.`);
+}
 
 const ALIAS = {
   'United States of America': 'United States', 'Macedonia': 'North Macedonia',
@@ -285,6 +345,7 @@ function initMap() {
       gC.selectAll('path').data(feats, d => d.properties.name).join('path')
         .attr('class', d => 'country' + (byCountry.has(d.properties.name) ? ' doc' : ''))
         .attr('d', path);
+      gC.selectAll('path.doc').raise();
       const base = Math.max(2.2, Math.min(w, 1100) / 330);
       W.places.forEach(p => { [p.x, p.y] = proj([p.lon, p.lat]); p.r = base + Math.sqrt(p.n) * base * .22; });
       gP.selectAll('circle').data([...W.places].sort((a, b) => b.n - a.n), d => d.name).join('circle')
@@ -316,10 +377,12 @@ function initMap() {
       if (!list) return `<b>${name}</b><span>Not documented yet</span>`;
       const ps = [...list].sort((a, b) => b.n - a.n);
       const vids = d3.sum(ps, p => p.n);
-      return `<b>${name}</b><span>${ps.map(p => p.name).join(' · ')}</span><br><span>${plural(ps.length, 'place')}, ${plural(vids, 'video')}</span>`;
+      return `<b>${name}</b><span>${ps.map(p => p.name).join(' · ')}</span><br><span>${plural(ps.length, 'place')}, ${plural(vids, 'video')}</span>${playlistLink(name, '<br>')}`;
     }
+    const playlistLink = (country, before = '') => (W.playlists || {})[country]
+      ? `${before}<a href="https://www.youtube.com/playlist?list=${W.playlists[country]}" target="_blank" rel="noopener">Go to playlist</a>` : '';
     const cityTip = p => `<b>${p.name}</b><span>${p.country} · ${plural(p.n, 'video')}</span><br>` +
-      `<a href="https://www.youtube.com/watch?v=${p.v}" target="_blank" rel="noopener">Watch a video</a>`;
+      `<a href="https://www.youtube.com/watch?v=${p.v}" target="_blank" rel="noopener">Watch a video</a>${playlistLink(p.country)}`;
     function show(html, at, pin) {
       tip.innerHTML = html; tip.classList.add('show'); tip.classList.toggle('pinned', !!pin); placeTip(at);
     }
