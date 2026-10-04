@@ -4,7 +4,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= categories: pills on top, panels slide sideways ================= */
-const ORDER = ['about', 'architecture', 'design', 'writing', 'documentation', 'apps'];
+const ORDER = ['about', 'architecture', 'design', 'writing', 'archive', 'apps'];
+const ALIASES = { documentation: 'archive' };   // old links keep working
 const DEFAULT = 'about';
 
 // The header is two rows whose height depends on the font and the safe area; measure it.
@@ -24,6 +25,7 @@ const ro = new ResizeObserver(fitHeight);
 panels.forEach(p => ro.observe(p));
 
 function go(id, { push = true } = {}) {
+  id = ALIASES[id] || id;
   if (!ORDER.includes(id)) id = DEFAULT;
   const changed = current !== null && current !== id;
   current = id;
@@ -38,11 +40,33 @@ function go(id, { push = true } = {}) {
   fitHeight();
   if (push && location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
   if (changed) window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
-  if (!firstShow[id]) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
+  // Behind the greeting nothing animates yet; entering calls go() again.
+  if (!firstShow[id] && entered) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
 }
 tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.tab)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.go); }));
 addEventListener('hashchange', () => go(location.hash.slice(1), { push: false }));
+
+/* ================= the greeting ================= */
+// Shown on every arrival. The first click, tap or key fades it out and the page rises in.
+const greet = $('#greet');
+let entered = false;
+{
+  const h = new Date().getHours();
+  const hello = h >= 5 && h < 12 ? 'Good morning.' : h >= 12 && h < 18 ? 'Good afternoon.' : 'Good evening.';
+  $('#greetHello').innerHTML = hello.split(' ').map((w, k) => `<span style="animation-delay:${.15 + k * .22}s">${w}</span>`).join(' ');
+  if (matchMedia('(hover: none)').matches) $('#greetHint').textContent = 'Tap anywhere to enter';
+}
+function enter() {
+  if (entered) return;
+  entered = true;
+  greet.classList.add('leaving');
+  document.documentElement.classList.remove('pre');
+  setTimeout(() => { greet.remove(); go(current, { push: false }); }, reduced ? 0 : 900);
+}
+greet.addEventListener('click', enter);
+addEventListener('keydown', e => { if (!entered && ['Enter', ' ', 'Escape'].includes(e.key)) { e.preventDefault(); enter(); } });
+greet.focus();
 
 /* ================= light and dark ================= */
 // The OS decides until the visitor presses the button; that choice is then remembered.
@@ -196,7 +220,7 @@ carousel({
   count: $('#appCount'), dots: $('#appDots'),
 });
 
-/* ================= documentation: the map ================= */
+/* ================= archive: the map ================= */
 const W = window.WW;
 const byCountry = d3.group(W.places, p => p.country);
 $('#sPlaces').textContent = W.places.length;
@@ -346,7 +370,7 @@ const onFirstShow = {
     writingOpen = true;
     setTimeout(() => awardTyper.start(() => poemTypers[poems.index].start()), reduced ? 0 : 450);
   },
-  documentation() { initMap(); },
+  archive() { initMap(); },
   apps() { loadAppImages(); },
 };
 // Slides sit off-screen inside the slider, where lazy loading never fires.
