@@ -201,16 +201,14 @@ and checked the cleavage of my escort.`,
 const poemTrack = $('#poemTrack');
 poemTrack.innerHTML = LIMERICKS.map(() => '<div class="slide"><div class="poem"><div></div></div></div>').join('');
 const poemTypers = $$('.poem > div', poemTrack).map((el, k) => typer(el, LIMERICKS[k], { speed: 34 }));
-const awardEl = $('#awardText');
-const awardTyper = typer(awardEl, awardEl.dataset.text, { speed: 22 });
-let writingOpen = false;
+let poemsReady = false;   // set once the award card has appeared
 
 const poems = carousel({
   car: $('#poemCar'), trackEl: poemTrack, prev: $('#poemPrev'), next: $('#poemNext'),
   count: $('#poemCount'), dots: $('#poemDots'),
   onChange(i, old) {
     if (old !== i && poemTypers[old].state === 'typing') poemTypers[old].finish();
-    if (writingOpen && awardTyper.state === 'done') poemTypers[i].start();
+    if (poemsReady) poemTypers[i].start();
   },
 });
 
@@ -367,8 +365,9 @@ function initMap() {
 /* ================= first visits ================= */
 const onFirstShow = {
   writing() {
-    writingOpen = true;
-    setTimeout(() => awardTyper.start(() => poemTypers[poems.index].start()), reduced ? 0 : 450);
+    // The award simply appears; only the limericks are typed.
+    $('#awardCard').classList.add('in');
+    setTimeout(() => { poemsReady = true; poemTypers[poems.index].start(); }, reduced ? 0 : 900);
   },
   archive() { initMap(); },
   apps() { loadAppImages(); },
