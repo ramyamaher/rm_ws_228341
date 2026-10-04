@@ -32,6 +32,9 @@ function go(id, { push = true } = {}) {
   const i = ORDER.indexOf(id);
   track.style.transform = `translateX(${-i * 100}%)`;
   panels.forEach((p, k) => p.setAttribute('aria-hidden', k === i ? 'false' : 'true'));
+  // container tabs fill the screen exactly, so the page behind them must not scroll
+  document.documentElement.classList.toggle('fit-tab', panels[i].classList.contains('fit'));
+  if (panels[i].classList.contains('fit')) window.scrollTo(0, 0);
   tabs.forEach(t => {
     const on = t.dataset.tab === id;
     t.classList.toggle('on', on);
