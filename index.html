@@ -30,7 +30,7 @@ html[data-theme="dark"]{
   --land:#262830; --land-edge:#16171d; --gold:#eab308; --gold-hi:#facc15; --gold-2:#a16207; --red:#f05252; --red-hi:#fca5a5;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; background:var(--bg)}
+html{-webkit-text-size-adjust:100%; background:var(--bg); scrollbar-gutter:stable}
 body{
   margin:0; min-height:100vh; color:var(--ink); background:var(--bg);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif;
@@ -196,6 +196,8 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .tip b{display:block; font-size:15px; letter-spacing:-.01em}
 .tip span{color:var(--ink-2)}
 .tip a{display:inline-block; margin-top:6px; font-weight:650; color:var(--red); text-decoration:none}
+.tip a + a{margin-left:16px}
+.tip a:hover{text-decoration:underline; text-underline-offset:3px}
 .zoom{position:absolute; right:12px; bottom:12px; display:flex; flex-direction:column; gap:8px; z-index:4}
 .zoom .arrow{width:38px; height:38px}
 .maphint{margin:14px 0 0; color:var(--ink-3); font-size:13px}
@@ -215,6 +217,68 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .gallery img{display:block; width:100%; height:auto; border-radius:18px; border:1px solid var(--line); box-shadow:0 12px 30px -14px rgba(0,0,0,.3); background:#fff; -webkit-user-drag:none}
 .gallery figcaption{margin-top:8px; color:var(--ink-3); font-size:12.5px; line-height:1.4}
 
+/* ---------- projects (architecture, design) ---------- */
+.project{padding:clamp(20px,3vw,34px)}
+.p-head{margin-bottom:16px}
+.p-head h2{font-size:clamp(20px,2.4vw,26px); line-height:1.25}
+.p-meta{margin:8px 0 0; color:var(--ink-3); font-size:14px; line-height:1.6}
+.p-meta i{display:inline-block; width:4px; height:4px; margin:0 8px 2px; border-radius:50%; background:currentColor; opacity:.6}
+.p-meta b{color:var(--gold-2); font-weight:650}
+html[data-theme="dark"] .p-meta b{color:var(--gold-hi)}
+.p-body{display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,300px); gap:clamp(18px,3vw,44px); align-items:start}
+.p-body .prose p{font-size:16px}
+.facts{margin:4px 0 0; display:grid; gap:14px}
+.facts div{border-top:1px solid var(--line); padding-top:10px}
+.facts dt{font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); font-weight:650}
+.facts dd{margin:4px 0 0; font-size:14.5px; line-height:1.45; color:var(--ink)}
+.project .chips{margin-top:18px}
+
+/* image tiles: the first one is large; every tile grows a little on hover and opens on click */
+.thumbs{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:clamp(90px,11vw,150px); gap:12px; margin-top:22px}
+.thumb{
+  position:relative; appearance:none; border:0; padding:0; cursor:zoom-in; border-radius:16px; overflow:hidden;
+  background:var(--soft); box-shadow:0 0 0 1px var(--line);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; z-index:0;
+}
+.thumb:first-child{grid-column:span 2; grid-row:span 2}
+.thumb img{display:block; width:100%; height:100%; object-fit:cover; transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.thumb:hover, .thumb:focus-visible{transform:scale(1.045); z-index:2; box-shadow:0 18px 40px -12px rgba(0,0,0,.35), 0 0 0 1px var(--line); outline:none}
+.thumb:hover img{transform:scale(1.06)}
+.thumb .slot{position:absolute; inset:0; display:grid; place-items:center; color:var(--ink-3); font-size:13px}
+
+/* the viewer */
+.lb{
+  position:fixed; inset:0; z-index:200; display:grid; grid-template-rows:1fr auto; place-items:center;
+  padding:calc(env(safe-area-inset-top) + 64px) clamp(12px,5vw,72px) calc(env(safe-area-inset-bottom) + 20px);
+  background:rgba(10,10,12,.92); opacity:0; visibility:hidden; transition:opacity .3s, visibility 0s .3s;
+  touch-action:pan-y; user-select:none; -webkit-user-select:none;
+}
+.lb.open{opacity:1; visibility:visible; transition:opacity .3s}
+.lb img{max-width:100%; max-height:100%; object-fit:contain; border-radius:10px; transform:scale(.97); transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .2s}
+.lb.open img{transform:none}
+.lb figcaption{margin-top:14px; color:rgba(255,255,255,.78); font-size:14px; text-align:center}
+.lb figcaption span{color:rgba(255,255,255,.5); margin-left:10px}
+.lb figure{margin:0; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; min-height:0}
+.lb .stage{flex:1; min-height:0; width:100%; display:flex; align-items:center; justify-content:center}
+.lb-btn{
+  position:absolute; appearance:none; border:0; cursor:pointer; width:46px; height:46px; border-radius:50%;
+  display:grid; place-items:center; color:#fff; background:rgba(255,255,255,.12); transition:background .2s, transform .2s;
+}
+.lb-btn:hover{background:rgba(255,255,255,.22); transform:scale(1.06)}
+.lb-btn svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+.lb-close{top:calc(env(safe-area-inset-top) + 14px); right:14px}
+.lb-prev{left:14px; top:50%; margin-top:-23px}
+.lb-next{right:14px; top:50%; margin-top:-23px}
+.lb-btn[hidden]{display:none}
+html.lb-lock body{overflow:hidden}
+
+@media (max-width:760px){
+  .p-body{grid-template-columns:1fr}
+  .thumbs{grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:110px; gap:8px}
+  .thumb:hover{transform:none}
+  .lb-prev, .lb-next{display:none}
+}
+
 /* ---------- the greeting shown on arrival ---------- */
 .greet{
   position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px; cursor:pointer;
@@ -224,7 +288,7 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .greet-in{text-align:center; transition:transform 1s var(--ease), opacity .8s var(--ease)}
 .g-hello{margin:0; font-size:clamp(38px,7vw,76px); font-weight:700; letter-spacing:-.04em; line-height:1.05}
 .g-hello span{display:inline-block; opacity:0; transform:translateY(14px); animation:rise .9s var(--ease) forwards}
-.g-sub{margin:18px 0 0; color:var(--ink-2); font-size:clamp(17px,2vw,21px); opacity:0; animation:fade 1s var(--ease) 1.1s forwards}
+.g-sub{margin:18px 0 0; line-height:1.55; color:var(--ink-2); font-size:clamp(17px,2vw,21px); opacity:0; animation:fade 1s var(--ease) 1.1s forwards}
 .g-hint{margin:56px 0 0; color:var(--ink-3); font-size:13px; letter-spacing:.08em; text-transform:uppercase; opacity:0; animation:fade 1s var(--ease) 1.9s forwards, breathe 2.6s ease-in-out 2.9s infinite}
 @keyframes rise{to{opacity:1; transform:none}}
 @keyframes fade{to{opacity:1}}
@@ -285,7 +349,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
 <div class="greet" id="greet" role="button" tabindex="0" aria-label="Enter the website">
   <div class="greet-in">
     <p class="g-hello" id="greetHello">Hello.</p>
-    <p class="g-sub">Welcome. I am Ramy Maher.</p>
+    <p class="g-sub">I am Ramy Maher.<br>Welcome.</p>
     <p class="g-hint" id="greetHint">Click anywhere to enter</p>
   </div>
 </div>
@@ -317,6 +381,13 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
   <a href="https://github.com/ramyamaher" target="_blank" rel="noopener"><span class="ico"><svg class="i" viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span><span>GitHub<small>github.com/ramyamaher</small></span></a>
 </div>
 
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
+  <figure><div class="stage"><img id="lbImg" alt=""></div><figcaption id="lbCap"></figcaption></figure>
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous image"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next image"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+</div>
+
 <main>
   <div class="viewport" id="viewport">
     <div class="track" id="track">
@@ -344,14 +415,80 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
       <section class="panel" id="architecture" role="tabpanel">
         <div class="wrap">
           <h1>Architecture</h1>
-          <div class="empty">Coming soon.</div>
+
+          <article class="glass card project">
+            <div class="p-head">
+              <h2>Wohnpark Gebersdorf</h2>
+              <p class="p-meta">Nuremberg, Germany <i></i> Invited competition, 2016 <i></i> <b>First prize</b></p>
+            </div>
+            <div class="p-body">
+              <div class="prose">
+                <p>A new residential quarter on the site of a former electrical converter station between Gebersdorfer Straße and Bibertstraße in Nuremberg. Besides housing, the brief called for a daycare centre, senior apartments and a neighbourhood grocery store.</p>
+                <p>The winning scheme lines up terraced houses along a green promenade that crosses the site, with play lawns, a playground and an oval daycare pavilion along its length. Four-storey apartment buildings face Gebersdorfer Straße and shelter the quarter from traffic, while the senior housing, the grocery store and a café frame a small square. A forest path follows the western edge, and a wildflower meadow doubles as rainwater storage.</p>
+              </div>
+              <dl class="facts">
+                <div><dt>Role</dt><dd>Design team, ATP architects engineers, Munich</dd></div>
+                <div><dt>Client</dt><dd>Deutsche Reihenhaus AG</dd></div>
+                <div><dt>Landscape</dt><dd>logo verde, Landshut</dd></div>
+                <div><dt>Competition</dt><dd>Invited, 7 entries; jury in December 2016</dd></div>
+              </dl>
+            </div>
+            <div class="thumbs" data-imgs="gb-0002|Street view along the promenade;gb-0004|Site plan;gb-0001|The site in its neighbourhood;gb-0003|Section through the quarter;gb-0005|Section"></div>
+            <div class="chips"><a class="chip" href="https://www.wettbewerbe-aktuell.de/ergebnis/wohnpark-gebersdorf-nurnberg-14702" target="_blank" rel="noopener">Competition result</a></div>
+          </article>
+
+          <article class="glass card project">
+            <div class="p-head">
+              <h2>Museum of the 20th Century, berlin modern</h2>
+              <p class="p-meta">Berlin, Germany <i></i> Herzog &amp; de Meuron <i></i> Competition won in 2016, under construction</p>
+            </div>
+            <div class="p-body">
+              <div class="prose">
+                <p>The new museum for the Nationalgalerie's collection of twentieth-century art completes Berlin's Kulturforum. It stands on the last open site of the ensemble, between Mies van der Rohe's Neue Nationalgalerie, Hans Scharoun's Philharmonie and the Church of St. Matthew.</p>
+                <p>Under a single wide pitched roof, with façades of open brickwork, the building is conceived as a covered piece of the city. Two passages cross inside it and connect it to the streets and squares on every side, so that art is met on the building's edges as much as in its galleries. Beside the Nationalgalerie's holdings it will show the Marx, Pietzsch and Marzona collections, and a tunnel links it underground to the Neue Nationalgalerie.</p>
+              </div>
+              <dl class="facts">
+                <div><dt>Role</dt><dd>Member of the Herzog &amp; de Meuron project team</dd></div>
+                <div><dt>Client</dt><dd>Stiftung Preußischer Kulturbesitz</dd></div>
+                <div><dt>Images</dt><dd>© Herzog &amp; de Meuron</dd></div>
+              </dl>
+            </div>
+            <div class="thumbs" data-imgs="ng-002|The museum on the Kulturforum, beside the Church of St. Matthew;ng-001|The main façade;ng-003|The central hall"></div>
+          </article>
         </div>
       </section>
 
       <section class="panel" id="design" role="tabpanel">
         <div class="wrap">
           <h1>Design</h1>
-          <div class="empty">Coming soon.</div>
+
+          <article class="glass card project">
+            <div class="p-head">
+              <h2>Layers of Egypt: Between Labyrinth and Elysium</h2>
+              <p class="p-meta">Egypt Pavilion, La Biennale di Venezia <i></i> 15th International Architecture Exhibition, 2016 <i></i> <b>Second place</b></p>
+            </div>
+            <div class="p-body">
+              <div class="prose">
+                <p>A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale, awarded second place. The pavilion is a passage between two worlds. Visitors first find their way through a dark labyrinth whose walls are covered with photographs of Egypt's cities, quarries and crowds, and with texts on its ancient sites, while a short poem traces the way from frustration towards a distant light.</p>
+                <p>The labyrinth opens into a bright hall under a luminous ceiling, where a large model of Greater Cairo and the Giza plateau lies on a single table. Virtual-reality headsets hang from above, and visitors move between the model and immersive views of the city.</p>
+              </div>
+            </div>
+            <div class="thumbs" data-imgs="vb-002|The labyrinth;vb-005|The city model, explored in virtual reality;vb-003|Photographs on the labyrinth walls;vb-004|Texts on Egypt's ancient sites;vb-006|Plan and section;vb-001|Exhibition poster"></div>
+          </article>
+
+          <article class="glass card project">
+            <div class="p-head">
+              <h2>Extended Threads</h2>
+              <p class="p-meta">Master's project <i></i> 2016</p>
+            </div>
+            <div class="p-body">
+              <div class="prose">
+                <p>Extended Threads joins a philosophical reading of architecture with technology. It takes apart what architecture means, who builds, where and how, and puts it back together as a game.</p>
+                <p>In a gesture-based video game played in virtual reality, players use their hands to control robots at a distance. The robots build by sintering, fusing loose material layer by layer into solid form, across a lunar landscape. The game runs on a computer and on a phone in a VR headset, and many players can build together from anywhere.</p>
+              </div>
+            </div>
+            <div class="thumbs" data-imgs="et-002|A sintered structure on the lunar surface;et-005|Robots at work;et-000|The game on a computer;et-003|Building in virtual reality on a phone;et-004|The stereo view for a VR headset;et-001|Steps of creating the game"></div>
+          </article>
         </div>
       </section>
 

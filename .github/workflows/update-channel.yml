@@ -1,0 +1,32 @@
+name: Update Wandering Wayfarer data
+
+# Once a day, re-read the channel and commit new numbers, places and playlists if anything
+# changed. GitHub Pages then republishes the site on its own.
+on:
+  schedule:
+    - cron: '17 4 * * *'   # 04:17 UTC every day
+  workflow_dispatch:        # and a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/update-channel.mjs
+      - name: Commit if the data changed
+        run: |
+          if git diff --quiet -- assets/data/places.js; then
+            echo "Nothing new."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+            git add assets/data/places.js
+            git commit -m "data: daily refresh of the Wandering Wayfarer channel"
+            git push
+          fi
