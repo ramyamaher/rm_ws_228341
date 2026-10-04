@@ -38,11 +38,20 @@ function go(id, { push = true } = {}) {
     t.setAttribute('aria-selected', on);
   });
   panels[i].querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
+  if (entered) setTimeout(() => flashNext(panels[i]), reduced ? 0 : 450);
   fitHeight();
   if (push && location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
   if (changed) window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
   // Behind the greeting nothing animates yet; entering calls go() again.
   if (!firstShow[id] && entered) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
+}
+// Draw the eye to the next project when a tab holds more than one.
+function flashNext(panel) {
+  const card = panel.querySelector('.wrap > .glass.card');
+  const dots = card && card.querySelector(':scope > .dots');
+  const btn = card && card.querySelector(':scope > .card-head .arrow:last-child');
+  if (!btn || !dots || dots.children.length < 2 || btn.disabled) return;
+  btn.classList.remove('rainbow'); void btn.offsetWidth; btn.classList.add('rainbow');
 }
 tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.tab)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.go); }));
@@ -169,6 +178,7 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
   let x0 = 0, y0 = 0, dx = 0, down = false, dragging = false, moved = false;
   car.addEventListener('pointerdown', e => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (e.target.closest('.car') !== car) return;
     // A sideways-scrolling strip of screenshots (phones) keeps its own swipe.
     const strip = e.target.closest('.thumbs.phones, .thumbs.wide');
     if (strip && strip.scrollWidth > strip.clientWidth) return;
@@ -280,6 +290,7 @@ const poems = carousel({
 /* ================= architecture and design ================= */
 carousel({ car: $('#archCar'), trackEl: $('#archTrack'), prev: $('#archPrev'), next: $('#archNext'), count: $('#archCount'), dots: $('#archDots') });
 carousel({ car: $('#desCar'), trackEl: $('#desTrack'), prev: $('#desPrev'), next: $('#desNext'), count: $('#desCount'), dots: $('#desDots') });
+carousel({ car: $('#writCar'), trackEl: $('#writTrack'), prev: $('#writPrev'), next: $('#writNext'), count: $('#writCount'), dots: $('#writDots') });
 
 /* ================= apps ================= */
 carousel({
