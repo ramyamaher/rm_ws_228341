@@ -276,9 +276,26 @@ html.lb-lock body{overflow:hidden}
 @media (max-width:760px){
   .p-body{grid-template-columns:1fr}
   .thumbs{grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:110px; gap:8px}
+  .thumbs.phones{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding-bottom:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none}
+  .thumbs.phones::-webkit-scrollbar{display:none}
+  .thumbs.phones .thumb{flex:0 0 46%; scroll-snap-align:start}
   .thumb:hover{transform:none}
   .lb-prev, .lb-next{display:none}
 }
+
+/* a prize, on its own line under the text, with the same medal as the Writing award */
+.prize-line{display:flex; align-items:center; gap:12px; margin:8px 0 2px}
+.prize-line p{margin:0; font-size:15.5px; line-height:1.5; color:var(--ink)}
+.prize-line b{color:var(--gold-2); font-weight:650}
+html[data-theme="dark"] .prize-line b{color:var(--gold-hi)}
+.medal.sm{width:38px; height:38px; border-radius:13px}
+.medal.sm svg{width:19px; height:19px}
+.thumbs.solo.logo-board .thumb{aspect-ratio:1.43/1; background:#fff}
+.thumbs.solo.logo-board .thumb img{object-fit:contain; padding:8%}
+/* four phone screenshots: one row across the width on a computer, scrolled sideways on a phone */
+.thumbs.phones{grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:auto; gap:16px}
+.thumbs.phones .thumb{grid-column:auto; grid-row:auto}
+.thumbs.phones .thumb img{height:auto}
 
 /* award lines under a project's text */
 .prose p.prize{margin-top:18px; color:var(--ink); font-size:15.5px}
@@ -468,6 +485,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                   </dl>
                 </div>
                 <div class="thumbs" data-imgs="ng-001|The main façade;ng-002|The museum on the Kulturforum, beside the Church of St. Matthew;ng-003|The central hall"></div>
+                <div class="chips"><a class="chip" href="https://www.herzogdemeuron.com/projects/469-museum-der-moderne-berlin-modern/" target="_blank" rel="noopener">The project on Herzog &amp; de Meuron's website</a></div>
               </article>
 
               <article class="slide project">
@@ -479,7 +497,6 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                   <div class="prose">
                     <p>A new residential quarter on the site of a former electrical converter station between Gebersdorfer Straße and Bibertstraße in Nuremberg. Besides housing, the brief called for a daycare centre, senior apartments and a neighbourhood grocery store.</p>
                     <p>The winning scheme lines up terraced houses along a green promenade that crosses the site, with play lawns, a playground and an oval daycare pavilion along its length. Four-storey apartment buildings face Gebersdorfer Straße and shelter the quarter from traffic, while the senior housing, the grocery store and a café frame a small square. A forest path follows the western edge, and a wildflower meadow doubles as rainwater storage.</p>
-                    <p class="prize"><b>First prize</b> in the invited competition, December 2016.</p>
                   </div>
                   <dl class="facts">
                     <div><dt>Role</dt><dd>Design team, ATP architects engineers, Munich</dd></div>
@@ -488,6 +505,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                     <div><dt>Competition</dt><dd>Invited, 7 entries</dd></div>
                   </dl>
                 </div>
+                <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>First prize</b> in the invited competition, December 2016.</p></div>
                 <div class="thumbs" data-imgs="gb-0002|Street view along the promenade;gb-0004|Site plan;gb-0001|The site in its neighbourhood;gb-0003|Section through the quarter;gb-0005|Section"></div>
                 <div class="chips"><a class="chip" href="https://www.wettbewerbe-aktuell.de/ergebnis/wohnpark-gebersdorf-nurnberg-14702" target="_blank" rel="noopener">Competition result</a></div>
               </article>
@@ -517,10 +535,10 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                   <div class="prose">
                     <p>A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale. The pavilion is a passage between two worlds. Visitors first find their way through a dark labyrinth whose walls are covered with photographs of Egypt's cities, quarries and crowds, and with texts on its ancient sites, while a short poem traces the way from frustration towards a distant light.</p>
                     <p>The labyrinth opens into a bright hall under a luminous ceiling, where a large model of Greater Cairo and the Giza plateau lies on a single table. Virtual-reality headsets hang from above, and visitors move between the model and immersive views of the city.</p>
-                    <p class="prize"><b>Second place</b>, awarded by the Egyptian Ministry of Culture.</p>
                   </div>
                   <div class="thumbs solo" data-imgs="vb-001|Layers of Egypt: Between Labyrinth and Elysium, the title of the entry"></div>
                 </div>
+                <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Second prize</b>, awarded by the Egyptian Ministry of Culture.</p></div>
                 <div class="thumbs" data-imgs="vb-002|The labyrinth;vb-005|The city model, explored in virtual reality;vb-003|Photographs on the labyrinth walls;vb-004|Texts on Egypt's ancient sites;vb-006|Plan and section"></div>
               </article>
 
@@ -529,13 +547,14 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                   <h2>Extended Threads</h2>
                   <p class="p-meta">Master's project <i></i> 2016</p>
                 </div>
-                <div class="p-body single">
+                <div class="p-body">
                   <div class="prose">
                     <p>Extended Threads joins a philosophical reading of architecture with technology. It takes apart what architecture means, who builds, where and how, and puts it back together as a game.</p>
                     <p>In a gesture-based video game played in virtual reality, players use their hands to control robots at a distance. The robots build by sintering, fusing loose material layer by layer into solid form, across a lunar landscape. The game runs on a computer and on a phone in a VR headset, and many players can build together from anywhere.</p>
-                    <p class="prize"><b>Honorable Mention</b> for the Robert Oxman Prize at the Dessau International Architecture Graduate School.</p>
                   </div>
+                  <div class="thumbs solo logo-board" data-imgs="et-logo|The Extended Threads logo, one of the building robots"></div>
                 </div>
+                <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Honorable Mention</b> for the Robert Oxman Prize at the Dessau International Architecture Graduate School.</p></div>
                 <div class="thumbs" data-imgs="et-002|A sintered structure on the lunar surface;et-005|Robots at work;et-000|The game on a computer;et-003|Building in virtual reality on a phone;et-004|The stereo view for a VR headset"></div>
               </article>
 
@@ -610,17 +629,21 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                   <div><h3>Shuin <span class="sub-ja">朱印</span></h3><p class="tag">A world travel stamp.</p></div>
                 </div>
                 <div class="a-body">
-                  <p>A shuin is the vermilion seal a Japanese temple gives its visitors. Shuin, the app, turns every trip into a map: routes are drawn across the world, each country visited earns a stamp in a passport of 200 designs, and the whole journey can be played back as an animation. It runs in the browser and on Android.</p>
+                  <div>
+                    <p>Shuin is a complete travel app. It records the places you visit, how you travel between them, where you stay and the photo folders of every trip, then animates your journeys so you can share them with friends.</p>
+                    <p>Wherever you come from, Shuin gives every traveller the same passport, valid forever.</p>
+                    <p>You can use it entirely offline and keep everything on your device, or connect it to services such as Booking.com, Airbnb, Ryanair and easyJet to pull in your travel data and add it to your trips.</p>
+                  </div>
                   <ul class="feats">
-                    <li>An interactive world map of routes and cities</li>
-                    <li>A passport with a stamp for every country</li>
-                    <li>Journey playback along a timeline</li>
+                    <li>Visits, transport and stays on one world map</li>
+                    <li>Photo folders for every trip</li>
+                    <li>One passport for everyone, with a stamp for every country</li>
+                    <li>Journeys played back as animations, to share with friends</li>
+                    <li>Fully offline, or connected to your booking apps</li>
                     <li>Statistics, expenses and the CO2 of every leg</li>
-                    <li>Shareable images of the map</li>
-                    <li>Friends and shared trips</li>
                   </ul>
                 </div>
-                <div class="thumbs row" data-imgs="app-shuin-map|The map, with sample trips|1.6;app-shuin-trips|Trips by journey|0.462"></div>
+                <div class="thumbs phones" data-imgs="app-shuin-1|The map, with sample trips;app-shuin-2|Trips grouped by journey, with the CO2 of each leg;app-shuin-3|The passport;app-shuin-4|A journey played back"></div>
               </article>
 
               <article class="slide app" style="--acc:#7d9b6a">
@@ -655,7 +678,10 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                   <div><h3>Bancanca</h3><p class="tag">Personal finance in a single file.</p></div>
                 </div>
                 <div class="a-body">
-                  <p>Bancanca keeps a household ledger, shows where the money goes and projects where it could go. The whole app is one HTML file: it runs offline, needs no server and no account, and the data never leaves the device. An Android app wraps the same file.</p>
+                  <div>
+                    <p>Bancanca helps you analyse your expenses and see where your money goes.</p>
+                    <p>It also has an interactive learning section that explains personal finance: investing, property, ETFs and stocks, compound interest and more.</p>
+                  </div>
                   <ul class="feats">
                     <li>A ledger for several people, accounts and currencies</li>
                     <li>Bank statement import and reconciliation</li>
@@ -665,7 +691,7 @@ footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3
                     <li>PIN lock and dark mode</li>
                   </ul>
                 </div>
-                <div class="thumbs row" data-imgs="app-bancanca-ledger|The ledger, with sample data|0.45;app-bancanca-investing|An ETF projection over twenty years|0.45"></div>
+                <div class="thumbs phones" data-imgs="app-bancanca-1|The ledger, with sample data;app-bancanca-2|Where the money goes: the cash flow;app-bancanca-3|An ETF projection over twenty years;app-bancanca-4|Learning: what inflation does to idle cash"></div>
               </article>
 
               <article class="slide app" style="--acc:#e8775a">

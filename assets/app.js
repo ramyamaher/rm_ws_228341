@@ -169,6 +169,9 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
   let x0 = 0, y0 = 0, dx = 0, down = false, dragging = false, moved = false;
   car.addEventListener('pointerdown', e => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    // A sideways-scrolling strip of screenshots (phones) keeps its own swipe.
+    const strip = e.target.closest('.thumbs.phones');
+    if (strip && strip.scrollWidth > strip.clientWidth) return;
     down = true; dragging = false; moved = false; x0 = e.clientX; y0 = e.clientY; dx = 0;
   });
   car.addEventListener('pointermove', e => {
