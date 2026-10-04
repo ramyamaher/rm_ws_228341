@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ramy Maher</title>
+<meta name="description" content="Ramy Maher: architecture, design, writing, documentation and apps.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%230f172a'/%3E%3Ctext x='32' y='42' font-family='Helvetica,Arial,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23fff'%3ERM%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#0f172a; --ink-2:rgba(15,23,42,.68); --ink-3:rgba(15,23,42,.45);
+  --line:rgba(15,23,42,.08); --trough:#eef1f6; --soft:#f6f8fc;
+  --gold:#facc15; --gold-2:#ca8a04; --red:#ef4444;
+  --ease:cubic-bezier(.65,0,.25,1);
+  --hdr:68px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; min-height:100vh; color:var(--ink); background:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden; font-variant-numeric:tabular-nums;
+}
+a{color:inherit}
+button{font-family:inherit}
+svg.i{width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+
+/* ---------- header ---------- */
+header{
+  position:fixed; inset:0 0 auto; z-index:50; height:var(--hdr);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:0 clamp(16px,3vw,32px); padding-top:env(safe-area-inset-top);
+  background:rgba(255,255,255,.82); backdrop-filter:saturate(1.6) blur(18px); -webkit-backdrop-filter:saturate(1.6) blur(18px);
+  border-bottom:1px solid var(--line);
+}
+.brand{font-weight:700; font-size:18px; letter-spacing:-.02em; text-decoration:none; white-space:nowrap}
+.contact{
+  appearance:none; border:0; cursor:pointer; font:600 14px/1 inherit; color:var(--ink);
+  padding:11px 18px; border-radius:999px; background:#f1f5f9; box-shadow:inset 0 0 0 1px var(--line);
+  transition:transform .2s, background .2s; white-space:nowrap;
+}
+.contact:hover{transform:translateY(-1px); background:#e8edf5}
+.contact[aria-expanded="true"]{background:var(--ink); color:#fff}
+
+/* the category pills: a recessed track, the active one raised in white */
+.tabs{
+  position:absolute; left:50%; top:calc(50% + env(safe-area-inset-top)/2); transform:translate(-50%,-50%);
+  display:flex; gap:2px; padding:4px; border-radius:999px; background:var(--trough);
+  box-shadow:inset 0 1px 3px rgba(15,23,42,.12);
+}
+.tab{
+  appearance:none; border:0; cursor:pointer; display:flex; align-items:center; gap:8px;
+  height:38px; padding:0 16px; border-radius:999px; background:transparent; color:var(--ink-2);
+  font:600 13.5px/1 inherit; white-space:nowrap; transition:background .3s, color .3s, box-shadow .3s, padding .35s var(--ease);
+}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--ink); background:#fff; box-shadow:0 2px 8px rgba(15,23,42,.15)}
+.tab .lbl{display:inline-block; overflow:hidden; max-width:140px; transition:max-width .4s var(--ease), opacity .3s}
+
+/* contact popover */
+.pop{
+  position:fixed; z-index:60; top:calc(var(--hdr) + env(safe-area-inset-top) + 8px); right:clamp(16px,3vw,32px);
+  width:min(320px, calc(100vw - 32px)); padding:10px; border-radius:24px; background:#fff;
+  border:1px solid var(--line); box-shadow:0 18px 44px -12px rgba(15,23,42,.28);
+  opacity:0; transform:translateY(-6px) scale(.98); transform-origin:top right; pointer-events:none; transition:opacity .2s, transform .2s;
+}
+.pop.open{opacity:1; transform:none; pointer-events:auto}
+.pop a{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:16px; text-decoration:none; font-size:14.5px; font-weight:600}
+.pop a:hover{background:var(--soft)}
+.pop a small{display:block; font-weight:500; color:var(--ink-3); font-size:12.5px; margin-top:2px}
+.pop .ico{width:36px; height:36px; border-radius:12px; display:grid; place-items:center; background:#f1f5f9; flex:none}
+
+/* ---------- panels that slide sideways ---------- */
+main{padding-top:calc(var(--hdr) + env(safe-area-inset-top))}
+.viewport{overflow:hidden; transition:height .55s var(--ease)}
+.track{display:flex; align-items:flex-start; transition:transform .6s var(--ease); will-change:transform}
+.panel{flex:0 0 100%; min-width:0}
+.panel[aria-hidden="true"]{visibility:hidden; transition:visibility 0s .6s}
+.wrap{max-width:1160px; margin:0 auto; padding:clamp(24px,4vw,48px) clamp(16px,3vw,32px) 64px}
+h1{margin:6px 0 26px; font-size:clamp(34px,6vw,64px); line-height:1.05; letter-spacing:-.035em; font-weight:700}
+.lead{margin:-14px 0 30px; max-width:720px; color:var(--ink-2); font-size:clamp(16px,1.7vw,18px); line-height:1.55}
+.lead a{font-weight:600; text-underline-offset:3px}
+
+.glass{
+  position:relative; border-radius:28px; background:#fff; border:1px solid var(--line);
+  box-shadow:0 18px 44px -18px rgba(15,23,42,.18), 0 2px 8px rgba(15,23,42,.05);
+}
+.card{padding:clamp(20px,3vw,34px); margin-bottom:26px}
+.card-head{display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-bottom:18px}
+.card-head .t{display:flex; gap:16px; align-items:center}
+.num{flex:none; min-width:44px; height:44px; padding:0 10px; border-radius:15px; display:grid; place-items:center; font-weight:700; font-size:16px; background:#f1f5f9; box-shadow:inset 0 0 0 1px var(--line)}
+h2{margin:0; font-size:clamp(20px,2.4vw,26px); letter-spacing:-.02em; font-weight:650}
+.sub{margin:4px 0 0; color:var(--ink-2); font-size:15px; line-height:1.5}
+.empty{padding:56px 24px; text-align:center; color:var(--ink-3); font-size:15px; background:var(--soft); border-radius:24px}
+
+.chip{
+  display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:var(--ink); font-size:13.5px; font-weight:600;
+  padding:10px 16px; border-radius:999px; background:#f1f5f9; box-shadow:inset 0 0 0 1px var(--line); transition:transform .2s, background .2s;
+}
+a.chip:hover{transform:translateY(-2px); background:#e8edf5}
+.chips{display:flex; flex-wrap:wrap; gap:10px}
+
+/* arrows next to the n/N counter */
+.nav{display:flex; gap:8px}
+.arrow{
+  appearance:none; border:0; cursor:pointer; width:42px; height:42px; border-radius:50%; display:grid; place-items:center;
+  background:#fff; color:var(--ink); border:1px solid rgba(15,23,42,.12); box-shadow:0 4px 12px rgba(15,23,42,.12);
+  transition:transform .2s cubic-bezier(.3,1.6,.5,1), opacity .2s;
+}
+.arrow:hover{transform:scale(1.08)}
+.arrow:disabled{opacity:.3; cursor:default; transform:none}
+.dots{display:flex; gap:6px; justify-content:center; margin-top:18px}
+.dots i{width:7px; height:7px; border-radius:99px; background:rgba(15,23,42,.16); transition:width .35s var(--ease), background .35s}
+.dots i.on{width:22px; background:var(--ink)}
+
+/* a carousel inside a card */
+.car{overflow:hidden; touch-action:pan-y; user-select:none; -webkit-user-select:none}
+.car-track{display:flex; transition:transform .55s var(--ease)}
+.car-track.drag{transition:none}
+.slide{flex:0 0 100%; min-width:0}
+
+/* ---------- writing ---------- */
+.award{display:flex; gap:18px; align-items:flex-start}
+.medal{flex:none; width:52px; height:52px; border-radius:17px; display:grid; place-items:center; color:#a16207; background:linear-gradient(135deg,#fde68a,#fbbf24); box-shadow:0 6px 18px -6px rgba(217,119,6,.55)}
+.medal svg{width:24px; height:24px}
+.award .k{font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); font-weight:650; margin-bottom:6px}
+.award p{margin:0; font-size:clamp(18px,2.2vw,23px); line-height:1.4; letter-spacing:-.01em; font-weight:600}
+.poem{
+  position:relative; margin:0 auto; padding:clamp(18px,4vw,40px) clamp(4px,3vw,30px);
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:clamp(19px,2.6vw,27px); line-height:1.6;
+}
+.tw{position:relative}
+.tw .ghost{visibility:hidden; white-space:pre-wrap}
+.tw .typed{position:absolute; left:0; right:0; top:0; white-space:pre-wrap}
+.caret{display:inline-block; width:2px; height:1.05em; margin-left:2px; vertical-align:-.15em; background:var(--ink); animation:blink 1s steps(1) infinite}
+.done .caret{display:none}
+@keyframes blink{50%{opacity:0}}
+.hint{text-align:center; color:var(--ink-3); font-size:12.5px; margin-top:8px}
+
+/* ---------- documentation ---------- */
+.stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:26px}
+.stat{padding:20px 22px; border-radius:24px; background:var(--soft)}
+.stat b{display:block; font-size:clamp(30px,4.4vw,48px); letter-spacing:-.04em; line-height:1}
+.stat span{display:block; margin-top:8px; color:var(--ink-2); font-size:14px}
+.map{position:relative; width:100%; aspect-ratio:2.1/1; touch-action:none; cursor:grab; border-radius:18px; overflow:hidden; background:#fff}
+.map:active{cursor:grabbing}
+.map svg{display:block; width:100%; height:100%}
+.map .loading{position:absolute; inset:0; display:grid; place-items:center; color:var(--ink-3); font-size:14px}
+.country{fill:#f2f2f2; stroke:#fff; stroke-width:.6; vector-effect:non-scaling-stroke; transition:opacity .25s, fill .2s}
+.country.doc{fill:var(--gold); stroke:var(--gold-2); cursor:pointer}
+.city{fill:var(--red); stroke:#fff; vector-effect:non-scaling-stroke; stroke-width:1.2; cursor:pointer; transition:opacity .25s}
+.city:hover,.city.sel{fill:#b91c1c}
+.map.focus .country:not(.hi), .map.focus .city:not(.hi){opacity:.28}
+.map.focus .country.hi.doc{fill:#f5bd0b}
+.tip{
+  position:absolute; z-index:5; pointer-events:none; opacity:0; transition:opacity .15s; max-width:min(300px, calc(100% - 16px));
+  padding:11px 14px; border-radius:16px; font-size:13px; line-height:1.5; color:var(--ink);
+  background:#fff; border:1px solid var(--line); box-shadow:0 14px 34px rgba(15,23,42,.2);
+}
+.tip.show{opacity:1}
+.tip.pinned{pointer-events:auto}
+.tip b{display:block; font-size:15px; letter-spacing:-.01em}
+.tip span{color:var(--ink-2)}
+.tip a{display:inline-block; margin-top:6px; font-weight:650; color:#dc2626; text-decoration:none}
+.zoom{position:absolute; right:12px; bottom:12px; display:flex; flex-direction:column; gap:8px; z-index:4}
+.zoom .arrow{width:38px; height:38px}
+.maphint{margin:14px 0 0; color:var(--ink-3); font-size:13px}
+
+/* ---------- apps ---------- */
+.app{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:clamp(20px,3vw,40px); align-items:start}
+.app h3{margin:0 0 4px; font-size:clamp(26px,3.4vw,38px); letter-spacing:-.03em; font-weight:700}
+.app .tag{margin:0 0 16px; color:var(--ink-2); font-size:16px; font-weight:600}
+.app p{margin:0 0 14px; color:var(--ink-2); font-size:15.5px; line-height:1.6}
+.feats{margin:4px 0 20px; padding:0; list-style:none; display:grid; gap:8px}
+.feats li{position:relative; padding-left:22px; font-size:14.5px; line-height:1.45}
+.feats li::before{content:""; position:absolute; left:2px; top:.45em; width:8px; height:8px; border-radius:50%; background:var(--acc,#22c3a0)}
+.gallery{display:flex; gap:14px; align-items:flex-start}
+.gallery figure{margin:0; min-width:0}
+.gallery img{display:block; width:100%; height:auto; border-radius:18px; border:1px solid var(--line); box-shadow:0 12px 30px -14px rgba(15,23,42,.3); background:#fff; -webkit-user-drag:none}
+.gallery figcaption{margin-top:8px; color:var(--ink-3); font-size:12.5px; line-height:1.4}
+
+footer{padding:0 clamp(16px,3vw,32px) 40px; text-align:center; color:var(--ink-3); font-size:12.5px}
+
+/* ---------- phone: pills drop to their own row, only the active one keeps its words ---------- */
+@media (max-width:760px){
+  :root{--hdr:116px}
+  header{flex-wrap:wrap; align-content:center; row-gap:10px; padding-top:calc(env(safe-area-inset-top) + 6px); padding-bottom:6px}
+  .brand{font-size:17px}
+  .contact{padding:10px 15px; font-size:13.5px}
+  .tabs{position:static; transform:none; order:3; margin:0 auto}
+  .tab{width:42px; height:42px; padding:0; justify-content:center; gap:0}
+  .tab .lbl{max-width:0; opacity:0}
+  .tab.on{width:auto; padding:0 16px; gap:8px}
+  .tab.on .lbl{max-width:140px; opacity:1}
+  .stats{grid-template-columns:1fr 1fr 1fr; gap:8px}
+  .stat{padding:14px 12px; border-radius:18px}
+  .stat span{font-size:12px}
+  .map{aspect-ratio:1.8/1}
+  .zoom{right:8px; bottom:8px; gap:6px}
+  .zoom .arrow{width:32px; height:32px}
+  .card{padding:16px}
+  .poem{font-size:17px; padding:14px 2px}
+  .card-head .nav{margin-left:auto}
+  .app{grid-template-columns:1fr}
+  .award{gap:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#documentation" data-go="documentation">Ramy Maher</a>
+  <nav class="tabs" role="tablist" aria-label="Categories">
+    <button class="tab" role="tab" data-tab="architecture" aria-label="Architecture"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9.5 21v-6h5v6M9 10.5h.01M15 10.5h.01"/></svg><span class="lbl">Architecture</span></button>
+    <button class="tab" role="tab" data-tab="design" aria-label="Design"><svg class="i" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg><span class="lbl">Design</span></button>
+    <button class="tab" role="tab" data-tab="writing" aria-label="Writing"><svg class="i" viewBox="0 0 24 24"><path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg><span class="lbl">Writing</span></button>
+    <button class="tab" role="tab" data-tab="documentation" aria-label="Documentation"><svg class="i" viewBox="0 0 24 24"><path d="M22 7.5l-6 4.5 6 4.5z"/><rect x="2" y="5" width="14" height="14" rx="3"/></svg><span class="lbl">Documentation</span></button>
+    <button class="tab" role="tab" data-tab="apps" aria-label="Apps"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg><span class="lbl">Apps</span></button>
+  </nav>
+  <button class="contact" id="contactBtn" aria-expanded="false" aria-controls="contactPop">Contact</button>
+</header>
+
+<div class="pop" id="contactPop" role="dialog" aria-label="Contact">
+  <a href="mailto:contact@ramymaher.com"><span class="ico"><svg class="i" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="M3 7l9 6 9-6"/></svg></span><span>Email<small>contact@ramymaher.com</small></span></a>
+  <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener"><span class="ico"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></span><span>Wandering Wayfarer<small>YouTube</small></span></a>
+  <a href="https://github.com/ramyamaher" target="_blank" rel="noopener"><span class="ico"><svg class="i" viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span><span>GitHub<small>github.com/ramyamaher</small></span></a>
+</div>
+
+<main>
+  <div class="viewport" id="viewport">
+    <div class="track" id="track">
+
+      <section class="panel" id="architecture" role="tabpanel">
+        <div class="wrap">
+          <h1>Architecture</h1>
+          <div class="empty">Coming soon.</div>
+        </div>
+      </section>
+
+      <section class="panel" id="design" role="tabpanel">
+        <div class="wrap">
+          <h1>Design</h1>
+          <div class="empty">Coming soon.</div>
+        </div>
+      </section>
+
+      <section class="panel" id="writing" role="tabpanel">
+        <div class="wrap">
+          <h1>Writing</h1>
+          <section class="glass card">
+            <div class="award">
+              <div class="medal"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div>
+              <div>
+                <div class="k">Award</div>
+                <p id="awardText" data-text="First-prize laureate of the Limerick Contest at the First International Aphoristic Conference “Magnum in Parvo”."></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="glass card">
+            <div class="card-head">
+              <div class="t"><div class="num" id="poemCount">1/5</div>
+                <div><h2>The five winning limericks</h2></div></div>
+              <div class="nav"><button class="arrow" id="poemPrev" aria-label="Previous limerick"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" id="poemNext" aria-label="Next limerick"><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            </div>
+            <div class="car" id="poemCar"><div class="car-track" id="poemTrack"></div></div>
+            <div class="dots" id="poemDots"></div>
+            <div class="hint">Swipe for the next one.</div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel" id="documentation" role="tabpanel">
+        <div class="wrap">
+          <h1>Documentation</h1>
+          <p class="lead">Places I have filmed for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K.</p>
+          <div class="stats">
+            <div class="stat"><b id="sVideos">479</b><span>videos and shorts</span></div>
+            <div class="stat"><b id="sPlaces">0</b><span>places</span></div>
+            <div class="stat"><b id="sCountries">0</b><span>countries</span></div>
+          </div>
+          <section class="glass card">
+            <div class="map" id="map">
+              <div class="loading">Loading the map…</div>
+              <div class="tip" id="mapTip"></div>
+              <div class="zoom">
+                <button class="arrow" id="zIn" aria-label="Zoom in"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+                <button class="arrow" id="zOut" aria-label="Zoom out"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+              </div>
+            </div>
+            <p class="maphint">Hover or tap a country to see the places filmed there, and tap a red dot for the city. Drag to move, pinch or use the buttons to zoom.</p>
+          </section>
+          <div class="chips"><a class="chip" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Watch on YouTube</a></div>
+        </div>
+      </section>
+
+      <section class="panel" id="apps" role="tabpanel">
+        <div class="wrap">
+          <h1>Apps</h1>
+          <section class="glass card">
+            <div class="card-head">
+              <div class="t"><div class="num" id="appCount">1/3</div></div>
+              <div class="nav"><button class="arrow" id="appPrev" aria-label="Previous app"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" id="appNext" aria-label="Next app"><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            </div>
+            <div class="car" id="appCar"><div class="car-track" id="appTrack">
+
+              <article class="slide" data-name="Revitesse">
+                <div class="app" style="--acc:#7d9b6a">
+                  <div>
+                    <h3>Revitesse</h3>
+                    <p class="tag">Revit, but faster.</p>
+                    <p>Revitesse is a plugin for Autodesk Revit that takes the repetitive work out of producing drawings. It began as a paid product and is now completely free and open source, installed as a pyRevit extension.</p>
+                    <p>Its tools sit in five panels on the Revit ribbon: Views, Sheets, Parameters, Revision Clouds and Annotations.</p>
+                    <ul class="feats">
+                      <li>Create many sheets at once and place views on them in one step</li>
+                      <li>Create shared parameters in batches, and transfer or combine their values</li>
+                      <li>Select and filter elements, or the tags on them, by category or parameter</li>
+                      <li>Number every door and window in the project at once</li>
+                      <li>Number, override, list and export revision clouds</li>
+                      <li>Find, select and replace text in annotations</li>
+                    </ul>
+                    <div class="chips">
+                      <a class="chip" href="https://github.com/ramyamaher/Revitesse" target="_blank" rel="noopener">Open source on GitHub</a>
+                      <a class="chip" href="https://www.youtube.com/@revitesse" target="_blank" rel="noopener">Tutorials on YouTube</a>
+                    </div>
+                  </div>
+                  <div class="gallery">
+                    <figure style="flex:1.02"><img src="assets/img/revitesse-hero.png" alt="Revitesse running in Autodesk Revit on a laptop" loading="lazy" width="1280" height="1255"><figcaption>Revitesse in Autodesk Revit</figcaption></figure>
+                    <figure style="flex:1"><img src="assets/img/revitesse-sheets.jpg" alt="The Revitesse logo" loading="lazy" width="1280" height="720" style="aspect-ratio:1/1.02;object-fit:cover"><figcaption>From the Sheets panel tutorial</figcaption></figure>
+                  </div>
+                </div>
+              </article>
+
+              <article class="slide" data-name="Bancanca">
+                <div class="app" style="--acc:#16a34a">
+                  <div>
+                    <h3>Bancanca</h3>
+                    <p class="tag">Personal finance in a single file.</p>
+                    <p>Bancanca keeps a household ledger, shows where the money goes and projects where it could go. The whole app is one HTML file: it runs offline, needs no server and no account, and the data never leaves the device. An Android app wraps the same file.</p>
+                    <ul class="feats">
+                      <li>A ledger for several people, accounts and currencies</li>
+                      <li>Bank statement import and reconciliation</li>
+                      <li>Spending analysis, budgets and recurring payments</li>
+                      <li>Investment and property projections, adjusted for inflation</li>
+                      <li>Summary and tax reports</li>
+                      <li>PIN lock and dark mode</li>
+                    </ul>
+                  </div>
+                  <div class="gallery">
+                    <figure style="flex:.45"><img src="assets/img/bancanca-inflation.png" alt="Bancanca guide comparing idle cash with invested money over twenty years" loading="lazy" width="822" height="1828"><figcaption>What inflation does to idle cash</figcaption></figure>
+                    <figure style="flex:.45"><img src="assets/img/bancanca-mortgage.png" alt="Bancanca guide with historic mortgage rates in Switzerland" loading="lazy" width="822" height="1828"><figcaption>Historic mortgage rates by country</figcaption></figure>
+                  </div>
+                </div>
+              </article>
+
+              <article class="slide" data-name="Shuin">
+                <div class="app" style="--acc:#dc2626">
+                  <div>
+                    <h3>Shuin <span style="font-weight:500;color:var(--ink-3)">朱印</span></h3>
+                    <p class="tag">A world travel stamp.</p>
+                    <p>A shuin is the vermilion seal a Japanese temple gives its visitors. Shuin, the app, turns every trip into a map: routes are drawn across the world, each country visited earns a stamp in a passport of 200 designs, and the whole journey can be played back as an animation. It runs in the browser and on Android.</p>
+                    <ul class="feats">
+                      <li>An interactive world map of routes and cities</li>
+                      <li>A passport with a stamp for every country</li>
+                      <li>Journey playback along a timeline</li>
+                      <li>Statistics, expenses and the CO2 of every leg</li>
+                      <li>Shareable images of the map</li>
+                      <li>Friends and shared trips</li>
+                    </ul>
+                  </div>
+                  <div class="gallery">
+                    <figure style="flex:1.6"><img src="assets/img/shuin-map.png" alt="Shuin world map with visited countries in gold and cities in red" loading="lazy" width="2880" height="1800"><figcaption>The map, with sample trips</figcaption></figure>
+                    <figure style="flex:.46"><img src="assets/img/shuin-trips.png" alt="Shuin trip list grouped by journey" loading="lazy" width="780" height="1688"><figcaption>Trips by journey</figcaption></figure>
+                  </div>
+                </div>
+              </article>
+
+            </div></div>
+            <div class="dots" id="appDots"></div>
+          </section>
+        </div>
+      </section>
+
+    </div>
+  </div>
+  <footer>© 2026 Ramy Maher</footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="assets/data/places.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
