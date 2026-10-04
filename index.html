@@ -49,7 +49,7 @@ header{
   padding:calc(env(safe-area-inset-top) + 12px) clamp(16px,3vw,32px) 12px;
   background:var(--bg); border-bottom:1px solid var(--line); transition:background-color .3s;
 }
-.hrow{width:100%; max-width:1160px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+.hrow{width:100%; max-width:calc(1160px - 2 * clamp(16px,3vw,32px)); display:flex; align-items:center; justify-content:space-between; gap:16px}
 .hright{display:flex; align-items:center; gap:14px}
 .brand{font-weight:700; font-size:18px; letter-spacing:-.02em; text-decoration:none; white-space:nowrap}
 .contact{
@@ -103,8 +103,8 @@ main{padding-top:var(--hdr)}
 .track{display:flex; align-items:flex-start; transition:transform .6s var(--ease); will-change:transform}
 .panel{flex:0 0 100%; min-width:0}
 .panel[aria-hidden="true"]{visibility:hidden; transition:visibility 0s .6s}
-.wrap{max-width:1160px; margin:0 auto; padding:clamp(24px,4vw,44px) clamp(16px,3vw,32px) 64px}
-h1{margin:4px 0 22px; font-size:clamp(26px,3.2vw,36px); line-height:1.1; letter-spacing:-.03em; font-weight:700}
+.wrap{max-width:1160px; margin:0 auto; padding:clamp(14px,2vw,22px) clamp(16px,3vw,32px) 64px}
+h1{margin:0 0 16px; font-size:clamp(26px,3.2vw,36px); line-height:1.1; letter-spacing:-.03em; font-weight:700}
 .lead{margin:-8px 0 28px; max-width:720px; color:var(--ink-2); font-size:clamp(16px,1.6vw,17.5px); line-height:1.6}
 .lead a{font-weight:600; color:var(--ink); text-underline-offset:3px}
 
@@ -341,9 +341,9 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 
 /* ---------- project tabs: the title, then one container that fills the screen down to the
    footer and scrolls inside itself ---------- */
-.panel.fit .wrap{height:calc(100dvh - var(--hdr) - var(--ftr)); display:flex; flex-direction:column; padding-top:clamp(16px,2.6vw,28px); padding-bottom:8px}
-.panel.fit h1{flex:none; margin-bottom:14px}
-.panel.fit .wrap > .glass.card{flex:1; min-height:0; display:flex; flex-direction:column; margin-bottom:0}
+.panel.fit .wrap{height:calc(100dvh - var(--hdr) - var(--ftr)); display:flex; flex-direction:column; padding-top:clamp(12px,1.8vw,18px); padding-bottom:22px}
+.panel.fit h1{flex:none; margin-bottom:12px}
+.panel.fit .wrap > .glass.card{flex:1; min-height:0; display:flex; flex-direction:column; margin-bottom:0; box-shadow:0 10px 24px -14px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.04)}
 .panel.fit .wrap > .glass.card > .card-head{flex:none; margin-bottom:12px}
 .panel.fit .wrap > .glass.card > .car{flex:1; min-height:0; height:auto !important; transition:none}
 .panel.fit .wrap > .glass.card > .car > .car-track{height:100%; align-items:stretch}
@@ -352,6 +352,16 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 .panel.fit .card-scroll{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; margin:0 -6px; padding:0 6px}
 .panel.fit .card-scroll .lead{margin-top:0}
 .panel.fit .card-scroll .chips{margin-top:14px}
+/* the Archive alone: everything on one screen, the map taking whatever height is left */
+.panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
+.archive-fit .lead{flex:none; margin-bottom:14px}
+.archive-fit .stats{flex:none; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px}
+.archive-fit .stat{padding:14px 18px; border-radius:20px; text-decoration:none; color:inherit}
+.archive-fit .stat b{font-size:clamp(22px,3vw,34px)}
+.archive-fit a.stat:hover{background:var(--btn-hover)}
+.archive-fit .map{flex:1; min-height:140px; aspect-ratio:auto}
+.archive-fit .maphint{flex:none; margin-top:10px}
+.archive-fit .chips{flex:none; margin-top:6px}
 
 /* the next-project button, ringed by a rainbow that goes round twice each time the tab opens
    (the same ring as the Combine trips button in Shuin) */
@@ -411,6 +421,12 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px); display:flex; align-it
   .tab.on{width:auto; padding:0 16px; gap:8px}
   .tab.on .lbl{max-width:140px; opacity:1}
   .stats{grid-template-columns:1fr 1fr 1fr; gap:8px}
+  .archive-fit .lead{font-size:14.5px; margin-bottom:10px}
+  .archive-fit .stats{gap:6px; margin-bottom:10px}
+  .archive-fit .stat{padding:10px 8px; border-radius:14px}
+  .archive-fit .stat b{font-size:19px}
+  .archive-fit .stat span{font-size:11px; margin-top:4px}
+  .archive-fit .maphint{font-size:12px}
   .stat{padding:14px 12px; border-radius:18px}
   .stat span{font-size:12px}
   .map{aspect-ratio:1.8/1}
@@ -474,6 +490,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px); display:flex; align-it
 <div class="pop" id="contactPop" role="dialog" aria-label="Contact">
   <a href="mailto:contact@ramymaher.com"><span class="ico"><svg class="i" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="M3 7l9 6 9-6"/></svg></span><span>Email<small>contact@ramymaher.com</small></span></a>
   <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener"><span class="ico"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></span><span>Wandering Wayfarer<small>YouTube</small></span></a>
+  <a href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener"><span class="ico"><svg class="i" viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="19" height="19" rx="4"/><path d="M7.5 10.5v6M7.5 7.5v.01M11.5 16.5v-6M11.5 13c0-1.6 1-2.5 2.4-2.5s2.1.9 2.1 2.5v3.5"/></svg></span><span>LinkedIn<small>linkedin.com/in/ramyamaher</small></span></a>
   <a href="https://github.com/ramyamaher" target="_blank" rel="noopener"><span class="ico"><svg class="i" viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></span><span>GitHub<small>github.com/ramyamaher</small></span></a>
 </div>
 
@@ -492,11 +509,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px); display:flex; align-it
         <div class="wrap">
           <h1>About</h1>
           <div class="prose">
-            <p class="first">I am an architect with projects in several countries. I studied architectural engineering and hold the LEED Accredited Professional credential. I have lived in three countries and speak five languages.</p>
+            <p class="first">I am an architect with projects in several countries. I studied architecture, have lived in three countries and speak five languages.</p>
             <p>My interest in technology, programming, finance and other cultures led me to create several apps and to start an archive of places.</p>
 
             <h2>Professional experience</h2>
-            <p>My career spans more than ten years in architecture, BIM and digitalization in the AEC industry, between Egypt, Germany and Switzerland. I also program, and have completed courses in Python, HTML, CSS and JavaScript.</p>
+            <p>My career spans more than ten years in architecture, BIM and digitalization in the AEC industry, between Egypt, Germany and Switzerland. I hold the LEED Accredited Professional credential. I also program, and have completed courses in Python, HTML, CSS and JavaScript.</p>
             <div class="chips"><a class="chip" href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">My full profile on LinkedIn</a></div>
 
             <h2>Revitesse</h2>
@@ -661,12 +678,13 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px); display:flex; align-it
         <div class="wrap">
           <h1>Archive</h1>
           <section class="glass card">
-            <div class="card-scroll">
+            <div class="card-scroll archive-fit">
               <p class="lead">Places I have documented for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K.</p>
               <div class="stats">
                 <div class="stat"><b id="sVideos">479</b><span>videos and shorts</span></div>
                 <div class="stat"><b id="sPlaces">0</b><span>places</span></div>
                 <div class="stat"><b id="sCountries">0</b><span>countries</span></div>
+                <a class="stat" id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener"><b id="sFirst">2023</b><span>first video</span></a>
               </div>
               <div class="map" id="map">
                 <div class="loading">Loading the map…</div>

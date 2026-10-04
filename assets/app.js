@@ -304,6 +304,11 @@ const byCountry = d3.group(W.places, p => p.country);
 $('#sPlaces').textContent = W.places.length;
 $('#sCountries').textContent = byCountry.size;
 $('#sVideos').textContent = W.total;
+if (W.first && W.first.date) {
+  const d = new Date(W.first.date + 'T12:00:00Z');
+  $('#sFirst').textContent = d.toLocaleDateString('en-GB', { month: matchMedia('(max-width:760px)').matches ? 'short' : 'long', year: 'numeric' });
+  $('#sFirstLink').href = 'https://www.youtube.com/watch?v=' + W.first.id;
+}
 if (W.updated) {
   const d = new Date(W.updated + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   $('.maphint').insertAdjacentHTML('beforeend', ` The numbers are refreshed from the channel every day; last update ${d}.`);
