@@ -44,6 +44,18 @@ tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.tab)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.go); }));
 addEventListener('hashchange', () => go(location.hash.slice(1), { push: false }));
 
+/* ================= light and dark ================= */
+// The OS decides until the visitor presses the button; that choice is then remembered.
+const darkOS = matchMedia('(prefers-color-scheme: dark)');
+const savedTheme = () => { try { return localStorage.getItem('theme'); } catch (_) { return null; } };
+function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); }
+$('#themeBtn').addEventListener('click', () => {
+  const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyTheme(t);
+  try { localStorage.setItem('theme', t); } catch (_) {}
+});
+darkOS.addEventListener('change', e => { if (!['light', 'dark'].includes(savedTheme())) applyTheme(e.matches ? 'dark' : 'light'); });
+
 /* ================= contact popover ================= */
 const cBtn = $('#contactBtn'), pop = $('#contactPop');
 const setPop = open => { pop.classList.toggle('open', open); cBtn.setAttribute('aria-expanded', open); };
@@ -225,11 +237,11 @@ function initMap() {
 
     $('.loading', host).remove();
     const svg = d3.select(host).insert('svg', '.tip').attr('role', 'img')
-      .attr('aria-label', `World map of ${W.places.length} places filmed in ${byCountry.size} countries`);
+      .attr('aria-label', `World map of ${W.places.length} places documented in ${byCountry.size} countries`);
     const layer = svg.append('g');
     const gC = layer.append('g'), gP = layer.append('g');
     const zoom = d3.zoom().scaleExtent([1, 18])
-      .filter(e => (e.type === 'wheel' ? e.ctrlKey : !e.button))
+      .filter(e => e.type === 'wheel' || !e.button)
       .on('zoom', e => {
         layer.attr('transform', e.transform);
         gP.selectAll('circle').attr('r', d => d.r / Math.sqrt(e.transform.k) / Math.pow(e.transform.k, .25));
