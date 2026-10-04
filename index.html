@@ -89,7 +89,13 @@ html[data-theme="dark"] .theme .moon{display:none}
   position:fixed; z-index:60; top:calc(env(safe-area-inset-top) + 58px); right:clamp(16px,3vw,32px);
   width:min(320px, calc(100vw - 32px)); padding:10px; border-radius:24px; background:var(--card);
   border:1px solid var(--line); box-shadow:0 18px 44px -12px rgba(0,0,0,.3);
-  opacity:0; transform:translateY(-6px) scale(.98); transform-origin:top right; pointer-events:none; transition:opacity .2s, transform .2s;
+  opacity:0; transform:translateY(-8px) scale(.96); transform-origin:var(--ox, 90%) top; pointer-events:none; transition:opacity .2s, transform .22s var(--ease);
+}
+/* a small notch pointing up at the button the menu belongs to (placed by app.js) */
+.pop::before{
+  content:""; position:absolute; top:-7px; left:calc(var(--ox, 90%) - 7px); width:12px; height:12px;
+  background:var(--card); border-left:1px solid var(--line); border-top:1px solid var(--line);
+  transform:rotate(45deg); border-radius:3px 0 0 0;
 }
 .pop.open{opacity:1; transform:none; pointer-events:auto}
 .pop a{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:16px; text-decoration:none; font-size:14.5px; font-weight:600}
