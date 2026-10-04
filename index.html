@@ -102,7 +102,7 @@ html[data-theme="dark"]{
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%; background:var(--bg); scrollbar-gutter:stable}
 body{
-  margin:0; min-height:100vh; color:var(--ink); background:var(--bg);
+  margin:0; min-height:100vh; min-height:100dvh; color:var(--ink); background:var(--bg);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; overflow-x:hidden; font-variant-numeric:tabular-nums;
   transition:background-color .3s, color .3s;
@@ -430,6 +430,9 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 .app .thumbs{margin-top:16px}
 .app .chips{margin-top:16px}
 
+html.fit-tab, html.fit-tab body{height:100%; overflow:hidden; overscroll-behavior:none}
+html.fit-tab body{min-height:0}
+
 /* ---------- project tabs: the title, then one container that fills the screen down to the
    footer and scrolls inside itself ---------- */
 .panel.fit .wrap{height:calc(100dvh - var(--hdr) - var(--ftr)); display:flex; flex-direction:column; padding-top:clamp(12px,1.8vw,18px); padding-bottom:9px}
@@ -585,7 +588,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   <nav class="tabs" role="tablist" aria-label="Categories">
     <button class="tab" role="tab" data-tab="about" aria-label="About"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="lbl">About</span></button>
     <button class="tab" role="tab" data-tab="architecture" aria-label="Architecture"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9.5 21v-6h5v6M9 10.5h.01M15 10.5h.01"/></svg><span class="lbl">Architecture</span></button>
-    <button class="tab" role="tab" data-tab="design" aria-label="Design"><svg class="i" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg><span class="lbl">Design</span></button>
+    <button class="tab" role="tab" data-tab="design" aria-label="Design"><svg class="i" viewBox="0 0 24 24"><circle cx="7.5" cy="7.5" r="4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><path d="M12 13.5l4.8 7H7.2z"/></svg><span class="lbl">Design</span></button>
     <button class="tab" role="tab" data-tab="writing" aria-label="Writing"><svg class="i" viewBox="0 0 24 24"><path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg><span class="lbl">Writing</span></button>
     <button class="tab" role="tab" data-tab="archive" aria-label="Archive"><svg class="i" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="5" rx="1.5"/><path d="M4.5 9v9.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V9M10 13h4"/></svg><span class="lbl">Archive</span></button>
     <button class="tab" role="tab" data-tab="apps" aria-label="Apps"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg><span class="lbl">Apps</span></button>
