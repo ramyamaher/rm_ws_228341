@@ -173,7 +173,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') setPop(-1, f
 // Set GOATCOUNTER to the code chosen at goatcounter.com, e.g. 'ramymaher', to switch counting on.
 // Each tab is counted as its own page (/about, /archive ...), so the dashboard shows which
 // sections people open, how many visitors came and which countries they came from.
-const GOATCOUNTER = '';
+const GOATCOUNTER = 'ramymaher';
 if (GOATCOUNTER && !/^(localhost|127\.)/.test(location.hostname)) {
   window.goatcounter = { no_onload: true };
   const gc = document.createElement('script');
