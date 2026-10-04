@@ -3,9 +3,78 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ramy Maher</title>
-<meta name="description" content="Ramy Maher, architect: architecture, design, writing, an archive of places, and apps.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%230f172a'/%3E%3Ctext x='32' y='42' font-family='Helvetica,Arial,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23fff'%3ERM%3C/text%3E%3C/svg%3E">
+<title>Ramy Maher | Architect, Computational Design and BIM</title>
+<meta name="description" content="Architect Ramy Maher: architecture, computational design and BIM across Egypt, Germany and Switzerland, with apps, writing and an archive of places.">
+<meta name="author" content="Ramy Maher">
+<link rel="canonical" href="https://ramymaher.com/">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0e12" media="(prefers-color-scheme: dark)">
+<!-- how the link looks when shared on LinkedIn, WhatsApp, X and others -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ramy Maher">
+<meta property="og:url" content="https://ramymaher.com/">
+<meta property="og:title" content="Ramy Maher | Architect, Computational Design and BIM">
+<meta property="og:description" content="Architect Ramy Maher: architecture, computational design and BIM across Egypt, Germany and Switzerland, with apps, writing and an archive of places.">
+<meta property="og:image" content="https://ramymaher.com/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ramy Maher, architect: computational design and BIM, with images of his projects">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://ramymaher.com/#person",
+   "name": "Ramy Maher",
+   "url": "https://ramymaher.com/",
+   "image": "https://ramymaher.com/assets/img/og.jpg",
+   "jobTitle": "Architect",
+   "description": "Architect working in architecture, computational design, BIM and digitalization in the AEC industry, mainly between Egypt, Germany and Switzerland.",
+   "knowsAbout": [
+    "Architecture",
+    "Computational design",
+    "Building Information Modeling (BIM)",
+    "Digitalization in the AEC industry",
+    "Autodesk Revit",
+    "pyRevit",
+    "Python",
+    "JavaScript",
+    "C#"
+   ],
+   "hasCredential": {
+    "@type": "EducationalOccupationalCredential",
+    "name": "LEED Accredited Professional"
+   },
+   "award": [
+    "First prize, Limerick Contest, First International Aphoristic Conference \"Magnum in Parvo\", 2025",
+    "First prize, Wohnpark Gebersdorf invited competition, Nuremberg, 2016 (with ATP architects engineers)",
+    "Second prize, Egypt Pavilion competition, Venice Architecture Biennale, 2016"
+   ],
+   "sameAs": [
+    "https://www.linkedin.com/in/ramyamaher/",
+    "https://github.com/ramyamaher",
+    "https://www.youtube.com/@WanderingWayfarer",
+    "https://www.youtube.com/@revitesse"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://ramymaher.com/#website",
+   "url": "https://ramymaher.com/",
+   "name": "Ramy Maher",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://ramymaher.com/#person"
+   }
+  }
+ ]
+}
+</script>
 <style>
 /* Light is the default. Dark comes from the OS unless the visitor picks one with the header
    button (saved in localStorage); colours for dark follow the CongressInsider app. */
@@ -365,7 +434,8 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
    footer and scrolls inside itself ---------- */
 .panel.fit .wrap{height:calc(100dvh - var(--hdr) - var(--ftr)); display:flex; flex-direction:column; padding-top:clamp(12px,1.8vw,18px); padding-bottom:9px}
 /* the title stays for screen readers and search engines, but takes no room: the pills already say where you are */
-.panel h1{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+.brand-h{margin:0; font:inherit; letter-spacing:inherit}
+.sr-title{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
 .panel.fit .wrap > .glass.card{flex:1; min-height:0; display:flex; flex-direction:column; margin-bottom:0; box-shadow:0 6px 14px -9px rgba(0,0,0,.2), 0 1px 3px rgba(0,0,0,.04)}
 .panel.fit .wrap > .glass.card > .card-head{flex:none; margin-bottom:12px}
 .panel.fit .wrap > .glass.card > .car{flex:1; min-height:0; height:auto !important; transition:none}
@@ -500,7 +570,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
 <header>
   <div class="hrow">
-    <a class="brand" href="#about" data-go="about">Ramy Maher</a>
+    <h1 class="brand-h"><a class="brand" href="#about" data-go="about">Ramy Maher</a></h1>
     <div class="hright">
       <button class="contact" id="contactBtn" aria-expanded="false" aria-controls="contactPop">Contact</button>
       <button class="theme" id="themeBtn" aria-label="Switch between light and dark mode" title="Light or dark">
@@ -554,7 +624,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
       <section class="panel" id="about" role="tabpanel">
         <div class="wrap">
-          <h1>About</h1>
+          <h2 class="sr-title">About</h2>
           <div class="prose">
             <p class="first">I am an architect with projects in several countries. I studied architecture, have lived in three countries and speak five languages.</p>
             <p>My interest in technology, programming, finance and other cultures led me to create several apps and to start an archive of places.</p>
@@ -578,7 +648,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
       <section class="panel fit" id="architecture" role="tabpanel">
         <div class="wrap">
-          <h1>Architecture</h1>
+          <h2 class="sr-title">Architecture</h2>
           <section class="glass card">
             <div class="card-head">
               <div class="t"><div class="num" id="archCount">1/2</div></div>
@@ -636,7 +706,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
       <section class="panel fit" id="design" role="tabpanel">
         <div class="wrap">
-          <h1>Design</h1>
+          <h2 class="sr-title">Design</h2>
           <section class="glass card">
             <div class="card-head">
               <div class="t"><div class="num" id="desCount">1/2</div></div>
@@ -694,7 +764,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
       <section class="panel fit" id="writing" role="tabpanel">
         <div class="wrap">
-          <h1>Writing</h1>
+          <h2 class="sr-title">Writing</h2>
           <section class="glass card">
             <div class="card-head">
               <div class="t"><div class="num" id="writCount">1/1</div></div>
@@ -733,7 +803,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
       <section class="panel fit" id="archive" role="tabpanel">
         <div class="wrap">
-          <h1>Archive</h1>
+          <h2 class="sr-title">Archive</h2>
           <section class="glass card">
             <div class="card-scroll archive-fit">
               <p class="lead">Places I have documented for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K.</p>
@@ -760,7 +830,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
       <section class="panel fit" id="apps" role="tabpanel">
         <div class="wrap">
-          <h1>Apps</h1>
+          <h2 class="sr-title">Apps</h2>
           <section class="glass card">
             <div class="card-head">
               <div class="t"><div class="num" id="appCount">1/4</div></div>
