@@ -550,6 +550,7 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .b8-wipe{animation:none} }
 /* Building 8: the render full width; the button plays the motion in its place */
 .b8-row{display:grid; grid-template-columns:3fr 2fr; gap:14px; margin-top:22px}
+.b8-stage, .b8-flip{cursor:zoom-in}
 .b8-stage{position:relative; margin:0; border-radius:18px; overflow:hidden; aspect-ratio:2/1; background:var(--soft)}
 .b8-stage img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
 .b8-stage img[hidden]{display:none}
@@ -1002,20 +1003,20 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="p-body">
                   <div class="prose">
                     <p>Building 8 ist ein Lehrgebäude der Universität, und sein Eingang führt in die große Halle. Auf der Brücke, die im Rendering unten zu sehen ist, stellte ich eine Kamera auf, die die Bewegung aller festhielt, die auf ihrem Weg zur Halle vorbeigingen, und ihre Spuren formten den Raum für das Möbel.</p>
-                    <p>Dann übertrug ich diese Bewegung flach auf den Grundriss des Raumes. In die leeren Flächen, wo niemand ging, entwarf ich ein Möbel aus gepressten und verleimten Holzplanken: eine Bar für ein Fest, die genau dort steht, wo sie niemandem im Weg ist.</p>
+                    <p>Dann übertrug ich diese Bewegung flach auf den Grundriss des Raumes. In die leeren Flächen, wo niemand ging, entwarf ich ein Möbel aus 2 cm starken, gepressten und verleimten Platten: eine Bar für ein Fest, die genau dort steht, wo sie niemandem im Weg ist.</p>
                   </div>
                   <dl class="facts">
                     <div><dt>Methode</dt><dd>Bewegungserfassung, flach auf den Grundriss übertragen</dd></div>
-                    <div><dt>Material</dt><dd>Holzplanken, gepresst und verleimt</dd></div>
+                    <div><dt>Material</dt><dd>Platten, 2 cm stark, gepresst und verleimt</dd></div>
                   </dl>
                 </div>
                 <div class="b8-row">
-                <figure class="b8-stage">
+                <figure class="b8-stage" tabindex="0">
                   <img class="b8-still" src="/assets/img/projects/b8-render.jpg" alt="Die Bar in der Eingangshalle von Building 8" loading="lazy" decoding="async">
                   <img class="b8-anim" alt="Die Bewegung in der Eingangshalle und die Bar in den Flächen, wo niemand ging" hidden>
                   <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Animieren</span><span class="b8-stop">Zum Rendering</span></button>
                 </figure>
-                <figure class="b8-flip" role="img" aria-label="Die vier Bilder nacheinander: die Bewegung baut sich auf">
+                <figure class="b8-flip" tabindex="0" role="img" aria-label="Die vier Bilder nacheinander: die Bewegung baut sich auf">
                   <img style="--k:0" src="/assets/img/projects/b8-screen-0501.jpg" alt="" loading="lazy" decoding="async">
                   <img style="--k:1" src="/assets/img/projects/b8-screen-1236.jpg" alt="" loading="lazy" decoding="async">
                   <img style="--k:2" src="/assets/img/projects/b8-screen-2255.jpg" alt="" loading="lazy" decoding="async">

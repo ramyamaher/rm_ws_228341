@@ -154,10 +154,17 @@ $$('.thumbs').forEach(box => {
     openLb(set.filter(s => s.f), set.filter(s => s.f).indexOf(set[+b.dataset.k]), b);
   });
 });
+let lbFlip = null;
 function showLb(k) {
   lbAt = (k + lbSet.length) % lbSet.length;
   const s = lbSet[lbAt];
-  lbImg.src = `/assets/img/projects/${s.f}.jpg`;
+  clearTimeout(lbFlip);
+  if (s.frames) {
+    // a quarter of a second for each frame, then a pause on the last
+    let n = 0;
+    const step = () => { lbImg.src = s.frames[n]; lbFlip = setTimeout(step, n === s.frames.length - 1 ? 1450 : 250); n = (n + 1) % s.frames.length; };
+    step();
+  } else lbImg.src = s.src || `/assets/img/projects/${s.f}.jpg`;
   lbImg.alt = s.c;
   lbCap.innerHTML = `${s.c}${lbSet.length > 1 ? `<span>${lbAt + 1}/${lbSet.length}</span>` : ''}`;
   $('#lbPrev').hidden = $('#lbNext').hidden = lbSet.length < 2;
@@ -169,6 +176,7 @@ function openLb(set, k, from) {
   $('#lbClose').focus();
 }
 function closeLb() {
+  clearTimeout(lbFlip);
   lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true');
   document.documentElement.classList.remove('lb-lock');
   if (lbFrom) lbFrom.focus({ preventScroll: true });
@@ -440,6 +448,14 @@ $$('.b8-stage').forEach(st => {
     if (on) { anim.src = '/assets/img/projects/b8-motion.gif?' + Date.now(); anim.hidden = false; still.hidden = true; }
     else { anim.hidden = true; anim.removeAttribute('src'); still.hidden = false; }
   });
+  btn.addEventListener('click', e => e.stopPropagation());
+  const flip = st.parentElement.querySelector('.b8-flip');
+  const set = () => [
+    anim.hidden ? { src: still.src, c: still.alt } : { src: anim.src, c: anim.alt },
+    { frames: $$('img', flip).map(i => i.src), c: flip.getAttribute('aria-label') },
+  ];
+  st.addEventListener('click', () => openLb(set(), 0, st));
+  flip.addEventListener('click', () => openLb(set(), 1, flip));
 });
 
 /* ================= apps ================= */
