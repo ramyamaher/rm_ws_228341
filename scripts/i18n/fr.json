@@ -51,7 +51,7 @@
   "First prize[[0]] in the invited competition, December 2016.": "Premier prix[[0]] du concours sur invitation, décembre 2016.",
   "Competition result": "Résultat du concours",
   "Layers of Egypt: Between Labyrinth and Elysium": "Layers of Egypt: Between Labyrinth and Elysium",
-  "Egypt Pavilion, La Biennale di Venezia [[0]][[1]] 15th International Architecture Exhibition, 2016": "Pavillon de l'Égypte, La Biennale di Venezia [[0]][[1]] 15e Exposition internationale d'architecture, 2016",
+  "Egyptian Pavilion, La Biennale di Venezia [[0]][[1]] 15th International Architecture Exhibition, 2016": "Pavillon de l'Égypte, La Biennale di Venezia [[0]][[1]] 15e Exposition internationale d'architecture, 2016",
   "A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale. The pavilion is a passage through three phases of Egypt. The past, where visitors read about Egypt's architecture and its architects. The present: Egypt in 2016, in the middle of a turbulent time, as a labyrinth of dimly lit spaces and images of the suffering Egyptians had grown used to. And the future, Elysium: the bright room the passage finally leads to, where a large physical model of the city has an empty part on the map, and visitors use augmented reality to build Egypt's future.": "Une proposition de concours pour le pavillon national de l'Égypte à la Biennale d'architecture de Venise 2016. Le pavillon est un passage à travers trois phases de l'Égypte. Le passé, où les visiteurs découvrent l'architecture du pays et ses architectes. Le présent : l'Égypte de 2016, en pleine période de turbulences, sous la forme d'un labyrinthe d'espaces faiblement éclairés et d'images des souffrances auxquelles les Égyptiens avaient fini par s'habituer. Et l'avenir, Elysium : la salle lumineuse à laquelle le passage mène enfin, où une grande maquette de la ville laisse une partie vide sur le plan, et où les visiteurs construisent l'avenir de l'Égypte en réalité augmentée.",
   "The design for that future unfolds in three phases. The first keeps the architecture of the existing city, with more green and public space. The second follows the city's main axes: buildings rise taller along them, and where they stay low, they make room for more green space. The third is a business district, to strengthen the city's chances of becoming a financial capital of North Africa and the Middle East.": "Le projet pour cet avenir se déploie en trois phases. La première conserve l'architecture de la ville existante, avec davantage de verdure et d'espaces publics. La deuxième suit les grands axes de la ville : les bâtiments s'y élèvent plus haut, et là où ils restent bas, ils laissent place à davantage d'espaces verts. La troisième est un quartier d'affaires, pour renforcer les chances de la ville de devenir une capitale financière de l'Afrique du Nord et du Moyen-Orient.",
   "Team": "Équipe",
@@ -335,7 +335,19 @@
   "Wörthsee": "Wörthsee",
   "Zagreb": "Zagreb",
   "Zurich": "Zurich",
-  "Þingvellir": "Þingvellir"
+  "Þingvellir": "Þingvellir",
+  "Building 8 Motion Furniture": "Building 8 Motion Furniture",
+  "Furniture designed from motion [[0]][[1]] 2015": "Un meuble dessiné à partir du mouvement [[0]][[1]] 2015",
+  "Building 8 is an educational building at the university, and its entrance leads people to the main hall. From a bridge on the first floor, I placed a camera that captured the motion of everyone passing below, and their paths built up over time into trails.": "Building 8 est un bâtiment d'enseignement de l'université, dont l'entrée mène au grand hall. Depuis une passerelle du premier étage, j'ai placé une caméra qui a capté le mouvement de tous ceux qui passaient en dessous, et leurs trajets se sont accumulés au fil du temps en traînées.",
+  "I then flattened that motion onto the floor plan of the room. In the empty spaces, where no one walked, I designed a piece of furniture made of wooden planks, pressed and glued: a bar for a party, standing exactly where it is in nobody's way.": "J'ai ensuite aplati ce mouvement sur le plan de la salle. Dans les espaces vides, là où personne ne passait, j'ai dessiné un meuble en planches de bois pressées et collées : un bar pour une fête, posé exactement là où il ne gêne personne.",
+  "Method": "Méthode",
+  "Motion capture, flattened onto the plan": "Capture du mouvement, aplatie sur le plan",
+  "Material": "Matériau",
+  "Wooden planks, pressed and glued": "Planches de bois, pressées et collées",
+  "Animate[[0]][[1]]Show the render": "Animer[[0]][[1]]Voir le rendu",
+  "The bar in the entrance hall of Building 8": "Le bar dans le hall d'entrée de Building 8",
+  "The motion in the entrance hall, and the bar standing in the spaces where no one walked": "Le mouvement dans le hall d'entrée, et le bar posé dans les espaces où personne ne passait",
+  "Building 8 logo: the trails of people walking through the hall": "Logo de Building 8 : les traînées des personnes qui traversent le hall"
  },
  "plurals": {
   "place": {
