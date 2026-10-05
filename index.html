@@ -329,6 +329,9 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .logo .m20-logo, .logo .et-logo{width:86%; height:86%}
 .logo .gb-logo{width:80%; height:80%}
 .p-aside .facts:first-child{margin-top:4px}
+/* in dark mode the project logos are inverted, on a dark tile; invert plus a half turn of hue keeps the laser red */
+html[data-theme="dark"] .p-head.has-logo .logo{background:var(--soft)}
+html[data-theme="dark"] .p-head.has-logo .logo .p-logo{filter:invert(1) hue-rotate(180deg)}
 .p-head h2{font-size:clamp(20px,2.4vw,26px); line-height:1.25}
 .p-meta{margin:8px 0 0; color:var(--ink-3); font-size:14px; line-height:1.6}
 .p-meta i{display:inline-block; width:4px; height:4px; margin:0 8px 2px; border-radius:50%; background:currentColor; opacity:.6}
@@ -1076,7 +1079,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
             <p>Most of what I make, inside architecture or outside it, started as a question I could not leave alone. Some of those questions came from technology and programming, some from finance, and many from cultures and travel.</p>
 
             <h2>Professional Experience</h2>
-            <p>My career spans more than ten years in architecture, computational design, BIM and digitalization in the AEC industry, mainly between Egypt, Germany and Switzerland. I hold the LEED Accredited Professional credential. I have completed courses in Python, HTML, CSS, and JavaScript, and I have also programmed in Processing, C# and C++ in my projects.</p>
+            <p>My career spans more than ten years in architecture, computational design, BIM and digitalization in the AEC industry, mainly between Egypt, Germany and Switzerland. I hold the LEED Accredited Professional credential. I took courses in Python, HTML, CSS, and JavaScript, and I completed projects using Processing, C#, and C++.</p>
             <div class="chips"><a class="chip" href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">My full profile on LinkedIn</a></div>
 
             <h2>Revitesse</h2>
