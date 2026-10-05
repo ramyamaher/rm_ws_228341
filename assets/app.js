@@ -56,7 +56,8 @@ function go(id, { push = true } = {}) {
 let shuinSplash = null;
 const PLAYERS = {
   shuin: {
-    play(el) {
+    play(el, still) {
+      if (still) return;
       const box = el.querySelector('.shuin-splash');
       const run = ++el._run || (el._run = 1);
       shuinSplash = shuinSplash || fetch('assets/img/logos/shuin-splash.svg').then(r => r.blob());
@@ -75,17 +76,29 @@ const PLAYERS = {
     },
     reset(el) { el._run = (el._run || 0) + 1; clearTimeout(el._t); el.classList.remove('splashing'); },
   },
+  // RealStage: SMIL morphs, begun after a pause; removing a frozen morph puts its field back across
+  plug: {
+    play(el, still) {
+      const run = () => el.querySelectorAll('animate').forEach(a => a.beginElement());
+      if (still) { run(); el.querySelectorAll('animate').forEach(a => a.endElement()); return; }
+      el._t = setTimeout(run, 900);
+    },
+    reset(el) {
+      clearTimeout(el._t);
+      el.querySelectorAll('animate').forEach(a => a.replaceWith(a.cloneNode()));
+    },
+  },
 };
 // Project logos that play when their project comes into view: the labyrinth opens, the robot
-// fires its laser. Logos out of view go back to their first frame, ready for the next visit.
+// fires its laser. Each plays again whenever its project comes back into view.
 function playLogos(root, dir = -1) {
   if (!entered) return;
   root.querySelectorAll('.anim-logo').forEach(svg => {
+    // a logo leaving the screen keeps its last frame; it starts over only when it comes back
+    if (svg.closest('[aria-hidden="true"]')) return;
     svg.classList.remove('play');
     const player = PLAYERS[svg.dataset.player];
-    if (player) player.reset(svg);
-    if (svg.closest('[aria-hidden="true"]')) return;
-    if (player) { if (!reduced) player.play(svg); return; }
+    if (player) { player.reset(svg); player.play(svg, reduced); return; }
     svg.style.setProperty('--dir', dir);
     void svg.getBoundingClientRect();
     svg.classList.add('play');
