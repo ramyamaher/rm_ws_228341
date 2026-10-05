@@ -40,15 +40,18 @@ export const RULES = [
   ['Clovis', 'United States', 36.83, -119.7, 'clovis'],
   ['Olney', 'United States', 39.15, -77.07, 'olney'],
   ['Redwood National Park', 'United States', 41.21, -124, 'redwood'],
-  ['Gibraltar', 'Gibraltar', 36.14, -5.35, 'gibraltar|macaques'],
+  ['Gibraltar', 'Gibraltar | UK', 36.14, -5.35, 'gibraltar|macaques'],
   ['Pristina', 'Kosovo', 42.66, 21.17, 'pristina|kosovo'],
   ['Andorra la Vella', 'Andorra', 42.51, 1.52, 'andorra'],
   ['Zagreb', 'Croatia', 45.81, 15.98, 'zagreb'],
   ['Rovinj', 'Croatia', 45.08, 13.64, 'rovinj'],
-  ['London', 'United Kingdom', 51.507, -0.128, 'london|tate modern|elizabeth line|v&a east'],
-  ['Glasgow', 'United Kingdom', 55.86, -4.25, 'glasgow|rangers vs celtic'],
-  ['Edinburgh', 'United Kingdom', 55.95, -3.19, 'edinburgh'],
-  ['Newcastle', 'United Kingdom', 54.97, -1.61, 'newcastle'],
+  ['London', 'England | UK', 51.507, -0.128, 'london|tate modern|elizabeth line|v&a east'],
+  ['Glasgow', 'Scotland | UK', 55.86, -4.25, 'glasgow|rangers vs celtic'],
+  ['Edinburgh', 'Scotland | UK', 55.95, -3.19, 'edinburgh'],
+  ['Newcastle', 'England | UK', 54.97, -1.61, 'newcastle'],
+  // ready for the first videos from Wales and Northern Ireland
+  ['Cardiff', 'Wales | UK', 51.48, -3.18, 'cardiff'],
+  ['Belfast', 'Northern Ireland | UK', 54.597, -5.93, 'belfast'],
   ['Ronchamp', 'France', 47.7, 6.62, 'ronchamp'],
   ['Nantes', 'France', 47.22, -1.55, 'nantes'],
   ['Paris', 'France', 48.857, 2.352, 'paris|pompidou|louis vuitton'],
@@ -106,4 +109,5 @@ export const RULES = [
 ];
 
 // Playlist titles on the channel that are not simply the country's name.
-export const PLAYLIST_ALIASES = { USA: 'United States' };
+// The UK is counted as its four countries plus Gibraltar, as on the channel's playlists.
+export const PLAYLIST_ALIASES = { USA: 'United States', Gibraltar: 'Gibraltar | UK', Wales: 'Wales | UK', 'Northern Ireland': 'Northern Ireland | UK' };

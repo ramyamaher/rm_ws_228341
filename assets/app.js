@@ -375,7 +375,7 @@ const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 
 function initMap() {
   const host = $('#map'), tip = $('#mapTip');
-  d3.json('assets/data/countries-50m.json').then(world => {
+  Promise.all([d3.json('assets/data/countries-50m.json'), d3.json('assets/data/uk-countries.json')]).then(([world, ukParts]) => {
     const geoms = world.objects.countries.geometries;
     let feats = topojson.feature(world, world.objects.countries).features;
     // The same merges Shuin makes, so the outlines match the app.
@@ -390,7 +390,12 @@ function initMap() {
     merge(['Israel', 'Palestine'], 'Palestine');
     merge(['Cyprus', 'N. Cyprus', 'Northern Cyprus'], 'Cyprus');
     feats.forEach(f => { f.properties.name = cleanName(f.properties.name); });
-    const land = { type: 'FeatureCollection', features: feats.filter(f => f.properties.name !== 'Antarctica') };
+    // The UK is shown as its four countries (England | UK, Scotland | UK, Wales | UK,
+    // Northern Ireland | UK), outlines from Natural Earth's map units.
+    if (ukParts && ukParts.features) {
+      feats = feats.filter(f => f.properties.name !== 'United Kingdom').concat(ukParts.features);
+    }
+    const land ={ type: 'FeatureCollection', features: feats.filter(f => f.properties.name !== 'Antarctica') };
     feats = land.features;
 
     $('.loading', host).remove();

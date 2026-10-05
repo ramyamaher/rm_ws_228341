@@ -300,7 +300,7 @@ window.WW = {
   },
   {
    "name": "Gibraltar",
-   "country": "Gibraltar",
+   "country": "Gibraltar | UK",
    "lat": 36.14,
    "lon": -5.35,
    "n": 6,
@@ -340,7 +340,7 @@ window.WW = {
   },
   {
    "name": "London",
-   "country": "United Kingdom",
+   "country": "England | UK",
    "lat": 51.507,
    "lon": -0.128,
    "n": 24,
@@ -348,7 +348,7 @@ window.WW = {
   },
   {
    "name": "Glasgow",
-   "country": "United Kingdom",
+   "country": "Scotland | UK",
    "lat": 55.86,
    "lon": -4.25,
    "n": 7,
@@ -356,7 +356,7 @@ window.WW = {
   },
   {
    "name": "Edinburgh",
-   "country": "United Kingdom",
+   "country": "Scotland | UK",
    "lat": 55.95,
    "lon": -3.19,
    "n": 5,
@@ -364,7 +364,7 @@ window.WW = {
   },
   {
    "name": "Newcastle",
-   "country": "United Kingdom",
+   "country": "England | UK",
    "lat": 54.97,
    "lon": -1.61,
    "n": 1,
@@ -808,7 +808,7 @@ window.WW = {
   "Poland": "PLonicp0axHUz-m_HEbku99j_gPAFy1_Pd",
   "Serbia": "PLonicp0axHUzr3GeJxedawxFX7fEVl7G-",
   "Andorra": "PLonicp0axHUzzo7vlCZBZYZZxfbZpBczQ",
-  "Gibraltar": "PLonicp0axHUwpDjZx3uTdmsjOFVQMb95X",
+  "Gibraltar | UK": "PLonicp0axHUwpDjZx3uTdmsjOFVQMb95X",
   "Romania": "PLonicp0axHUwQ5ebYE51eU5OIpKEeLgw2",
   "Luxembourg": "PLonicp0axHUz2o1vfOINEJUn09qLmot2p",
   "Iceland": "PLonicp0axHUwKuLISqC6pkOmRx-fJIvmu",
@@ -826,7 +826,8 @@ window.WW = {
   "Spain": "PLonicp0axHUx_RnAY03ZVVzpUqXYLRugk",
   "Italy": "PLonicp0axHUyV-mkLT3jKc6j-k_xn3YdQ",
   "Japan": "PLonicp0axHUz5UbOCtnjakP6cymxcyIJd",
-  "United Kingdom": "PLonicp0axHUwfhklzx3SaBuHf_hqoP7br",
+  "England | UK": "PLonicp0axHUwlB-CaH36KRXDUtTG_wMLD",
+  "Scotland | UK": "PLonicp0axHUxlu3eUYcq8sZVuNTjYJJ7_",
   "Portugal": "PLonicp0axHUwqcl5A2ivIBYhWoUlr5d9L",
   "France": "PLonicp0axHUwoZI0AnONya527gT1AbMu3",
   "Germany": "PLonicp0axHUxNqHT4aScl8aq7PdbRI9PN",
