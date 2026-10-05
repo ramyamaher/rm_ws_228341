@@ -171,11 +171,11 @@ html[data-theme="dark"] .theme .moon{display:none}
 .tab .lbl{display:inline-block; overflow:hidden; max-width:140px; transition:max-width .4s var(--ease), opacity .3s}
 
 /* the language button: a round flag, as in Bancanca; the menu is a column of round flags */
-.theme.lang{padding:0; overflow:hidden}
+.theme.lang{padding:4px; overflow:hidden}
 .flag{display:block; width:100%; height:100%; border-radius:50%; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
 .flag svg{display:block; width:100%; height:100%}
 .pop.langs{width:auto; padding:6px; display:flex; flex-direction:column; gap:6px; border-radius:26px}
-.pop.langs a{display:block; width:40px; height:40px; padding:0; border-radius:50%; border:1px solid var(--line)}
+.pop.langs a{display:block; width:40px; height:40px; padding:4px; border-radius:50%; border:1px solid var(--line); background:var(--btn-bg)}
 .pop.langs a.sel{outline:2px solid var(--ink); outline-offset:1px; border-color:transparent}
 .pop.langs a:hover{background:none; transform:scale(1.06)}
 /* Arabic reads right to left; the header stays as it is, so its buttons never move */
@@ -530,13 +530,15 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .anim-logo.play .lim-line{animation:limWrite .5s cubic-bezier(.4,0,.3,1) calc(.5s + var(--k) * .55s) forwards}
 @keyframes limWrite{from{opacity:1; stroke-dashoffset:1} to{opacity:1; stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){ .lim-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .lim-line{animation:none} }
-/* Zweite Stammstrecke: an ICE passes and is gone; the next one comes in and brakes to a stop */
+/* Zweite Stammstrecke: a long ICE, nosed at both ends, passes right through; the next one brakes
+   to a stop with its front at 75% of the width */
 .logo .zs-logo{width:88%; height:88%}
-.zs-t1{opacity:0}
-.anim-logo.play .zs-t1{animation:zsPass 1.5s cubic-bezier(.4,0,.8,.6) .4s both}
-.anim-logo.play .zs-t2{animation:zsArrive 2.4s cubic-bezier(.12,.62,.28,1) 1.95s both}
-@keyframes zsPass{0%{transform:translateX(-210px); opacity:1} 60%{opacity:1} 100%{transform:translateX(420px); opacity:0}}
-@keyframes zsArrive{0%{transform:translateX(-230px)} 100%{transform:none}}
+.zs-t1{transform:translateX(-410px)}
+.zs-t2{transform:translateX(-46px)}
+.anim-logo.play .zs-t1{animation:zsPass 1.9s cubic-bezier(.4,0,.75,.7) .4s both}
+.anim-logo.play .zs-t2{animation:zsArrive 2.6s cubic-bezier(.12,.62,.28,1) 2.35s both}
+@keyframes zsPass{from{transform:translateX(-410px)} to{transform:translateX(380px)}}
+@keyframes zsArrive{from{transform:translateX(-410px)} to{transform:translateX(-46px)}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .zs-t1,.anim-logo.play .zs-t2{animation:none} }
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
@@ -817,7 +819,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide project">
                 <div class="p-head has-logo">
-                  <span class="logo"><svg class="p-logo zs-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 26 200 56" role="img" aria-label="Zweite Stammstrecke logo: an ICE train arriving"><defs><linearGradient id="zsFade1" gradientUnits="userSpaceOnUse" x1="-10" y1="0" x2="120" y2="0"><stop offset="0" stop-color="rgb(35,35,35)" stop-opacity="0"/><stop offset="1" stop-color="rgb(35,35,35)"/></linearGradient><linearGradient id="zsFade2" gradientUnits="userSpaceOnUse" x1="-10" y1="0" x2="120" y2="0"><stop offset="0" stop-color="rgb(35,35,35)" stop-opacity="0"/><stop offset="1" stop-color="rgb(35,35,35)"/></linearGradient></defs><line x1="0" y1="77" x2="200" y2="77" stroke="rgb(190,190,190)" stroke-width="3"/><g class="zs-t1"><path fill="url(#zsFade1)" d="M-260 71 L-260 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g><g class="zs-t2"><path fill="url(#zsFade2)" d="M-260 71 L-260 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g></svg></span>
+                  <span class="logo"><svg class="p-logo zs-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 26 200 56" role="img" aria-label="Zweite Stammstrecke logo: an ICE train arriving"><line x1="0" y1="77" x2="200" y2="77" stroke="rgb(190,190,190)" stroke-width="3"/><g class="zs-t1"><path fill="rgb(35,35,35)" d="M-154 71 Q-164 71 -164 61 C-164 47 -134 37 -96 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g><g class="zs-t2"><path fill="rgb(35,35,35)" d="M-154 71 Q-164 71 -164 61 C-164 47 -134 37 -96 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g></svg></span>
                   <div>
                     <h2>Zweite Stammstrecke München</h2>
                     <p class="p-meta">Munich, Germany <i></i> Atelier 4d Architekten <i></i> Hauptbahnhof, Marienhof and Ostbahnhof stations</p>
