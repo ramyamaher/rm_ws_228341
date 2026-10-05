@@ -336,7 +336,6 @@
   "Zurich": "Zurich",
   "Þingvellir": "Þingvellir",
   "Building 8 Motion Furniture": "Building 8 Motion Furniture",
-  "Building 8 is an educational building at the university, and its entrance leads people to the main hall. From a bridge on the first floor, I placed a camera that captured the motion of everyone passing below, and their paths built up over time into trails.": "Building 8 est un bâtiment d'enseignement de l'université, dont l'entrée mène au grand hall. Depuis une passerelle du premier étage, j'ai placé une caméra qui a capté le mouvement de tous ceux qui passaient en dessous, et leurs trajets se sont accumulés au fil du temps en traînées.",
   "I then flattened that motion onto the floor plan of the room. In the empty spaces, where no one walked, I designed a piece of furniture made of wooden planks, pressed and glued: a bar for a party, standing exactly where it is in nobody's way.": "J'ai ensuite aplati ce mouvement sur le plan de la salle. Dans les espaces vides, là où personne ne passait, j'ai dessiné un meuble en planches de bois pressées et collées : un bar pour une fête, posé exactement là où il ne gêne personne.",
   "Method": "Méthode",
   "Motion capture, flattened onto the plan": "Capture du mouvement, aplatie sur le plan",
@@ -352,7 +351,8 @@
   "The motion seen from the bridge, frame 3765": "Le mouvement vu depuis la passerelle, image 3765",
   "Dessau, Germany [[0]][[1]] Master's project [[2]][[3]] 2016": "Dessau, Allemagne [[0]][[1]] Projet de master [[2]][[3]] 2016",
   "Dessau, Germany [[0]][[1]] Furniture designed from motion [[2]][[3]] 2015": "Dessau, Allemagne [[0]][[1]] Un meuble dessiné à partir du mouvement [[2]][[3]] 2015",
-  "The four screens, one after another: the motion building up": "Les quatre images l'une après l'autre : le mouvement qui s'accumule"
+  "The four screens, one after another: the motion building up": "Les quatre images l'une après l'autre : le mouvement qui s'accumule",
+  "Building 8 is an educational building at the university, and its entrance leads people to the main hall. From the bridge shown in the render below, I placed a camera that captured the motion of everyone passing on their way to the hall, and their trails built up the space for the furniture.": "Building 8 est un bâtiment d'enseignement de l'université, dont l'entrée mène au grand hall. Depuis la passerelle visible dans le rendu ci-dessous, j'ai placé une caméra qui a capté le mouvement de tous ceux qui passaient en se rendant au hall, et leurs traînées ont dessiné l'espace du meuble."
  },
  "plurals": {
   "place": {
