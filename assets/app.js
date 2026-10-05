@@ -2,6 +2,20 @@
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Language: the generated pages set window.I18N (lang, locale, t: English to translated strings,
+// plurals); the English page has none and every t() returns its argument.
+const I = window.I18N || {};
+const LANG = I.lang || 'en', LOCALE = I.locale || 'en-GB';
+const t = (s, vars) => { let r = (I.t && I.t[s]) || s; if (vars) for (const k in vars) r = r.split('{' + k + '}').join(vars[k]); return r; };
+const PR = new Intl.PluralRules(LOCALE);
+const plural = (n, w) => {
+  const f = I.plurals && I.plurals[w];
+  const form = f && (f[PR.select(n)] || f.other);
+  return form ? form.split('{n}').join(n.toLocaleString(LOCALE)) : `${n} ${w}${n === 1 ? '' : 's'}`;
+};
+const RTL = document.documentElement.dir === 'rtl';
+// in a right-to-left page the slides sit to the left of one another, so they move the other way
+const isRtl = (el) => getComputedStyle(el).direction === 'rtl';
 
 /* ================= categories: pills on top, panels slide sideways ================= */
 const ORDER = ['architecture', 'design', 'writing', 'archive', 'apps', 'about'];
@@ -31,7 +45,7 @@ function go(id, { push = true } = {}) {
   const from = ORDER.indexOf(current);
   current = id;
   const i = ORDER.indexOf(id);
-  track.style.transform = `translateX(${-i * 100}%)`;
+  track.style.transform = `translateX(${(RTL ? 1 : -1) * i * 100}%)`;
   panels.forEach((p, k) => p.setAttribute('aria-hidden', k === i ? 'false' : 'true'));
   // container tabs fill the screen exactly, so the page behind them must not scroll
   document.documentElement.classList.toggle('fit-tab', panels[i].classList.contains('fit'));
@@ -49,7 +63,7 @@ function go(id, { push = true } = {}) {
   if (changed) window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
   // Behind the greeting nothing animates yet; entering calls go() again.
   if (!firstShow[id] && entered) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
-  playLogos(document, from > i ? 1 : -1, !changed);
+  playLogos(document, (from > i ? 1 : -1) * (RTL ? -1 : 1), !changed);
 }
 // Shuin's tile plays the app's splash (a 1 MB SVG, fetched once, the first time it is needed),
 // then fades to the stamp. A fresh blob URL per play restarts the splash from its first frame.
@@ -60,7 +74,7 @@ const PLAYERS = {
       if (still) return;
       const box = el.querySelector('.shuin-splash');
       const run = ++el._run || (el._run = 1);
-      shuinSplash = shuinSplash || fetch('assets/img/logos/shuin-splash.svg').then(r => r.blob());
+      shuinSplash = shuinSplash || fetch('/assets/img/logos/shuin-splash.svg').then(r => r.blob());
       shuinSplash.then(blob => {
         if (run !== el._run || el.closest('[aria-hidden="true"]')) return;
         const img = new Image();
@@ -129,8 +143,8 @@ $$('.thumbs').forEach(box => {
   // A row keeps each image's proportions; capped so two phone screenshots do not grow huge.
   if (row) box.style.maxWidth = Math.round(set.reduce((t, s) => t + (s.ar || 1), 0) * 420) + 'px';
   box.innerHTML = set.map((s, k) => s.f
-    ? `<button class="thumb" type="button" data-k="${k}"${row ? ` style="flex:${s.ar || 1} 1 0"` : ''} aria-label="Open image: ${s.c}"><img src="assets/img/projects/thumbs/${s.f}.jpg" alt="${s.c}" loading="lazy" decoding="async"></button>`
-    : `<div class="thumb" aria-hidden="true"><span class="slot">Image to come</span></div>`).join('');
+    ? `<button class="thumb" type="button" data-k="${k}"${row ? ` style="flex:${s.ar || 1} 1 0"` : ''} aria-label="${t('Open image: {c}', { c: s.c })}"><img src="/assets/img/projects/thumbs/${s.f}.jpg" alt="${s.c}" loading="lazy" decoding="async"></button>`
+    : `<div class="thumb" aria-hidden="true"><span class="slot">${t('Image to come')}</span></div>`).join('');
   box.addEventListener('click', e => {
     const b = e.target.closest('button.thumb'); if (!b) return;
     openLb(set.filter(s => s.f), set.filter(s => s.f).indexOf(set[+b.dataset.k]), b);
@@ -139,7 +153,7 @@ $$('.thumbs').forEach(box => {
 function showLb(k) {
   lbAt = (k + lbSet.length) % lbSet.length;
   const s = lbSet[lbAt];
-  lbImg.src = `assets/img/projects/${s.f}.jpg`;
+  lbImg.src = `/assets/img/projects/${s.f}.jpg`;
   lbImg.alt = s.c;
   lbCap.innerHTML = `${s.c}${lbSet.length > 1 ? `<span>${lbAt + 1}/${lbSet.length}</span>` : ''}`;
   $('#lbPrev').hidden = $('#lbNext').hidden = lbSet.length < 2;
@@ -162,8 +176,8 @@ lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.co
 addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
   if (e.key === 'Escape') closeLb();
-  else if (e.key === 'ArrowLeft') showLb(lbAt - 1);
-  else if (e.key === 'ArrowRight') showLb(lbAt + 1);
+  else if (e.key === 'ArrowLeft') showLb(lbAt + (RTL ? 1 : -1));
+  else if (e.key === 'ArrowRight') showLb(lbAt + (RTL ? -1 : 1));
 });
 // swipe between images on a phone
 {
@@ -172,7 +186,7 @@ addEventListener('keydown', e => {
   lb.addEventListener('pointerup', e => {
     if (x0 === null || lbSet.length < 2) return;
     const dx = e.clientX - x0; x0 = null;
-    if (Math.abs(dx) > 50) showLb(lbAt + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 50) showLb(lbAt + ((dx < 0) !== RTL ? 1 : -1));
   });
 }
 
@@ -182,7 +196,7 @@ const greet = $('#greet');
 let entered = false;
 {
   const h = new Date().getHours();
-  const hello = h >= 5 && h < 12 ? 'Good morning.' : h >= 12 && h < 18 ? 'Good afternoon.' : 'Good evening.';
+  const hello = t(h >= 5 && h < 12 ? 'Good morning.' : h >= 12 && h < 18 ? 'Good afternoon.' : 'Good evening.');
   // First "Hello.", which fades away; then the greeting for the visitor's time of day, then
   // the name, the welcome and the hint. A click at any moment still enters.
   const el = $('#greetHello');
@@ -190,11 +204,11 @@ let entered = false;
   const second = () => { el.classList.remove('out'); el.innerHTML = words(hello); greet.classList.add('p2'); };
   if (reduced) second();
   else {
-    el.innerHTML = words('Hello.');
+    el.innerHTML = words(t('Hello.'));
     setTimeout(() => el.classList.add('out'), 1250);
     setTimeout(second, 1950);
   }
-  if (matchMedia('(hover: none)').matches) $('#greetHint').textContent = 'Tap anywhere to proceed';
+  if (matchMedia('(hover: none)').matches) $('#greetHint').textContent = t('Tap anywhere to proceed');
 }
 function enter() {
   if (entered) return;
@@ -220,7 +234,8 @@ $('#themeBtn').addEventListener('click', () => {
 darkOS.addEventListener('change', e => { if (!['light', 'dark'].includes(savedTheme())) applyTheme(e.matches ? 'dark' : 'light'); });
 
 /* ================= contact, privacy and cookies: one popover open at a time ================= */
-const pops = [[$('#contactBtn'), $('#contactPop')], [$('#cookieBtn'), $('#privacyPop')]];
+const pops = [[$('#contactBtn'), $('#contactPop')], [$('#cookieBtn'), $('#privacyPop')], [$('#langBtn'), $('#langPop')]];
+$$('#langPop a').forEach(a => a.addEventListener('click', () => { a.href = a.getAttribute('href').split('#')[0] + (location.hash || ''); }));
 // Each menu drops from under its own button: right-aligned to the button where there is room,
 // kept 12px inside the screen otherwise, with the notch pointing at the button's centre.
 function placePop(b, p) {
@@ -256,25 +271,26 @@ if (GOATCOUNTER && !/^(localhost|127\.)/.test(location.hostname)) {
   document.head.appendChild(gc);
 }
 function countView(id) {
-  if (window.goatcounter && window.goatcounter.count && id) window.goatcounter.count({ path: '/' + id, title: id });
+  if (window.goatcounter && window.goatcounter.count && id) window.goatcounter.count({ path: (LANG === 'en' ? '/' : '/' + LANG + '/') + id, title: id });
 }
 
 /* ================= carousel with swipe ================= */
 function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
   const slides = [...trackEl.children];
   const n = slides.length;
+  const rtl = isRtl(car), S = rtl ? 1 : -1;
   let i = 0;
   dots.innerHTML = slides.map(() => '<i></i>').join('');
   function show(k, fromUser = true) {
     const old = i;
     i = Math.max(0, Math.min(n - 1, k));
-    trackEl.style.transform = `translateX(${-i * 100}%)`;
+    trackEl.style.transform = `translateX(${S * i * 100}%)`;
     count.textContent = `${i + 1}/${n}`;
     prev.disabled = i === 0; next.disabled = i === n - 1;
     [...dots.children].forEach((d, j) => d.classList.toggle('on', j === i));
     slides.forEach((s, j) => s.setAttribute('aria-hidden', j !== i));
     car.style.height = slides[i].offsetHeight + 'px';
-    if (i !== old) playLogos(car, i < old ? 1 : -1);
+    if (i !== old) playLogos(car, (i < old ? 1 : -1) * (rtl ? -1 : 1));
     onChange && onChange(i, old, fromUser);
   }
   prev.addEventListener('click', () => show(i - 1));
@@ -299,8 +315,9 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
       dragging = true; moved = true; trackEl.classList.add('drag');
       try { car.setPointerCapture(e.pointerId); } catch (_) {}
     }
-    const edge = (i === 0 && dx > 0) || (i === n - 1 && dx < 0);
-    trackEl.style.transform = `translateX(calc(${-i * 100}% + ${edge ? dx / 3 : dx}px))`;
+    const dn = rtl ? -dx : dx;   // as if left to right
+    const edge = (i === 0 && dn > 0) || (i === n - 1 && dn < 0);
+    trackEl.style.transform = `translateX(calc(${S * i * 100}% + ${edge ? dx / 3 : dx}px))`;
   });
   const end = () => {
     if (!down) return;
@@ -308,8 +325,9 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
     if (!dragging) return;
     trackEl.classList.remove('drag');
     const w = car.clientWidth;
-    if (dx < -Math.min(60, w * .18)) show(i + 1);
-    else if (dx > Math.min(60, w * .18)) show(i - 1);
+    const dn = rtl ? -dx : dx;
+    if (dn < -Math.min(60, w * .18)) show(i + 1);
+    else if (dn > Math.min(60, w * .18)) show(i - 1);
     else show(i, false);
   };
   car.addEventListener('pointerup', end);
@@ -393,12 +411,13 @@ const poems = carousel({
 });
 
 /* ================= architecture and design ================= */
-carousel({ car: $('#archCar'), trackEl: $('#archTrack'), prev: $('#archPrev'), next: $('#archNext'), count: $('#archCount'), dots: $('#archDots') });
-carousel({ car: $('#desCar'), trackEl: $('#desTrack'), prev: $('#desPrev'), next: $('#desNext'), count: $('#desCount'), dots: $('#desDots') });
-carousel({ car: $('#writCar'), trackEl: $('#writTrack'), prev: $('#writPrev'), next: $('#writNext'), count: $('#writCount'), dots: $('#writDots') });
+const CARS = {};
+CARS.architecture = carousel({ car: $('#archCar'), trackEl: $('#archTrack'), prev: $('#archPrev'), next: $('#archNext'), count: $('#archCount'), dots: $('#archDots') });
+CARS.design = carousel({ car: $('#desCar'), trackEl: $('#desTrack'), prev: $('#desPrev'), next: $('#desNext'), count: $('#desCount'), dots: $('#desDots') });
+CARS.writing = carousel({ car: $('#writCar'), trackEl: $('#writTrack'), prev: $('#writPrev'), next: $('#writNext'), count: $('#writCount'), dots: $('#writDots') });
 
 /* ================= apps ================= */
-carousel({
+CARS.apps = carousel({
   car: $('#appCar'), trackEl: $('#appTrack'), prev: $('#appPrev'), next: $('#appNext'),
   count: $('#appCount'), dots: $('#appDots'),
 });
@@ -411,12 +430,12 @@ $('#sCountries').textContent = byCountry.size;
 $('#sVideos').textContent = W.total;
 if (W.first && W.first.date) {
   const d = new Date(W.first.date + 'T12:00:00Z');
-  $('#sFirst').textContent = d.toLocaleDateString('en-GB', { month: matchMedia('(max-width:760px)').matches ? 'short' : 'long', year: 'numeric' });
+  $('#sFirst').textContent = d.toLocaleDateString(LOCALE, { month: matchMedia('(max-width:760px)').matches ? 'short' : 'long', year: 'numeric' });
   $('#sFirstLink').href = 'https://www.youtube.com/watch?v=' + W.first.id;
 }
 if (W.updated) {
-  const d = new Date(W.updated + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-  $('.maphint').insertAdjacentHTML('beforeend', ` The numbers are refreshed from the channel every day; last update ${d}.`);
+  const d = new Date(W.updated + 'T12:00:00Z').toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' });
+  $('.maphint').insertAdjacentHTML('beforeend', ' ' + t('The numbers are refreshed from the channel every day; last update {d}.', { d }));
 }
 
 const ALIAS = {
@@ -429,11 +448,26 @@ const ALIAS = {
   'Antigua and Barb.': 'Antigua and Barbuda', 'Br. Indian Ocean Ter.': 'British Indian Ocean Territory',
 };
 const cleanName = n => ALIAS[n] || n.replace(/ Is\.$/, ' Islands').replace(/^St\. /, 'Saint ');
-const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+// Country names in the page's language: the browser knows every region by its two-letter code;
+// the English names are matched to codes once. The UK's four countries come from the translations.
+const regionName = (() => {
+  if (LANG === 'en' || !Intl.DisplayNames) return (n) => n;
+  const en = new Intl.DisplayNames('en', { type: 'region' }), loc = new Intl.DisplayNames(LOCALE, { type: 'region' });
+  const code = {};
+  const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (const a of A) for (const b of A) { try { const c = a + b, n = en.of(c); if (n && n !== c) code[n] = c; } catch (_) {} }
+  Object.assign(code, { 'United States': 'US', 'Bosnia and Herzegovina': 'BA', 'DR Congo': 'CD', 'Republic of the Congo': 'CG', 'Congo': 'CG',
+    'Central African Republic': 'CF', 'Dominican Republic': 'DO', 'Ivory Coast': 'CI', "Côte d'Ivoire": 'CI', 'Czechia': 'CZ', 'Czech Republic': 'CZ',
+    'Eswatini': 'SZ', 'North Macedonia': 'MK', 'Myanmar': 'MM', 'Palestine': 'PS', 'Saint Vincent and the Grenadines': 'VC', 'Antigua and Barbuda': 'AG',
+    'Solomon Islands': 'SB', 'Falkland Islands': 'FK', 'Faeroe Islands': 'FO', 'Turks and Caicos Islands': 'TC', 'Cayman Islands': 'KY', 'Marshall Islands': 'MH',
+    'Cook Islands': 'CK', 'Timor-Leste': 'TL', 'Vatican': 'VA', 'Macao': 'MO', 'Hong Kong': 'HK', 'Kosovo': 'XK', 'Cabo Verde': 'CV', 'São Tomé and Principe': 'ST' });
+  return (n) => (I.t && I.t[n]) || (code[n] ? loc.of(code[n]) : n);
+})();
+const placeName = (n) => (I.t && I.t[n]) || n;
 
 function initMap() {
   const host = $('#map'), tip = $('#mapTip');
-  Promise.all([d3.json('assets/data/countries-50m.json'), d3.json('assets/data/uk-countries.json')]).then(([world, ukParts]) => {
+  Promise.all([d3.json('/assets/data/countries-50m.json'), d3.json('/assets/data/uk-countries.json')]).then(([world, ukParts]) => {
     const geoms = world.objects.countries.geometries;
     let feats = topojson.feature(world, world.objects.countries).features;
     // The same merges Shuin makes, so the outlines match the app.
@@ -458,7 +492,7 @@ function initMap() {
 
     $('.loading', host).remove();
     const svg = d3.select(host).insert('svg', '.tip').attr('role', 'img')
-      .attr('aria-label', `World map of ${W.places.length} places documented in ${byCountry.size} countries`);
+      .attr('aria-label', t('World map of {p} places documented in {c} countries', { p: W.places.length, c: byCountry.size }));
     const layer = svg.append('g');
     const gC = layer.append('g'), gP = layer.append('g');
     const zoom = d3.zoom().scaleExtent([1, 18])
@@ -513,15 +547,15 @@ function initMap() {
     }
     function countryTip(name) {
       const list = byCountry.get(name);
-      if (!list) return `<b>${name}</b><span>Not documented yet</span>`;
+      if (!list) return `<b>${regionName(name)}</b><span>${t('Not documented yet')}</span>`;
       const ps = [...list].sort((a, b) => b.n - a.n);
       const vids = d3.sum(ps, p => p.n);
-      return `<b>${name}</b><span>${ps.map(p => p.name).join(' · ')}</span><br><span>${plural(ps.length, 'place')}, ${plural(vids, 'video')}</span>${playlistLink(name, '<br>')}`;
+      return `<b>${regionName(name)}</b><span>${ps.map(p => placeName(p.name)).join(' · ')}</span><br><span>${plural(ps.length, 'place')}${LANG === 'ar' ? '، ' : ', '}${plural(vids, 'video')}</span>${playlistLink(name, '<br>')}`;
     }
     const playlistLink = (country, before = '') => (W.playlists || {})[country]
-      ? `${before}<a href="https://www.youtube.com/playlist?list=${W.playlists[country]}" target="_blank" rel="noopener">Go to playlist</a>` : '';
-    const cityTip = p => `<b>${p.name}</b><span>${p.country} · ${plural(p.n, 'video')}</span><br>` +
-      `<a href="https://www.youtube.com/watch?v=${p.v}" target="_blank" rel="noopener">Watch a video</a>${playlistLink(p.country)}`;
+      ? `${before}<a href="https://www.youtube.com/playlist?list=${W.playlists[country]}" target="_blank" rel="noopener">${t('Go to playlist')}</a>` : '';
+    const cityTip = p => `<b>${placeName(p.name)}</b><span>${regionName(p.country)} · ${plural(p.n, 'video')}</span><br>` +
+      `<a href="https://www.youtube.com/watch?v=${p.v}" target="_blank" rel="noopener">${t('Watch a video')}</a>${playlistLink(p.country)}`;
     function show(html, at, pin) {
       tip.innerHTML = html; tip.classList.add('show'); tip.classList.toggle('pinned', !!pin); placeTip(at);
     }
@@ -561,7 +595,7 @@ function initMap() {
     svg.on('click', clear);
     $('#zIn').addEventListener('click', () => svg.transition().duration(350).call(zoom.scaleBy, 1.8));
     $('#zOut').addEventListener('click', () => svg.transition().duration(350).call(zoom.scaleBy, 1 / 1.8));
-  }).catch(() => { $('.loading', host).textContent = 'The map could not be loaded. Please reload the page.'; });
+  }).catch(() => { $('.loading', host).textContent = t('The map could not be loaded. Please reload the page.'); });
 }
 
 /* ================= first visits ================= */
@@ -578,5 +612,7 @@ const onFirstShow = {
 function loadAppImages() { $$('#apps img[loading="lazy"]').forEach(img => { img.loading = 'eager'; }); }
 addEventListener('load', () => setTimeout(loadAppImages, 1500));
 
-go(location.hash.slice(1) || DEFAULT, { push: false });
+const [startTab, startSlide] = (document.documentElement.dataset.start || '').split('/');
+if (!location.hash && startTab) { go(startTab, { push: false }); if (CARS[startTab] && +startSlide) CARS[startTab].show(+startSlide, false); }
+else go(location.hash.slice(1) || DEFAULT, { push: false });
 })();
