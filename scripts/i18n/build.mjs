@@ -25,7 +25,7 @@ const NAME = { en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', ar
 // of its own on purpose: revitesse.com is its page.
 const PROJECTS = [
   ['architecture', 0, 'berlin-modern'], ['architecture', 1, 'zweite-stammstrecke'], ['architecture', 2, 'wohnpark-gebersdorf'],
-  ['design', 0, 'layers-of-egypt'], ['design', 1, 'extended-threads'],
+  ['design', 0, 'layers-of-egypt'], ['design', 1, 'extended-threads'], ['design', 2, 'building-8-motion-furniture'],
   ['writing', 0, 'limericks-contest'],
   ['apps', 0, 'shuin'], ['apps', 2, 'bancanca'], ['apps', 3, 'realstage'],
 ];

@@ -59,7 +59,7 @@
    "award": [
     "First prize, Limerick Contest, First International Aphoristic Conference \"Magnum in Parvo\", 2025",
     "First prize, Wohnpark Gebersdorf invited competition, Nuremberg, 2016 (with ATP architects engineers)",
-    "Second prize, Egypt Pavilion competition, Venice Architecture Biennale, 2016"
+    "Second prize, Egyptian Pavilion competition, Venice Architecture Biennale, 2016"
    ],
    "sameAs": [
     "https://www.linkedin.com/in/ramyamaher/",
@@ -540,6 +540,22 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 @keyframes zsPass{from{transform:translateX(-410px)} to{transform:translateX(380px)}}
 @keyframes zsArrive{from{transform:translateX(-410px)} to{transform:translateX(-46px)}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .zs-t1,.anim-logo.play .zs-t2{animation:none} }
+/* Building 8 logo: the trails, simplified from the plan of the motion, walk in from the entrances at the bottom */
+.logo .b8-logo{width:74%; height:74%}
+.b8-wipe{transform-box:fill-box; transform-origin:50% 100%}
+.anim-logo.play .b8-wipe{animation:b8Walk 1.8s cubic-bezier(.4,.1,.3,1) .4s both}
+@keyframes b8Walk{from{transform:scaleY(0)} to{transform:none}}
+@media (prefers-reduced-motion:reduce){ .anim-logo.play .b8-wipe{animation:none} }
+/* Building 8: the render full width; the button plays the motion in its place */
+.b8-stage{position:relative; margin:22px 0 0; border-radius:18px; overflow:hidden; aspect-ratio:2/1; background:var(--soft)}
+.b8-stage img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
+.b8-stage img[hidden]{display:none}
+.b8-play{position:absolute; right:14px; top:14px; appearance:none; border:0; cursor:pointer; height:38px; padding:0 18px; border-radius:19px;
+  background:rgba(255,255,255,.92); color:rgb(35,35,35); font:650 14px/1 inherit; box-shadow:0 6px 18px -8px rgba(0,0,0,.45); backdrop-filter:blur(6px)}
+.b8-play:hover{background:#fff}
+.b8-play .b8-stop, .b8-play[aria-pressed="true"] .b8-go{display:none}
+.b8-play[aria-pressed="true"] .b8-stop{display:inline}
+html[dir="rtl"] .b8-play{right:auto; left:14px}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
 .anim-logo.play .lab-frame{animation:labFrame 1.1s cubic-bezier(.6,0,.3,1) .45s forwards}
@@ -876,7 +892,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
           <h2 class="sr-title">Diseño</h2>
           <section class="glass card">
             <div class="card-head">
-              <div class="t"><div class="num" id="desCount">1/2</div></div>
+              <div class="t"><div class="num" id="desCount">1/3</div></div>
               <div class="nav"><button class="arrow" id="desPrev" aria-label="Proyecto anterior"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" id="desNext" aria-label="Proyecto siguiente"><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
             </div>
             <div class="car" id="desCar"><div class="car-track" id="desTrack">
@@ -959,6 +975,31 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div class="prize-line faded"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Mención de honor</b> en el Premio Robert Oxman de la Dessau International Architecture Graduate School.</p></div>
                 <div class="thumbs" data-imgs="et-002|Una estructura sinterizada sobre la superficie lunar;et-005|Robots trabajando;et-000|El juego en un ordenador;et-003|Construir en realidad virtual en un móvil;et-004|La vista estereoscópica para unas gafas de RV"></div>
+              </article>
+
+              <article class="slide project">
+                <div class="p-head has-logo">
+                  <span class="logo"><svg class="p-logo b8-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Logotipo de Building 8: las estelas de las personas que atraviesan el vestíbulo"><defs><clipPath id="b8Walk"><rect class="b8-wipe" x="0" y="0" width="300" height="300"/></clipPath></defs><path fill="#e3120b" fill-rule="evenodd" clip-path="url(#b8Walk)" d="M 42.3 0 L 59.3 0 L 60.5 0.8 L 60 2.3 L 60.3 3.5 L 61 3.8 L 60 4.3 L 61 7.3 L 61.5 11.8 L 61.5 12.8 L 62.8 16 L 63.5 16.3 L 63 16.8 L 65.3 19 L 66.5 19.8 L 66.3 20.5 L 79.5 31.3 Q 87 39 92 49.3 L 93.5 55.3 L 94.5 69.3 L 98.8 78 L 100 78.8 L 101.3 81 L 103 82.3 L 103.3 83 L 105 84.3 L 105.3 85 Q 110.7 90.5 118.8 93.5 L 126.8 94 Q 132.6 98.4 141.3 100 Q 145.3 98.8 144 92.3 Q 142.1 90.7 142.5 86.8 L 145.8 81 Q 149.7 77.7 155.8 76.5 L 168.8 75.5 L 185.8 71 L 192.8 71 Q 204.7 73 210 81.8 L 214.8 90 Q 218.9 91.1 220 89.3 L 221.5 83.3 L 221.5 79.3 L 228.3 71.5 L 229.5 70.8 L 236 60.8 Q 241.2 43.5 249 28.8 L 253.5 12.8 L 257.5 5.3 L 257.5 4.3 L 258.8 0.5 L 268.8 0 L 269.8 2.5 L 270.5 2.8 L 271 3.8 L 271 6.8 L 274 16.3 L 274 17.3 Q 275.5 24.5 279.8 29 L 284 32.3 L 284.3 33 L 300 40.8 L 300 161.3 L 288.3 179 L 287.5 179.3 L 285.3 183 L 284.5 183.3 L 279.5 192.3 L 278.5 201.3 L 279.5 217.3 L 280.5 219.3 L 280.5 245.3 L 279 262.8 L 278.5 283.3 L 279 284.8 L 279 289.8 L 278.5 294.8 L 279 297.3 L 278.5 298.8 L 279 299.8 L 257.3 300 L 257 298.8 L 257.5 297.8 L 257 293.3 L 257.5 289.3 L 257.5 288.3 L 257 285.8 L 257 284.8 L 257.5 279.3 L 257 276.8 L 260 255.8 L 260 231.8 L 258 219.8 Q 256.4 215.1 252.8 212.5 L 248.3 211.5 L 242.5 215.3 Q 234.9 223.7 230 234.8 L 221.5 259.3 L 210 283.3 L 206.5 293.8 L 206.5 295.8 L 206 298.8 L 205.8 300 L 160.3 300 L 159.5 299.3 Q 161.8 297.9 160.8 296.5 L 160 296.3 L 161 295.8 L 161 293.8 L 161.5 289.3 L 161 288.3 L 161 286.3 L 161.5 284.8 L 161 283.8 L 161.5 282.8 L 160.5 280.3 L 161 279.3 L 160.5 268.8 L 162.5 260.8 L 165.5 255.3 L 165.5 252.8 Q 171 244.5 174 233.8 L 175.5 221.3 L 175 211.3 Q 177.1 197.6 182 186.8 L 183.5 176.8 L 181 169.8 L 176.3 165 L 168.3 163.5 L 160.8 165.5 L 154.3 166 L 148.8 165.5 L 141.3 162.5 L 132.8 162.5 L 128.8 161.5 L 121.3 156.5 L 117.3 156 L 115 157.8 L 110.5 165.3 L 108.5 171.3 L 106 182.8 L 106 193.8 L 108.5 220.8 L 113 241.3 L 114 260.3 L 115 265.3 Q 119.9 283.3 129 297.3 L 129 298.3 L 129.5 299.3 L 128.8 300 L 10.3 300 L 9.3 300 L 7.8 299.5 L 6.3 300 L 0 299.8 L 0 236.3 L 0.8 234 L 2.5 235.3 L 2.8 234 L 3.5 233.8 L 3.8 230.5 L 4.3 231.5 L 4.8 230 L 5.5 230.3 L 5.8 228.5 L 6.3 229.5 Q 8.1 225.4 7 218.3 L 6.3 216 L 5.8 217 L 5.3 215.5 L 4.5 215.8 L 4.3 214 L 3.5 213.8 L 3.3 212.5 L 2.5 212.3 L 2.3 211.5 L 0.8 212 L 0 209.8 L 0 183.8 L 0.5 172.8 L 0 137.3 L 0.8 136 L 2.5 135.8 L 2.8 134.5 L 3.8 134 L 5.5 134.3 L 5.8 133.5 L 6.3 134.5 L 9.3 131 L 11 130.8 L 11.3 129 L 12.5 128.8 L 12.8 127 L 13.5 127.3 L 14.3 121 L 15 121.3 Q 14.5 116 16.3 113 L 17 112.8 Q 17.2 107.2 19.8 104 L 20.5 104.3 L 26.5 92.3 L 26.5 85.3 L 27.5 83.3 L 28 73.3 Q 30.2 61.7 35.5 53.3 L 39.5 36.8 L 40.5 20.3 L 40 18.3 L 40.5 16.8 L 40.5 15.8 L 41 3.8 L 42 2.3 L 41.5 0.8 L 42.3 0 Z M 46 130 L 45 131 L 44 135 L 45 142 Q 46 144 49 144 L 52 137 L 50 131 L 46 130 Z M 45 178 L 44 179 L 41 180 L 40 183 L 38 185 L 38 189 L 39 190 L 40 191 L 41 192 L 51 192 L 52 193 L 56 195 L 55 219 L 50 228 Q 47 232 42 233 L 38 238 L 39 245 L 42 249 L 49 265 L 54 272 L 61 279 L 75 283 L 78 283 L 80 280 L 80 280 L 83 266 L 83 256 L 78 239 L 73 211 Q 70 201 64 195 L 61 194 L 60 193 L 57 192 L 56 189 L 55 188 L 54 185 L 53 184 L 52 183 L 49 180 L 48 179 L 45 178 Z "/></svg></span>
+                  <div>
+                    <h2>Building 8 Motion Furniture</h2>
+                    <p class="p-meta">Un mueble diseñado a partir del movimiento <i></i> 2015</p>
+                  </div>
+                </div>
+                <div class="p-body">
+                  <div class="prose">
+                    <p>Building 8 es un edificio docente de la universidad, y su entrada conduce al vestíbulo principal. Desde un puente en la primera planta, coloqué una cámara que captó el movimiento de todos los que pasaban por debajo, y sus recorridos se fueron acumulando con el tiempo en estelas.</p>
+                    <p>Después aplané ese movimiento sobre la planta de la sala. En los espacios vacíos, donde nadie caminaba, diseñé un mueble de tablones de madera prensados y encolados: una barra para una fiesta, situada justo donde no estorba a nadie.</p>
+                  </div>
+                  <dl class="facts">
+                    <div><dt>Método</dt><dd>Captura del movimiento, aplanada sobre la planta</dd></div>
+                    <div><dt>Material</dt><dd>Tablones de madera, prensados y encolados</dd></div>
+                  </dl>
+                </div>
+                <figure class="b8-stage">
+                  <img class="b8-still" src="/assets/img/projects/b8-render.jpg" alt="La barra en el vestíbulo de entrada de Building 8" loading="lazy" decoding="async">
+                  <img class="b8-anim" alt="El movimiento en el vestíbulo de entrada y la barra en los espacios por donde nadie caminaba" hidden>
+                  <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Animar</span><span class="b8-stop">Ver el render</span></button>
+                </figure>
               </article>
 
             </div></div>
