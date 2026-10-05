@@ -1,7 +1,453 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ramymaher.com/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/architecture/berlin-modern/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/berlin-modern/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/architecture/berlin-modern/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/berlin-modern/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/architecture/berlin-modern/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/berlin-modern/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/architecture/berlin-modern/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/berlin-modern/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/architecture/berlin-modern/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/berlin-modern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/berlin-modern/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/architecture/zweite-stammstrecke/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/architecture/zweite-stammstrecke/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/architecture/zweite-stammstrecke/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/architecture/zweite-stammstrecke/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/architecture/zweite-stammstrecke/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/zweite-stammstrecke/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/zweite-stammstrecke/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/architecture/wohnpark-gebersdorf/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/architecture/wohnpark-gebersdorf/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/architecture/wohnpark-gebersdorf/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/architecture/wohnpark-gebersdorf/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/architecture/wohnpark-gebersdorf/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/wohnpark-gebersdorf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/design/layers-of-egypt/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/layers-of-egypt/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/design/layers-of-egypt/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/layers-of-egypt/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/design/layers-of-egypt/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/layers-of-egypt/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/design/layers-of-egypt/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/layers-of-egypt/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/design/layers-of-egypt/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/layers-of-egypt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/layers-of-egypt/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/design/extended-threads/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/extended-threads/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/design/extended-threads/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/extended-threads/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/design/extended-threads/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/extended-threads/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/design/extended-threads/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/extended-threads/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/design/extended-threads/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/extended-threads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/extended-threads/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/writing/limericks-contest/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/writing/limericks-contest/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/writing/limericks-contest/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/writing/limericks-contest/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/writing/limericks-contest/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/writing/limericks-contest/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/writing/limericks-contest/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/writing/limericks-contest/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/writing/limericks-contest/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/writing/limericks-contest/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/writing/limericks-contest/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/apps/shuin/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/shuin/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/apps/shuin/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/shuin/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/apps/shuin/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/shuin/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/apps/shuin/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/shuin/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/apps/shuin/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/shuin/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/shuin/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/apps/bancanca/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/bancanca/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/apps/bancanca/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/bancanca/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/apps/bancanca/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/bancanca/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/apps/bancanca/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/bancanca/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/apps/bancanca/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/bancanca/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/bancanca/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/apps/realstage/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/realstage/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/de/apps/realstage/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/realstage/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/fr/apps/realstage/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/realstage/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/es/apps/realstage/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/realstage/"/>
+  </url>
+  <url>
+    <loc>https://ramymaher.com/ar/apps/realstage/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ramymaher.com/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ramymaher.com/de/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/realstage/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/realstage/"/>
   </url>
 </urlset>
