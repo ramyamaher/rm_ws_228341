@@ -431,25 +431,25 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 /* Logos that play each time their project comes into view (app.js adds .play) */
 /* 1. the sphere rocks on its base like an egg about to hatch: a rock, a pause, then a fast shake */
 .et-sphere{transform-box:view-box; transform-origin:610px 1400px}
-.anim-logo.play .et-sphere{animation:etWobble 1.6s ease-in-out both}
+.anim-logo.play .et-sphere{animation:etWobble 2.2s ease-in-out both}
 @keyframes etWobble{
-  0%{transform:rotate(0)} 8.6%{transform:rotate(-10deg)} 17.1%{transform:rotate(9deg)} 25.7%{transform:rotate(-6deg)} 34.3%,48.6%{transform:rotate(0)}
-  54.3%{transform:rotate(-12deg) translateY(-30px)} 60%{transform:rotate(12deg)} 65.7%{transform:rotate(-11deg) translateY(-20px)}
-  71.4%{transform:rotate(10deg)} 77.1%{transform:rotate(-8deg)} 82.9%{transform:rotate(6deg)} 88.6%{transform:rotate(-3.5deg)}
-  94.3%{transform:rotate(1.5deg)} 100%{transform:rotate(0)}
+  0%{transform:rotate(0)} 8.6%{transform:rotate(-6.5deg)} 17.1%{transform:rotate(6deg)} 25.7%{transform:rotate(-4deg)} 34.3%,48.6%{transform:rotate(0)}
+  54.3%{transform:rotate(-8deg) translateY(-18px)} 60%{transform:rotate(8deg)} 65.7%{transform:rotate(-7deg) translateY(-12px)}
+  71.4%{transform:rotate(6.5deg)} 77.1%{transform:rotate(-5deg)} 82.9%{transform:rotate(4deg)} 88.6%{transform:rotate(-2.3deg)}
+  94.3%{transform:rotate(1deg)} 100%{transform:rotate(0)}
 }
 /* the beam does not exist until it fires */
 .et-beam{opacity:0}
-.anim-logo.play .et-beam{animation:etOn 0s linear 1.55s forwards}
+.anim-logo.play .et-beam{animation:etOn 0s linear 2.15s forwards}
 @keyframes etOn{to{opacity:1}}
 /* 2. then the laser beams out from the cap */
 .et-reveal{stroke-dasharray:1 1; stroke-dashoffset:1}
-.anim-logo.play .et-reveal{animation:etBeam 1.5s cubic-bezier(.3,.1,.3,1) 1.55s forwards}
+.anim-logo.play .et-reveal{animation:etBeam 1.5s cubic-bezier(.3,.1,.3,1) 2.15s forwards}
 @keyframes etBeam{to{stroke-dashoffset:0}}
 .et-flash{opacity:0; transform-box:fill-box; transform-origin:center}
-.anim-logo.play .et-flash{animation:etFlash .7s ease-out 1.5s both}
+.anim-logo.play .et-flash{animation:etFlash .7s ease-out 2.1s both}
 @keyframes etFlash{0%{opacity:0; transform:scale(.3)} 25%{opacity:1; transform:scale(1)} 100%{opacity:0; transform:scale(1.6)}}
-.anim-logo.play .et-beam path:first-child{animation:etHum .9s ease-in-out 3.1s 2}
+.anim-logo.play .et-beam path:first-child{animation:etHum .9s ease-in-out 3.7s 2}
 @keyframes etHum{50%{opacity:.75}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .et-sphere,.anim-logo.play .et-flash,.anim-logo.play .et-beam path{animation:none} .et-reveal{stroke-dashoffset:0} .et-beam{opacity:1} }
 /* the buildings brake: they run on in the direction they arrived from, leaning, then settle back */
@@ -503,13 +503,13 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .anim-logo.play .lim-line{animation:limWrite .5s cubic-bezier(.4,0,.3,1) calc(.5s + var(--k) * .55s) forwards}
 @keyframes limWrite{from{opacity:1; stroke-dashoffset:1} to{opacity:1; stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){ .lim-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .lim-line{animation:none} }
-/* Zweite Stammstrecke: an ICE passes and fades, its trail leaving the frame; a second one comes in and settles */
+/* Zweite Stammstrecke: an ICE passes and is gone; the next one comes in and brakes to a stop */
 .logo .zs-logo{width:88%; height:88%}
 .zs-t1{opacity:0}
-.anim-logo.play .zs-t1{animation:zsPass 1.3s cubic-bezier(.45,0,.85,.55) .4s both}
-.anim-logo.play .zs-t2{animation:zsArrive 1.5s cubic-bezier(.2,.8,.3,1) 1.75s both}
-@keyframes zsPass{0%{transform:translateX(-230px); opacity:1} 55%{opacity:1} 100%{transform:translateX(330px); opacity:0}}
-@keyframes zsArrive{0%{transform:translateX(-240px)} 82%{transform:translateX(3px)} 100%{transform:none}}
+.anim-logo.play .zs-t1{animation:zsPass 1.5s cubic-bezier(.4,0,.8,.6) .4s both}
+.anim-logo.play .zs-t2{animation:zsArrive 2.4s cubic-bezier(.12,.62,.28,1) 1.95s both}
+@keyframes zsPass{0%{transform:translateX(-210px); opacity:1} 60%{opacity:1} 100%{transform:translateX(420px); opacity:0}}
+@keyframes zsArrive{0%{transform:translateX(-230px)} 100%{transform:none}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .zs-t1,.anim-logo.play .zs-t2{animation:none} }
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
@@ -780,7 +780,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide project">
                 <div class="p-head has-logo">
-                  <span class="logo"><svg class="p-logo zs-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 30 200 52" role="img" aria-label="Zweite Stammstrecke logo: an ICE train arriving"><defs><linearGradient id="zsTrail" gradientUnits="userSpaceOnUse" x1="-150" y1="0" x2="8" y2="0"><stop offset="0" stop-color="rgb(35,35,35)" stop-opacity="0"/><stop offset="1" stop-color="rgb(35,35,35)" stop-opacity=".7"/></linearGradient></defs><line x1="0" y1="76" x2="200" y2="76" stroke="rgb(190,190,190)" stroke-width="3"/><g class="zs-t1"><line x1="-150" y1="62" x2="8" y2="62" stroke="url(#zsTrail)" stroke-width="4" stroke-linecap="round"/><path fill="rgb(35,35,35)" fill-rule="evenodd" d="M6 70 L6 46 Q6 41 11 41 L132 41 C158 41 176 50 190 63 Q195 68 188 70 Z M14 47 H128 V54 H14 Z M140 45 C155 46 167 51 176 58 L150 58 Q143 58 141 52 Z"/></g><g class="zs-t2"><path fill="rgb(35,35,35)" fill-rule="evenodd" d="M6 70 L6 46 Q6 41 11 41 L132 41 C158 41 176 50 190 63 Q195 68 188 70 Z M14 47 H128 V54 H14 Z M140 45 C155 46 167 51 176 58 L150 58 Q143 58 141 52 Z"/></g></svg></span>
+                  <span class="logo"><svg class="p-logo zs-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 26 200 56" role="img" aria-label="Zweite Stammstrecke logo: an ICE train arriving"><defs><linearGradient id="zsFade1" gradientUnits="userSpaceOnUse" x1="-10" y1="0" x2="120" y2="0"><stop offset="0" stop-color="rgb(35,35,35)" stop-opacity="0"/><stop offset="1" stop-color="rgb(35,35,35)"/></linearGradient><linearGradient id="zsFade2" gradientUnits="userSpaceOnUse" x1="-10" y1="0" x2="120" y2="0"><stop offset="0" stop-color="rgb(35,35,35)" stop-opacity="0"/><stop offset="1" stop-color="rgb(35,35,35)"/></linearGradient></defs><line x1="0" y1="77" x2="200" y2="77" stroke="rgb(190,190,190)" stroke-width="3"/><g class="zs-t1"><path fill="url(#zsFade1)" d="M-260 71 L-260 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g><g class="zs-t2"><path fill="url(#zsFade2)" d="M-260 71 L-260 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g></svg></span>
                   <div>
                     <h2>Zweite Stammstrecke München</h2>
                     <p class="p-meta">Munich, Germany <i></i> Atelier 4d Architekten <i></i> Hauptbahnhof, Marienhof and Ostbahnhof stations</p>
