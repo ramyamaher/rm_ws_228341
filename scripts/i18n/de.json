@@ -58,7 +58,6 @@
   "Kamel Lokman[[0]]Ramy Maher": "Kamel Lokman[[0]]Ramy Maher",
   "Second prize[[0]], awarded by the Egyptian Ministry of Culture.": "Zweiter Preis[[0]], verliehen vom ägyptischen Kulturministerium.",
   "Extended Threads": "Extended Threads",
-  "Master's project [[0]][[1]] 2016": "Masterprojekt [[0]][[1]] 2016",
   "Extended Threads joins a philosophical reading of architecture with technology. It takes apart what architecture means, who builds, where and how, and puts it back together as a game. It is an inquiry into where architecture ends and design begins, stripping architecture down and dismantling it back to single syllables. Its result is a tool for building vernacularly, without professionally trained architects.": "Extended Threads verbindet eine philosophische Lesart der Architektur mit Technologie. Es zerlegt, was Architektur bedeutet, wer baut, wo und wie, und setzt es als Spiel wieder zusammen. Es ist eine Untersuchung darüber, wo Architektur endet und Design beginnt, die Architektur bis auf das Gerüst freilegt und sie zurück in einzelne Silben zerlegt. Das Ergebnis ist ein Werkzeug, um vernakulär zu bauen, ohne professionell ausgebildete Architekten.",
   "In a gesture-based video game played in virtual reality, players use their hands to control robots at a distance. The robots build by sintering, fusing loose material layer by layer into solid form, across a lunar landscape. The game runs on a computer and on a phone in a VR headset, and many players can build together from anywhere.": "In einem gestengesteuerten Videospiel in virtueller Realität steuern die Spieler mit ihren Händen Roboter aus der Ferne. Die Roboter bauen durch Sintern, indem sie loses Material Schicht für Schicht zu fester Form verschmelzen, quer über eine Mondlandschaft. Das Spiel läuft auf einem Computer und auf einem Smartphone in einer VR-Brille, und viele Spieler können von überall aus gemeinsam bauen.",
   "Project Type": "Projektart",
@@ -337,7 +336,6 @@
   "Zurich": "Zürich",
   "Þingvellir": "Þingvellir",
   "Building 8 Motion Furniture": "Building 8 Motion Furniture",
-  "Furniture designed from motion [[0]][[1]] 2015": "Ein Möbel, entworfen aus Bewegung [[0]][[1]] 2015",
   "Building 8 is an educational building at the university, and its entrance leads people to the main hall. From a bridge on the first floor, I placed a camera that captured the motion of everyone passing below, and their paths built up over time into trails.": "Building 8 ist ein Lehrgebäude der Universität, und sein Eingang führt in die große Halle. Auf einer Brücke im ersten Obergeschoss stellte ich eine Kamera auf, die die Bewegung aller festhielt, die darunter vorbeigingen, und ihre Wege legten sich mit der Zeit zu Spuren übereinander.",
   "I then flattened that motion onto the floor plan of the room. In the empty spaces, where no one walked, I designed a piece of furniture made of wooden planks, pressed and glued: a bar for a party, standing exactly where it is in nobody's way.": "Dann übertrug ich diese Bewegung flach auf den Grundriss des Raumes. In die leeren Flächen, wo niemand ging, entwarf ich ein Möbel aus gepressten und verleimten Holzplanken: eine Bar für ein Fest, die genau dort steht, wo sie niemandem im Weg ist.",
   "Method": "Methode",
@@ -351,7 +349,10 @@
   "The motion seen from the bridge, frame 501": "Die Bewegung von der Brücke aus gesehen, Bild 501",
   "The motion seen from the bridge, frame 1236": "Die Bewegung von der Brücke aus gesehen, Bild 1236",
   "The motion seen from the bridge, frame 2255": "Die Bewegung von der Brücke aus gesehen, Bild 2255",
-  "The motion seen from the bridge, frame 3765": "Die Bewegung von der Brücke aus gesehen, Bild 3765"
+  "The motion seen from the bridge, frame 3765": "Die Bewegung von der Brücke aus gesehen, Bild 3765",
+  "Dessau, Germany [[0]][[1]] Master's project [[2]][[3]] 2016": "Dessau, Deutschland [[0]][[1]] Masterprojekt [[2]][[3]] 2016",
+  "Dessau, Germany [[0]][[1]] Furniture designed from motion [[2]][[3]] 2015": "Dessau, Deutschland [[0]][[1]] Ein Möbel, entworfen aus Bewegung [[2]][[3]] 2015",
+  "The four screens, one after another: the motion building up": "Die vier Bilder nacheinander: die Bewegung baut sich auf"
  },
  "plurals": {
   "place": {
