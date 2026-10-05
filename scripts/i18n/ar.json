@@ -51,7 +51,7 @@
   "First prize[[0]] in the invited competition, December 2016.": "الجائزة الأولى[[0]] في المسابقة بالدعوة، ديسمبر 2016.",
   "Competition result": "نتيجة المسابقة",
   "Layers of Egypt: Between Labyrinth and Elysium": "طبقات مصر: بين المتاهة والجنة",
-  "Egypt Pavilion, La Biennale di Venezia [[0]][[1]] 15th International Architecture Exhibition, 2016": "الجناح المصري، بينالي البندقية [[0]][[1]] المعرض الدولي الخامس عشر للعمارة، 2016",
+  "Egyptian Pavilion, La Biennale di Venezia [[0]][[1]] 15th International Architecture Exhibition, 2016": "الجناح المصري، بينالي البندقية [[0]][[1]] المعرض الدولي الخامس عشر للعمارة، 2016",
   "A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale. The pavilion is a passage through three phases of Egypt. The past, where visitors read about Egypt's architecture and its architects. The present: Egypt in 2016, in the middle of a turbulent time, as a labyrinth of dimly lit spaces and images of the suffering Egyptians had grown used to. And the future, Elysium: the bright room the passage finally leads to, where a large physical model of the city has an empty part on the map, and visitors use augmented reality to build Egypt's future.": "مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر. الماضي، حيث يقرأ الزوار عن عمارة مصر ومعمارييها. والحاضر: مصر في 2016، في قلب زمن مضطرب، متاهة من فضاءات خافتة الإضاءة وصور لمعاناة اعتادها المصريون. والمستقبل، الجنة: الغرفة المضيئة التي ينتهي إليها الممرّ، حيث يضم مجسّم كبير للمدينة جزءًا فارغًا على الخريطة، ويستخدم الزوار الواقع المعزّز لبناء مستقبل مصر.",
   "The design for that future unfolds in three phases. The first keeps the architecture of the existing city, with more green and public space. The second follows the city's main axes: buildings rise taller along them, and where they stay low, they make room for more green space. The third is a business district, to strengthen the city's chances of becoming a financial capital of North Africa and the Middle East.": "يتكشّف تصميم ذلك المستقبل على ثلاث مراحل. الأولى تحافظ على عمارة المدينة القائمة، مع مساحات خضراء وعامة أكثر. والثانية تتبع محاور المدينة الرئيسية: ترتفع المباني على امتدادها، وحيث تبقى منخفضة تفسح المجال لمزيد من المساحات الخضراء. والثالثة حيّ للأعمال، يعزّز فرص المدينة في أن تصبح عاصمة مالية لشمال أفريقيا والشرق الأوسط.",
   "Team": "الفريق",
@@ -335,7 +335,19 @@
   "Wörthsee": "فورتزيه",
   "Zagreb": "زغرب",
   "Zurich": "زيورخ",
-  "Þingvellir": "ثينغفيلير"
+  "Þingvellir": "ثينغفيلير",
+  "Building 8 Motion Furniture": "أثاث الحركة في المبنى 8",
+  "Furniture designed from motion [[0]][[1]] 2015": "أثاث مصمَّم من الحركة [[0]][[1]] 2015",
+  "Building 8 is an educational building at the university, and its entrance leads people to the main hall. From a bridge on the first floor, I placed a camera that captured the motion of everyone passing below, and their paths built up over time into trails.": "المبنى 8 مبنى تعليمي في الجامعة، يقود مدخله إلى القاعة الرئيسية. من جسر في الطابق الأول، وضعت كاميرا التقطت حركة كل من مرّ تحتها، فتراكمت مساراتهم مع الوقت حتى صارت آثارًا.",
+  "I then flattened that motion onto the floor plan of the room. In the empty spaces, where no one walked, I designed a piece of furniture made of wooden planks, pressed and glued: a bar for a party, standing exactly where it is in nobody's way.": "ثم سطّحتُ تلك الحركة على المسقط الأفقي للقاعة. وفي المساحات الخالية، حيث لم يمشِ أحد، صمّمتُ قطعة أثاث من ألواح خشبية مضغوطة وملصوقة: بارًا لحفلة، يقف تمامًا حيث لا يعترض طريق أحد.",
+  "Method": "المنهج",
+  "Motion capture, flattened onto the plan": "التقاط الحركة وتسطيحها على المسقط",
+  "Material": "المادة",
+  "Wooden planks, pressed and glued": "ألواح خشبية مضغوطة وملصوقة",
+  "Animate[[0]][[1]]Show the render": "تحريك[[0]][[1]]عرض الصورة",
+  "The bar in the entrance hall of Building 8": "البار في قاعة مدخل المبنى 8",
+  "The motion in the entrance hall, and the bar standing in the spaces where no one walked": "الحركة في قاعة المدخل، والبار قائم في المساحات التي لم يمشِ فيها أحد",
+  "Building 8 logo: the trails of people walking through the hall": "شعار المبنى 8: آثار الناس وهم يعبرون القاعة"
  },
  "plurals": {
   "place": {

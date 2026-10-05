@@ -430,6 +430,18 @@ CARS.architecture = carousel({ car: $('#archCar'), trackEl: $('#archTrack'), pre
 CARS.design = carousel({ car: $('#desCar'), trackEl: $('#desTrack'), prev: $('#desPrev'), next: $('#desNext'), count: $('#desCount'), dots: $('#desDots') });
 CARS.writing = carousel({ car: $('#writCar'), trackEl: $('#writTrack'), prev: $('#writPrev'), next: $('#writNext'), count: $('#writCount'), dots: $('#writDots') });
 
+// Building 8: the button swaps the render for the animation of the motion (3.5 MB, loaded only
+// when asked for) and back
+$$('.b8-stage').forEach(st => {
+  const btn = $('.b8-play', st), still = $('.b8-still', st), anim = $('.b8-anim', st);
+  btn.addEventListener('click', () => {
+    const on = btn.getAttribute('aria-pressed') !== 'true';
+    btn.setAttribute('aria-pressed', on);
+    if (on) { anim.src = '/assets/img/projects/b8-motion.gif?' + Date.now(); anim.hidden = false; still.hidden = true; }
+    else { anim.hidden = true; anim.removeAttribute('src'); still.hidden = false; }
+  });
+});
+
 /* ================= apps ================= */
 CARS.apps = carousel({
   car: $('#appCar'), trackEl: $('#appTrack'), prev: $('#appPrev'), next: $('#appNext'),
