@@ -49,7 +49,7 @@ function go(id, { push = true } = {}) {
   if (changed) window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
   // Behind the greeting nothing animates yet; entering calls go() again.
   if (!firstShow[id] && entered) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
-  playLogos(document, from > i ? 1 : -1);
+  playLogos(document, from > i ? 1 : -1, !changed);
 }
 // Shuin's tile plays the app's splash (a 1 MB SVG, fetched once, the first time it is needed),
 // then fades to the stamp. A fresh blob URL per play restarts the splash from its first frame.
@@ -91,11 +91,13 @@ const PLAYERS = {
 };
 // Project logos that play when their project comes into view: the labyrinth opens, the robot
 // fires its laser. Each plays again whenever its project comes back into view.
-function playLogos(root, dir = -1) {
+function playLogos(root, dir = -1, landing = false) {
   if (!entered) return;
   root.querySelectorAll('.anim-logo').forEach(svg => {
     // a logo leaving the screen keeps its last frame; it starts over only when it comes back
     if (svg.closest('[aria-hidden="true"]')) return;
+    // a building brakes because you moved to it; on the page you land on it simply stands
+    if (landing && svg.querySelector('.jelly')) return;
     svg.classList.remove('play');
     const player = PLAYERS[svg.dataset.player];
     if (player) { player.reset(svg); player.play(svg, reduced); return; }
