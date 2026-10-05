@@ -4,9 +4,9 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= categories: pills on top, panels slide sideways ================= */
-const ORDER = ['about', 'architecture', 'design', 'writing', 'archive', 'apps'];
+const ORDER = ['architecture', 'design', 'writing', 'archive', 'apps', 'about'];
 const ALIASES = { documentation: 'archive' };   // old links keep working
-const DEFAULT = 'about';
+const DEFAULT = 'architecture';
 
 // The header is two rows whose height depends on the font and the safe area; measure it.
 const header = $('header');
@@ -51,13 +51,41 @@ function go(id, { push = true } = {}) {
   if (!firstShow[id] && entered) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
   playLogos(document, from > i ? 1 : -1);
 }
+// Shuin's tile plays the app's splash (a 1 MB SVG, fetched once, the first time it is needed),
+// then fades to the stamp. A fresh blob URL per play restarts the splash from its first frame.
+let shuinSplash = null;
+const PLAYERS = {
+  shuin: {
+    play(el) {
+      const box = el.querySelector('.shuin-splash');
+      const run = ++el._run || (el._run = 1);
+      shuinSplash = shuinSplash || fetch('assets/img/logos/shuin-splash.svg').then(r => r.blob());
+      shuinSplash.then(blob => {
+        if (run !== el._run || el.closest('[aria-hidden="true"]')) return;
+        const img = new Image();
+        img.alt = '';
+        img.src = URL.createObjectURL(blob);
+        img.onload = () => {
+          if (run !== el._run) return;
+          box.replaceChildren(img);
+          el.classList.add('splashing');
+          el._t = setTimeout(() => { el.classList.remove('splashing'); URL.revokeObjectURL(img.src); }, 8200);
+        };
+      }).catch(() => {});
+    },
+    reset(el) { el._run = (el._run || 0) + 1; clearTimeout(el._t); el.classList.remove('splashing'); },
+  },
+};
 // Project logos that play when their project comes into view: the labyrinth opens, the robot
 // fires its laser. Logos out of view go back to their first frame, ready for the next visit.
 function playLogos(root, dir = -1) {
   if (!entered) return;
   root.querySelectorAll('.anim-logo').forEach(svg => {
     svg.classList.remove('play');
+    const player = PLAYERS[svg.dataset.player];
+    if (player) player.reset(svg);
     if (svg.closest('[aria-hidden="true"]')) return;
+    if (player) { if (!reduced) player.play(svg); return; }
     svg.style.setProperty('--dir', dir);
     void svg.getBoundingClientRect();
     svg.classList.add('play');
