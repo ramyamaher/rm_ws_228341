@@ -28,6 +28,7 @@ function go(id, { push = true } = {}) {
   id = ALIASES[id] || id;
   if (!ORDER.includes(id)) id = DEFAULT;
   const changed = current !== null && current !== id;
+  const from = ORDER.indexOf(current);
   current = id;
   const i = ORDER.indexOf(id);
   track.style.transform = `translateX(${-i * 100}%)`;
@@ -48,6 +49,19 @@ function go(id, { push = true } = {}) {
   if (changed) window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
   // Behind the greeting nothing animates yet; entering calls go() again.
   if (!firstShow[id] && entered) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
+  playLogos(document, from > i ? 1 : -1);
+}
+// Project logos that play when their project comes into view: the labyrinth opens, the robot
+// fires its laser. Logos out of view go back to their first frame, ready for the next visit.
+function playLogos(root, dir = -1) {
+  if (!entered) return;
+  root.querySelectorAll('.anim-logo').forEach(svg => {
+    svg.classList.remove('play');
+    if (svg.closest('[aria-hidden="true"]')) return;
+    svg.style.setProperty('--dir', dir);
+    void svg.getBoundingClientRect();
+    svg.classList.add('play');
+  });
 }
 // Draw the eye to the next project when a tab holds more than one.
 function flashNext(panel) {
@@ -217,6 +231,7 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
     [...dots.children].forEach((d, j) => d.classList.toggle('on', j === i));
     slides.forEach((s, j) => s.setAttribute('aria-hidden', j !== i));
     car.style.height = slides[i].offsetHeight + 'px';
+    if (i !== old) playLogos(car, i < old ? 1 : -1);
     onChange && onChange(i, old, fromUser);
   }
   prev.addEventListener('click', () => show(i - 1));
