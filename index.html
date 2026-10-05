@@ -549,6 +549,7 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .b8-wipe{animation:none} }
 /* Building 8: the render full width; the button plays the motion in its place */
 .b8-row{display:grid; grid-template-columns:3fr 2fr; gap:14px; margin-top:22px}
+.b8-stage, .b8-flip{cursor:zoom-in}
 .b8-stage{position:relative; margin:0; border-radius:18px; overflow:hidden; aspect-ratio:2/1; background:var(--soft)}
 .b8-stage img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
 .b8-stage img[hidden]{display:none}
@@ -1001,20 +1002,20 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="p-body">
                   <div class="prose">
                     <p>Building 8 is an educational building at the university, and its entrance leads people to the main hall. From the bridge shown in the render below, I placed a camera that captured the motion of everyone passing on their way to the hall, and their trails built up the space for the furniture.</p>
-                    <p>I then flattened that motion onto the floor plan of the room. In the empty spaces, where no one walked, I designed a piece of furniture made of wooden planks, pressed and glued: a bar for a party, standing exactly where it is in nobody's way.</p>
+                    <p>I then flattened that motion onto the floor plan of the room. In the empty spaces, where no one walked, I designed a piece of furniture made of 2 cm boards, pressed and glued: a bar for a party, standing exactly where it is in nobody's way.</p>
                   </div>
                   <dl class="facts">
                     <div><dt>Method</dt><dd>Motion capture, flattened onto the plan</dd></div>
-                    <div><dt>Material</dt><dd>Wooden planks, pressed and glued</dd></div>
+                    <div><dt>Material</dt><dd>Boards 2 cm thick, pressed and glued</dd></div>
                   </dl>
                 </div>
                 <div class="b8-row">
-                <figure class="b8-stage">
+                <figure class="b8-stage" tabindex="0">
                   <img class="b8-still" src="/assets/img/projects/b8-render.jpg" alt="The bar in the entrance hall of Building 8" loading="lazy" decoding="async">
                   <img class="b8-anim" alt="The motion in the entrance hall, and the bar standing in the spaces where no one walked" hidden>
                   <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Animate</span><span class="b8-stop">Show the render</span></button>
                 </figure>
-                <figure class="b8-flip" role="img" aria-label="The four screens, one after another: the motion building up">
+                <figure class="b8-flip" tabindex="0" role="img" aria-label="The four screens, one after another: the motion building up">
                   <img style="--k:0" src="/assets/img/projects/b8-screen-0501.jpg" alt="" loading="lazy" decoding="async">
                   <img style="--k:1" src="/assets/img/projects/b8-screen-1236.jpg" alt="" loading="lazy" decoding="async">
                   <img style="--k:2" src="/assets/img/projects/b8-screen-2255.jpg" alt="" loading="lazy" decoding="async">
