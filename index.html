@@ -330,7 +330,8 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .logo .gb-logo{width:80%; height:80%}
 .p-aside .facts:first-child{margin-top:4px}
 /* in dark mode the project logos are inverted, on a dark tile; invert plus a half turn of hue keeps the laser red */
-html[data-theme="dark"] .p-head.has-logo .logo{background:var(--soft)}
+html[data-theme="dark"] .p-head.has-logo .logo, html[data-theme="dark"] .a-head .logo{background:var(--soft)}
+html[data-theme="dark"] .shuin-splash{background:var(--soft)}
 html[data-theme="dark"] .p-head.has-logo .logo .p-logo{filter:invert(1) hue-rotate(180deg)}
 .p-head h2{font-size:clamp(20px,2.4vw,26px); line-height:1.25}
 .p-meta{margin:8px 0 0; color:var(--ink-3); font-size:14px; line-height:1.6}
@@ -443,12 +444,12 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 @keyframes etOn{to{opacity:1}}
 /* 2. then the laser beams out from the cap */
 .et-reveal{stroke-dasharray:1 1; stroke-dashoffset:1}
-.anim-logo.play .et-reveal{animation:etBeam .55s cubic-bezier(.2,.7,.2,1) 1.55s forwards}
+.anim-logo.play .et-reveal{animation:etBeam 1.5s cubic-bezier(.3,.1,.3,1) 1.55s forwards}
 @keyframes etBeam{to{stroke-dashoffset:0}}
 .et-flash{opacity:0; transform-box:fill-box; transform-origin:center}
 .anim-logo.play .et-flash{animation:etFlash .7s ease-out 1.5s both}
 @keyframes etFlash{0%{opacity:0; transform:scale(.3)} 25%{opacity:1; transform:scale(1)} 100%{opacity:0; transform:scale(1.6)}}
-.anim-logo.play .et-beam path:first-child{animation:etHum .9s ease-in-out 2.15s 2}
+.anim-logo.play .et-beam path:first-child{animation:etHum .9s ease-in-out 3.1s 2}
 @keyframes etHum{50%{opacity:.75}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .et-sphere,.anim-logo.play .et-flash,.anim-logo.play .et-beam path{animation:none} .et-reveal{stroke-dashoffset:0} .et-beam{opacity:1} }
 /* the buildings brake: they run on in the direction they arrived from, leaning, then settle back */
@@ -502,6 +503,14 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .anim-logo.play .lim-line{animation:limWrite .5s cubic-bezier(.4,0,.3,1) calc(.5s + var(--k) * .55s) forwards}
 @keyframes limWrite{from{opacity:1; stroke-dashoffset:1} to{opacity:1; stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){ .lim-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .lim-line{animation:none} }
+/* Zweite Stammstrecke: an ICE passes and fades, its trail leaving the frame; a second one comes in and settles */
+.logo .zs-logo{width:88%; height:88%}
+.zs-t1{opacity:0}
+.anim-logo.play .zs-t1{animation:zsPass 1.3s cubic-bezier(.45,0,.85,.55) .4s both}
+.anim-logo.play .zs-t2{animation:zsArrive 1.5s cubic-bezier(.2,.8,.3,1) 1.75s both}
+@keyframes zsPass{0%{transform:translateX(-230px); opacity:1} 55%{opacity:1} 100%{transform:translateX(330px); opacity:0}}
+@keyframes zsArrive{0%{transform:translateX(-240px)} 82%{transform:translateX(3px)} 100%{transform:none}}
+@media (prefers-reduced-motion:reduce){ .anim-logo.play .zs-t1,.anim-logo.play .zs-t2{animation:none} }
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
 .anim-logo.play .lab-frame{animation:labFrame 1.1s cubic-bezier(.6,0,.3,1) .45s forwards}
@@ -741,7 +750,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
           <h2 class="sr-title">Architecture</h2>
           <section class="glass card">
             <div class="card-head">
-              <div class="t"><div class="num" id="archCount">1/2</div></div>
+              <div class="t"><div class="num" id="archCount">1/3</div></div>
               <div class="nav"><button class="arrow" id="archPrev" aria-label="Previous project"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" id="archNext" aria-label="Next project"><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
             </div>
             <div class="car" id="archCar"><div class="car-track" id="archTrack">
@@ -767,6 +776,29 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div class="thumbs" data-imgs="ng-001|The main façade;ng-002|The museum on the Kulturforum, beside the Church of St. Matthew;ng-003|The central hall"></div>
                 <div class="chips"><a class="chip" href="https://www.herzogdemeuron.com/projects/469-museum-der-moderne-berlin-modern/" target="_blank" rel="noopener">The project on Herzog &amp; de Meuron's website</a></div>
+              </article>
+
+              <article class="slide project">
+                <div class="p-head has-logo">
+                  <span class="logo"><svg class="p-logo zs-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 30 200 52" role="img" aria-label="Zweite Stammstrecke logo: an ICE train arriving"><defs><linearGradient id="zsTrail" gradientUnits="userSpaceOnUse" x1="-150" y1="0" x2="8" y2="0"><stop offset="0" stop-color="rgb(35,35,35)" stop-opacity="0"/><stop offset="1" stop-color="rgb(35,35,35)" stop-opacity=".7"/></linearGradient></defs><line x1="0" y1="76" x2="200" y2="76" stroke="rgb(190,190,190)" stroke-width="3"/><g class="zs-t1"><line x1="-150" y1="62" x2="8" y2="62" stroke="url(#zsTrail)" stroke-width="4" stroke-linecap="round"/><path fill="rgb(35,35,35)" fill-rule="evenodd" d="M6 70 L6 46 Q6 41 11 41 L132 41 C158 41 176 50 190 63 Q195 68 188 70 Z M14 47 H128 V54 H14 Z M140 45 C155 46 167 51 176 58 L150 58 Q143 58 141 52 Z"/></g><g class="zs-t2"><path fill="rgb(35,35,35)" fill-rule="evenodd" d="M6 70 L6 46 Q6 41 11 41 L132 41 C158 41 176 50 190 63 Q195 68 188 70 Z M14 47 H128 V54 H14 Z M140 45 C155 46 167 51 176 58 L150 58 Q143 58 141 52 Z"/></g></svg></span>
+                  <div>
+                    <h2>Zweite Stammstrecke München</h2>
+                    <p class="p-meta">Munich, Germany <i></i> Atelier 4d Architekten <i></i> Hauptbahnhof, Marienhof and Ostbahnhof stations</p>
+                  </div>
+                </div>
+                <div class="p-body">
+                  <div class="prose">
+                    <p>An infrastructure giant is taking shape beneath the city of Oktoberfest, while life above carries on at full pace. The Zweite Stammstrecke is Munich's second S-Bahn line through the city centre, with new stations deep below the Hauptbahnhof, Marienhof and Ostbahnhof. With Atelier 4d, I worked on the interiors of the stations underground.</p>
+                    <p>All of it is built while the trains of the main station keep running, and that structure was the challenge that drew me in. The station is built from the top down. The ground is dug out and a floor slab is poured; beneath it, the next level is excavated and propped on temporary columns before its own slab is poured, and so on, nine levels deep. Only then are the permanent columns cast and the temporary ones removed.</p>
+                  </div>
+                  <dl class="facts">
+                    <div><dt>Role</dt><dd>Architect and BIM Manager</dd></div>
+                    <div><dt>Scope</dt><dd>Interiors of the underground stations</dd></div>
+                    <div><dt>Images</dt><dd>© Atelier 4d Architekten</dd></div>
+                  </dl>
+                </div>
+                <div class="thumbs wide" data-imgs="zs-001|Hauptbahnhof: the platform;zs-002|Hauptbahnhof: escalators through the station hall;zs-003|Hauptbahnhof: the construction site beside the main station;zs-004|Hauptbahnhof: reinforcing a floor slab between the temporary columns;zs-005|Hauptbahnhof: the levels dug out one beneath another;zs-006|A pedestrian tunnel with spiralling lit ribs;zs-007|The tunnel: ribs and cladding;zs-008|Marienhof: the hall under the golden columns;zs-009|Marienhof: the platform;zs-010|Marienhof: the construction site;zs-011|Marienhof: steel columns of the top-down construction"></div>
+                <div class="chips"><a class="chip" href="https://atelier4d-architekten.de/projekte/untergrundbahnhof-hauptbahnhof-muenchen" target="_blank" rel="noopener">The project on Atelier 4d's website</a></div>
               </article>
 
               <article class="slide project">
