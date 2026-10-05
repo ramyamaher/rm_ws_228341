@@ -35,6 +35,10 @@ function fitHeight() {
   const p = panels[ORDER.indexOf(current)];
   if (p) viewport.style.height = p.offsetHeight + 'px';
 }
+// An address ending in #archive (or any tab) makes the browser jump to that section after the page
+// has loaded, scrolling the strip of tabs sideways inside its frame, and so does focusing something in
+// a hidden tab. The transform alone moves the strip, so any such scroll is put straight back.
+viewport.addEventListener('scroll', () => { if (viewport.scrollLeft || viewport.scrollTop) viewport.scrollLeft = viewport.scrollTop = 0; });
 const ro = new ResizeObserver(fitHeight);
 panels.forEach(p => ro.observe(p));
 
@@ -220,6 +224,12 @@ function enter() {
 greet.addEventListener('click', enter);
 addEventListener('keydown', e => { if (!entered && ['Enter', ' ', 'Escape'].includes(e.key)) { e.preventDefault(); enter(); } });
 greet.focus();
+try {
+  if (sessionStorage.getItem('langSwitch')) {
+    sessionStorage.removeItem('langSwitch');
+    entered = true; greet.remove(); document.documentElement.classList.remove('pre');
+  }
+} catch (_) {}
 
 /* ================= light and dark ================= */
 // The OS decides until the visitor presses the button; that choice is then remembered.
@@ -235,7 +245,11 @@ darkOS.addEventListener('change', e => { if (!['light', 'dark'].includes(savedTh
 
 /* ================= contact, privacy and cookies: one popover open at a time ================= */
 const pops = [[$('#contactBtn'), $('#contactPop')], [$('#cookieBtn'), $('#privacyPop')], [$('#langBtn'), $('#langPop')]];
-$$('#langPop a').forEach(a => a.addEventListener('click', () => { a.href = a.getAttribute('href').split('#')[0] + (location.hash || ''); }));
+// a flag keeps the tab you are on, and the next page skips the greeting: you are already here
+$$('#langPop a').forEach(a => a.addEventListener('click', () => {
+  a.href = a.getAttribute('href').split('#')[0] + (location.hash || '');
+  try { sessionStorage.setItem('langSwitch', '1'); } catch (_) {}
+}));
 // Each menu drops from under its own button: right-aligned to the button where there is room,
 // kept 12px inside the screen otherwise, with the notch pointing at the button's centre.
 function placePop(b, p) {
