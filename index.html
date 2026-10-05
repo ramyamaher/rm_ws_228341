@@ -8,6 +8,12 @@
 <meta name="author" content="Ramy Maher">
 <meta name="google-site-verification" content="yuDKJdIt_1y7rSpfkxcoU1A5VrnDaJl2mhG5ETP7dv0">
 <link rel="canonical" href="https://ramymaher.com/">
+<link rel="alternate" hreflang="en" href="https://ramymaher.com/">
+<link rel="alternate" hreflang="de" href="https://ramymaher.com/de/">
+<link rel="alternate" hreflang="fr" href="https://ramymaher.com/fr/">
+<link rel="alternate" hreflang="es" href="https://ramymaher.com/es/">
+<link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/">
+<link rel="alternate" hreflang="x-default" href="https://ramymaher.com/">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d0e12" media="(prefers-color-scheme: dark)">
 <!-- how the link looks when shared on LinkedIn, WhatsApp, X and others -->
@@ -145,7 +151,7 @@ header{
   border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--ink); transition:all .2s;
 }
 .theme:hover{background:var(--btn-hover); transform:translateY(-1px)}
-.theme svg{width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round}
+.theme > svg{width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round}
 .theme .sun{display:none}
 html[data-theme="dark"] .theme .sun{display:block}
 html[data-theme="dark"] .theme .moon{display:none}
@@ -164,6 +170,26 @@ html[data-theme="dark"] .theme .moon{display:none}
 .tab:hover{color:var(--ink)}
 .tab.on{color:var(--ink); background:var(--pill); box-shadow:0 2px 8px rgba(0,0,0,.15); font-weight:750}
 .tab .lbl{display:inline-block; overflow:hidden; max-width:140px; transition:max-width .4s var(--ease), opacity .3s}
+
+/* the language button: a round flag, as in Bancanca; the menu is a column of round flags */
+.theme.lang{padding:0; overflow:hidden}
+.flag{display:block; width:100%; height:100%; border-radius:50%; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.flag svg{display:block; width:100%; height:100%}
+.pop.langs{width:auto; padding:6px; display:flex; flex-direction:column; gap:6px; border-radius:26px}
+.pop.langs a{display:block; width:40px; height:40px; padding:0; border-radius:50%; border:1px solid var(--line)}
+.pop.langs a.sel{outline:2px solid var(--ink); outline-offset:1px; border-color:transparent}
+.pop.langs a:hover{background:none; transform:scale(1.06)}
+/* Arabic reads right to left; the header stays as it is, so its buttons never move */
+html[dir="rtl"] header{direction:ltr}
+html[dir="rtl"] .card-head .nav .arrow svg, html[dir="rtl"] .lb-btn:not(.lb-close) svg{transform:scaleX(-1)}
+html[dir="rtl"] .lb-prev{left:auto; right:14px}
+html[dir="rtl"] .lb-next{right:auto; left:14px}
+html[dir="rtl"] .feats li{padding-left:0; padding-right:22px}
+html[dir="rtl"] .feats li::before{left:auto; right:2px}
+html[dir="rtl"] .tip a + a{margin-left:0; margin-right:16px}
+html[dir="rtl"] .lb figcaption span{margin-left:0; margin-right:10px}
+/* the limericks are not translated: they keep reading left to right */
+html[dir="rtl"] .limericks{direction:ltr; text-align:left}
 
 /* contact popover */
 .pop{
@@ -229,6 +255,8 @@ h2{margin:0; font-size:clamp(19px,2.2vw,23px); letter-spacing:-.02em; font-weigh
 .chip::after{content:"\2192"; transition:transform .2s}
 a.chip:hover{text-decoration-color:currentColor}
 a.chip:hover::after{transform:translateX(3px)}
+html[dir="rtl"] .chip::after{content:"\2190"}
+html[dir="rtl"] a.chip:hover::after{transform:translateX(-3px)}
 .chips{display:flex; flex-wrap:wrap; gap:6px 26px}
 
 /* arrows next to the n/N counter */
@@ -662,6 +690,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   .slide, .slide.project{padding:0 12px}
   .poem{font-size:17px; padding:14px 2px}
   .card-head .nav{margin-left:auto}
+  html[dir="rtl"] .card-head .nav{margin-left:0; margin-right:auto}
   .a-body{grid-template-columns:1fr; gap:4px}
   .logo{width:54px; height:54px; border-radius:16px}
   .award{gap:14px}
@@ -703,6 +732,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
       <button class="theme" id="cookieBtn" aria-label="Privacy and cookies" title="Privacy and cookies" aria-expanded="false" aria-controls="privacyPop">
         <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 3 3 0 0 1-3.2-3 3 3 0 0 1-2.8-2.8A3 3 0 0 1 12 3z"/><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="15.8" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11.6" r=".7" fill="currentColor" stroke="none"/></svg>
       </button>
+      <button class="theme lang" id="langBtn" aria-label="Language: English" title="English" aria-expanded="false" aria-controls="langPop"><span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="3"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg></span></button>
     </div>
   </div>
   <nav class="tabs" role="tablist" aria-label="Categories">
@@ -725,6 +755,14 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
     <h4><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.4-3 7.9-7 9-4-1.1-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Privacy</h4>
     <p>Visits are counted anonymously with GoatCounter, which records the page and the visitor's country, without cookies or personal data. The site is hosted on GitHub Pages and loads its map code from jsDelivr, which, like any web server, see your IP address; your light or dark choice stays in your own browser. Questions: <a href="mailto:contact@ramymaher.com">contact@ramymaher.com</a>.</p>
   </section>
+</div>
+
+<div class="pop langs" id="langPop" role="dialog" aria-label="Language">
+  <a href="/" hreflang="en" lang="en" data-lang="en" class="sel" aria-current="true" title="English" aria-label="English"><span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="3"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg></span></a>
+  <a href="/de/" hreflang="de" lang="de" data-lang="de" title="Deutsch" aria-label="Deutsch"><span class="flag"><svg viewBox="0 0 30 30"><rect width="30" height="10" fill="#000"/><rect y="10" width="30" height="10" fill="#DD0000"/><rect y="20" width="30" height="10" fill="#FFCE00"/></svg></span></a>
+  <a href="/fr/" hreflang="fr" lang="fr" data-lang="fr" title="Français" aria-label="Français"><span class="flag"><svg viewBox="0 0 30 30"><rect width="10" height="30" fill="#0055A4"/><rect x="10" width="10" height="30" fill="#fff"/><rect x="20" width="10" height="30" fill="#EF4135"/></svg></span></a>
+  <a href="/es/" hreflang="es" lang="es" data-lang="es" title="Español" aria-label="Español"><span class="flag"><svg viewBox="0 0 30 30"><rect width="30" height="30" fill="#AA151B"/><rect y="7.5" width="30" height="15" fill="#F1BF00"/></svg></span></a>
+  <a href="/ar/" hreflang="ar" lang="ar" data-lang="ar" title="العربية" aria-label="العربية"><span class="flag"><svg viewBox="0 0 30 30"><rect width="30" height="10" fill="#CE1126"/><rect y="10" width="30" height="10" fill="#fff"/><rect y="20" width="30" height="10" fill="#000"/><g fill="#C09300"><circle cx="15" cy="11.4" r=".95"/><path d="M15 12.3 l1.5 1.3 v3.6 l-1.5 1.5 l-1.5-1.5 v-3.6 Z"/><path d="M13.3 13.4 C11.3 13 10.2 14.6 10 17 L13.3 16.1 Z"/><path d="M16.7 13.4 C18.7 13 19.8 14.6 20 17 L16.7 16.1 Z"/></g></svg></span></a>
 </div>
 
 <div class="pop" id="contactPop" role="dialog" aria-label="Contact">
@@ -1009,7 +1047,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide app" style="--acc:#dc2626">
                 <div class="a-head">
-                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="roomy" src="assets/img/logos/shuin.png" alt="Shuin logo"><span class="shuin-splash" aria-hidden="true"></span></span>
+                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="roomy" src="/assets/img/logos/shuin.png" alt="Shuin logo"><span class="shuin-splash" aria-hidden="true"></span></span>
                   <div><h3>Shuin <span class="sub-ja">朱印</span></h3><p class="tag">A world travel stamp.</p></div>
                 </div>
                 <div class="a-body">
@@ -1032,7 +1070,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide app" style="--acc:#7d9b6a">
                 <div class="a-head">
-                  <span class="logo"><img src="assets/img/logos/revitesse.png" alt="Revitesse logo"></span>
+                  <span class="logo"><img src="/assets/img/logos/revitesse.png" alt="Revitesse logo"></span>
                   <div><h3>Revitesse</h3><p class="tag">Revit, but faster.</p></div>
                 </div>
                 <div class="a-body">
@@ -1133,7 +1171,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="assets/data/places.js"></script>
-<script src="assets/app.js"></script>
+<script src="/assets/data/places.js"></script>
+<script src="/assets/app.js"></script>
 </body>
 </html>
