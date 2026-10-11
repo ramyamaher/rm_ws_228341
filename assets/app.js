@@ -213,17 +213,17 @@ let entered = false;
   // the name, the welcome and the hint. A click at any moment still enters.
   const el = $('#greetHello');
   const words = (t) => t.split(' ').map((w, k) => `<span style="animation-delay:${.15 + k * .22}s">${w}</span>`).join(' ');
-  // A moment after the greeting has fully appeared and the page has loaded, it moves on by itself.
+  // The greeting appears at its own slow pace; once all of it is there (and the page has loaded), it moves on.
   const loaded = new Promise(r => { if (document.readyState === 'complete') r(); else addEventListener('load', r, { once: true }); setTimeout(r, 3000); });
   const second = () => {
     el.classList.remove('out'); el.innerHTML = words(hello); greet.classList.add('p2');
-    Promise.all([loaded, new Promise(r => setTimeout(r, reduced ? 0 : 1150))]).then(() => setTimeout(enter, 450));
+    Promise.all([loaded, new Promise(r => setTimeout(r, reduced ? 0 : 1700))]).then(() => setTimeout(enter, 150));
   };
   if (reduced) second();
   else {
     el.innerHTML = words(t('Hello.'));
-    setTimeout(() => el.classList.add('out'), 850);
-    setTimeout(second, 1350);
+    setTimeout(() => el.classList.add('out'), 1250);
+    setTimeout(second, 1950);
   }
 }
 function enter() {
