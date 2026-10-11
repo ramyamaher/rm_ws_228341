@@ -687,7 +687,7 @@ html.fit-tab body{min-height:0}
   .slide:has(> .limericks) > .prose{order:3}
   .slide:has(> .limericks) > .chips{order:4}
   .slide:has(> .limericks) > .prize-line{order:5}
-  footer{height:auto; padding-top:14px; padding-bottom:calc(env(safe-area-inset-bottom) + 14px); line-height:1.6}
+  footer{height:auto; padding-top:10px; padding-bottom:calc(env(safe-area-inset-bottom) + 10px)}
 }
 
 /* ---------- the greeting shown on arrival ---------- */
@@ -707,7 +707,7 @@ html[data-theme="dark"] .greet.p2 .g-hello{animation-name:toneDark}
 /* "Hello." leaves slowly before the time-of-day greeting takes its place */
 .g-hello.out{opacity:0; transform:translateY(-10px); transition:opacity .7s ease, transform .7s ease}
 .g-sub{margin:18px 0 0; line-height:1.55; color:var(--ink-2); font-size:clamp(17px,2vw,21px); opacity:0}
-.greet.p2 .g-sub{animation:fade .9s var(--ease) .8s forwards}
+.greet.p2 .g-sub{animation:fade .8s var(--ease) .35s forwards}
 .g-hint{margin:56px 0 0; color:var(--ink-3); font-size:13px; letter-spacing:.08em; text-transform:uppercase; opacity:0}
 .greet.p2 .g-hint{animation:fade .9s var(--ease) 1.4s forwards, breathe 2.6s ease-in-out 2.3s infinite}
 @keyframes rise{to{opacity:1; transform:none}}
@@ -721,11 +721,7 @@ main{transition:opacity 1.1s var(--ease) .75s, transform 1.1s var(--ease) .75s}
 html.pre header{transform:translateY(-100%)}
 html.pre main{opacity:0; transform:translateY(28px)}
 
-footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 18px; color:var(--ink-3); font-size:12px; line-height:1}
-footer nav{display:flex; flex-wrap:wrap; justify-content:center; gap:4px 12px}
-footer a{color:inherit; text-decoration:none}
-footer a:hover{color:var(--ink); text-decoration:underline; text-underline-offset:3px}
-footer a.sel{color:var(--ink-2)}
+footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; align-items:center; justify-content:center; color:var(--ink-3); font-size:12px; line-height:1}
 
 /* ---------- phone: only the active pill keeps its words ---------- */
 @media (max-width:760px){
@@ -1265,17 +1261,13 @@ footer a.sel{color:var(--ink-2)}
 
     </div>
   </div>
-  <footer>
-    <nav class="foot-links" aria-label="روابط أخرى"><a href="mailto:contact@ramymaher.com">contact@ramymaher.com</a><a href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/ramyamaher" target="_blank" rel="noopener">GitHub</a><a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">YouTube</a></nav>
-    <nav class="foot-langs" aria-label="اللغات"><a href="/" hreflang="en" lang="en" data-lang="en">English</a><a href="/de/" hreflang="de" lang="de" data-lang="de">Deutsch</a><a href="/fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a><a href="/es/" hreflang="es" lang="es" data-lang="es">Español</a><a href="/ar/" hreflang="ar" lang="ar" data-lang="ar" class="sel" aria-current="true">العربية</a></nav>
-    <span class="foot-copy">© 2026 رامي ماهر</span>
-  </footer>
+  <footer>© 2026 رامي ماهر</footer>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js"></script>
-<script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arosa":"أروزا","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cairo":"القاهرة","Cannes":"كان","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Dessau":"ديساو","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Faro":"فارو","Fes":"فاس","Florence":"فلورنسا","Flúðir":"فلوذير","Fort Lauderdale":"فورت لودرديل","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss":"غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Huningue":"هونينغ","Keflavík":"كيفلافيك","Kraków":"كراكوف","Kyoto":"كيوتو","La Jolla":"لا هويا","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Malibu":"ماليبو","Marrakech":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle":"نيوكاسل","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National Park":"متنزه ريدوود الوطني","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Rovinj":"روفين","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Seljalandsfoss":"سيليالاندسفوس","Siwa":"سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","Tarifa":"طريفة","Tokyo":"طوكيو","Varna":"فارنا","Varosha":"فاروشا","Washington, D.C.":"واشنطن العاصمة","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zurich":"زيورخ","Þingvellir":"ثينغفيلير"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
+<script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arosa":"أروزا","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cairo":"القاهرة","Cannes":"كان","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Dessau":"ديساو","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Faro":"فارو","Fes":"فاس","Flims":"فليمس","Florence":"فلورنسا","Flúðir":"فلوذير","Fort Lauderdale":"فورت لودرديل","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss":"غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Huningue":"هونينغ","Keflavík":"كيفلافيك","Kraków":"كراكوف","Kyoto":"كيوتو","La Jolla":"لا هويا","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Malibu":"ماليبو","Marrakech":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle":"نيوكاسل","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National Park":"متنزه ريدوود الوطني","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Rovinj":"روفين","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Seljalandsfoss":"سيليالاندسفوس","Siwa":"سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","Tarifa":"طريفة","Tokyo":"طوكيو","Varna":"فارنا","Varosha":"فاروشا","Washington, D.C.":"واشنطن العاصمة","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zurich":"زيورخ","Þingvellir":"ثينغفيلير"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
 <script src="/assets/app.js"></script>
 </body>
 </html>
