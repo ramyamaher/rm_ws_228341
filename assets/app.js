@@ -18,9 +18,9 @@ const RTL = document.documentElement.dir === 'rtl';
 const isRtl = (el) => getComputedStyle(el).direction === 'rtl';
 
 /* ================= categories: pills on top, panels slide sideways ================= */
-const ORDER = ['architecture', 'design', 'writing', 'archive', 'apps', 'about'];
+const ORDER = ['about', 'architecture', 'design', 'writing', 'archive', 'apps'];
 const ALIASES = { documentation: 'archive' };   // old links keep working
-const DEFAULT = 'architecture';
+const DEFAULT = 'about';
 
 // The header is two rows whose height depends on the font and the safe area; measure it.
 const header = $('header');
@@ -213,14 +213,18 @@ let entered = false;
   // the name, the welcome and the hint. A click at any moment still enters.
   const el = $('#greetHello');
   const words = (t) => t.split(' ').map((w, k) => `<span style="animation-delay:${.15 + k * .22}s">${w}</span>`).join(' ');
-  const second = () => { el.classList.remove('out'); el.innerHTML = words(hello); greet.classList.add('p2'); };
+  // Two seconds after the greeting has fully appeared and the page has loaded, it moves on by itself.
+  const loaded = new Promise(r => { if (document.readyState === 'complete') r(); else addEventListener('load', r, { once: true }); setTimeout(r, 6000); });
+  const second = () => {
+    el.classList.remove('out'); el.innerHTML = words(hello); greet.classList.add('p2');
+    Promise.all([loaded, new Promise(r => setTimeout(r, reduced ? 0 : 1700))]).then(() => setTimeout(enter, 2000));
+  };
   if (reduced) second();
   else {
     el.innerHTML = words(t('Hello.'));
     setTimeout(() => el.classList.add('out'), 1250);
     setTimeout(second, 1950);
   }
-  if (matchMedia('(hover: none)').matches) $('#greetHint').textContent = t('Tap anywhere to proceed');
 }
 function enter() {
   if (entered) return;
@@ -313,6 +317,8 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
     slides.forEach((s, j) => s.setAttribute('aria-hidden', j !== i));
     car.style.height = slides[i].offsetHeight + 'px';
     if (i !== old) playLogos(car, (i < old ? 1 : -1) * (rtl ? -1 : 1));
+    // on a phone the page scrolls; a new project starts at the top of its card
+    if (i !== old && fromUser && matchMedia('(max-width:900px)').matches) car.closest('.card').scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
     onChange && onChange(i, old, fromUser);
   }
   prev.addEventListener('click', () => show(i - 1));
@@ -362,32 +368,54 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
 }
 
 /* ================= typewriter ================= */
+// Types a limerick up to its last line, then waits: a click or tap on the poem types the fifth.
 function typer(host, text, { speed = 30, lineGap = 240 } = {}) {
   host.innerHTML = ''; host.classList.add('tw');
+  const stop = text.lastIndexOf('\n');   // the four lines end here; the fifth waits for a click
+  const hint = document.createElement('button');
+  hint.type = 'button'; hint.className = 'reveal';
+  hint.textContent = t(matchMedia('(hover: none)').matches ? 'Tap for the last line' : 'Click for the last line');
   const ghost = document.createElement('div'); ghost.className = 'ghost'; ghost.textContent = text;
   const out = document.createElement('div'); out.className = 'typed';
   const txt = document.createTextNode(''); const caret = document.createElement('span'); caret.className = 'caret';
-  out.append(txt, caret); host.append(ghost, out);
-  host.setAttribute('aria-label', text);
+  out.append(txt, caret); host.append(ghost, out, hint);
+  host.setAttribute('aria-label', text.slice(0, stop));
   let k = 0, timer = null, state = 'idle';
-  const t = {
-    get state() { return state; },
-    start(done) {
-      if (state !== 'idle') return;
-      if (reduced) { t.finish(); done && done(); return; }
-      state = 'typing';
-      const step = () => {
-        k++; txt.data = text.slice(0, k);
-        if (k >= text.length) { state = 'done'; host.classList.add('done'); done && done(); return; }
-        const ch = text[k - 1];
-        const wait = ch === '\n' ? lineGap : /[,.;]/.test(ch) ? speed * 4 : speed * (0.6 + Math.random() * 0.8);
-        timer = setTimeout(step, wait);
-      };
-      timer = setTimeout(step, 250);
-    },
-    finish() { clearTimeout(timer); txt.data = text; k = text.length; state = 'done'; host.classList.add('done'); },
+  const wait4 = () => { k = stop; txt.data = text.slice(0, stop); state = 'waiting'; host.classList.add('waiting'); };
+  const run = (to, then) => {
+    const step = () => {
+      k++; txt.data = text.slice(0, k);
+      if (k >= to) { then(); return; }
+      const ch = text[k - 1];
+      const wait = ch === '\n' ? lineGap : /[,.;]/.test(ch) ? speed * 4 : speed * (0.6 + Math.random() * 0.8);
+      timer = setTimeout(step, wait);
+    };
+    timer = setTimeout(step, 250);
   };
-  return t;
+  const tw = {
+    get state() { return state; },
+    start() {
+      if (state !== 'idle') return;
+      if (reduced) { wait4(); return; }
+      state = 'typing';
+      run(stop, wait4);
+    },
+    reveal() {
+      if (state !== 'waiting') return;
+      host.classList.remove('waiting'); host.setAttribute('aria-label', text);
+      if (reduced) { tw.finish(); return; }
+      state = 'revealing';
+      run(text.length, () => { state = 'done'; host.classList.add('done'); });
+    },
+    // leaving a limerick: the four lines stay; a fifth already on its way is completed
+    finish() {
+      clearTimeout(timer);
+      if (state === 'revealing') { txt.data = text; k = text.length; state = 'done'; host.classList.add('done'); }
+      else if (state === 'typing') wait4();
+    },
+  };
+  host.addEventListener('click', () => tw.reveal());
+  return tw;
 }
 
 /* ================= writing ================= */
@@ -427,7 +455,7 @@ const poems = carousel({
   car: $('#poemCar'), trackEl: poemTrack, prev: $('#poemPrev'), next: $('#poemNext'),
   count: $('#poemCount'), dots: $('#poemDots'),
   onChange(i, old) {
-    if (old !== i && poemTypers[old].state === 'typing') poemTypers[old].finish();
+    if (old !== i && ['typing', 'revealing'].includes(poemTypers[old].state)) poemTypers[old].finish();
     if (poemsReady) poemTypers[i].start();
   },
 });

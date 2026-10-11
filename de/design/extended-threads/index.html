@@ -297,6 +297,13 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .tw .typed{position:absolute; left:0; right:0; top:0; white-space:pre-wrap}
 .caret{display:inline-block; width:2px; height:1.05em; margin-left:2px; vertical-align:-.15em; background:var(--ink); animation:blink 1s steps(1) infinite}
 .done .caret{display:none}
+/* the fifth line waits for a click, with a quiet hint where it will appear */
+.tw{cursor:default}
+.tw.waiting{cursor:pointer}
+.tw .reveal{position:absolute; left:0; bottom:0; appearance:none; border:0; background:none; padding:0; cursor:pointer;
+  font:600 12.5px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); opacity:0; pointer-events:none; transition:opacity .4s}
+.tw.waiting .reveal{opacity:1; pointer-events:auto; animation:breathe 2.6s ease-in-out .6s infinite}
+.tw.waiting .caret{display:none}
 @keyframes blink{50%{opacity:0}}
 .hint{text-align:center; color:var(--ink-3); font-size:12.5px; margin-top:8px}
 
@@ -608,15 +615,18 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 .app .thumbs{margin-top:16px}
 .app .chips{margin-top:16px}
 
+/* the title stays for screen readers and search engines, but takes no room: the pills already say where you are */
+.brand-h{margin:0; font:inherit; letter-spacing:inherit}
+.sr-title{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+/* On a computer the project tabs fill the screen and their cards scroll inside themselves. On a phone
+   or a tablet held upright the page simply scrolls, with the images first (see the narrow rules below). */
+@media (min-width:901px){
 html.fit-tab, html.fit-tab body{height:100%; overflow:hidden; overscroll-behavior:none}
 html.fit-tab body{min-height:0}
 
 /* ---------- project tabs: the title, then one container that fills the screen down to the
    footer and scrolls inside itself ---------- */
 .panel.fit .wrap{height:calc(100dvh - var(--hdr) - var(--ftr)); display:flex; flex-direction:column; padding-top:clamp(12px,1.8vw,18px); padding-bottom:9px}
-/* the title stays for screen readers and search engines, but takes no room: the pills already say where you are */
-.brand-h{margin:0; font:inherit; letter-spacing:inherit}
-.sr-title{position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
 .panel.fit .wrap > .glass.card{flex:1; min-height:0; display:flex; flex-direction:column; margin-bottom:0; box-shadow:0 6px 14px -9px rgba(0,0,0,.2), 0 1px 3px rgba(0,0,0,.04)}
 .panel.fit .wrap > .glass.card > .card-head{flex:none; margin-bottom:12px}
 .panel.fit .wrap > .glass.card > .car{flex:1; min-height:0; height:auto !important; transition:none}
@@ -636,6 +646,7 @@ html.fit-tab body{min-height:0}
 .archive-fit .map{flex:1; min-height:140px; aspect-ratio:auto}
 .archive-fit .maphint{flex:none; margin-top:10px}
 .archive-fit .chips{flex:none; margin-top:6px}
+}
 
 /* the next-project button, ringed by a rainbow that goes round twice each time the tab opens
    (the same ring as the Combine trips button in Shuin) */
@@ -657,6 +668,25 @@ html.fit-tab body{min-height:0}
 .arrow.sm{width:36px; height:36px}
 .limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
 .slide .thumbs.row{margin-top:18px; margin-bottom:6px}
+
+/* phones and tablets held upright: one column, images first, the page scrolls as a page */
+@media (max-width:900px){
+  .p-body{grid-template-columns:1fr}
+  .b8-row{grid-template-columns:1fr}
+  .slide.project, .slide.app{display:flex; flex-direction:column}
+  .slide > .p-head, .slide > .a-head{order:0}
+  .slide > .thumbs, .slide > .b8-row{order:1; margin-top:0; margin-bottom:18px}
+  .slide > .p-body, .slide > .a-body, .slide > .prose{order:2}
+  .slide > .prize-line{order:3}
+  .slide > .chips{order:4}
+  /* Writing: the limericks first, then the photographs, then the conference */
+  .slide > .limericks{order:1; margin:0 0 20px; padding:0 0 18px; border-top:0; border-bottom:1px solid var(--line)}
+  .slide:has(> .limericks) > .thumbs{order:2}
+  .slide:has(> .limericks) > .prose{order:3}
+  .slide:has(> .limericks) > .chips{order:4}
+  .slide:has(> .limericks) > .prize-line{order:5}
+  footer{height:auto; padding-top:14px; padding-bottom:calc(env(safe-area-inset-bottom) + 14px); line-height:1.6}
+}
 
 /* ---------- the greeting shown on arrival ---------- */
 .greet{
@@ -689,7 +719,11 @@ main{transition:opacity 1.1s var(--ease) .75s, transform 1.1s var(--ease) .75s}
 html.pre header{transform:translateY(-100%)}
 html.pre main{opacity:0; transform:translateY(28px)}
 
-footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; align-items:center; justify-content:center; color:var(--ink-3); font-size:12px; line-height:1}
+footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 18px; color:var(--ink-3); font-size:12px; line-height:1}
+footer nav{display:flex; flex-wrap:wrap; justify-content:center; gap:4px 12px}
+footer a{color:inherit; text-decoration:none}
+footer a:hover{color:var(--ink); text-decoration:underline; text-underline-offset:3px}
+footer a.sel{color:var(--ink-2)}
 
 /* ---------- phone: only the active pill keeps its words ---------- */
 @media (max-width:760px){
@@ -736,9 +770,10 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   try { t = localStorage.getItem('theme'); } catch (e) {}
   if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', t);
-  document.documentElement.classList.add('pre');   /* the greeting is up until the first click */
+  document.documentElement.classList.add('pre');   /* the greeting is up until it moves on, or a click */
 })();
 </script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Extended Threads","description":"Extended Threads verbindet eine philosophische Lesart der Architektur mit Technologie.","url":"https://ramymaher.com/de/design/extended-threads/","inLanguage":"de","creator":{"@id":"https://ramymaher.com/#person"},"image":"https://ramymaher.com/assets/img/projects/et-002.jpg"}</script>
 </head>
 <body>
 
@@ -746,13 +781,12 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   <div class="greet-in">
     <p class="g-hello" id="greetHello"></p>
     <p class="g-sub">Ich bin Ramy Maher.<br>Willkommen.</p>
-    <p class="g-hint" id="greetHint">Klicken Sie irgendwo, um fortzufahren</p>
   </div>
 </div>
 
 <header>
   <div class="hrow">
-    <h1 class="brand-h"><a class="brand" href="#architecture" data-go="architecture">Ramy Maher</a></h1>
+    <h1 class="brand-h"><a class="brand" href="#about" data-go="about">Ramy Maher</a></h1>
     <div class="hright">
       <button class="contact" id="contactBtn" aria-expanded="false" aria-controls="contactPop">Kontakt</button>
       <button class="theme" id="themeBtn" aria-label="Zwischen hellem und dunklem Modus wechseln" title="Hell oder dunkel">
@@ -766,12 +800,12 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
     </div>
   </div>
   <nav class="tabs" role="tablist" aria-label="Kategorien">
+    <button class="tab" role="tab" data-tab="about" aria-label="Über mich"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="lbl">Über mich</span></button>
     <button class="tab" role="tab" data-tab="architecture" aria-label="Architektur"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9.5 21v-6h5v6M9 10.5h.01M15 10.5h.01"/></svg><span class="lbl">Architektur</span></button>
     <button class="tab" role="tab" data-tab="design" aria-label="Design"><svg class="i" viewBox="0 0 24 24"><circle cx="7.5" cy="7.5" r="4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><path d="M12 13.5l4.8 7H7.2z"/></svg><span class="lbl">Design</span></button>
     <button class="tab" role="tab" data-tab="writing" aria-label="Texte"><svg class="i" viewBox="0 0 24 24"><path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg><span class="lbl">Texte</span></button>
     <button class="tab" role="tab" data-tab="archive" aria-label="Archiv"><svg class="i" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="5" rx="1.5"/><path d="M4.5 9v9.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V9M10 13h4"/></svg><span class="lbl">Archiv</span></button>
     <button class="tab" role="tab" data-tab="apps" aria-label="Apps"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg><span class="lbl">Apps</span></button>
-    <button class="tab" role="tab" data-tab="about" aria-label="Über mich"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="lbl">Über mich</span></button>
   </nav>
 </header>
 
@@ -803,7 +837,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 </div>
 
 <div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildbetrachter" aria-hidden="true">
-  <figure><div class="stage"><img id="lbImg" alt=""></div><figcaption id="lbCap"></figcaption></figure>
+  <figure><div class="stage"><img id="lbImg" alt="Vergrößertes Bild"></div><figcaption id="lbCap"></figcaption></figure>
   <button class="lb-btn lb-close" id="lbClose" aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <button class="lb-btn lb-prev" id="lbPrev" aria-label="Vorheriges Bild"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
   <button class="lb-btn lb-next" id="lbNext" aria-label="Nächstes Bild"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
@@ -812,6 +846,30 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 <main>
   <div class="viewport" id="viewport">
     <div class="track" id="track">
+
+      <section class="panel" id="about" role="tabpanel">
+        <div class="wrap">
+          <h2 class="sr-title">Über mich</h2>
+          <div class="prose">
+            <p class="first">Ich bin Architekt. Ich habe in mehreren Ländern gearbeitet, an Projekten jeder Größenordnung, vom größten Museum Deutschlands bis zu einem Schachspiel. Ich habe in drei Ländern gelebt und spreche fünf Sprachen, und jeder Ort hat Spuren darin hinterlassen, wie ich eine Straße, einen Plan oder einen Satz lese. Wer zwei Perspektiven sieht, öffnet den Horizont für die Existenz weiterer.</p>
+            <p>Das meiste, was ich mache, innerhalb der Architektur oder außerhalb, begann als eine Frage, die mich nicht losließ. Manche dieser Fragen kamen aus Technologie und Programmierung, manche aus den Finanzen und viele aus Kulturen und Reisen.</p>
+
+            <h2>Berufserfahrung</h2>
+            <p>Meine Laufbahn umfasst mehr als zehn Jahre in Architektur, Computational Design, BIM und Digitalisierung in der AEC-Branche, vor allem zwischen Ägypten, Deutschland und der Schweiz. Ich bin LEED Accredited Professional. Ich habe Kurse in Python, HTML, CSS und JavaScript besucht und Projekte mit Processing, C# und C++ umgesetzt.</p>
+            <div class="chips"><a class="chip" href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">Mein vollständiges Profil auf LinkedIn</a></div>
+
+            <h2>Revitesse</h2>
+            <p>Software für Architektur und Ingenieurwesen ist darauf ausgelegt, 90 bis 95 Prozent des Marktes zu bedienen. In den verbleibenden 5 bis 10 Prozent wird die Arbeit hochspezifisch, und genau dort geht die meiste Zeit verloren.</p>
+            <p>In verschiedenen Büros bin ich immer wieder auf dieselben Probleme gestoßen. Revitesse entstand aus dem Wunsch, sie ein für alle Mal zu lösen und anderen Fachleuten zu helfen, weniger Zeit mit repetitiven Aufgaben in Revit zu verbringen. Was als C#-Paket begann, wurde schließlich eine Open-Source-Bibliothek für pyRevit.</p>
+            <div class="chips"><a class="chip" href="#apps" data-go="apps">Revitesse ansehen</a></div>
+
+            <h2>Das Archiv</h2>
+            <p>Ich habe es begonnen, nachdem ich lange Zeit fern von meinem Heimatland gewesen war. Mir wurde klar, dass ich ein Weltbürger geworden war: ein Nomade in der Zeit ebenso wie im Raum, der zu jedem Ort nur in einem bestimmten Moment gehörte. Nostalgie ist für mich bedingt, denn sie bezieht sich auf eine Momentaufnahme eines Ortes und einer Zeit, nicht auf einen Ort oder eine Zeit im Allgemeinen.</p>
+            <p>Als James Joyce <em>Ulysses</em> schrieb, soll er seine Tante angerufen und sie gebeten haben, ein Haus in Dublin aufzusuchen und zu prüfen, ob ein übergewichtiger Mann plausibel über dessen Geländer klettern könnte. Sollte die Stadt je bis auf die Grundmauern niederbrennen, wollte er, dass man sie anhand des Romans wieder aufbauen kann. Die starke Vorstellungskraft eines der besten Bücher, die je auf Englisch geschrieben wurden, zusammen mit seiner Genauigkeit bei der Beschreibung eines Details, das belanglos erscheinen mag, aus Aufrichtigkeit gegenüber dem Leser, hat mein Archiv inspiriert.</p>
+            <div class="chips"><a class="chip" href="#archive" data-go="archive">Zur Karte</a></div>
+          </div>
+        </div>
+      </section>
 
       <section class="panel fit" id="architecture" role="tabpanel">
         <div class="wrap">
@@ -1015,10 +1073,10 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Animieren</span><span class="b8-stop">Zum Rendering</span></button>
                 </figure>
                 <figure class="b8-flip" tabindex="0" role="img" aria-label="Die vier Bilder nacheinander: die Bewegung baut sich auf">
-                  <img style="--k:0" src="/assets/img/projects/b8-screen-0501.jpg" alt="" loading="lazy" decoding="async">
-                  <img style="--k:1" src="/assets/img/projects/b8-screen-1236.jpg" alt="" loading="lazy" decoding="async">
-                  <img style="--k:2" src="/assets/img/projects/b8-screen-2255.jpg" alt="" loading="lazy" decoding="async">
-                  <img style="--k:3" src="/assets/img/projects/b8-screen-3765.jpg" alt="" loading="lazy" decoding="async">
+                  <img style="--k:0" src="/assets/img/projects/b8-screen-0501.jpg" alt="Die Bewegung von der Brücke aus gesehen, Bild 501" loading="lazy" decoding="async">
+                  <img style="--k:1" src="/assets/img/projects/b8-screen-1236.jpg" alt="Die Bewegung von der Brücke aus gesehen, Bild 1236" loading="lazy" decoding="async">
+                  <img style="--k:2" src="/assets/img/projects/b8-screen-2255.jpg" alt="Die Bewegung von der Brücke aus gesehen, Bild 2255" loading="lazy" decoding="async">
+                  <img style="--k:3" src="/assets/img/projects/b8-screen-3765.jpg" alt="Die Bewegung von der Brücke aus gesehen, Bild 3765" loading="lazy" decoding="async">
                 </figure>
                 </div>
               </article>
@@ -1204,38 +1262,19 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
         </div>
       </section>
 
-      <section class="panel" id="about" role="tabpanel">
-        <div class="wrap">
-          <h2 class="sr-title">Über mich</h2>
-          <div class="prose">
-            <p class="first">Ich bin Architekt. Ich habe in mehreren Ländern gearbeitet, an Projekten jeder Größenordnung, vom größten Museum Deutschlands bis zu einem Schachspiel. Ich habe in drei Ländern gelebt und spreche fünf Sprachen, und jeder Ort hat Spuren darin hinterlassen, wie ich eine Straße, einen Plan oder einen Satz lese. Wer zwei Perspektiven sieht, öffnet den Horizont für die Existenz weiterer.</p>
-            <p>Das meiste, was ich mache, innerhalb der Architektur oder außerhalb, begann als eine Frage, die mich nicht losließ. Manche dieser Fragen kamen aus Technologie und Programmierung, manche aus den Finanzen und viele aus Kulturen und Reisen.</p>
-
-            <h2>Berufserfahrung</h2>
-            <p>Meine Laufbahn umfasst mehr als zehn Jahre in Architektur, Computational Design, BIM und Digitalisierung in der AEC-Branche, vor allem zwischen Ägypten, Deutschland und der Schweiz. Ich bin LEED Accredited Professional. Ich habe Kurse in Python, HTML, CSS und JavaScript besucht und Projekte mit Processing, C# und C++ umgesetzt.</p>
-            <div class="chips"><a class="chip" href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">Mein vollständiges Profil auf LinkedIn</a></div>
-
-            <h2>Revitesse</h2>
-            <p>Software für Architektur und Ingenieurwesen ist darauf ausgelegt, 90 bis 95 Prozent des Marktes zu bedienen. In den verbleibenden 5 bis 10 Prozent wird die Arbeit hochspezifisch, und genau dort geht die meiste Zeit verloren.</p>
-            <p>In verschiedenen Büros bin ich immer wieder auf dieselben Probleme gestoßen. Revitesse entstand aus dem Wunsch, sie ein für alle Mal zu lösen und anderen Fachleuten zu helfen, weniger Zeit mit repetitiven Aufgaben in Revit zu verbringen. Was als C#-Paket begann, wurde schließlich eine Open-Source-Bibliothek für pyRevit.</p>
-            <div class="chips"><a class="chip" href="#apps" data-go="apps">Revitesse ansehen</a></div>
-
-            <h2>Das Archiv</h2>
-            <p>Ich habe es begonnen, nachdem ich lange Zeit fern von meinem Heimatland gewesen war. Mir wurde klar, dass ich ein Weltbürger geworden war: ein Nomade in der Zeit ebenso wie im Raum, der zu jedem Ort nur in einem bestimmten Moment gehörte. Nostalgie ist für mich bedingt, denn sie bezieht sich auf eine Momentaufnahme eines Ortes und einer Zeit, nicht auf einen Ort oder eine Zeit im Allgemeinen.</p>
-            <p>Als James Joyce <em>Ulysses</em> schrieb, soll er seine Tante angerufen und sie gebeten haben, ein Haus in Dublin aufzusuchen und zu prüfen, ob ein übergewichtiger Mann plausibel über dessen Geländer klettern könnte. Sollte die Stadt je bis auf die Grundmauern niederbrennen, wollte er, dass man sie anhand des Romans wieder aufbauen kann. Die starke Vorstellungskraft eines der besten Bücher, die je auf Englisch geschrieben wurden, zusammen mit seiner Genauigkeit bei der Beschreibung eines Details, das belanglos erscheinen mag, aus Aufrichtigkeit gegenüber dem Leser, hat mein Archiv inspiriert.</p>
-            <div class="chips"><a class="chip" href="#archive" data-go="archive">Zur Karte</a></div>
-          </div>
-        </div>
-      </section>
     </div>
   </div>
-  <footer>© 2026 Ramy Maher</footer>
+  <footer>
+    <nav class="foot-links" aria-label="Anderswo"><a href="mailto:contact@ramymaher.com">contact@ramymaher.com</a><a href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/ramyamaher" target="_blank" rel="noopener">GitHub</a><a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">YouTube</a></nav>
+    <nav class="foot-langs" aria-label="Sprachen"><a href="/design/extended-threads/" hreflang="en" lang="en" data-lang="en">English</a><a href="/de/design/extended-threads/" hreflang="de" lang="de" data-lang="de" class="sel" aria-current="true">Deutsch</a><a href="/fr/design/extended-threads/" hreflang="fr" lang="fr" data-lang="fr">Français</a><a href="/es/design/extended-threads/" hreflang="es" lang="es" data-lang="es">Español</a><a href="/ar/design/extended-threads/" hreflang="ar" lang="ar" data-lang="ar">العربية</a></nav>
+    <span class="foot-copy">© 2026 Ramy Maher</span>
+  </footer>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js"></script>
-<script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Tap anywhere to proceed":"Tippen Sie irgendwo, um fortzufahren","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich vom Kanal aktualisiert; letzte Aktualisierung {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arosa":"Arosa","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cairo":"Kairo","Cannes":"Cannes","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Dessau":"Dessau","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Faro":"Faro","Fes":"Fès","Florence":"Florenz","Flúðir":"Flúðir","Fort Lauderdale":"Fort Lauderdale","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Huningue":"Hüningen","Keflavík":"Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","La Jolla":"La Jolla","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Malibu":"Malibu","Marrakech":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle":"Newcastle","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National Park":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Seljalandsfoss":"Seljalandsfoss","Siwa":"Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Tarifa":"Tarifa","Tokyo":"Tokio","Varna":"Varna","Varosha":"Varosha","Washington, D.C.":"Washington, D.C.","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zurich":"Zürich","Þingvellir":"Þingvellir"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
+<script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the last line":"Klicken für die letzte Zeile","Tap for the last line":"Tippen für die letzte Zeile","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich vom Kanal aktualisiert; letzte Aktualisierung {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arosa":"Arosa","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cairo":"Kairo","Cannes":"Cannes","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Dessau":"Dessau","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Faro":"Faro","Fes":"Fès","Florence":"Florenz","Flúðir":"Flúðir","Fort Lauderdale":"Fort Lauderdale","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Huningue":"Hüningen","Keflavík":"Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","La Jolla":"La Jolla","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Malibu":"Malibu","Marrakech":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle":"Newcastle","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National Park":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Seljalandsfoss":"Seljalandsfoss","Siwa":"Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Tarifa":"Tarifa","Tokyo":"Tokio","Varna":"Varna","Varosha":"Varosha","Washington, D.C.":"Washington, D.C.","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zurich":"Zürich","Þingvellir":"Þingvellir"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
 <script src="/assets/app.js"></script>
 </body>
 </html>

@@ -32,7 +32,7 @@ const PROJECTS = [
 
 // Strings app.js shows (passed through t() there), and the plural words it counts with.
 const JS = [
-  'Hello.', 'Good morning.', 'Good afternoon.', 'Good evening.', 'Tap anywhere to proceed',
+  'Hello.', 'Good morning.', 'Good afternoon.', 'Good evening.', 'Click for the last line', 'Tap for the last line',
   'Open image: {c}', 'Image to come', 'The numbers are refreshed from the channel every day; last update {d}.',
   'World map of {p} places documented in {c} countries', 'Not documented yet', 'Go to playlist', 'Watch a video',
   'The map could not be loaded. Please reload the page.',
@@ -161,11 +161,14 @@ function article(html, tab, n) {
   return parts[n].split('</article>')[0];
 }
 const plain = (s) => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, ' ').trim();
-function summary(text, max = 160) {
+// one to three sentences, between about 70 and 158 characters, cut at a word if need be
+function summary(text, max = 158) {
   const sentences = text.match(/[^.!?。؟]+[.!?。؟]+/g) || [text];
   let out = '';
-  for (const s of sentences) { if ((out + s).length > max && out) break; out += s; }
-  return out.trim().slice(0, max + 40);
+  for (const s of sentences) { if (out.trim().length >= 70 && (out + s).length > max) break; out += s; }
+  out = out.trim();
+  if (out.length > max) { out = out.slice(0, max); out = out.slice(0, out.lastIndexOf(' ')).replace(/[,;:]$/, '') + '…'; }
+  return out;
 }
 
 function page(html, { lang, path, start, title, desc, image, imageAlt }) {
@@ -188,6 +191,11 @@ function page(html, { lang, path, start, title, desc, image, imageAlt }) {
   if (image) {
     html = html.replace(/<meta property="og:image" content="[^"]*">\n<meta property="og:image:width" content="\d+">\n<meta property="og:image:height" content="\d+">/, `<meta property="og:image" content="${SITE}/assets/img/projects/${image}.jpg">`);
     html = html.replace(/<meta property="og:image:alt" content="[^"]*">/, `<meta property="og:image:alt" content="${esc(imageAlt || title)}">`);
+  }
+  if (path && title) {
+    const ld = { '@context': 'https://schema.org', '@type': 'CreativeWork', name: title.replace(/ \| Ramy Maher$/, ''), description: desc, url, inLanguage: lang,
+      creator: { '@id': SITE + '/#person' }, ...(image ? { image: `${SITE}/assets/img/projects/${image}.jpg` } : {}) };
+    html = html.replace('</head>', `<script type="application/ld+json">${JSON.stringify(ld)}</script>\n</head>`);
   }
   // the flag menu points at this same page in every language
   html = html.replace(/<a href="[^"]*" hreflang="(\w+)" lang="\w+" data-lang="\w+"( class="sel" aria-current="true")?/g, (m, l) =>
@@ -228,7 +236,8 @@ for (const lang of LANGS) {
   for (const [tab, n, slug] of PROJECTS) {
     const art = article(home, tab, n);
     const name = plain((art.match(/<h[23]>([\s\S]*?)<\/h[23]>/) || [])[1] || slug);
-    const p = (art.match(/<div class="(?:prose|a-body)">\s*(?:<div>\s*)?<p[^>]*>([\s\S]*?)<\/p>/) || art.match(/<p(?: class="first")?>([\s\S]*?)<\/p>/) || [])[1] || '';
+    // the project's own paragraphs (not the header line or the tagline), so a short first one can run on
+    const p = [...art.matchAll(/<p(?: class="first")?>([\s\S]*?)<\/p>/g)].map((m) => m[1]).join(' ');
     const img = (art.match(/data-imgs="([^|"]+)\|([^;"]*)/) || []);
     const path = `${tab}/${slug}/`;
     await out(path, page(home, { lang, path, start: `${tab}/${n}`, title: `${name} | Ramy Maher`, desc: summary(plain(p)), image: img[1], imageAlt: img[2] && plain(img[2]) }));
