@@ -217,7 +217,7 @@ let entered = false;
   const loaded = new Promise(r => { if (document.readyState === 'complete') r(); else addEventListener('load', r, { once: true }); setTimeout(r, 3000); });
   const second = () => {
     el.classList.remove('out'); el.innerHTML = words(hello); greet.classList.add('p2');
-    Promise.all([loaded, new Promise(r => setTimeout(r, reduced ? 0 : 1150))]).then(() => setTimeout(enter, 1500));
+    Promise.all([loaded, new Promise(r => setTimeout(r, reduced ? 0 : 1150))]).then(() => setTimeout(enter, 450));
   };
   if (reduced) second();
   else {
