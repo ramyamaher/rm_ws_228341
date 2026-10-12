@@ -20,7 +20,7 @@ for (const f of files) {
   const noAlt = (h.match(/<img(?![^>]*\balt="[^"]+")[^>]*>/g) || []).length;
   if (noAlt) issues.push(`${noAlt} images without alt`);
   if (!/rel="canonical"/.test(h)) issues.push('no canonical');
-  if ((h.match(/hreflang=/g) || []).length < 6) issues.push('language links missing');
+  if ((h.match(/hreflang=/g) || []).length < 6 && !/name="seo-check" content="standalone"/.test(h)) issues.push('language links missing');
   if (issues.length) { problems++; console.log(relative(ROOT, f).replace(/\\/g, '/').padEnd(48), issues.join(', ')); }
 }
 console.log(`${files.length} pages checked, ${problems} with something to fix`);

@@ -361,7 +361,17 @@
   "Tap for the last line": "Tippen für die letzte Zeile",
   "Cahir": "Cahir",
   "Flims": "Flims",
-  "Mount Fuji": "Fuji"
+  "Mount Fuji": "Fuji",
+  "Bespoke Spiral Staircase in Berlin": "Maßgefertigte Wendeltreppe in Berlin",
+  "Berlin, Germany [[0]][[1]] Computational design [[2]][[3]] 2020": "Berlin, Deutschland [[0]][[1]] Computational Design [[2]][[3]] 2020",
+  "An outdoor spiral staircase for a café in Berlin, with a landing after three steps. The view on the way up mattered most: the stair had to open up and show more of its surroundings as you climb, rather than shut you in between walls.": "Eine Außenwendeltreppe für ein Café in Berlin, mit einem Podest nach drei Stufen. Am wichtigsten war der Blick beim Hinaufgehen: Die Treppe sollte sich öffnen und beim Steigen mehr von ihrer Umgebung zeigen, statt einen zwischen Wänden einzuschließen.",
+  "The top edge of its curved outer wall is written as an equation. Parallel to the stair it stays closed; a sine opens it but meets the parapet with a kink; a smoother curve opens it and flows into the parapet. In the interactive model you change the curve and watch the wall change, in 3D and unrolled.": "Die Oberkante ihrer gekrümmten Außenwand ist als Gleichung geschrieben. Parallel zur Treppe bleibt sie geschlossen; ein Sinus öffnet sie, trifft die Brüstung aber mit einem Knick; eine weichere Kurve öffnet sie und fließt in die Brüstung über. Im interaktiven Modell verändert man die Kurve und sieht, wie sich die Wand verändert, in 3D und abgewickelt.",
+  "The wall's top edge, written as an equation": "Die Oberkante der Wand, als Gleichung geschrieben",
+  "Geometry": "Geometrie",
+  "20 risers, 3.63 m floor to floor, 3.90 m across": "20 Steigungen, 3,63 m Geschosshöhe, 3,90 m Durchmesser",
+  "Open the interactive model": "Interaktives Modell öffnen",
+  "Bespoke Spiral Staircase in Berlin logo: the outer wall drawn as one line": "Logo der maßgefertigten Wendeltreppe in Berlin: die Außenwand als eine Linie gezeichnet",
+  "The interactive model: the staircase in 3D and its outer wall unrolled": "Das interaktive Modell: die Treppe in 3D und ihre abgewickelte Außenwand"
  },
  "plurals": {
   "place": {

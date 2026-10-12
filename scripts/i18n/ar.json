@@ -361,7 +361,17 @@
   "Tap for the last line": "المس لإظهار السطر الأخير",
   "Cahir": "كاهير",
   "Flims": "فليمس",
-  "Mount Fuji": "جبل فوجي"
+  "Mount Fuji": "جبل فوجي",
+  "Bespoke Spiral Staircase in Berlin": "درج حلزوني مصمَّم خصيصًا في برلين",
+  "Berlin, Germany [[0]][[1]] Computational design [[2]][[3]] 2020": "برلين، ألمانيا [[0]][[1]] تصميم حسابي [[2]][[3]] 2020",
+  "An outdoor spiral staircase for a café in Berlin, with a landing after three steps. The view on the way up mattered most: the stair had to open up and show more of its surroundings as you climb, rather than shut you in between walls.": "درج حلزوني خارجي لمقهى في برلين، مع بسطة بعد ثلاث درجات. كان المنظر أثناء الصعود هو الأهم: كان على الدرج أن ينفتح ويُظهر المزيد مما حوله كلما صعدت، بدلًا من أن يحبسك بين الجدران.",
+  "The top edge of its curved outer wall is written as an equation. Parallel to the stair it stays closed; a sine opens it but meets the parapet with a kink; a smoother curve opens it and flows into the parapet. In the interactive model you change the curve and watch the wall change, in 3D and unrolled.": "الحافة العلوية لجداره الخارجي المنحني مكتوبة كمعادلة. موازيةً للدرج يبقى الجدار مغلقًا؛ والجيب يفتحه لكنه يلتقي بالدرابزين بانكسار؛ ومنحنى أنعم يفتحه وينساب في الدرابزين. في النموذج التفاعلي تغيّر المنحنى وترى الجدار يتغيّر، ثلاثي الأبعاد ومبسوطًا.",
+  "The wall's top edge, written as an equation": "الحافة العلوية للجدار، مكتوبة كمعادلة",
+  "Geometry": "الهندسة",
+  "20 risers, 3.63 m floor to floor, 3.90 m across": "20 قائمة، 3.63 م بين الطابقين، 3.90 م قطرًا",
+  "Open the interactive model": "افتح النموذج التفاعلي",
+  "Bespoke Spiral Staircase in Berlin logo: the outer wall drawn as one line": "شعار الدرج الحلزوني المصمَّم خصيصًا في برلين: الجدار الخارجي مرسوم بخط واحد",
+  "The interactive model: the staircase in 3D and its outer wall unrolled": "النموذج التفاعلي: الدرج ثلاثي الأبعاد وجداره الخارجي مبسوطًا"
  },
  "plurals": {
   "place": {
