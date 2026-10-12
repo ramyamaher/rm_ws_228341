@@ -486,6 +486,67 @@ $$('.b8-stage').forEach(st => {
   flip.addEventListener('click', () => openLb(set(), 1, flip));
 });
 
+// Building 8 in 3D: the boards of the bar, from the Rhino model. three.js and the boards (74 kB) load
+// only when the model first comes into view; the slider drops the boards into place, lowest layer first
+$$('.b8-build').forEach(fig => {
+  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig);
+  let started = false;
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
+  io.observe(box);
+  async function start() {
+    const [THREE, { OrbitControls }, data] = await Promise.all([
+      import('https://cdn.jsdelivr.net/npm/three@0.160.0/+esm'),
+      import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js/+esm'),
+      fetch('/assets/data/b8-layers.json').then(r => r.json()),
+    ]);
+    const ren = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.append(ren.domElement);
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 1, 1, 2000);
+    cam.position.set(-6, 122, 103);
+    const ctl = new OrbitControls(cam, ren.domElement);
+    ctl.target.set(98, 24, -40); ctl.enablePan = false; ctl.maxPolarAngle = Math.PI * .48; ctl.minDistance = 60; ctl.maxDistance = 420; ctl.update();
+    const face = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+    const edge = new THREE.LineBasicMaterial({ color: '#94a3b8' }), moving = new THREE.LineBasicMaterial({ color: '#e3120b' }), waiting = new THREE.LineBasicMaterial({ color: '#cbd5e1' });
+    const room = new THREE.LineBasicMaterial({ color: '#cbd5e1' });
+    const theme = () => { const dark = document.documentElement.dataset.theme === 'dark'; face.color.set(getComputedStyle(fig).backgroundColor); room.color.set(dark ? '#3a3d48' : '#cbd5e1'); waiting.color.set(dark ? '#4b4f5c' : '#cbd5e1'); edge.color.set(dark ? '#8b93a7' : '#94a3b8'); draw(); };
+    // the room: its outline and the lines of the plan
+    const P = (x, y, z) => new THREE.Vector3(x, z, -y);
+    const rp = data.room, seg = [];
+    for (let i = 0; i < rp.length; i += 3) seg.push(rp[i], rp[i + 2], -rp[i + 1]);
+    for (const c of data.curves) for (let i = 3; i < c.length; i += 3) seg.push(c[i - 3], c[i - 1], -c[i - 2], c[i], c[i + 2], -c[i + 1]);
+    const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(seg, 3)); scene.add(new THREE.LineSegments(rg, room));
+    // the boards: each outline extruded to its thickness
+    const levels = [...new Set(data.boards.map(b => b.z))].sort((a, b) => a - b);
+    const boards = data.boards.map(b => {
+      const shape = (L) => { const pts = []; for (let i = 0; i < L.length; i += 2) pts.push(new THREE.Vector2(L[i], L[i + 1])); return pts; };
+      const s = new THREE.Shape(shape(b.loops[0])); for (const L of b.loops.slice(1)) s.holes.push(new THREE.Path(shape(L)));
+      const g = new THREE.ExtrudeGeometry(s, { depth: b.h, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2);
+      const grp = new THREE.Group(); grp.add(new THREE.Mesh(g, face)); const lines = new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), edge); grp.add(lines);
+      grp.position.y = b.z; scene.add(grp);
+      return { grp, lines, z: b.z, k: levels.indexOf(b.z) };
+    });
+    const N = levels.length, ease = (p) => p * p * (3 - 2 * p);
+    function place() {
+      const t = range.value / 1000; let done = 0;
+      for (const b of boards) {
+        const p = ease(Math.min(1, Math.max(0, (t * (N + 2) - b.k) / 2.5)));
+        b.grp.position.y = b.z + (1 - p) * (16 + b.k * 1.4);
+        b.lines.material = p >= 1 ? edge : p > 0 ? moving : waiting;
+        if (p >= 1) done++;
+      }
+      out.value = out.textContent = done + ' / ' + boards.length;
+      draw();
+    }
+    let raf = 0; function draw() { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => ren.render(scene, cam)); }
+    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 32 * Math.pow(Math.max(1, 1.3 / cam.aspect), .8); cam.updateProjectionMatrix(); draw(); }
+    ctl.addEventListener('change', draw);
+    range.addEventListener('input', place);
+    new ResizeObserver(size).observe(box);
+    new MutationObserver(theme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    size(); theme(); place();
+  }
+});
+
 /* ================= apps ================= */
 CARS.apps = carousel({
   car: $('#appCar'), trackEl: $('#appTrack'), prev: $('#appPrev'), next: $('#appNext'),

@@ -371,7 +371,9 @@
   "20 risers, 3.63 m floor to floor, 3.90 m across": "20 قائمة، 3.63 م بين الطابقين، 3.90 م قطرًا",
   "Open the interactive model": "افتح النموذج التفاعلي",
   "Bespoke Spiral Staircase in Berlin logo: the outer wall drawn as one line": "شعار الدرج الحلزوني المصمَّم خصيصًا في برلين: الجدار الخارجي مرسوم بخط واحد",
-  "The interactive model: the staircase in 3D and its outer wall unrolled": "النموذج التفاعلي: الدرج ثلاثي الأبعاد وجداره الخارجي مبسوطًا"
+  "The interactive model: the staircase in 3D and its outer wall unrolled": "النموذج التفاعلي: الدرج ثلاثي الأبعاد وجداره الخارجي مبسوطًا",
+  "Place the boards": "ضع الألواح",
+  "The 3D model of the bar: its boards fall into place, layer by layer, as you move the slider": "النموذج ثلاثي الأبعاد للبار: تستقر ألواحه في مكانها طبقةً بعد طبقة كلما حرّكت المنزلق"
  },
  "plurals": {
   "place": {

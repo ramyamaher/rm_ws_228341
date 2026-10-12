@@ -576,6 +576,18 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .b8-play .b8-stop, .b8-play[aria-pressed="true"] .b8-go{display:none}
 .b8-play[aria-pressed="true"] .b8-stop{display:inline}
 html[dir="rtl"] .b8-play{right:auto; left:14px}
+/* Building 8 in 3D: a slider places the boards, layer by layer */
+.b8-build{margin:14px 0 0; border-radius:18px; overflow:hidden; background:var(--soft)}
+.b8-3d{position:relative; height:clamp(260px,42vh,440px); cursor:grab; touch-action:pan-y}
+.b8-3d:active{cursor:grabbing}
+.b8-3d canvas{display:block}
+.b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
+.b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
+.b8-ctl output{font-size:13px; color:var(--ink-3); font-variant-numeric:tabular-nums; min-width:4.2em; text-align:end}
+.b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
+.b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
+.b8-ctl input::-moz-range-thumb{width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
+.b8-ctl input:focus-visible::-webkit-slider-thumb{outline:2px solid #e3120b; outline-offset:2px}
 /* the spiral staircase: its logo draws the outer wall, its picture opens the interactive model */
 .logo .ss-logo{width:82%; height:82%}
 .ss-line{fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; stroke-dashoffset:1; opacity:0}
@@ -688,6 +700,7 @@ html.fit-tab body{min-height:0}
   .slide.project, .slide.app{display:flex; flex-direction:column}
   .slide > .p-head, .slide > .a-head{order:0}
   .slide > .thumbs, .slide > .b8-row, .slide > .ss-open{order:1; margin-top:0; margin-bottom:18px}
+  .slide > .b8-build{order:1; margin:0 0 18px}
   .slide > .p-body, .slide > .a-body, .slide > .prose{order:2}
   .slide > .prize-line{order:3}
   .slide > .chips{order:4}
@@ -1087,6 +1100,10 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <img style="--k:3" src="/assets/img/projects/b8-screen-3765.jpg" alt="Le mouvement vu depuis la passerelle, image 3765" loading="lazy" decoding="async">
                 </figure>
                 </div>
+                <figure class="b8-build">
+                  <div class="b8-3d" role="img" aria-label="Le modèle 3D du bar : ses planches se mettent en place, couche après couche, quand on déplace le curseur"></div>
+                  <div class="b8-ctl"><label for="b8Range">Placer les planches</label><input id="b8Range" type="range" min="0" max="1000" value="0"><output for="b8Range">0 / 40</output></div>
+                </figure>
               </article>
 
               <article class="slide project">
