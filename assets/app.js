@@ -113,7 +113,7 @@ function playLogos(root, dir = -1, landing = false) {
   if (!entered) return;
   root.querySelectorAll('.anim-logo').forEach(svg => {
     // a logo leaving the screen keeps its last frame; it starts over only when it comes back
-    if (svg.closest('[aria-hidden="true"]')) return;
+    if (svg.closest('[aria-hidden="true"]') || svg.closest('[data-dex]')) return;
     // a building brakes because you moved to it; on the page you land on it simply stands
     if (landing && svg.querySelector('.jelly')) return;
     svg.classList.remove('play');
@@ -1129,6 +1129,175 @@ function loadAppImages() { $$('#apps img[loading="lazy"]').forEach(img => { img.
 addEventListener('load', () => setTimeout(loadAppImages, 1500));
 
 const [startTab, startSlide] = (document.documentElement.dataset.start || '').split('/');
+/* ================= About: the project browser ================= */
+// Every project of every tab as its own logo tile on a slowly drifting strip, turned like cards in a fan; drag it
+// through, click one to stop on it and read about it, or search all the projects' words. Built from the page itself,
+// so it speaks the page's language.
+(() => {
+  const box = $('#dex'); if (!box) return;
+  const flow = $('.dex-flow', box), info = $('.dex-info', box), results = $('.dex-results', box), input = $('.dex-search input', box);
+  const W = (k) => ($(`.dex-words [data-w="${k}"]`, box) || {}).textContent || '';
+  const norm = (s) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // an element's words as they read: separators as dots, line breaks as commas
+  const said = (e) => e.innerHTML.replace(/<i><\/i>/g, ' · ').replace(/<br\s*\/?>/g, ', ').replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  let uid = 0;
+  // a copy of a logo tile, its ids made its own so its masks and gradients play in the copy
+  function copyLogo(el) {
+    const c = el.cloneNode(true), n = ++uid;
+    c.setAttribute('data-dex', ''); c.removeAttribute('id');
+    const ids = new Map(); c.querySelectorAll('[id]').forEach((e) => { const id = `${e.id}-dex${n}`; ids.set(e.id, id); e.id = id; });
+    if (ids.size) c.querySelectorAll('*').forEach((e) => [...e.attributes].forEach((a) => {
+      let v = a.value; for (const [o, m] of ids) v = v.split(`#${o})`).join(`#${m})`).split(`"#${o}"`).join(`"#${m}"`);
+      if ((a.name === 'href' || a.name === 'xlink:href') && v.startsWith('#') && ids.has(v.slice(1))) v = '#' + ids.get(v.slice(1));
+      if (v !== a.value) e.setAttribute(a.name, v);
+    }));
+    // at rest a copy shows its logo finished, as it stands on its page after playing
+    const anims = [...(c.matches('.anim-logo') ? [c] : []), ...c.querySelectorAll('.anim-logo')];
+    anims.forEach((e) => { const p = PLAYERS[e.dataset.player]; if (p) return; e.classList.add('play'); });
+    c.classList.add('dex-still');
+    return c;
+  }
+  // the projects, read from the tabs
+  const items = [];
+  const TRACKS = { architecture: '#archTrack', design: '#desTrack', writing: '#writTrack', apps: '#appTrack' };
+  for (const [tab, sel] of Object.entries(TRACKS)) {
+    $$(`${sel} > .slide`).forEach((s, k) => {
+      const head = s.querySelector(':scope > .p-head, :scope > .a-head'), logo = head && head.querySelector('.logo');
+      if (!logo) return;
+      const m = head.querySelector('.p-meta, .tag'), title = head.querySelector('h2, h3').textContent.trim();
+      const meta = m ? said(m) : '';
+      const note = $(`.dex-words [data-for="${title}"]`, box);
+      const own = note ? [...note.querySelectorAll('p')].map((p) => p.textContent.trim()) : [];
+      const words = [...s.querySelectorAll('p, dt, dd, li, figcaption, h4, .city-step span, .prize-line')].map(said);
+      const caps = [...s.querySelectorAll('[data-imgs]')].flatMap((e) => e.dataset.imgs.split(';').map((x) => (x.split('|')[1] || '').trim()));
+      const labels = [...s.querySelectorAll('.vb-dot[aria-label]')].map((e) => e.getAttribute('aria-label'));
+      const desc = own.length ? own : [((s.querySelector('.prose p, .a-body p, .lead') || {}).textContent || '').trim()].filter(Boolean);
+      items.push({ tab, k, title, meta: meta.replace(/\s+/g, ' ').trim(), logo, desc, texts: [...own, ...words, ...caps, ...labels].filter(Boolean) });
+    });
+  }
+  { // the Archive: its tab's own icon on a tile, its words from the About page
+    const tile = document.createElement('span'); tile.className = 'logo dex-archive';
+    tile.innerHTML = $('.tab[data-tab="archive"] svg').outerHTML;
+    const note = $('.dex-words [data-for="archive"]', box), own = [...note.querySelectorAll('p')].map((p) => p.textContent.trim());
+    const lead = (($('#archive .lead') || {}).textContent || '').trim();
+    items.push({ tab: 'archive', k: -1, title: W('archive'), meta: W('archive-meta'), logo: tile, desc: own, texts: [...own, lead] });
+  }
+  const N = items.length;
+  const open = (it) => { go(it.tab); if (it.k >= 0 && CARS[it.tab]) CARS[it.tab].show(it.k); };
+
+  // the strip
+  const tiles = items.map((it, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'dex-item'; b.setAttribute('role', 'option'); b.setAttribute('aria-label', it.title);
+    b.append(copyLogo(it.logo)); b.dataset.i = i; flow.append(b); return b;
+  });
+  const GAP = () => (flow.clientWidth < 520 ? 74 : 92);
+  let pos = 0, vel = 0, drift = !reduced, target = null, chosen = -1, raf = 0, last = 0;
+  const wrap = (d) => ((d % N) + N + N / 2) % N - N / 2;
+  function place() {
+    const g = GAP();
+    tiles.forEach((t, i) => {
+      const d = wrap(i - pos), a = Math.abs(d);
+      const x = d * g * (1 - Math.min(a, 4) * .06), s = (i === chosen ? 1.22 : 1.12) - Math.min(a, 3.5) * .13, r = Math.max(-58, Math.min(58, -d * 26));
+      t.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px) translateZ(${(-a * 34).toFixed(1)}px) rotateY(${r.toFixed(1)}deg) scale(${s.toFixed(3)})`;
+      t.style.opacity = a > 4.2 ? 0 : (1 - Math.max(0, a - 2.6) * .55).toFixed(2);
+      t.style.zIndex = 100 - Math.round(a * 10);
+      t.tabIndex = a < .5 ? 0 : -1;
+    });
+  }
+  function frame(now) {
+    const dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
+    if (target !== null) { const d = wrap(target - pos); pos += d * Math.min(1, dt * 9); if (Math.abs(d) < .002) { pos = target; target = null; } }
+    else if (!dragging && Math.abs(vel) > .02) { pos += vel * dt; vel *= Math.pow(.04, dt); if (Math.abs(vel) <= .02) { vel = 0; if (!drift) target = Math.round(pos); } }
+    else if (drift && !dragging) pos += dt * .32;
+    place();
+    raf = (drift || dragging || target !== null || Math.abs(vel) > .02) && !flow.hidden ? requestAnimationFrame(frame) : 0;
+  }
+  const kick = () => { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } };
+  // drag it through; a short press without moving is a click
+  let dragging = false, x0 = 0, p0 = 0, moved = 0, lx = 0, lt = 0;
+  flow.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragging = true; drift = false; target = null; vel = 0; x0 = lx = e.clientX; lt = performance.now(); p0 = pos; moved = 0;
+    flow.classList.add('dragging'); flow.setPointerCapture(e.pointerId); kick();
+  });
+  flow.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - x0, now = performance.now(); moved = Math.max(moved, Math.abs(dx));
+    pos = p0 - dx / GAP() * (RTL ? -1 : 1);
+    if (now > lt) vel = -(e.clientX - lx) / GAP() / ((now - lt) / 1000) * (RTL ? -1 : 1);
+    lx = e.clientX; lt = now;
+  });
+  const up = () => { if (!dragging) return; dragging = false; flow.classList.remove('dragging'); if (performance.now() - lt > 80) vel = 0; if (Math.abs(vel) < .3) target = Math.round(pos); kick(); };
+  flow.addEventListener('pointerup', up); flow.addEventListener('pointercancel', up);
+  // a click stops the strip on that tile, plays its logo and tells about its project
+  flow.addEventListener('click', (e) => {
+    const t = e.target.closest('.dex-item'); if (!t || moved > 6) return;
+    choose(+t.dataset.i);
+  });
+  flow.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault(); const step = (e.key === 'ArrowRight') !== !!RTL ? 1 : -1;
+    choose(((Math.round(pos) + step) % N + N) % N); tiles[chosen].focus({ preventScroll: true });
+  });
+  function choose(i) {
+    drift = false; vel = 0; target = i; chosen = i; kick();
+    tiles.forEach((t, j) => { t.classList.toggle('sel', j === i); t.setAttribute('aria-selected', j === i); });
+    const it = items[i], logo = tiles[i].querySelector('.logo');
+    // its logo plays as it does on the project's page
+    logo.classList.remove('dex-still');
+    [...(logo.matches('.anim-logo') ? [logo] : []), ...logo.querySelectorAll('.anim-logo')].forEach((svg) => {
+      svg.classList.remove('play');
+      const player = PLAYERS[svg.dataset.player];
+      if (player) { player.reset(svg); player.play(svg, reduced); return; }
+      svg.style.setProperty('--dir', -1); void svg.getBoundingClientRect(); svg.classList.add('play');
+    });
+    info.innerHTML = `<h3>${esc(it.title)}</h3>${it.meta ? `<p class="meta">${esc(it.meta)}</p>` : ''}${it.desc.map((p) => `<p>${esc(p)}</p>`).join('')}<button class="vb-pill dex-open" type="button">${esc(W('open'))}</button>`;
+    $('.dex-open', info).addEventListener('click', () => open(it));
+  }
+
+  // search: every project's words; the matches side by side, each with the sentences it was found in
+  const sentences = (s) => s.split(/(?<=[.!?؟。])\s+/);
+  function mark(s, q) {
+    const n = norm(s), i = n.indexOf(q); if (i < 0) return esc(s);
+    // map the match in the plain text back onto the sentence as written
+    let a = -1, b = -1, k = 0;
+    for (let j = 0; j < s.length; j++) { const len = norm(s[j]).length; if (a < 0 && k + len > i) a = j; k += len; if (k >= i + q.length) { b = j + 1; break; } }
+    if (a < 0 || b < 0) return esc(s);
+    return esc(s.slice(0, a)) + '<mark>' + esc(s.slice(a, b)) + '</mark>' + esc(s.slice(b));
+  }
+  function search() {
+    const q = norm(input.value.trim());
+    const on = q.length >= 2;
+    flow.hidden = on; info.hidden = on; results.hidden = !on;
+    if (!on) { kick(); return; }
+    const hits = [];
+    for (const it of items) {
+      const inTitle = norm(it.title).includes(q) || norm(it.meta).includes(q);
+      const found = []; const seen = new Set();
+      for (const t of it.texts) for (const s of sentences(t)) { if (found.length >= 2) break; const k = norm(s); if (k.includes(q) && !seen.has(k)) { seen.add(k); found.push(s); } }
+      if (inTitle || found.length) hits.push({ it, found: found.length ? found : [it.meta], score: (inTitle ? 2 : 0) + found.length });
+    }
+    hits.sort((x, y) => y.score - x.score);
+    results.innerHTML = hits.length ? '' : `<p class="dex-none">${esc(W('none'))}</p>`;
+    for (const { it, found } of hits) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'dex-hit';
+      b.append(copyLogo(it.logo));
+      const txt = document.createElement('div');
+      txt.innerHTML = `<b>${mark(it.title, q)}</b>${found.filter(Boolean).map((s) => `<span>${mark(s, q)}</span>`).join('')}`;
+      b.append(txt); b.addEventListener('click', () => open(it)); results.append(b);
+    }
+  }
+  let timer = 0; input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 120); });
+  input.addEventListener('keydown', (e) => { if (e.key === 'Escape') { input.value = ''; search(); } });
+
+  // the strip moves only while it can be seen
+  new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) kick(); }).observe(flow);
+  new ResizeObserver(() => place()).observe(flow);
+  place();
+})();
+
 if (!location.hash && startTab) { go(startTab, { push: false }); if (CARS[startTab] && +startSlide) CARS[startTab].show(+startSlide, false); }
 else go(location.hash.slice(1) || DEFAULT, { push: false });
 })();

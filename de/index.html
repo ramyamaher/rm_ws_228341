@@ -366,14 +366,50 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .p-head.has-logo .p-meta{margin-bottom:0}
 /* room round the logo tile, so its outline and shadow are never cut by the carousel when the title beside it is short */
 .p-head.has-logo .logo, .a-head .logo{margin-block:6px}
+/* About: the portrait, round, framed like the logo tiles */
+.me{width:clamp(108px,22vw,136px); aspect-ratio:1; margin:6px auto 26px; border-radius:50%; overflow:hidden; background:var(--card);
+  box-shadow:0 0 0 1px var(--line), 0 0 0 6px var(--card), 0 0 0 7px var(--line), 0 18px 34px -16px rgba(0,0,0,.35)}
+.me img{display:block; width:100%; height:100%; object-fit:cover}
+/* the project browser: a search bar, a strip of every project's logo tile, and what one tile or a search found */
+.dex{margin-top:30px}
+.dex-search{display:flex; align-items:center; gap:10px; height:50px; padding:0 18px; border-radius:999px; background:var(--btn-bg); border:1px solid var(--btn-border); box-shadow:0 4px 12px rgba(0,0,0,.08); cursor:text}
+.dex-search svg{width:20px; height:20px; flex:none; fill:none; stroke:var(--ink-3); stroke-width:2; stroke-linecap:round}
+.dex-search input{flex:1; min-width:0; border:0; outline:none; background:none; font:inherit; font-size:15.5px; color:var(--ink)}
+.dex-search input::placeholder{color:var(--ink-3)}
+.dex-search:focus-within{box-shadow:0 0 0 2px color-mix(in srgb, var(--ink) 18%, transparent), 0 4px 12px rgba(0,0,0,.08)}
+.dex-flow{position:relative; height:170px; margin-top:14px; perspective:900px; touch-action:pan-y; user-select:none; -webkit-user-select:none; cursor:grab; overflow:hidden;
+  -webkit-mask:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); mask:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent)}
+.dex-flow.dragging{cursor:grabbing}
+.dex-flow[hidden], .dex-info[hidden], .dex-results[hidden]{display:none}
+.dex-item{position:absolute; left:50%; top:50%; padding:0; border:0; background:none; cursor:pointer; transform-style:preserve-3d; will-change:transform; -webkit-tap-highlight-color:transparent}
+.dex-item .logo{pointer-events:none}
+/* a resting copy shows its logo finished; chosen, it plays from the start */
+.dex-still.play, .dex-still .play, .dex-still .play *, .dex-still.play *{animation-delay:-60s !important}
+.logo.dex-archive svg{width:58%; height:58%; fill:none; stroke:rgb(35,35,35); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+html[data-theme="dark"] .logo.dex-archive{background:var(--soft)} html[data-theme="dark"] .logo.dex-archive svg{stroke:var(--ink)}
+.dex-item.sel .logo{box-shadow:0 0 0 2px var(--ink), 0 14px 26px -12px rgba(0,0,0,.4)}
+.dex-info{min-height:7.5em; text-align:center; padding:4px 6px 0}
+.dex-info h3{margin:6px 0 2px; font-size:19px; font-weight:700; letter-spacing:-.02em}
+.dex-info .meta{margin:0 0 10px; color:var(--ink-3); font-size:13.5px}
+.dex-info p{margin:0 auto 10px; max-width:640px; font-size:15px; line-height:1.6; color:var(--ink-2, var(--ink)); text-align:start}
+.dex-info .vb-pill{margin-top:4px}
+.dex-info, .dex-results{animation:vbOpen .35s ease-out}
+.dex-results{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap:12px; margin-top:18px}
+.dex-hit{display:flex; gap:14px; align-items:flex-start; padding:14px; border-radius:20px; border:1px solid var(--line); background:var(--card); text-align:start; cursor:pointer; color:inherit; font:inherit; transition:transform .2s}
+.dex-hit:hover{transform:translateY(-2px)}
+.dex-hit .logo{width:54px; height:54px; border-radius:15px}
+.dex-hit b{display:block; font-size:15px; margin:2px 0 4px}
+.dex-hit span{display:block; font-size:13.5px; line-height:1.5; color:var(--ink-2, var(--ink)); margin-top:4px}
+.dex-hit mark, .dex-info mark{background:color-mix(in srgb, #22c3a0 30%, transparent); color:inherit; border-radius:4px; padding:0 2px}
+.dex-none{grid-column:1 / -1; text-align:center; color:var(--ink-3); padding:18px 0}
 .logo .p-logo{width:74%; height:74%; mix-blend-mode:normal; color:rgb(35,35,35); overflow:visible}
 .logo .m20-logo, .logo .et-logo{width:86%; height:86%}
 .logo .gb-logo{width:80%; height:80%}
 .p-aside .facts:first-child{margin-top:4px}
 /* in dark mode the project logos are inverted, on a dark tile; invert plus a half turn of hue keeps the laser red */
-html[data-theme="dark"] .p-head.has-logo .logo, html[data-theme="dark"] .a-head .logo{background:var(--soft)}
+html[data-theme="dark"] .p-head.has-logo .logo, html[data-theme="dark"] .a-head .logo, html[data-theme="dark"] .dex .logo{background:var(--soft)}
 html[data-theme="dark"] .shuin-splash{background:var(--soft)}
-html[data-theme="dark"] .p-head.has-logo .logo .p-logo{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="dark"] .p-head.has-logo .logo .p-logo, html[data-theme="dark"] .dex .logo .p-logo{filter:invert(1) hue-rotate(180deg)}
 .p-head h2{font-size:clamp(20px,2.4vw,26px); line-height:1.25}
 .p-meta{margin:8px 0 0; color:var(--ink-3); font-size:14px; line-height:1.6}
 .p-meta i{display:inline-block; width:4px; height:4px; margin:0 8px 2px; border-radius:50%; background:currentColor; opacity:.6}
@@ -979,6 +1015,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
       <section class="panel" id="about" role="tabpanel">
         <div class="wrap">
           <h2 class="sr-title">Über mich</h2>
+          <figure class="me"><img src="/assets/img/ramy-maher.jpg" width="400" height="400" alt="Ramy Maher" decoding="async"></figure>
           <div class="prose">
             <p class="first">Ich bin Architekt. Ich habe in mehreren Ländern gearbeitet, an Projekten jeder Größenordnung, vom größten Museum Deutschlands bis zu einem Schachspiel. Ich habe in drei Ländern gelebt und spreche fünf Sprachen, und jeder Ort hat Spuren darin hinterlassen, wie ich eine Straße, einen Plan oder einen Satz lese. Wer zwei Perspektiven sieht, öffnet den Horizont für die Existenz weiterer.</p>
             <p>Das meiste, was ich mache, innerhalb der Architektur oder außerhalb, begann als eine Frage, die mich nicht losließ. Manche dieser Fragen kamen aus Technologie und Programmierung, manche aus den Finanzen und viele aus Kulturen und Reisen.</p>
@@ -987,15 +1024,27 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
             <p>Meine Laufbahn umfasst mehr als zehn Jahre in Architektur, Computational Design, BIM und Digitalisierung in der AEC-Branche, vor allem zwischen Ägypten, Deutschland und der Schweiz. Ich bin LEED Accredited Professional. Ich habe Kurse in Python, HTML, CSS und JavaScript besucht und Projekte mit Processing, C# und C++ umgesetzt.</p>
             <div class="chips"><a class="chip" href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">Mein vollständiges Profil auf LinkedIn</a></div>
 
-            <h2>Revitesse</h2>
-            <p>Software für Architektur und Ingenieurwesen ist darauf ausgelegt, 90 bis 95 Prozent des Marktes zu bedienen. In den verbleibenden 5 bis 10 Prozent wird die Arbeit hochspezifisch, und genau dort geht die meiste Zeit verloren.</p>
-            <p>In verschiedenen Büros bin ich immer wieder auf dieselben Probleme gestoßen. Revitesse entstand aus dem Wunsch, sie ein für alle Mal zu lösen und anderen Fachleuten zu helfen, weniger Zeit mit repetitiven Aufgaben in Revit zu verbringen. Was als C#-Paket begann, wurde schließlich eine Open-Source-Bibliothek für pyRevit.</p>
-            <div class="chips"><a class="chip" href="#apps" data-go="apps">Revitesse ansehen</a></div>
-
-            <h2>Das Archiv</h2>
-            <p>Ich habe es begonnen, nachdem ich lange Zeit fern von meinem Heimatland gewesen war. Mir wurde klar, dass ich ein Weltbürger geworden war: ein Nomade in der Zeit ebenso wie im Raum, der zu jedem Ort nur in einem bestimmten Moment gehörte. Nostalgie ist für mich bedingt, denn sie bezieht sich auf eine Momentaufnahme eines Ortes und einer Zeit, nicht auf einen Ort oder eine Zeit im Allgemeinen.</p>
-            <p>Als James Joyce <em>Ulysses</em> schrieb, soll er seine Tante angerufen und sie gebeten haben, ein Haus in Dublin aufzusuchen und zu prüfen, ob ein übergewichtiger Mann plausibel über dessen Geländer klettern könnte. Sollte die Stadt je bis auf die Grundmauern niederbrennen, wollte er, dass man sie anhand des Romans wieder aufbauen kann. Die starke Vorstellungskraft eines der besten Bücher, die je auf Englisch geschrieben wurden, zusammen mit seiner Genauigkeit bei der Beschreibung eines Details, das belanglos erscheinen mag, aus Aufrichtigkeit gegenüber dem Leser, hat mein Archiv inspiriert.</p>
-            <div class="chips"><a class="chip" href="#archive" data-go="archive">Zur Karte</a></div>
+            <!-- every project of every tab: search them, or browse their logos -->
+            <div class="dex" id="dex">
+              <label class="dex-search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><input type="search" placeholder="Projekte durchsuchen: ein Name, ein Ort, ein Wort" aria-label="Projekte durchsuchen" autocomplete="off" spellcheck="false"></label>
+              <div class="dex-flow" role="listbox" aria-label="Alle Projekte"></div>
+              <div class="dex-info" aria-live="polite"></div>
+              <div class="dex-results" aria-live="polite" hidden></div>
+              <div class="dex-words" hidden>
+                <p data-w="open">Zum Projekt</p>
+                <p data-w="none">Nichts gefunden</p>
+                <p data-w="archive">Das Archiv</p>
+                <p data-w="archive-meta">Wandering Wayfarer, die Orte, die ich dokumentiert habe</p>
+                <div data-for="Revitesse">
+                <p>Software für Architektur und Ingenieurwesen ist darauf ausgelegt, 90 bis 95 Prozent des Marktes zu bedienen. In den verbleibenden 5 bis 10 Prozent wird die Arbeit hochspezifisch, und genau dort geht die meiste Zeit verloren.</p>
+                <p>In verschiedenen Büros bin ich immer wieder auf dieselben Probleme gestoßen. Revitesse entstand aus dem Wunsch, sie ein für alle Mal zu lösen und anderen Fachleuten zu helfen, weniger Zeit mit repetitiven Aufgaben in Revit zu verbringen. Was als C#-Paket begann, wurde schließlich eine Open-Source-Bibliothek für pyRevit.</p>
+                </div>
+                <div data-for="archive">
+                <p>Ich habe es begonnen, nachdem ich lange Zeit fern von meinem Heimatland gewesen war. Mir wurde klar, dass ich ein Weltbürger geworden war: ein Nomade in der Zeit ebenso wie im Raum, der zu jedem Ort nur in einem bestimmten Moment gehörte. Nostalgie ist für mich bedingt, denn sie bezieht sich auf eine Momentaufnahme eines Ortes und einer Zeit, nicht auf einen Ort oder eine Zeit im Allgemeinen.</p>
+                <p>Als James Joyce <em>Ulysses</em> schrieb, soll er seine Tante angerufen und sie gebeten haben, ein Haus in Dublin aufzusuchen und zu prüfen, ob ein übergewichtiger Mann plausibel über dessen Geländer klettern könnte. Sollte die Stadt je bis auf die Grundmauern niederbrennen, wollte er, dass man sie anhand des Romans wieder aufbauen kann. Die starke Vorstellungskraft eines der besten Bücher, die je auf Englisch geschrieben wurden, zusammen mit seiner Genauigkeit bei der Beschreibung eines Details, das belanglos erscheinen mag, aus Aufrichtigkeit gegenüber dem Leser, hat mein Archiv inspiriert.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
