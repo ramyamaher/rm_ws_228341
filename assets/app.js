@@ -823,7 +823,8 @@ $$('.city-build').forEach(fig => {
       fetch('/assets/data/cairo-city.json').then(r => r.json()),
     ]);
     const ren = new THREE.WebGLRenderer({ antialias: true });
-    ren.setClearColor('#ffffff', 1); ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.append(ren.domElement);
+    // drawn finer than the screen, so its many one-pixel lines read thinner
+    ren.setClearColor('#ffffff', 1); ren.setPixelRatio(Math.min(3, Math.max(2, devicePixelRatio * 1.5))); box.append(ren.domElement);
     const [EX, EY] = D.size, scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, 10, 20000);
     const ctl = new OrbitControls(cam, ren.domElement);
     cam.position.set(2150, 820, 1350); ctl.target.set(2400, 0, -800);
