@@ -526,8 +526,8 @@ $$('.b8-build').forEach(fig => {
       const g = new THREE.ExtrudeGeometry(new THREE.Shape(pr.map(([u, v]) => new THREE.Vector2(u, v))), { depth: 140.6, bevelEnabled: false, curveSegments: 1 });
       g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, .4, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30); }
     // the ramp, from the hall floor up to the entrance level
-    { const p = (x, y, z) => P(x, y, z), v = [p(-22.1, -14.2, 0), p(.4, -14.2, 0), p(.4, 186, 12), p(-22.1, 186, 12)].flat();
-      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3)); g.setIndex([0, 1, 2, 0, 2, 3]); add(g, 30); }
+    { const g = new THREE.ExtrudeGeometry(new THREE.Shape([[-14.2, 0], [186, 12], [186, 0]].map(([u, v]) => new THREE.Vector2(u, v))), { depth: 22.5, bevelEnabled: false, curveSegments: 1 });   // solid down to the floor
+      g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, -22.1, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30); }
     const plate = (outline, holes, z0, z1) => {
       const s = new THREE.Shape(outline.map(([x, y]) => new THREE.Vector2(x, y))); for (const h of holes) s.holes.push(new THREE.Path(h.map(([x, y]) => new THREE.Vector2(x, y))));
       const g = new THREE.ExtrudeGeometry(s, { depth: z1 - z0, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, z0, 0); add(g, 30);
@@ -575,7 +575,7 @@ $$('.b8-build').forEach(fig => {
     const zB = zT, by1 = -23;
     plate([[XW + 5.7, -59.6], [RW, -59.6], [RW, 250], [XW + 5.7, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
     const railLine = (a, b, n) => rail(Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n, zB]));
-    railLine([XW + 5.7, 250], [RW, 250], 24); railLine([RW, 185.6], [RW, 250], 7); railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
+    railLine([XW + 5.7, 250], [RW, 250], 24); railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
     // the gallery behind the red wall, which the bridge leads to, and the railings in the wall's openings
     for (const [y0, y1] of [...GAL, [by1, 0]]) rail(Array.from({ length: 6 }, (_, k) => [RW + 2.85, y0 + (y1 - y0) * k / 5, LV2]));
     // curtain walls, their steel grids, closing both ends of the building
@@ -593,7 +593,7 @@ $$('.b8-build').forEach(fig => {
     const OPEN = [...GAL, [-59.3, 0]], inOpen = (ya, yb) => OPEN.some(([a, b]) => Math.min(ya, yb) >= a - .2 && Math.max(ya, yb) <= b + .2);
     const near = (v, t, e = .2) => v > t - e && v < t + e;
     const drop = (ax, ah, ay, bx, bh, by) => {
-      if (near(ax, RW) && near(bx, RW) && ah > ZT - .2 && ah < 70.2 && bh > ZT - .2 && bh < 70.2) return !(near(ah, LV2) && near(bh, LV2) && inOpen(ay, by));   // inner face: only the openings' feet
+      if (near(ax, RW) && near(bx, RW) && ah > ZT - .2 && ah < 70.2 && bh > ZT - .2 && bh < 70.2) return !((near(ah, LV2) && near(bh, LV2) && inOpen(ay, by)) || (near(ah, ZT) && near(bh, ZT) && Math.max(ay, by) <= by1 + .2));   // inner face: only the openings' feet, and the bridge's underside
       if (near(ax, RW + 5.7) && near(bx, RW + 5.7) && near(ah, LV2) && near(bh, LV2)) return inOpen(ay, by);                                                    // far face: the openings' feet go
       return near(ax, XW, .3) || near(ax, XW + 5.7, .3) ? near(ah, ZT) && near(bh, ZT) && near(bx, ax, .3) : false;                                              // the two corridor walls: one
     };
