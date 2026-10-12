@@ -613,7 +613,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-cut path{fill:none; stroke:currentColor; stroke-width:5}
 .vb-cut path.vb-tip{fill:currentColor; stroke:none; opacity:1}
 .vb-zones{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0; transition:opacity .45s}
-.vb-duo{margin-top:22px}
+.vb-box{margin-top:22px; padding:18px; border:1px solid var(--line); border-radius:18px}
+.vb-duo{margin-top:0}
 .vb-duo .vb-plan{margin-top:0}
 .vb-media{position:relative; border-radius:12px; overflow:hidden; aspect-ratio:16/10; background:#0a0a0c}
 .vb-pic{display:block; width:100%; height:100%; padding:0; border:0; background:none; cursor:zoom-in}
@@ -642,6 +643,9 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
   background:var(--btn-bg); color:var(--ink); border:1px solid var(--btn-border); box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .2s cubic-bezier(.3,1.6,.5,1), opacity .2s}
 .vb-pill:hover{transform:scale(1.04)}
 .vb-pill:disabled{opacity:.35; cursor:default; transform:none}
+.vb-grow{overflow:hidden; transition:height .55s cubic-bezier(.2,.8,.2,1)}
+.vb-poem{white-space:pre-line; height:7.6em; overflow-y:auto; margin-top:10px; padding:8px 12px; border-left:2px solid var(--line);
+  font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); scrollbar-width:thin}
 .vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; animation:vbOpen .45s ease-out}
 .vb-steps .vb-nav{grid-column:1 / -1}
 @media (max-width:760px){.vb-steps{grid-template-columns:1fr; gap:14px}}
@@ -781,8 +785,7 @@ html.fit-tab body{min-height:0}
   .slide > .thumbs, .slide > .b8-row, .slide > .ss-live{order:1; margin-top:0; margin-bottom:18px}
   .slide > .b8-build{order:1; margin:0 0 18px}
   .slide > .city-build{order:1; margin:0 0 18px}
-  .slide > .vb-duo{order:1; margin:0 0 12px}
-  .slide > .vb-story{order:1; margin:0 0 18px}
+  .slide > .vb-box{order:1; margin:0 0 18px}
   .slide > .p-body, .slide > .a-body, .slide > .prose{order:2}
   .slide > .prize-line{order:3}
   .slide > .chips{order:4}
@@ -1113,6 +1116,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <p class="city-step" aria-live="polite"><span><b>Stufe 1</b>Die gewachsene Stadt: niedrige Häuser stehen zufällig verstreut und in alle Richtungen gedreht, wie in Kairos informellen Vierteln, und freie Grundstücke bleiben als Parks offen.</span><span><b>Stufe 2</b>Wachstum entlang der Achsen: die Grundstücke folgen den Hauptachsen und dem Ring um den Park; an den Achsen sind die Gebäude am höchsten und werden von ihnen weg niedriger.</span><span><b>Stufe 3</b>Das Geschäftsviertel: ein Raster von Grundstücken um runde Parks, in dem Hochhäuser in Gruppen zwischen niedrigeren Blöcken aufragen.</span></p>
                   <p class="b8-note">Die Gebäude des Wettbewerbsbeitrags, aus dem Wettbewerbsmodell übernommen, mit der bestehenden Stadt ringsum.</p>
                 </figure>
+                <div class="vb-box">
                 <div class="vb-duo">
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="Grundriss"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="841" alt="Grundriss" loading="lazy" decoding="async"></button>
@@ -1136,12 +1140,25 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </div>
                     <div class="vb-texts" aria-live="polite">
                       <section data-pics="vb-004"><h4>Die Vergangenheit</h4><p>Die Besucher treten ein und gehen durch den Gang um das Labyrinth und den weissen Raum. Projektionen an seinen Wänden zeigen Ägyptens Architekten der Vergangenheit und die Art, wie Architektur früher betrieben wurde.</p></section>
-                      <section data-pics="vb-003 vb-002"><h4>Die Gegenwart</h4><p>Der Gang führt ins Labyrinth: enge, dunkle Wege voller Bilder von Leid und Aufruhr und von einer Architektur, die ihre Richtung verloren hat.</p></section>
-                      <section data-pics="vb-005"><h4>Elysium</h4><p>Das Labyrinth öffnet sich in den weissen Raum. Ein langer Tisch trägt ein Modell von ganz Kairo, in dem ein Gebiet unbebaut bleibt, daneben VR-Brillen. Das helle Weiss und die Menschen im Raum stehen für die Hoffnung auf Kairos Zukunft.</p></section>
+                      <section data-pics="vb-003 vb-002"><h4>Die Gegenwart</h4><p>Der Gang führt ins Labyrinth: enge, dunkle Wege voller Bilder von Leid und Aufruhr und von einer Architektur, die ihre Richtung verloren hat. Am Ende, sobald man weisses Licht vor sich sieht, steht neben der Quelle des Lichts dieses Gedicht:</p>
+                      <div class="vb-poem" tabindex="0"></div><script type="text/plain" class="vb-poem-src">Species of men from different realms
+An unmistakable bond
+Warped thoughts,
+Asemic at the other end.
+Frustration...
+The link was sought
+For every cloud
+there is a silver lining.
+A bright infinitely distant light.
+There comes a place,
+an Elysium
+destined to guide.</script></section>
+                      <section data-pics="vb-005"><h4>Elysium</h4><p>Das Labyrinth öffnet sich in den weissen Raum. Ein langer Tisch trägt ein Modell von ganz Kairo, in dem ein Gebiet unbebaut bleibt, daneben VR-Brillen. Das helle Weiss und der Tisch, die an einen Operationssaal im Spital erinnern, wie in einem Schwebezustand, stehen für die Hoffnung auf Kairos Zukunft und erwecken die glorreiche Vergangenheit der Stadt wieder zum Leben.</p></section>
                       <section data-pics="vb-007"><h4>Kairos Zukunft</h4><p>Das leere Gebiet, in der virtuellen Realität in drei Stufen bebaut: die gewachsene Stadt mit mehr Freiraum und Parks, Wachstum entlang der Hauptachsen mit den höchsten Gebäuden an ihnen, und ein Geschäftsviertel mit Hochhäusern. Das Modell oben baut es, während du den Regler bewegst.</p></section>
                     </div>
                     <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">Zurück</button><button class="vb-pill vb-next" type="button">Weiter</button><button class="vb-pill vb-end" type="button">Geschichte schliessen</button></div>
                   </div>
+                </div>
                 </div>
               </article>
 
