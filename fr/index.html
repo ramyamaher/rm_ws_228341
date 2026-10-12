@@ -580,13 +580,14 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .b8-play[aria-pressed="true"] .b8-stop{display:inline}
 html[dir="rtl"] .b8-play{right:auto; left:14px}
 /* Building 8 in 3D: a slider places the boards, layer by layer */
-.b8-build{margin:14px 0 0; border-radius:18px; overflow:hidden; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
+.b8-build{margin:14px 0 0; border-radius:18px; overflow:hidden; background:#fff; border:1px solid var(--line)}   /* a border, not an inset shadow: the canvas would paint over a shadow */
 html[data-theme="dark"] .b8-build{background:var(--soft)}
 html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .b8-3d{position:relative; height:clamp(260px,42vh,440px); cursor:grab; touch-action:pan-y}
 .b8-3d:active{cursor:grabbing}
 .b8-3d canvas{display:block}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
+.b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
 .b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
 .b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
 .b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
@@ -1104,6 +1105,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <figure class="b8-build">
                   <div class="b8-3d" role="img" aria-label="Le modèle 3D du bar : ses planches se mettent en place, couche après couche, quand on déplace le curseur"></div>
                   <div class="b8-ctl"><label for="b8Range">Placer les planches</label><input id="b8Range" type="range" min="0" max="40" step="1" value="40"><output for="b8Range">40 / 40</output></div>
+                  <p class="b8-note">Le modèle est simplifié : ses couches font 5 cm, alors que le bar lui-même est fait de planches de 2 cm.</p>
                 </figure>
               </article>
 
