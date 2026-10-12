@@ -1168,13 +1168,14 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
       if (!logo) return;
       const m = head.querySelector('.p-meta, .tag'), title = head.querySelector('h2, h3').textContent.trim();
       const meta = m ? said(m) : '';
-      const note = $(`.dex-words [data-for="${title}"]`, box);
+      // its own words for the strip, found by its place in the tab (or by name); an h4 there is the grey line under the title
+      const note = $(`.dex-words [data-for="${tab}-${k}"], .dex-words [data-for="${title}"]`, box), sub = note && note.querySelector('h4');
       const own = note ? [...note.querySelectorAll('p')].map((p) => p.textContent.trim()) : [];
       const words = [...s.querySelectorAll('p, dt, dd, li, figcaption, h4, .city-step span, .prize-line')].map(said);
       const caps = [...s.querySelectorAll('[data-imgs]')].flatMap((e) => e.dataset.imgs.split(';').map((x) => (x.split('|')[1] || '').trim()));
       const labels = [...s.querySelectorAll('.vb-dot[aria-label]')].map((e) => e.getAttribute('aria-label'));
       const desc = own.length ? own : [((s.querySelector('.prose p, .a-body p, .lead') || {}).textContent || '').trim()].filter(Boolean);
-      items.push({ tab, k, title, meta: meta.replace(/\s+/g, ' ').trim(), logo, desc, texts: [...own, ...words, ...caps, ...labels].filter(Boolean) });
+      items.push({ tab, k, title, meta: sub ? sub.textContent.trim() : meta.replace(/\s+/g, ' ').trim(), logo, desc, texts: [...(sub ? [sub.textContent.trim(), meta] : []), ...own,...words, ...caps, ...labels].filter(Boolean) });
     });
   }
   { // the Archive: its tab's own icon on a tile, its words from the About page
