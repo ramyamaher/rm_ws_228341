@@ -598,11 +598,12 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-plan{position:relative; margin-top:22px}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
-.vb-dot{position:absolute; width:clamp(20px,3.8vw,28px); aspect-ratio:1; transform:translate(-50%,-50%); padding:0; border:0; background:none; cursor:pointer}
+.vb-dot{position:absolute; width:clamp(13px,2.4vw,18px); aspect-ratio:1; transform:translate(-50%,-50%); padding:0; border:0; background:none; cursor:pointer}
 .vb-dot svg{width:100%; height:100%; overflow:visible}
-.vb-dot circle{fill:#fff; stroke:#22c3a0; stroke-width:3.5}
+.vb-dot::after{content:""; position:absolute; inset:-12px; border-radius:50%}
+.vb-dot circle{fill:#22c3a0; stroke:#22c3a0; stroke-width:3.5}
 .vb-dot circle.pulse{fill:#22c3a0; stroke:none; transform-box:fill-box; transform-origin:center; animation:vbPulse 2.2s ease-out infinite}
-.vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#22c3a0}
+.vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#159a7e; stroke:#159a7e}
 @keyframes vbPulse{0%{transform:scale(1); opacity:.6}100%{transform:scale(3.2); opacity:0}}
 .vb-cut{position:absolute; width:clamp(28px,4.6vw,42px); transform:translate(-50%,-50%); pointer-events:none; color:#0f172a}
 html[data-theme="dark"] .vb-cut{color:#e5e7eb}
@@ -1056,7 +1057,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="A 3D model of the future city in three phases, built up as you move the slider"></div>
-                  <div class="b8-ctl"><label for="cityRange">Build the City</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  <div class="b8-ctl"><label for="cityRange">Build Cairo's Future</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   <p class="city-step" aria-live="polite"><span>Stage 1, the vernacular city: low houses are scattered at random and turned every way, as in Cairo's informal districts, and open lots are left free as parks.</span><span>Stage 2, growth along the axes: the plots follow the main axes and the ring around the park; buildings are tallest on the axes and step down away from them.</span><span>Stage 3, the business district: a grid of plots around round parks, where towers rise in clusters among lower blocks.</span></p>
                   <p class="b8-note">The entry's buildings, taken from the competition model, with the existing city around them.</p>
                 </figure>

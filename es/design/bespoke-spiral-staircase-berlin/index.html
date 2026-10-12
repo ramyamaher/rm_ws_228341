@@ -598,11 +598,12 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-plan{position:relative; margin-top:22px}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
-.vb-dot{position:absolute; width:clamp(20px,3.8vw,28px); aspect-ratio:1; transform:translate(-50%,-50%); padding:0; border:0; background:none; cursor:pointer}
+.vb-dot{position:absolute; width:clamp(13px,2.4vw,18px); aspect-ratio:1; transform:translate(-50%,-50%); padding:0; border:0; background:none; cursor:pointer}
 .vb-dot svg{width:100%; height:100%; overflow:visible}
-.vb-dot circle{fill:#fff; stroke:#22c3a0; stroke-width:3.5}
+.vb-dot::after{content:""; position:absolute; inset:-12px; border-radius:50%}
+.vb-dot circle{fill:#22c3a0; stroke:#22c3a0; stroke-width:3.5}
 .vb-dot circle.pulse{fill:#22c3a0; stroke:none; transform-box:fill-box; transform-origin:center; animation:vbPulse 2.2s ease-out infinite}
-.vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#22c3a0}
+.vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#159a7e; stroke:#159a7e}
 @keyframes vbPulse{0%{transform:scale(1); opacity:.6}100%{transform:scale(3.2); opacity:0}}
 .vb-cut{position:absolute; width:clamp(28px,4.6vw,42px); transform:translate(-50%,-50%); pointer-events:none; color:#0f172a}
 html[data-theme="dark"] .vb-cut{color:#e5e7eb}
@@ -1056,7 +1057,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="Un modelo 3D de la ciudad futura en tres fases, que se construye al mover el control deslizante"></div>
-                  <div class="b8-ctl"><label for="cityRange">Construir la ciudad</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  <div class="b8-ctl"><label for="cityRange">Construir el futuro de El Cairo</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   <p class="city-step" aria-live="polite"><span>Etapa 1, la ciudad vernácula: casas bajas dispersas al azar y giradas en todas direcciones, como en los barrios informales de El Cairo, y solares libres que quedan como parques.</span><span>Etapa 2, crecimiento a lo largo de los ejes: las parcelas siguen los ejes principales y el anillo alrededor del parque; los edificios son más altos sobre los ejes y bajan al alejarse de ellos.</span><span>Etapa 3, el distrito de negocios: una retícula de parcelas alrededor de parques redondos, donde las torres se alzan en grupos entre bloques más bajos.</span></p>
                   <p class="b8-note">Los edificios de la propuesta, tomados del modelo del concurso, con la ciudad existente alrededor.</p>
                 </figure>
