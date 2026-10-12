@@ -588,6 +588,9 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .b8-3d canvas{display:block}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
+  .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
+  .city-step span{grid-area:1/1; visibility:hidden}
+  .city-step span.on{visibility:visible}
 .b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
 .b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
 .b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
@@ -1030,8 +1033,9 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Segundo premio</b>, otorgado por el Ministerio de Cultura de Egipto.</p></div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="Un modelo 3D de la ciudad futura en tres fases, que se construye al mover el control deslizante"></div>
-                  <div class="b8-ctl"><label for="cityRange">Construir la ciudad</label><input id="cityRange" type="range" min="0" max="60" step="1" value="60"><output for="cityRange">3 / 3</output></div>
-                  <p class="b8-note">Reconstruido a partir de los tres scripts de Grasshopper: la ciudad existente con más parques, edificios más altos a lo largo de los ejes principales y un distrito de negocios de rascacielos.</p>
+                  <div class="b8-ctl"><label for="cityRange">Construir la ciudad</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  <p class="city-step" aria-live="polite"><span>Regla 1, la ciudad vernácula: casas bajas dispersas al azar y giradas en todas direcciones, como en los barrios informales de El Cairo, y solares libres que quedan como parques.</span><span>Regla 2, crecimiento a lo largo de los ejes: las parcelas siguen los ejes principales y el anillo alrededor del parque; los edificios son más altos sobre los ejes y bajan al alejarse de ellos.</span><span>Regla 3, el distrito de negocios: una retícula de parcelas alrededor de parques redondos, donde las torres se alzan en grupos entre bloques más bajos.</span></p>
+                  <p class="b8-note">Los edificios de la propuesta, tomados del modelo del concurso, con la ciudad existente alrededor.</p>
                 </figure>
                 <div class="thumbs wide" data-imgs="vb-002|El presente: el laberinto;vb-005|Elysium: la maqueta de la ciudad, donde los visitantes construyen el futuro en realidad aumentada;vb-003|Imágenes en los muros del laberinto;vb-004|El pasado: textos sobre la arquitectura de Egipto;vb-006|Planta y sección;vb-007|El diseño para el futuro de la ciudad"></div>
               </article>

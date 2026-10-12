@@ -586,6 +586,9 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .b8-3d canvas{display:block}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
+  .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
+  .city-step span{grid-area:1/1; visibility:hidden}
+  .city-step span.on{visibility:visible}
 .b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
 .b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
 .b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
@@ -1029,8 +1032,9 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الجائزة الثانية</b>، من وزارة الثقافة المصرية.</p></div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="نموذج ثلاثي الأبعاد للمدينة المستقبلية على ثلاث مراحل، يُبنى كلما حرّكت المنزلق"></div>
-                  <div class="b8-ctl"><label for="cityRange">ابنِ المدينة</label><input id="cityRange" type="range" min="0" max="60" step="1" value="60"><output for="cityRange">3 / 3</output></div>
-                  <p class="b8-note">أُعيد بناؤه من سكربتات Grasshopper الثلاثة: المدينة القائمة مع حدائق أكثر، ومبانٍ أعلى على امتداد المحاور الرئيسية، وحيّ أعمال من الأبراج.</p>
+                  <div class="b8-ctl"><label for="cityRange">ابنِ المدينة</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  <p class="city-step" aria-live="polite"><span>القاعدة 1، المدينة الشعبية: بيوت منخفضة متناثرة عشوائيًا ومتجهة في كل اتجاه، كما في أحياء القاهرة غير الرسمية، مع ترك قطع أرض خالية كحدائق.</span><span>القاعدة 2، النمو على امتداد المحاور: تتبع قطع الأراضي المحاور الرئيسية والحلقة حول الحديقة؛ والمباني أعلى ما تكون على المحاور وتنخفض كلما ابتعدت عنها.</span><span>القاعدة 3، حي الأعمال: شبكة من قطع الأراضي حول حدائق دائرية، ترتفع فيها الأبراج في مجموعات بين كتل أقل ارتفاعًا.</span></p>
+                  <p class="b8-note">مباني المشروع كما في نموذج المسابقة، مع المدينة القائمة من حولها.</p>
                 </figure>
                 <div class="thumbs wide" data-imgs="vb-002|الحاضر: المتاهة;vb-005|الجنة: مجسّم المدينة، حيث يبني الزوار المستقبل بالواقع المعزّز;vb-003|صور على جدران المتاهة;vb-004|الماضي: نصوص عن عمارة مصر;vb-006|مسقط وقطاع;vb-007|تصميم مستقبل المدينة"></div>
               </article>
