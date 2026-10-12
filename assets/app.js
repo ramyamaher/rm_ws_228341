@@ -159,6 +159,7 @@ function showLb(k) {
   lbAt = (k + lbSet.length) % lbSet.length;
   const s = lbSet[lbAt];
   clearTimeout(lbFlip);
+  lb.classList.toggle('paper', !!s.paper);
   if (s.frames) {
     // a quarter of a second for each frame, then a pause on the last
     let n = 0;
@@ -651,7 +652,7 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
 $$('.vb-plan').forEach(box => {
   const dots = $$('.vb-dot', box), set = dots.map(d => ({ f: d.dataset.f, c: d.getAttribute('aria-label') })), open = $('.vb-open', box);
   dots.forEach((d, k) => d.addEventListener('click', () => openLb(set, k, d)));
-  open.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-plan-full.webp', c: open.getAttribute('aria-label') }], 0, open));
+  open.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-plan-full.webp', c: open.getAttribute('aria-label'), paper: true }], 0, open));
 });
 
 // Layers of Egypt: the entry's own city, from the competition's Rhino model (assets/data/cairo-city.json), in the frame of
