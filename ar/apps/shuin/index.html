@@ -787,7 +787,7 @@ html.fit-tab body{min-height:0}
 .arrow.sm{width:36px; height:36px}
 .limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
 .slide .thumbs.row{margin-top:18px; margin-bottom:6px}
-.slide:has(> .limericks) > .prize-line{margin:14px 0 20px}
+.slide:has(> .limericks) > .prize-line{margin:0 0 18px}
 .slide:has(> .city-build) > .prize-line, .slide > .prize-line.top{margin:0 0 18px}
 
 /* phones and tablets held upright: one column, images first, the page scrolls as a page */
@@ -806,7 +806,7 @@ html.fit-tab body{min-height:0}
   /* Writing: the limericks first, then the photographs and the award, then the conference */
   .slide > .limericks{order:1; margin:0 0 20px}
   .slide:has(> .limericks) > .thumbs{order:2}
-  .slide:has(> .limericks) > .prize-line{order:3}
+  .slide:has(> .limericks) > .prize-line{order:0}
   .slide:has(> .limericks) > .prose{order:4}
   .slide:has(> .limericks) > .chips{order:5}
   .slide:has(> .city-build) > .prize-line, .slide > .prize-line.top{order:0}
@@ -1305,6 +1305,7 @@ destined to guide.</script></section>
                     <p class="p-meta">المؤتمر الدولي الأول للحكمة القصيرة «Magnum in Parvo» <i></i> فروتسواف، بولندا <i></i> أكتوبر 2025</p>
                   </div>
                 </div>
+                <div class="prize-line top appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الفائز بالجائزة الأولى</b> في مسابقة الليمريك في المؤتمر الدولي الأول للحكمة القصيرة «Magnum in Parvo»، أكتوبر 2025.</p></div>
                 <div class="limericks">
                   <div class="card-head sub">
                     <div class="t"><div class="num" id="poemCount">1/5</div><div><h3>قصائد الليمريك الخمس الفائزة</h3></div></div>
@@ -1314,7 +1315,6 @@ destined to guide.</script></section>
                   <div class="dots" id="poemDots"></div>
                 </div>
                 <div class="thumbs row" data-imgs="mp-1|قراءة قصائد الليمريك الفائزة|1.85;mp-2|تسلّم الجائزة|1.88;mp-3|ميدالية المؤتمر|0.826"></div>
-                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الفائز بالجائزة الأولى</b> في مسابقة الليمريك في المؤتمر الدولي الأول للحكمة القصيرة «Magnum in Parvo»، أكتوبر 2025.</p></div>
                 <div class="prose">
                   <p>كان Magnum in Parvo، أي «العظمة في الصِّغَر»، المؤتمر الدولي الأول للحكمة القصيرة، وقد عُقد يومي 24 و25 أكتوبر 2025 في معهد فقه اللغة الألمانية بجامعة فروتسواف. نظّمه المعهد مع فرع فروتسواف من Societas Humboldtiana Polonorum، وترأسه الكاتب أندجي ماييفسكي، وجمع باحثين وكتّاب حِكَم من اثنتي عشرة دولة.</p>
                   <p>وإلى جانب محاضرات عن الحكمة القصيرة وترجمتها وتاريخها، ضمّ البرنامج معارض لطبعات تاريخية، وحفلًا موسيقيًا لموسيقى الحجرة، ومسابقة ليمريك حكّمها اللغوي يان ميودك. شاركت في مسابقة الليمريك وفزت بالجائزة الأولى.</p>
