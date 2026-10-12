@@ -645,7 +645,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-pill:disabled{opacity:.35; cursor:default; transform:none}
 .vb-grow{overflow:hidden; transition:height .55s cubic-bezier(.2,.8,.2,1)}
 .vb-poem{white-space:pre-line; height:7.6em; overflow-y:auto; margin-top:10px; padding:8px 12px; border-left:2px solid var(--line);
-  font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); scrollbar-width:thin}
+  font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); border-left-color:transparent; transition:border-color .5s}
+.vb-poem.on{border-left-color:var(--line)}
 .vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; animation:vbOpen .45s ease-out}
 .vb-steps .vb-nav{grid-column:1 / -1}
 @media (max-width:760px){.vb-steps{grid-template-columns:1fr; gap:14px}}
@@ -1150,7 +1151,7 @@ For every cloud
 there is a silver lining.
 A bright infinitely distant light.
 There comes a place,
-an Elysium
+an Elysium,
 destined to guide.</script></section>
                       <section data-pics="vb-005"><h4>الإليزيوم</h4><p>تنفتح المتاهة على الغرفة البيضاء. تحمل طاولة طويلة نموذجًا للقاهرة كلها تُركت فيه منطقة دون تطوير، وبجانبه نظارات الواقع الافتراضي. يرمز البياض الساطع والطاولة، اللذان يذكّران بغرفة عمليات في مستشفى، وكأنهما في حالة برزخ، إلى الأمل في مستقبل القاهرة، ويعيدان إلى الحياة ماضي المدينة المجيد.</p></section>
                       <section data-pics="vb-007"><h4>مستقبل القاهرة</h4><p>المنطقة الفارغة، تُبنى في الواقع الافتراضي على ثلاث مراحل: المدينة الشعبية بمساحات مفتوحة وحدائق أكثر، والنمو على امتداد المحاور الرئيسية حيث أعلى المباني، وحي أعمال من الأبراج. يبنيها النموذج أعلاه كلما حرّكت شريط التمرير.</p></section>
