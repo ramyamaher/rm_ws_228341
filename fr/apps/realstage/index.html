@@ -583,12 +583,11 @@ html[dir="rtl"] .b8-play{right:auto; left:14px}
 .b8-3d:active{cursor:grabbing}
 .b8-3d canvas{display:block}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
-.b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
+.b8-ctl .b8-lbl{font-size:14px; font-weight:650; white-space:nowrap}
+.b8-bar{flex:1; min-width:0; height:4px; border-radius:99px; overflow:hidden; background:color-mix(in srgb, var(--ink) 13%, transparent)}
+.b8-bar i{display:block; height:100%; width:100%; border-radius:inherit; background:#e3120b; transform-origin:left; transform:scaleX(0)}
+html[dir="rtl"] .b8-bar i{transform-origin:right}
 .b8-ctl output{font-size:13px; color:var(--ink-3); font-variant-numeric:tabular-nums; min-width:4.2em; text-align:end}
-.b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
-.b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
-.b8-ctl input::-moz-range-thumb{width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
-.b8-ctl input:focus-visible::-webkit-slider-thumb{outline:2px solid #e3120b; outline-offset:2px}
 /* the spiral staircase: its logo draws the outer wall, its picture opens the interactive model */
 .logo .ss-logo{width:82%; height:82%}
 .ss-line{fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; stroke-dashoffset:1; opacity:0}
@@ -597,6 +596,7 @@ html[dir="rtl"] .b8-play{right:auto; left:14px}
 @media (prefers-reduced-motion:reduce){ .ss-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .ss-line{animation:none} }
 .ss-live{position:relative; margin-top:22px}
 .ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
+html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg); box-shadow:none}
 .ss-full{display:inline-block; margin-top:10px; font-size:13.5px; font-weight:600; color:var(--ink-3); text-decoration:none}
 .ss-full::after{content:" ↗"}
 .ss-full:hover{color:var(--ink)}
@@ -685,8 +685,8 @@ html.fit-tab body{min-height:0}
   animation:rbSpin 1s linear 2, rbFade .5s 2s forwards; will-change:transform, opacity;
 }
 
-/* Writing: the limericks under the award, smaller than before */
-.limericks{margin-top:26px; padding-top:18px; border-top:1px solid var(--line)}
+/* Writing: the five winning limericks first, the contest under them */
+.limericks{margin:4px 0 22px; padding-bottom:18px; border-bottom:1px solid var(--line)}
 .card-head.sub{margin-bottom:4px}
 .card-head.sub h3{margin:0; font-size:17px; font-weight:650; letter-spacing:-.01em}
 .arrow.sm{width:36px; height:36px}
@@ -705,7 +705,7 @@ html.fit-tab body{min-height:0}
   .slide > .prize-line{order:3}
   .slide > .chips{order:4}
   /* Writing: the limericks first, then the photographs, then the conference */
-  .slide > .limericks{order:1; margin:0 0 20px; padding:0 0 18px; border-top:0; border-bottom:1px solid var(--line)}
+  .slide > .limericks{order:1; margin:0 0 20px}
   .slide:has(> .limericks) > .thumbs{order:2}
   .slide:has(> .limericks) > .prose{order:3}
   .slide:has(> .limericks) > .chips{order:4}
@@ -1101,8 +1101,8 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </figure>
                 </div>
                 <figure class="b8-build">
-                  <div class="b8-3d" role="img" aria-label="Le modèle 3D du bar : ses planches se mettent en place, couche après couche, quand on déplace le curseur"></div>
-                  <div class="b8-ctl"><label for="b8Range">Placer les planches</label><input id="b8Range" type="range" min="0" max="1000" value="0"><output for="b8Range">0 / 40</output></div>
+                  <div class="b8-3d" role="img" aria-label="Le modèle 3D du bar : ses planches se mettent en place, couche après couche, quand on fait défiler la page"></div>
+                  <div class="b8-ctl"><span class="b8-lbl">Faites défiler pour placer les planches</span><span class="b8-bar"><i></i></span><output>0 / 40</output></div>
                 </figure>
               </article>
 
@@ -1154,14 +1154,6 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Première conférence aphoristique internationale « Magnum in Parvo » <i></i> Wrocław, Pologne <i></i> Octobre 2025</p>
                   </div>
                 </div>
-                <div class="prose">
-                  <p>Magnum in Parvo, « La grandeur dans la petitesse », était la première conférence aphoristique internationale, tenue les 24 et 25 octobre 2025 à l'Institut de philologie allemande de l'Université de Wrocław. Organisée par l'institut avec la section de Wrocław de la Societas Humboldtiana Polonorum et présidée par l'écrivain Andrzej Majewski, elle a réuni des chercheurs et des aphoristes de douze pays.</p>
-                  <p>Outre des conférences sur l'aphorisme, sa traduction et son histoire, le programme comprenait des expositions d'éditions historiques, un concert de musique de chambre et un concours de limericks jugé par le linguiste Jan Miodek. J'ai participé au concours de limericks et remporté le premier prix.</p>
-                </div>
-                <div class="chips"><a class="chip" href="https://magnuminparvo.com/en.php" target="_blank" rel="noopener">Le site de la conférence</a></div>
-                <div class="thumbs row" data-imgs="mp-1|Lecture des limericks lauréats|1.85;mp-2|La remise du prix|1.88;mp-3|La médaille de la conférence|0.826"></div>
-                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Lauréat du premier prix</b> du concours de limericks de la première conférence aphoristique internationale « Magnum in Parvo », en octobre 2025.</p></div>
-
                 <div class="limericks">
                   <div class="card-head sub">
                     <div class="t"><div class="num" id="poemCount">1/5</div><div><h3>Les cinq limericks lauréats</h3></div></div>
@@ -1170,7 +1162,15 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <div class="car" id="poemCar"><div class="car-track" id="poemTrack"></div></div>
                   <div class="dots" id="poemDots"></div>
                 </div>
-              </article>
+                <div class="prose">
+                  <p>Magnum in Parvo, « La grandeur dans la petitesse », était la première conférence aphoristique internationale, tenue les 24 et 25 octobre 2025 à l'Institut de philologie allemande de l'Université de Wrocław. Organisée par l'institut avec la section de Wrocław de la Societas Humboldtiana Polonorum et présidée par l'écrivain Andrzej Majewski, elle a réuni des chercheurs et des aphoristes de douze pays.</p>
+                  <p>Outre des conférences sur l'aphorisme, sa traduction et son histoire, le programme comprenait des expositions d'éditions historiques, un concert de musique de chambre et un concours de limericks jugé par le linguiste Jan Miodek. J'ai participé au concours de limericks et remporté le premier prix.</p>
+                </div>
+                <div class="chips"><a class="chip" href="https://magnuminparvo.com/en.php" target="_blank" rel="noopener">Le site de la conférence</a></div>
+                <div class="thumbs row" data-imgs="mp-1|Lecture des limericks lauréats|1.85;mp-2|La remise du prix|1.88;mp-3|La médaille de la conférence|0.826"></div>
+                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Lauréat du premier prix</b> du concours de limericks de la première conférence aphoristique internationale « Magnum in Parvo », en octobre 2025.</p></div>
+
+</article>
 
             </div></div>
             <div class="dots" id="writDots"></div>
