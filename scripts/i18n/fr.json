@@ -361,7 +361,17 @@
   "Tap for the last line": "Touchez pour le dernier vers",
   "Cahir": "Cahir",
   "Flims": "Flims",
-  "Mount Fuji": "Mont Fuji"
+  "Mount Fuji": "Mont Fuji",
+  "Bespoke Spiral Staircase in Berlin": "Escalier hélicoïdal sur mesure à Berlin",
+  "Berlin, Germany [[0]][[1]] Computational design [[2]][[3]] 2020": "Berlin, Allemagne [[0]][[1]] Design computationnel [[2]][[3]] 2020",
+  "An outdoor spiral staircase for a café in Berlin, with a landing after three steps. The view on the way up mattered most: the stair had to open up and show more of its surroundings as you climb, rather than shut you in between walls.": "Un escalier hélicoïdal extérieur pour un café à Berlin, avec un palier après trois marches. Le plus important était la vue pendant la montée : l'escalier devait s'ouvrir et montrer davantage de son environnement à mesure que l'on monte, au lieu de vous enfermer entre des murs.",
+  "The top edge of its curved outer wall is written as an equation. Parallel to the stair it stays closed; a sine opens it but meets the parapet with a kink; a smoother curve opens it and flows into the parapet. In the interactive model you change the curve and watch the wall change, in 3D and unrolled.": "L'arête supérieure de son mur extérieur courbe est écrite comme une équation. Parallèle à l'escalier, le mur reste fermé ; une sinusoïde l'ouvre mais rejoint le garde-corps avec une cassure ; une courbe plus douce l'ouvre et se fond dans le garde-corps. Dans le modèle interactif, on modifie la courbe et on voit le mur changer, en 3D et déroulé.",
+  "The wall's top edge, written as an equation": "L'arête supérieure du mur, écrite comme une équation",
+  "Geometry": "Géométrie",
+  "20 risers, 3.63 m floor to floor, 3.90 m across": "20 contremarches, 3,63 m d’étage à étage, 3,90 m de diamètre",
+  "Open the interactive model": "Ouvrir le modèle interactif",
+  "Bespoke Spiral Staircase in Berlin logo: the outer wall drawn as one line": "Logo de l'escalier hélicoïdal sur mesure à Berlin : le mur extérieur dessiné d'un seul trait",
+  "The interactive model: the staircase in 3D and its outer wall unrolled": "Le modèle interactif : l'escalier en 3D et son mur extérieur déroulé"
  },
  "plurals": {
   "place": {
