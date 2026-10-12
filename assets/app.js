@@ -573,9 +573,10 @@ $$('.b8-build').forEach(fig => {
     rail(along(XS - W, yL, zL, yT, zT, 8)); rail(along(XS, yL, zL, yT, zT, 8));
     // the bridge across the glass front at gallery height: 1.8 m wide, with posts under its far end
     const zB = zT, by1 = -23;
-    plate([[XW + 5.7, -59.6], [RW, -59.6], [RW, 250], [XW + 5.7, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
+    const XE = RW + 5.7 + 30;   // level 2 runs on through the red wall to a walkway 1.5 m wide outside it
+    plate([[XW + 5.7, -59.6], [XE, -59.6], [XE, 250], [XW + 5.7, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
     const railLine = (a, b, n) => rail(Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n, zB]));
-    railLine([XW + 5.7, 250], [RW, 250], 24); railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
+    railLine([XW + 5.7, 250], [XE, 250], 26); railLine([XE, -59.6], [XE, 250], 30); railLine([RW + 5.7, -59.6], [XE, -59.6], 3); railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
     // the gallery behind the red wall, which the bridge leads to, and the railings in the wall's openings
     for (const [y0, y1] of [...GAL, [by1, 0]]) rail(Array.from({ length: 6 }, (_, k) => [RW + 2.85, y0 + (y1 - y0) * k / 5, LV2]));
     // curtain walls, their steel grids, closing both ends of the building
