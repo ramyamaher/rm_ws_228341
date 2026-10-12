@@ -588,6 +588,9 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .b8-3d canvas{display:block}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
+  .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
+  .city-step span{grid-area:1/1; visibility:hidden}
+  .city-step span.on{visibility:visible}
 .b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
 .b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
 .b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
@@ -1031,8 +1034,9 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Deuxième prix</b>, décerné par le ministère égyptien de la Culture.</p></div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="Un modèle 3D de la ville future en trois phases, qui se construit quand on déplace le curseur"></div>
-                  <div class="b8-ctl"><label for="cityRange">Construire la ville</label><input id="cityRange" type="range" min="0" max="60" step="1" value="60"><output for="cityRange">3 / 3</output></div>
-                  <p class="b8-note">Reconstruit à partir des trois scripts Grasshopper : la ville existante avec plus de parcs, des bâtiments plus hauts le long des grands axes et un quartier d’affaires de tours.</p>
+                  <div class="b8-ctl"><label for="cityRange">Construire la ville</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  <p class="city-step" aria-live="polite"><span>Règle 1, la ville vernaculaire : des maisons basses sont dispersées au hasard et tournées dans tous les sens, comme dans les quartiers informels du Caire, et des parcelles restent libres pour des parcs.</span><span>Règle 2, la croissance le long des axes : les parcelles suivent les axes principaux et l'anneau autour du parc ; les bâtiments sont les plus hauts sur les axes et s'abaissent en s'en éloignant.</span><span>Règle 3, le quartier d'affaires : une trame de parcelles autour de parcs ronds, où des tours s'élèvent en groupes parmi des îlots plus bas.</span></p>
+                  <p class="b8-note">Les bâtiments du projet, tirés du modèle du concours, avec la ville existante autour.</p>
                 </figure>
                 <div class="thumbs wide" data-imgs="vb-002|Le présent : le labyrinthe;vb-005|Elysium : la maquette de la ville, où les visiteurs construisent l'avenir en réalité augmentée;vb-003|Images sur les murs du labyrinthe;vb-004|Le passé : textes sur l'architecture égyptienne;vb-006|Plan et coupe;vb-007|Le projet pour l'avenir de la ville"></div>
               </article>

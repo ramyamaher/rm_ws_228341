@@ -374,9 +374,10 @@
   "Place the boards": "Colocar los tableros",
   "The 3D model of the bar: its boards fall into place, layer by layer, as you move the slider": "El modelo 3D de la barra: sus tableros encajan en su sitio, capa a capa, al mover el control deslizante",
   "The model is simplified: its layers are 5 cm thick, while the bar itself is built from 2 cm boards.": "El modelo está simplificado: sus capas tienen 5 cm de grosor, mientras que la barra está hecha de tableros de 2 cm.",
-  "Build the city": "Construir la ciudad",
   "A 3D model of the future city in three phases, built up as you move the slider": "Un modelo 3D de la ciudad futura en tres fases, que se construye al mover el control deslizante",
-  "Rebuilt from the three Grasshopper scripts: the existing city with more parks, taller buildings along the main axes, and a business district of high-rises.": "Reconstruido a partir de los tres scripts de Grasshopper: la ciudad existente con más parques, edificios más altos a lo largo de los ejes principales y un distrito de negocios de rascacielos."
+  "Build the City": "Construir la ciudad",
+  "Rule 1, the vernacular city: low houses are scattered at random and turned every way, as in Cairo's informal districts, and open lots are left free as parks.[[0]][[1]]Rule 2, growth along the axes: the plots follow the main axes and the ring around the park; buildings are tallest on the axes and step down away from them.[[2]][[3]]Rule 3, the business district: a grid of plots around round parks, where towers rise in clusters among lower blocks.": "Regla 1, la ciudad vernácula: casas bajas dispersas al azar y giradas en todas direcciones, como en los barrios informales de El Cairo, y solares libres que quedan como parques.[[0]][[1]]Regla 2, crecimiento a lo largo de los ejes: las parcelas siguen los ejes principales y el anillo alrededor del parque; los edificios son más altos sobre los ejes y bajan al alejarse de ellos.[[2]][[3]]Regla 3, el distrito de negocios: una retícula de parcelas alrededor de parques redondos, donde las torres se alzan en grupos entre bloques más bajos.",
+  "The entry's buildings, taken from the competition model, with the existing city around them.": "Los edificios de la propuesta, tomados del modelo del concurso, con la ciudad existente alrededor."
  },
  "plurals": {
   "place": {
