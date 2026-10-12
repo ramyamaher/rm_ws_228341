@@ -631,8 +631,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-plan[data-step] .vb-zones{opacity:1}
 .vb-flow{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible}
 .vb-flow path{fill:none; stroke-linecap:round; stroke-linejoin:round}
-.vb-flow .glow{stroke:#fbbf24; stroke-width:5.5; opacity:.55; filter:url(#vbBlur)}
-.vb-flow .band{stroke:#f97316; stroke-width:2.6; opacity:.9; filter:url(#vbSoft)}
+.vb-flow .vb-bands path{stroke:#f97316; stroke-width:4.6}
+.vb-flow .vb-bands{filter:url(#vbBlur); opacity:.55}
 .vb-plan[data-step] .vb-dot, .vb-plan[data-step] .vb-cut{opacity:0; pointer-events:none; transition:opacity .3s}
 .vb-plan[data-step="1"] .vb-dot[data-zone="1"], .vb-plan[data-step="2"] .vb-dot[data-zone="2"], .vb-plan[data-step="3"] .vb-dot[data-zone="3"]{opacity:1; pointer-events:auto}
 .vb-story{display:flex; flex-direction:column; align-items:center; margin-top:14px}
@@ -653,7 +653,10 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-texts section.on{visibility:visible}
 .vb-texts h4{margin:0 0 6px; font-size:16px; font-weight:650}
 .vb-texts p{margin:0; font-size:14.5px; line-height:1.55; color:var(--ink-2, var(--ink))}
-.vb-nav{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:16px}
+.vb-nav{display:grid; grid-template-columns:1fr auto auto 1fr; align-items:center; gap:8px; margin-top:16px}
+.vb-nav .vb-n{justify-self:end}
+.vb-nav .vb-end{justify-self:start}
+.vb-nav .vb-end[hidden]{display:block; visibility:hidden}
 .vb-n{font-size:13px; font-weight:600; color:var(--ink-3); margin-right:6px; font-variant-numeric:tabular-nums}
 .vb-cut svg{animation:vbGlow 2.2s ease-out infinite}
 @keyframes vbGlow{0%{filter:drop-shadow(0 0 0 rgba(34,195,160,.9))}60%{filter:drop-shadow(0 0 7px rgba(34,195,160,.55))}100%{filter:drop-shadow(0 0 10px rgba(34,195,160,0))}}
@@ -766,7 +769,7 @@ html.fit-tab body{min-height:0}
 .limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
 .slide .thumbs.row{margin-top:18px; margin-bottom:6px}
 .slide:has(> .limericks) > .prize-line{margin:14px 0 20px}
-.slide:has(> .city-build) > .prize-line{margin:0 0 18px}
+.slide:has(> .city-build) > .prize-line, .slide > .prize-line.top{margin:0 0 18px}
 
 /* phones and tablets held upright: one column, images first, the page scrolls as a page */
 @media (max-width:900px){
@@ -788,7 +791,7 @@ html.fit-tab body{min-height:0}
   .slide:has(> .limericks) > .prize-line{order:3}
   .slide:has(> .limericks) > .prose{order:4}
   .slide:has(> .limericks) > .chips{order:5}
-  .slide:has(> .city-build) > .prize-line{order:0}
+  .slide:has(> .city-build) > .prize-line, .slide > .prize-line.top{order:0}
   footer{height:auto; padding-top:10px; padding-bottom:calc(env(safe-area-inset-bottom) + 10px)}
 }
 
@@ -1035,6 +1038,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Nuremberg, Allemagne <i></i> ATP architects engineers <i></i> Concours sur invitation, 2016</p>
                   </div>
                 </div>
+                <div class="prize-line top"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Premier prix</b> du concours sur invitation, décembre 2016.</p></div>
                 <div class="p-body">
                   <div class="prose">
                     <p>Un nouveau quartier résidentiel sur le site d'une ancienne station de conversion électrique, entre la Gebersdorfer Straße et la Bibertstraße à Nuremberg. Outre les logements, le programme comprenait une crèche, des appartements pour seniors et une épicerie de quartier.</p>
@@ -1047,7 +1051,6 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <div><dt>Concours</dt><dd>Sur invitation, 7 participants</dd></div>
                   </dl>
                 </div>
-                <div class="prize-line"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Premier prix</b> du concours sur invitation, décembre 2016.</p></div>
                 <div class="thumbs" data-imgs="gb-0002|Vue de la rue le long de la promenade;gb-0004|Plan de masse;gb-0001|Le site dans son quartier;gb-0003|Coupe à travers le quartier;gb-0005|Coupe"></div>
                 <div class="chips"><a class="chip" href="https://www.wettbewerbe-aktuell.de/ergebnis/wohnpark-gebersdorf-nurnberg-14702" target="_blank" rel="noopener">Résultat du concours</a></div>
               </article>
@@ -1112,13 +1115,13 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="vb-duo">
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="Plan"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="841" alt="Plan" loading="lazy" decoding="async"></button>
-                  <button class="vb-dot" type="button" data-f="vb-004" data-zone="1" style="left:82.6%; top:70.7%" aria-label="Le passé : textes sur l'architecture égyptienne"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-004" data-zone="1" style="left:82.6%; top:68.6%" aria-label="Le passé : textes sur l'architecture égyptienne"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-003" data-zone="2" style="left:84.5%; top:40.4%" aria-label="Images sur les murs du labyrinthe"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-002" data-zone="2" style="left:71.6%; top:53.6%" aria-label="Le présent : le labyrinthe"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-005" data-zone="3" style="left:67.2%; top:23.0%" aria-label="Elysium : la maquette de la ville, où les visiteurs construisent l'avenir en réalité augmentée"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-cut l" type="button" style="left:1.9%; top:35.4%" aria-label="Coupe A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                   <svg class="vb-zones" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><g class="z1"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M5.3 12H94.9V72.5H60.6V99.2H39.5V72.5H5.3Z M8.6 19.4H91.5V65.8H8.6Z"/><path class="lit" d="M5.3 12H94.9V72.5H60.6V99.2H39.5V72.5H5.3Z M8.6 19.4H91.5V65.8H8.6Z"/></g><g class="z2"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M70.2 19.4H91.5V65.8H70.2Z"/><path class="lit" d="M70.2 19.4H91.5V65.8H70.2Z"/></g><g class="z3"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M8.6 19.4H70.2V65.8H8.6Z"/><path class="lit" d="M8.6 19.4H70.2V65.8H8.6Z"/></g><g class="z4"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M16.5 27.5H62.5V55.3H16.5Z"/><path class="lit" d="M16.5 27.5H62.5V55.3H16.5Z"/></g></svg>
-                  <svg class="vb-flow" viewBox="0 0 214 100" aria-hidden="true"><defs><filter id="vbBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter><filter id="vbSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".5"/></filter></defs><g class="vb-bands"></g></svg>
+                  <svg class="vb-flow" viewBox="0 0 214 100" aria-hidden="true"><defs><filter id="vbBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.8"/></filter></defs><g class="vb-bands"></g></svg>
                   <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="Coupe A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                 </div>
                   <div class="vb-media" hidden>
@@ -1168,6 +1171,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Dessau, Allemagne <i></i> Projet de master <i></i> 2016</p>
                     </div>
                   </div>
+                <div class="prize-line top faded"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Mention honorable</b> au prix Robert Oxman de la Dessau International Architecture Graduate School.</p></div>
                 <div class="p-body">
                   <div class="prose">
                     <p>Extended Threads associe une lecture philosophique de l'architecture à la technologie. Le projet démonte ce que signifie l'architecture, qui construit, où et comment, puis le remonte sous la forme d'un jeu. C'est une enquête sur l'endroit où l'architecture s'arrête et où le design commence, qui dépouille l'architecture et la décompose jusqu'à ses syllabes élémentaires. Il aboutit à un outil pour construire de manière vernaculaire, sans architectes formés professionnellement.</p>
@@ -1179,7 +1183,6 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </dl>
                   </div>
                 </div>
-                <div class="prize-line faded"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Mention honorable</b> au prix Robert Oxman de la Dessau International Architecture Graduate School.</p></div>
                 <div class="thumbs" data-imgs="et-002|Une structure frittée sur la surface lunaire;et-005|Robots au travail;et-000|Le jeu sur ordinateur;et-003|Construire en réalité virtuelle sur un téléphone;et-004|La vue stéréo pour un casque de réalité virtuelle"></div>
               </article>
 
