@@ -490,7 +490,7 @@ $$('.b8-stage').forEach(st => {
 // staircase: white faces, grey lines, colour only for the board being placed. The doors, the metal stair, the
 // gallery, the bridge and the ramp's railings are added after the render. three.js and the model (60 kB) load
 // only when it first comes into view; the slider places one board per step
-$$('.b8-build').forEach(fig => {
+$$('.b8-build:not(.city-build)').forEach(fig => {
   const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig);
   let started = false;
   const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
@@ -644,6 +644,116 @@ $$('.b8-build').forEach(fig => {
     range.addEventListener('input', () => set(+range.value));
     new ResizeObserver(size).observe(box);
     paint(); size();
+  }
+});
+
+// Layers of Egypt: the future city, rebuilt in the browser from the three Grasshopper scripts of the entry. Phase 1, the
+// existing fabric (Grid with Greens): a grid of low plots with parks left open. Phase 2, the main axes (Growing City):
+// buildings rise along two axes and fall away from them, round greens kept free. Phase 3, the business district
+// (Voronoi City): Voronoi plots, highest in the middle. Drawn like the other models; the slider builds it batch by batch
+$$('.city-build').forEach(fig => {
+  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig);
+  let started = false;
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
+  io.observe(box);
+  async function start() {
+    const [THREE, { OrbitControls }, { mergeGeometries }] = await Promise.all([
+      import('https://cdn.jsdelivr.net/npm/three@0.160.0/+esm'),
+      import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js/+esm'),
+      import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js/+esm'),
+    ]);
+    const ren = new THREE.WebGLRenderer({ antialias: true });
+    ren.setClearColor('#ffffff', 1); ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.append(ren.domElement);
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(36, 1, 1, 6000);
+    const ctl = new OrbitControls(cam, ren.domElement);
+    cam.position.set(180, 300, 420); ctl.target.set(430, 0, -170);
+    ctl.enablePan = false; ctl.minDistance = 120; ctl.maxDistance = 1600; ctl.maxPolarAngle = Math.PI * .47; ctl.update();
+    ren.domElement.style.touchAction = 'pan-y';
+    const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+    const EDGE = new THREE.LineBasicMaterial({ color: '#94a3b8' }), GREEN = new THREE.LineBasicMaterial({ color: '#22c3a0', transparent: true, opacity: .6 });
+    const P = (x, y, z) => new THREE.Vector3(x, z, -y);              // plan x, y and height z, in three's axes (metres)
+    let seed = 2016; const rnd = () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const ease = (u) => u * u * (3 - 2 * u);
+    // the site: three districts side by side on a base, streets between them
+    const D1 = [0, 270], D2 = [290, 570], D3 = [590, 860], Y = [0, 380];
+    { const g = new THREE.BoxGeometry(880, 6, 400); g.translate(430, -3, -190); scene.add(new THREE.Mesh(g, WHITE)); scene.add(new THREE.LineSegments(new THREE.EdgesGeometry(g), EDGE)); }
+    const greens = [];                                                   // outlines of the parks, drawn in the accent colour
+    const ring = (cx, cy, r, n = 48) => { for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2, b = (i + 1) / n * Math.PI * 2; greens.push(P(cx + r * Math.cos(a), cy + r * Math.sin(a), .2), P(cx + r * Math.cos(b), cy + r * Math.sin(b), .2)); } };
+    const items = [];                                                    // every building: { phase, order, geometry }
+    const boxAt = (x, y, w, d, hgt, ang = 0) => { const g = new THREE.BoxGeometry(w, hgt, d); g.translate(0, hgt / 2, 0); g.rotateY(ang); g.translate(x, 0, -y); return g; };
+    // Phase 1, Grid with Greens: plots of 9 m on a 12 m grid; parks round a few centres and some open lots; 2 to 5 storeys
+    { const parks = [[60, 90, 34], [190, 250, 30], [110, 320, 24], [215, 70, 22]];
+      parks.forEach(([x, y, r]) => ring(x, y, r));
+      for (let x = D1[0] + 6; x < D1[1]; x += 12) for (let y = Y[0] + 6; y < Y[1]; y += 12) {
+        if (parks.some(([px, py, r]) => Math.hypot(x - px, y - py) < r) || rnd() < .08) continue;
+        const floors = 2 + Math.floor(rnd() * 4);
+        items.push({ phase: 0, order: x + rnd() * 30, g: boxAt(x, y, 9, 9, floors * 3.2) });
+      } }
+    // Phase 2, Growing City: two curved axes; buildings along them high (up to 14 storeys) and falling away, turned to
+    // follow the nearest axis; round greens kept free
+    { const axis = (pts) => { const c = new THREE.CatmullRomCurve3(pts.map(([x, y]) => new THREE.Vector3(x, y, 0))); return c.getSpacedPoints(120); };
+      const axes = [axis([[290, 40], [380, 150], [470, 230], [570, 330]]), axis([[290, 330], [400, 260], [480, 150], [570, 50]])];
+      const circles = [[430, 300, 32], [360, 70, 26], [520, 175, 22]];
+      circles.forEach(([x, y, r]) => ring(x, y, r));
+      axes.forEach((A) => { for (let i = 1; i < A.length; i++) greens.push(P(A[i - 1].x, A[i - 1].y, .2), P(A[i].x, A[i].y, .2)); });
+      for (let x = D2[0] + 6; x < D2[1]; x += 11) for (let y = Y[0] + 6; y < Y[1]; y += 11) {
+        const jx = x + (rnd() - .5) * 3, jy = y + (rnd() - .5) * 3;
+        if (circles.some(([cx, cy, r]) => Math.hypot(jx - cx, jy - cy) < r + 3)) continue;
+        let best = Infinity, ang = 0;
+        for (const A of axes) for (let i = 1; i < A.length; i++) { const d = Math.hypot(jx - A[i].x, jy - A[i].y); if (d < best) { best = d; ang = Math.atan2(A[i].y - A[i - 1].y, A[i].x - A[i - 1].x); } }
+        if (best < 8) continue;                                          // the axes themselves are streets
+        const k = Math.pow(Math.max(0, 1 - best / 110), 1.6), floors = 2 + Math.round(12 * k * (.85 + rnd() * .3));
+        items.push({ phase: 1, order: best + rnd() * 6, g: boxAt(jx, jy, 7.5, 7.5, floors * 3.2, ang) });
+      } }
+    // Phase 3, Voronoi City: Voronoi plots, set back 3 m from their edges, from 20 m on the edges to 100 m in the middle
+    { const pts = []; for (let i = 0; i < 150; i++) pts.push([D3[0] + rnd() * (D3[1] - D3[0]), Y[0] + rnd() * (Y[1] - Y[0])]);
+      const vor = d3.Delaunay.from(pts).voronoi([D3[0], Y[0], D3[1], Y[1]]), cx = (D3[0] + D3[1]) / 2, cy = (Y[0] + Y[1]) / 2;
+      pts.forEach((_, i) => {
+        const poly = vor.cellPolygon(i); if (!poly) return;
+        const c = poly.slice(0, -1), mx = c.reduce((s, p) => s + p[0], 0) / c.length, my = c.reduce((s, p) => s + p[1], 0) / c.length;
+        const area = Math.abs(d3.polygonArea(c)), r = Math.sqrt(area / Math.PI), sc = Math.max(.3, 1 - 3 / r);
+        const shape = new THREE.Shape(c.map(([x, y]) => new THREE.Vector2(mx + (x - mx) * sc, my + (y - my) * sc)));
+        const d = Math.hypot(mx - cx, (my - cy) * 1.4) / 190, hgt = 20 + 80 * Math.pow(Math.max(0, 1 - d), 1.4) * (.8 + rnd() * .4);
+        const g = new THREE.ExtrudeGeometry(shape, { depth: hgt, bevelEnabled: false }); g.rotateX(-Math.PI / 2);
+        items.push({ phase: 2, order: d, g });
+      }); }
+    { const gg = new THREE.BufferGeometry().setFromPoints(greens); scene.add(new THREE.LineSegments(gg, GREEN)); }
+    // batches: each phase in twenty steps, in the order the rule builds it
+    const A = new THREE.Color('#22c3a0'), B = new THREE.Color('#3b82f6'), STEPS = 20, batches = [];
+    for (let ph = 0; ph < 3; ph++) {
+      const list = items.filter((it) => it.phase === ph).sort((a, b) => a.order - b.order);
+      for (let s = 0; s < STEPS; s++) {
+        const part = list.slice(Math.floor(list.length * s / STEPS), Math.floor(list.length * (s + 1) / STEPS)); if (!part.length) continue;
+        const g = mergeGeometries(part.map((it) => it.g.index ? it.g.toNonIndexed() : it.g));
+        const k = batches.length, c = A.clone().lerp(B, k / (3 * STEPS - 1));
+        const lit = { face: new THREE.MeshBasicMaterial({ color: c.clone().lerp(new THREE.Color('#fff'), .35), polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }), line: new THREE.LineBasicMaterial({ color: c }) };
+        const grp = new THREE.Group(), mesh = new THREE.Mesh(g, WHITE), ln = new THREE.LineSegments(new THREE.EdgesGeometry(g, 30), EDGE);
+        grp.add(mesh, ln); scene.add(grp);
+        batches.push({ grp, mesh, ln, lit, phase: ph, s: 1, target: 1, n: part.length });
+      }
+    }
+    range.max = batches.length;
+    let shown = Math.min(+range.value, batches.length), raf = 0;
+    const total = batches.reduce((s, b) => s + b.n, 0);
+    function paint() { const ph = shown ? batches[shown - 1].phase + 1 : 0; out.value = out.textContent = ph + ' / 3'; }
+    function tick() {
+      let moving = false;
+      for (const b of batches) {
+        b.s += (b.target - b.s) * .22; if (Math.abs(b.target - b.s) < .004) b.s = b.target; else moving = true;
+        b.grp.visible = b.s > .002; b.grp.scale.y = Math.max(.002, ease(Math.min(1, b.s)));
+        const lit = b.s !== b.target; b.mesh.material = lit ? b.lit.face : WHITE; b.ln.material = lit ? b.lit.line : EDGE;
+      }
+      ren.render(scene, cam); raf = moving ? requestAnimationFrame(tick) : 0;
+    }
+    const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    function set(v) { shown = v; batches.forEach((b, i) => { b.target = i < v ? 1 : 0; }); paint(); kick(); }
+    batches.forEach((b, i) => { b.s = b.target = i < shown ? 1 : 0; });
+    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 36 * Math.pow(Math.max(1, 1.6 / cam.aspect), .7); cam.updateProjectionMatrix(); kick(); }
+    ctl.addEventListener('change', kick);
+    range.addEventListener('input', () => set(+range.value));
+    new ResizeObserver(size).observe(box);
+    paint(); size();
+    fig.dataset.buildings = total;
   }
 });
 

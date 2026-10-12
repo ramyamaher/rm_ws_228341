@@ -373,7 +373,10 @@
   "The interactive model: the staircase in 3D and its outer wall unrolled": "El modelo interactivo: la escalera en 3D y su muro exterior desplegado",
   "Place the boards": "Colocar los tableros",
   "The 3D model of the bar: its boards fall into place, layer by layer, as you move the slider": "El modelo 3D de la barra: sus tableros encajan en su sitio, capa a capa, al mover el control deslizante",
-  "The model is simplified: its layers are 5 cm thick, while the bar itself is built from 2 cm boards.": "El modelo está simplificado: sus capas tienen 5 cm de grosor, mientras que la barra está hecha de tableros de 2 cm."
+  "The model is simplified: its layers are 5 cm thick, while the bar itself is built from 2 cm boards.": "El modelo está simplificado: sus capas tienen 5 cm de grosor, mientras que la barra está hecha de tableros de 2 cm.",
+  "Build the city": "Construir la ciudad",
+  "A 3D model of the future city in three phases, built up as you move the slider": "Un modelo 3D de la ciudad futura en tres fases, que se construye al mover el control deslizante",
+  "Rebuilt from the three Grasshopper scripts: the existing city with more parks, taller buildings along the main axes, and a business district of high-rises.": "Reconstruido a partir de los tres scripts de Grasshopper: la ciudad existente con más parques, edificios más altos a lo largo de los ejes principales y un distrito de negocios de rascacielos."
  },
  "plurals": {
   "place": {

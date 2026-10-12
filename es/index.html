@@ -695,6 +695,7 @@ html.fit-tab body{min-height:0}
 .arrow.sm{width:36px; height:36px}
 .limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
 .slide .thumbs.row{margin-top:18px; margin-bottom:6px}
+.slide:has(> .limericks) > .prize-line{margin:14px 0 20px}
 
 /* phones and tablets held upright: one column, images first, the page scrolls as a page */
 @media (max-width:900px){
@@ -704,15 +705,16 @@ html.fit-tab body{min-height:0}
   .slide > .p-head, .slide > .a-head{order:0}
   .slide > .thumbs, .slide > .b8-row, .slide > .ss-live{order:1; margin-top:0; margin-bottom:18px}
   .slide > .b8-build{order:1; margin:0 0 18px}
+  .slide > .city-build{order:1; margin:0 0 18px}
   .slide > .p-body, .slide > .a-body, .slide > .prose{order:2}
   .slide > .prize-line{order:3}
   .slide > .chips{order:4}
-  /* Writing: the limericks first, then the photographs, then the conference */
+  /* Writing: the limericks first, then the photographs and the award, then the conference */
   .slide > .limericks{order:1; margin:0 0 20px}
   .slide:has(> .limericks) > .thumbs{order:2}
-  .slide:has(> .limericks) > .prose{order:3}
-  .slide:has(> .limericks) > .chips{order:4}
-  .slide:has(> .limericks) > .prize-line{order:5}
+  .slide:has(> .limericks) > .prize-line{order:3}
+  .slide:has(> .limericks) > .prose{order:4}
+  .slide:has(> .limericks) > .chips{order:5}
   footer{height:auto; padding-top:10px; padding-bottom:calc(env(safe-area-inset-bottom) + 10px)}
 }
 
@@ -1026,6 +1028,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   </div>
                 </div>
                 <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Segundo premio</b>, otorgado por el Ministerio de Cultura de Egipto.</p></div>
+                <figure class="b8-build city-build">
+                  <div class="b8-3d" role="img" aria-label="Un modelo 3D de la ciudad futura en tres fases, que se construye al mover el control deslizante"></div>
+                  <div class="b8-ctl"><label for="cityRange">Construir la ciudad</label><input id="cityRange" type="range" min="0" max="60" step="1" value="60"><output for="cityRange">3 / 3</output></div>
+                  <p class="b8-note">Reconstruido a partir de los tres scripts de Grasshopper: la ciudad existente con más parques, edificios más altos a lo largo de los ejes principales y un distrito de negocios de rascacielos.</p>
+                </figure>
                 <div class="thumbs wide" data-imgs="vb-002|El presente: el laberinto;vb-005|Elysium: la maqueta de la ciudad, donde los visitantes construyen el futuro en realidad aumentada;vb-003|Imágenes en los muros del laberinto;vb-004|El pasado: textos sobre la arquitectura de Egipto;vb-006|Planta y sección;vb-007|El diseño para el futuro de la ciudad"></div>
               </article>
 
@@ -1164,13 +1171,13 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <div class="car" id="poemCar"><div class="car-track" id="poemTrack"></div></div>
                   <div class="dots" id="poemDots"></div>
                 </div>
+                <div class="thumbs row" data-imgs="mp-1|Leyendo los limericks ganadores|1.85;mp-2|Recibiendo el premio|1.88;mp-3|La medalla de la conferencia|0.826"></div>
+                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Ganador del primer premio</b> del Concurso de Limericks de la Primera Conferencia Internacional de Aforística «Magnum in Parvo», en octubre de 2025.</p></div>
                 <div class="prose">
                   <p>Magnum in Parvo, «La grandeza en lo pequeño», fue la Primera Conferencia Internacional de Aforística, celebrada los días 24 y 25 de octubre de 2025 en el Instituto de Filología Alemana de la Universidad de Wrocław. Organizada por el instituto junto con la sección de Wrocław de la Societas Humboldtiana Polonorum y presidida por el escritor Andrzej Majewski, reunió a investigadores y aforistas de doce países.</p>
                   <p>Además de conferencias sobre el aforismo, su traducción y su historia, el programa incluyó exposiciones de ediciones históricas, un concierto de cámara y un concurso de limericks con el lingüista Jan Miodek como jurado. Participé en el concurso de limericks y gané el primer premio.</p>
                 </div>
                 <div class="chips"><a class="chip" href="https://magnuminparvo.com/en.php" target="_blank" rel="noopener">La web de la conferencia</a></div>
-                <div class="thumbs row" data-imgs="mp-1|Leyendo los limericks ganadores|1.85;mp-2|Recibiendo el premio|1.88;mp-3|La medalla de la conferencia|0.826"></div>
-                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Ganador del primer premio</b> del Concurso de Limericks de la Primera Conferencia Internacional de Aforística «Magnum in Parvo», en octubre de 2025.</p></div>
 
 </article>
 

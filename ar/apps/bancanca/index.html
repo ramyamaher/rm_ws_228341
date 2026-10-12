@@ -693,6 +693,7 @@ html.fit-tab body{min-height:0}
 .arrow.sm{width:36px; height:36px}
 .limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
 .slide .thumbs.row{margin-top:18px; margin-bottom:6px}
+.slide:has(> .limericks) > .prize-line{margin:14px 0 20px}
 
 /* phones and tablets held upright: one column, images first, the page scrolls as a page */
 @media (max-width:900px){
@@ -702,15 +703,16 @@ html.fit-tab body{min-height:0}
   .slide > .p-head, .slide > .a-head{order:0}
   .slide > .thumbs, .slide > .b8-row, .slide > .ss-live{order:1; margin-top:0; margin-bottom:18px}
   .slide > .b8-build{order:1; margin:0 0 18px}
+  .slide > .city-build{order:1; margin:0 0 18px}
   .slide > .p-body, .slide > .a-body, .slide > .prose{order:2}
   .slide > .prize-line{order:3}
   .slide > .chips{order:4}
-  /* Writing: the limericks first, then the photographs, then the conference */
+  /* Writing: the limericks first, then the photographs and the award, then the conference */
   .slide > .limericks{order:1; margin:0 0 20px}
   .slide:has(> .limericks) > .thumbs{order:2}
-  .slide:has(> .limericks) > .prose{order:3}
-  .slide:has(> .limericks) > .chips{order:4}
-  .slide:has(> .limericks) > .prize-line{order:5}
+  .slide:has(> .limericks) > .prize-line{order:3}
+  .slide:has(> .limericks) > .prose{order:4}
+  .slide:has(> .limericks) > .chips{order:5}
   footer{height:auto; padding-top:10px; padding-bottom:calc(env(safe-area-inset-bottom) + 10px)}
 }
 
@@ -1025,6 +1027,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   </div>
                 </div>
                 <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الجائزة الثانية</b>، من وزارة الثقافة المصرية.</p></div>
+                <figure class="b8-build city-build">
+                  <div class="b8-3d" role="img" aria-label="نموذج ثلاثي الأبعاد للمدينة المستقبلية على ثلاث مراحل، يُبنى كلما حرّكت المنزلق"></div>
+                  <div class="b8-ctl"><label for="cityRange">ابنِ المدينة</label><input id="cityRange" type="range" min="0" max="60" step="1" value="60"><output for="cityRange">3 / 3</output></div>
+                  <p class="b8-note">أُعيد بناؤه من سكربتات Grasshopper الثلاثة: المدينة القائمة مع حدائق أكثر، ومبانٍ أعلى على امتداد المحاور الرئيسية، وحيّ أعمال من الأبراج.</p>
+                </figure>
                 <div class="thumbs wide" data-imgs="vb-002|الحاضر: المتاهة;vb-005|الجنة: مجسّم المدينة، حيث يبني الزوار المستقبل بالواقع المعزّز;vb-003|صور على جدران المتاهة;vb-004|الماضي: نصوص عن عمارة مصر;vb-006|مسقط وقطاع;vb-007|تصميم مستقبل المدينة"></div>
               </article>
 
@@ -1163,13 +1170,13 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <div class="car" id="poemCar"><div class="car-track" id="poemTrack"></div></div>
                   <div class="dots" id="poemDots"></div>
                 </div>
+                <div class="thumbs row" data-imgs="mp-1|قراءة قصائد الليمريك الفائزة|1.85;mp-2|تسلّم الجائزة|1.88;mp-3|ميدالية المؤتمر|0.826"></div>
+                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الفائز بالجائزة الأولى</b> في مسابقة الليمريك في المؤتمر الدولي الأول للحكمة القصيرة «Magnum in Parvo»، أكتوبر 2025.</p></div>
                 <div class="prose">
                   <p>كان Magnum in Parvo، أي «العظمة في الصِّغَر»، المؤتمر الدولي الأول للحكمة القصيرة، وقد عُقد يومي 24 و25 أكتوبر 2025 في معهد فقه اللغة الألمانية بجامعة فروتسواف. نظّمه المعهد مع فرع فروتسواف من Societas Humboldtiana Polonorum، وترأسه الكاتب أندجي ماييفسكي، وجمع باحثين وكتّاب حِكَم من اثنتي عشرة دولة.</p>
                   <p>وإلى جانب محاضرات عن الحكمة القصيرة وترجمتها وتاريخها، ضمّ البرنامج معارض لطبعات تاريخية، وحفلًا موسيقيًا لموسيقى الحجرة، ومسابقة ليمريك حكّمها اللغوي يان ميودك. شاركت في مسابقة الليمريك وفزت بالجائزة الأولى.</p>
                 </div>
                 <div class="chips"><a class="chip" href="https://magnuminparvo.com/en.php" target="_blank" rel="noopener">موقع المؤتمر</a></div>
-                <div class="thumbs row" data-imgs="mp-1|قراءة قصائد الليمريك الفائزة|1.85;mp-2|تسلّم الجائزة|1.88;mp-3|ميدالية المؤتمر|0.826"></div>
-                <div class="prize-line appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الفائز بالجائزة الأولى</b> في مسابقة الليمريك في المؤتمر الدولي الأول للحكمة القصيرة «Magnum in Parvo»، أكتوبر 2025.</p></div>
 
 </article>
 
