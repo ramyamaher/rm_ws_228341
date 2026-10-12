@@ -1178,9 +1178,9 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
       items.push({ tab, k, title, meta: sub ? sub.textContent.trim() : meta.replace(/\s+/g, ' ').trim(), logo, desc, texts: [...(sub ? [sub.textContent.trim(), meta] : []), ...own,...words, ...caps, ...labels].filter(Boolean) });
     });
   }
-  { // the Archive: its tab's own icon on a tile, its words from the About page
+  { // the Archive: the Wandering Wayfarer channel's own logo on a tile, its words from the About page
     const tile = document.createElement('span'); tile.className = 'logo dex-archive';
-    tile.innerHTML = '<svg viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="5.6" fill="#ff0033"/><path d="M11.2 5.7v8.6l7.4-4.3z" fill="#fff"/></svg>';   // the Archive is the YouTube channel
+    tile.innerHTML = '<img src="/assets/img/logos/wandering-wayfarer.jpg" width="512" height="512" alt="" decoding="async">';
     const note = $('.dex-words [data-for="archive"]', box), own = [...note.querySelectorAll('p')].map((p) => p.textContent.trim());
     const lead = (($('#archive .lead') || {}).textContent || '').trim();
     items.push({ tab: 'archive', k: -1, title: W('archive'), meta: W('archive-meta'), logo: tile, desc: own, texts: [...own, lead] });
@@ -1264,7 +1264,7 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   function play(i) {
     played = i;
     const logo = tiles[i].querySelector('.logo');
-    logo.classList.remove('dex-still');
+    logo.classList.remove('dex-still'); unsettle(logo);
     [...(logo.matches('.anim-logo') ? [logo] : []), ...logo.querySelectorAll('.anim-logo')].forEach((svg) => {
       svg.classList.remove('play');
       const player = PLAYERS[svg.dataset.player];
@@ -1312,6 +1312,27 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) kick(); }).observe(flow);
   new ResizeObserver(() => place()).observe(flow);
   place();
+  // a finished animation can stay a picture drawn at the size it ran at, and turn blurry as its tile grows; once
+  // done, its last frame is written onto the element and the animation let go, so the logo is drawn sharp at any size
+  function settle(root) {
+    root.getAnimations({ subtree: true }).forEach((a) => {
+      if (a.playState !== 'finished' || !a.effect || !a.effect.target) return;
+      const el = a.effect.target;
+      if (!el.hasAttribute('data-dex-style')) el.setAttribute('data-dex-style', el.getAttribute('style') || '');
+      // the finished frame as the page draws it (commitStyles wrote a frame from mid-way here), then the animation goes
+      const props = new Set(); a.effect.getKeyframes().forEach((k) => Object.keys(k).forEach((p) => { if (!['offset', 'computedOffset', 'easing', 'composite'].includes(p)) props.add(p); }));
+      const cs = getComputedStyle(el), end = [...props].map((p) => { const css = p.startsWith('--') ? p : p.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase()); return [css, cs.getPropertyValue(css)]; });
+      a.cancel(); end.forEach(([p, v]) => el.style.setProperty(p, v));
+    });
+  }
+  function unsettle(root) {
+    root.querySelectorAll('[data-dex-style]').forEach((el) => {
+      const s = el.getAttribute('data-dex-style'); if (s) el.setAttribute('style', s); else el.removeAttribute('style');
+      el.removeAttribute('data-dex-style');
+    });
+  }
+  flow.addEventListener('animationend', (e) => { const t = e.target.closest('.dex-item'); if (t) settle(t); });
+  requestAnimationFrame(() => requestAnimationFrame(() => tiles.forEach(settle)));
 })();
 
 if (!location.hash && startTab) { go(startTab, { push: false }); if (CARS[startTab] && +startSlide) CARS[startTab].show(+startSlide, false); }
