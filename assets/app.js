@@ -485,9 +485,10 @@ $$('.b8-stage').forEach(st => {
 });
 
 // Building 8 in 3D: the boards of the bar, from the Rhino model. three.js and the boards (74 kB) load
-// only when the model first comes into view; the slider drops the boards into place, lowest layer first
+// only when the model first comes into view; scrolling it into view drops the boards into place, lowest
+// layer first, and scrolling back lifts them off again
 $$('.b8-build').forEach(fig => {
-  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig);
+  const box = $('.b8-3d', fig), bar = $('.b8-bar i', fig), out = $('output', fig);
   let started = false;
   const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
   io.observe(box);
@@ -525,20 +526,29 @@ $$('.b8-build').forEach(fig => {
     });
     const N = levels.length, ease = (p) => p * p * (3 - 2 * p);
     function place() {
-      const t = range.value / 1000; let done = 0;
+      const t = progress(); let done = 0;
       for (const b of boards) {
         const p = ease(Math.min(1, Math.max(0, (t * (N + 2) - b.k) / 2.5)));
         b.grp.position.y = b.z + (1 - p) * (16 + b.k * 1.4);
         b.lines.material = p >= 1 ? edge : p > 0 ? moving : waiting;
         if (p >= 1) done++;
       }
-      out.value = out.textContent = done + ' / ' + boards.length;
+      out.value = out.textContent = done + ' / ' + boards.length; bar.style.transform = `scaleX(${t})`;
       draw();
     }
     let raf = 0; function draw() { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => ren.render(scene, cam)); }
     function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 32 * Math.pow(Math.max(1, 1.3 / cam.aspect), .8); cam.updateProjectionMatrix(); draw(); }
     ctl.addEventListener('change', draw);
-    range.addEventListener('input', place);
+    // how far the model has come into view: 0 as its top enters from below, 1 once all of it (or a screenful) is in
+    // view; on a computer the project scrolls inside its card, on a phone the page scrolls
+    const scroller = fig.closest('.slide');
+    function progress() {
+      const r = box.getBoundingClientRect(); let top = 0, bottom = innerHeight;
+      if (scroller && scroller.scrollHeight > scroller.clientHeight + 1) { const s = scroller.getBoundingClientRect(); top = Math.max(top, s.top); bottom = Math.min(bottom, s.bottom); }
+      return Math.min(1, Math.max(0, (bottom - r.top) / Math.max(1, .85 * Math.min(r.height, bottom - top))));
+    }
+    let tick = 0; const onScroll = () => { if (!tick) tick = requestAnimationFrame(() => { tick = 0; place(); }); };
+    addEventListener('scroll', onScroll, { passive: true, capture: true }); addEventListener('resize', onScroll);
     new ResizeObserver(size).observe(box);
     new MutationObserver(theme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     size(); theme(); place();
