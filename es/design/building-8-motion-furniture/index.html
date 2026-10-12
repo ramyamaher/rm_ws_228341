@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Building 8 Motion Furniture | Ramy Maher</title>
-<meta name="description" content="Building 8 es un edificio docente de la universidad, y su entrada conduce al vestíbulo principal.">
+<meta name="description" content="El Building 8 es un edificio docente de la universidad, y su entrada lleva a la gente al vestíbulo principal.">
 <meta name="author" content="Ramy Maher">
 <meta name="google-site-verification" content="yuDKJdIt_1y7rSpfkxcoU1A5VrnDaJl2mhG5ETP7dv0">
 <link rel="canonical" href="https://ramymaher.com/es/design/building-8-motion-furniture/">
@@ -22,7 +22,7 @@
 <meta property="og:url" content="https://ramymaher.com/es/design/building-8-motion-furniture/">
 <meta property="og:locale" content="es_ES">
 <meta property="og:title" content="Building 8 Motion Furniture | Ramy Maher">
-<meta property="og:description" content="Building 8 es un edificio docente de la universidad, y su entrada conduce al vestíbulo principal.">
+<meta property="og:description" content="El Building 8 es un edificio docente de la universidad, y su entrada lleva a la gente al vestíbulo principal.">
 <meta property="og:image" content="https://ramymaher.com/assets/img/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -685,6 +685,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 @keyframes ssWrite{from{opacity:1; stroke-dashoffset:1} to{opacity:1; stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){ .ss-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .ss-line{animation:none} }
 .ss-live{position:relative; margin-top:22px}
+.ss-hook{margin:0 0 12px; font-size:17px; font-weight:650; letter-spacing:-.01em}
 .ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
 html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg); box-shadow:none}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
@@ -892,7 +893,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   document.documentElement.classList.add('pre');   /* the greeting is up until it moves on, or a click */
 })();
 </script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Building 8 Motion Furniture","description":"Building 8 es un edificio docente de la universidad, y su entrada conduce al vestíbulo principal.","url":"https://ramymaher.com/es/design/building-8-motion-furniture/","inLanguage":"es","creator":{"@id":"https://ramymaher.com/#person"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Building 8 Motion Furniture","description":"El Building 8 es un edificio docente de la universidad, y su entrada lleva a la gente al vestíbulo principal.","url":"https://ramymaher.com/es/design/building-8-motion-furniture/","inLanguage":"es","creator":{"@id":"https://ramymaher.com/#person"}}</script>
 </head>
 <body>
 
@@ -1227,7 +1228,7 @@ destined to guide.</script></section>
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Building 8 es un edificio docente de la universidad, y su entrada conduce al vestíbulo principal. Desde el puente que se ve en el render de abajo, coloqué una cámara que captó el movimiento de todos los que pasaban camino del vestíbulo, y sus estelas fueron formando el espacio para el mueble.</p>
+                    <p>El Building 8 es un edificio docente de la universidad, y su entrada lleva a la gente al vestíbulo principal. Programé un sensor de movimiento en Processing con la cámara corriente de un portátil: si el cambio en los valores RGB de un píxel superaba un umbral, medido como √(x² + y² + z²), donde x, y y z son los cambios en rojo, verde y azul, el sensor entendía que había movimiento en ese píxel. Después coloqué la cámara en el puente que se ve en el render de abajo para captar el movimiento de todos los que pasaban camino del vestíbulo, y sus rastros fueron construyendo el espacio del mueble.</p>
                     <p>Después aplané ese movimiento sobre la planta de la sala. En los espacios vacíos, donde nadie caminaba, diseñé un mueble de tableros de 2 cm de grosor, prensados y encolados: una barra para una fiesta, situada justo donde no estorba a nadie.</p>
                   </div>
                   <dl class="facts">
@@ -1274,6 +1275,7 @@ destined to guide.</script></section>
                   </dl>
                 </div>
                 <div class="ss-live">
+                  <p class="ss-hook">¿Alguna vez te has preguntado para qué sirve la trigonometría?</p>
                   <iframe title="El modelo interactivo: la escalera en 3D y su muro exterior desplegado" data-src="/design/bespoke-spiral-staircase-berlin/model/?embed" allow="fullscreen"></iframe>
                 </div>
               </article>
