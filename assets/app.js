@@ -506,7 +506,7 @@ $$('.b8-build').forEach(fig => {
     const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(50, 1, 1, 3000);
     cam.position.set(-12, 40, -168);                                // on the ramp, looking at the glass front, as in the render
     const ctl = new OrbitControls(cam, ren.domElement);
-    ctl.target.set(88, 14, -30); ctl.enablePan = false; ctl.enableZoom = false; ctl.maxPolarAngle = Math.PI * .49; ctl.update();
+    ctl.target.set(96, 11, -38); ctl.enablePan = false; ctl.minDistance = 25; ctl.maxDistance = 420; ctl.maxPolarAngle = Math.PI * .49; ctl.update();   // zooms in on the bar
     ren.domElement.style.touchAction = 'pan-y';
     const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
     const EDGE = new THREE.LineBasicMaterial({ color: '#94a3b8' }), THIN = new THREE.LineBasicMaterial({ color: '#b6c0ce' });
@@ -560,7 +560,8 @@ $$('.b8-build').forEach(fig => {
     for (const x of [0.4, -22.1]) rail(Array.from({ length: 26 }, (_, i) => { const y = -14.2 + 200.2 * i / 25; return [x, y, rz(y)]; }));
     const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3)); scene.add(new THREE.LineSegments(lg, EDGE));
     const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(thin, 3)); scene.add(new THREE.LineSegments(tg, THIN));
-    // the boards, lowest first; the one just placed in the staircase's colours, the others white, those above not yet there
+    // the boards, lowest first: a board is in the staircase's colours while it moves and white once it lands;
+    // the boards above the slider's position are not there yet
     const A = new THREE.Color('#22c3a0'), B = new THREE.Color('#3b82f6');
     const boards = data.boards.slice().sort((p, q) => p.z - q.z || p.id - q.id).map((b, i, all) => {
       const shape = (L) => { const pts = []; for (let k = 0; k < L.length; k += 2) pts.push(new THREE.Vector2(L[k], L[k + 1])); return pts; };
@@ -574,12 +575,13 @@ $$('.b8-build').forEach(fig => {
     });
     const DROP = 18;                                               // a board comes down from 90 cm above its place
     let shown = +range.value, raf = 0;
-    function paint() { boards.forEach((b, i) => { const cur = i === shown - 1; b.mesh.material = cur ? b.lit.face : WHITE; b.ln.material = cur ? b.lit.line : EDGE; }); out.value = out.textContent = shown + ' / ' + boards.length; }
+    function paint() { out.value = out.textContent = shown + ' / ' + boards.length; }
     function tick() {
       let moving = false;
       for (const b of boards) {
         if (b.leaving) { b.off += (DROP - b.off) * .28; if (b.off > DROP - .5) { b.leaving = false; b.vis = false; b.off = 0; } else moving = true; }
         else if (b.off > .02) { b.off *= .75; moving = true; } else b.off = 0;
+        const lit = b.off > .05; b.mesh.material = lit ? b.lit.face : WHITE; b.ln.material = lit ? b.lit.line : EDGE;
         b.grp.visible = b.vis; b.grp.position.y = b.z + b.off;
       }
       ren.render(scene, cam); raf = moving ? requestAnimationFrame(tick) : 0;
