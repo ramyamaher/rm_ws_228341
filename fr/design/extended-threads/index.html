@@ -362,6 +362,8 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 /* a project with a logo shows it in a tile beside its title, as the apps do */
 .p-head.has-logo{display:flex; gap:16px; align-items:center}
 .p-head.has-logo .p-meta{margin-bottom:0}
+/* room round the logo tile, so its outline and shadow are never cut by the carousel when the title beside it is short */
+.p-head.has-logo .logo, .a-head .logo{margin-block:6px}
 .logo .p-logo{width:74%; height:74%; mix-blend-mode:normal; color:rgb(35,35,35); overflow:visible}
 .logo .m20-logo, .logo .et-logo{width:86%; height:86%}
 .logo .gb-logo{width:80%; height:80%}
@@ -433,7 +435,8 @@ html.lb-lock body{overflow:hidden}
   .thumbs.wide{display:flex; grid-auto-columns:auto; overflow-x:auto; scroll-snap-type:x mandatory; gap:8px}
   .thumbs.wide .thumb{flex:0 0 72%; height:180px; scroll-snap-align:start}
   .thumbs.wide .thumb:nth-child(n+6){flex-basis:72%}
-  .thumbs.phones{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding-bottom:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none}
+  /* a little room inside the strip, so the screenshots' outlines are not cut at its edges */
+  .thumbs.phones{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding:2px 2px 6px; margin-left:-2px; margin-right:-2px; scroll-padding-left:2px; -webkit-overflow-scrolling:touch; scrollbar-width:none}
   .thumbs.phones::-webkit-scrollbar{display:none}
   .thumbs.phones .thumb{flex:0 0 46%; scroll-snap-align:start}
   .thumb:hover{transform:none}
