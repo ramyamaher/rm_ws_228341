@@ -25,6 +25,13 @@ body{margin:0; min-height:100vh; color:var(--ink); background:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; font-variant-numeric:tabular-nums}
 .wrap{max-width:1240px; margin:0 auto; padding:clamp(16px,3vw,36px) clamp(12px,3vw,32px) 56px}
+.ctl{position:relative}
+.rb-ring{position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; pointer-events:none; z-index:2;
+  background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+  animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
+@keyframes rbSpin{to{transform:rotate(360deg)}}
+@keyframes rbFade{to{opacity:0}}
 .back{display:inline-flex; align-items:center; gap:6px; margin:0 0 14px; color:var(--ink-3); font-size:13.5px; font-weight:600; text-decoration:none}
 .back:hover{color:var(--ink)}
 .head{display:flex; align-items:center; gap:16px; margin:0 0 16px}
@@ -152,18 +159,6 @@ const M = {
   parapet: 1.28,      // parapet height above the upper floor, and the wall's height above the stair line
   rail: 0.90,         // handrail height above the stair line
 };
-// the middle wall round the eye (r 0.25 to 0.40), per plan angle: [angle, bottom, top], model heights
-const CORE = [[345,-0.148,1.502],[330,-0.148,1.549],[315,-0.149,1.6],[300,-0.149,1.649],[285,-0.149,1.698],[270,-0.15,1.751],[265,-0.142,1.782],[260,-0.087,1.806],[250,0.023,1.873],[240,0.138,1.942],[230,0.243,2.009],[220,0.351,2.078],[210,0.461,2.148],[200,0.567,2.216],[190,0.685,2.3],[180,0.783,2.369],[170,0.891,2.456],[160,0.997,2.545],[150,1.105,2.632],[140,1.219,2.722],[130,1.322,2.813],[120,1.43,2.912],[110,1.544,3.006],[100,1.649,3.111],[90,1.762,3.211],[80,1.869,3.321],[70,1.984,3.432],[60,2.087,3.535],[50,2.197,3.656],[40,2.312,3.775],[30,2.423,3.893],[20,2.528,4.01],[10,2.643,4.126],[0,2.758,4.256],[-10,2.859,4.376],[-20,2.973,4.504],[-30,3.077,4.629],[-40,3.19,4.741],[-50,3.281,4.851],[-60,3.298,4.917],[-66.5,3.298,4.95]];
-// at the top the parapet leaves the circle at 200 degrees and curves in to the middle wall: [angle, r of the floor face, r of the stair face]
-const CURVE = [[200,1.95,1.80],[205.1,1.938,1.785],[208.3,1.904,1.75],[211.3,1.849,1.67],[214.1,1.776,1.36],[216.4,1.686,1.12],[218.1,1.584,1.01],[219.2,1.475,0.94],[220.5,1.365,0.88],[222,1.257,0.81],[223.8,1.15,0.75],[226,1.045,0.69],[228.6,0.941,0.62],[231.9,0.839,0.56],[236.1,0.741,0.49],[241.5,0.649,0.43],[248.7,0.564,0.37],[258.1,0.49,0.32],[270.5,0.435,0.28],[285.5,0.404,0.256],[293.5,0.40,0.25]];
-const lerpT = (T, a, c) => { for (let i = 1; i < T.length; i++) { const a0 = T[i - 1][0], a1 = T[i][0]; if ((a - a0) * (a - a1) <= 0) { const f = a1 === a0 ? 0 : (a - a0) / (a1 - a0); return T[i - 1][c] + (T[i][c] - T[i - 1][c]) * f; } } return (Math.abs(a - T[0][0]) < Math.abs(a - T[T.length - 1][0]) ? T[0] : T[T.length - 1])[c]; };
-const Z0 = 0.04;   // the model's floor sits 4 cm above zero
-const coreB = (th) => Math.max(0, lerpT(CORE, th, 1) - Z0), coreT = (th) => lerpT(CORE, th, 2) - Z0;
-const PAR0 = -68, PAR1 = 200, CORE0 = 345, CORE1 = -66.5;
-const GAP = .15;                  // the open gap round the stair, between the climbing wall and the wall upstairs
-const pIn = 1.95 + GAP, pOut = pIn + .15;   // the wall upstairs, outside the climbing wall (1.80 to 1.95)
-// the curve into the eye leaves the upstairs wall where it is and eases back to the measured curve within 40 degrees
-const curveShift = (a) => { const u = Math.min(1, Math.max(0, (a - PAR1) / 40)); return (pIn - M.rOut) * (1 - u * u * (3 - 2 * u)); };
 // the outer wall's bottom edge, as built in the model: a straight helix that runs into the ground
 const WALL0 = 345, bottomL = (th) => 2.74 - 0.01091 * th;
 const ZM = 3.63 - .3;                         // underside of the upper floor and of the parapet standing on it
@@ -171,6 +166,18 @@ const WEND = (2.74 - ZM) / 0.01091;           // where the bottom edge reaches i
 const KB = .2;                                // how gently the top edge turns into the level parapet
 const smin = (a, b, k) => { const t = Math.min(1, Math.max(0, .5 + .5 * (b - a) / k)); return b + (a - b) * t - k * t * (1 - t); };
 const rise = M.floor / M.risers, rMid = M.rOut + M.wall / 2, rOuter = M.rOut + M.wall, D2R = Math.PI / 180;
+// the page's words, in the language of the site around it (or ?lang=)
+const T = {"de":{"← Ramy Maher · Design":"← Ramy Maher · Design","Bespoke Spiral Staircase in Berlin":"Maßgefertigte Wendeltreppe in Berlin","Show hidden lines":"Verdeckte Linien zeigen","Hide hidden lines":"Verdeckte Linien ausblenden","Handrail":"Handlauf","Outer wall top":"Oberkante der Außenwand","Drag to turn · scroll or pinch to zoom":"Ziehen zum Drehen · scrollen oder kneifen zum Zoomen","Drag to turn":"Ziehen zum Drehen","Top edge of the wall":"Oberkante der Wand","Parallel":"Parallel","Sine":"Sinus","Smooth":"Weich","Opening":"Öffnung","Smoothness":"Weichheit","Units":"Einheiten","Metric":"Metrisch","Imperial":"Imperial","The wall, unrolled":"Die Wand, abgewickelt","A spiral stair with a landing after three steps. The view on the way up mattered most: the stair had to open up and show more of its surroundings as you climb, not shut you in between walls. Its outer wall follows the stair up, and the line of its top edge decides how open the stair feels and how smoothly the rail runs: parallel keeps the wall closed, a sine opens it but meets the parapet with a kink, and the smooth curve opens it and flows into the parapet.":"Eine Wendeltreppe mit einem Podest nach drei Stufen. Am wichtigsten war der Blick beim Hinaufgehen: Die Treppe sollte sich öffnen und beim Steigen mehr von ihrer Umgebung zeigen, statt einen zwischen Wänden einzuschließen. Ihre Außenwand folgt der Treppe nach oben, und die Linie ihrer Oberkante entscheidet, wie offen die Treppe wirkt und wie ruhig der Handlauf verläuft: parallel hält die Wand geschlossen, ein Sinus öffnet sie, trifft die Brüstung aber mit einem Knick, und die weiche Kurve öffnet sie und fließt in die Brüstung über.","Top edge = stair line + <b>{h}</b>, the parapet height":"Oberkante = Treppenlinie + <b>{h}</b>, die Brüstungshöhe","Top edge = stair line eased over the landing + {h} − <b>A · sin(πx/X)</b>":"Oberkante = über dem Podest geglättete Treppenlinie + {h} − <b>A · sin(πx/X)</b>","Top edge = stair line eased over the landing + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>":"Oberkante = über dem Podest geglättete Treppenlinie + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>","Landing":"Podest","parapet top":"Oberkante Brüstung","upper floor":"Obergeschoss","opens {x}":"öffnet {x}","meets the parapet":"trifft die Brüstung","meets the parapet with a kink":"trifft die Brüstung mit einem Knick","meets the parapet smoothly":"trifft die Brüstung weich","handrail, {x}":"Handlauf, {x}","wall starts":"Wand beginnt","no opening: the top edge stays parallel to the stair":"keine Öffnung: die Oberkante bleibt parallel zur Treppe","flat middle: {x} lower":"flache Mitte: {x} tiefer","flat middle: {x} lower, so the same height above the stair":"flache Mitte: {x} tiefer, also dieselbe Höhe über der Treppe","{x} lower at the middle only":"nur in der Mitte {x} tiefer","each of {n} risers":"jede der {n} Steigungen","floor to floor":"Geschoss zu Geschoss","outer diameter":"Außendurchmesser","Bespoke Spiral Staircase in Berlin logo":"Logo der maßgefertigten Wendeltreppe in Berlin"},"fr":{"← Ramy Maher · Design":"← Ramy Maher · Design","Bespoke Spiral Staircase in Berlin":"Escalier hélicoïdal sur mesure à Berlin","Show hidden lines":"Afficher les lignes cachées","Hide hidden lines":"Masquer les lignes cachées","Handrail":"Main courante","Outer wall top":"Haut du mur extérieur","Drag to turn · scroll or pinch to zoom":"Glisser pour tourner · faire défiler ou pincer pour zoomer","Drag to turn":"Glisser pour tourner","Top edge of the wall":"Bord supérieur du mur","Parallel":"Parallèle","Sine":"Sinus","Smooth":"Doux","Opening":"Ouverture","Smoothness":"Douceur","Units":"Unités","Metric":"Métrique","Imperial":"Impérial","The wall, unrolled":"Le mur, déroulé","A spiral stair with a landing after three steps. The view on the way up mattered most: the stair had to open up and show more of its surroundings as you climb, not shut you in between walls. Its outer wall follows the stair up, and the line of its top edge decides how open the stair feels and how smoothly the rail runs: parallel keeps the wall closed, a sine opens it but meets the parapet with a kink, and the smooth curve opens it and flows into the parapet.":"Un escalier hélicoïdal avec un palier après trois marches. La vue en montant comptait le plus : l'escalier devait s'ouvrir et montrer davantage de ses alentours à mesure que l'on monte, et non vous enfermer entre des murs. Son mur extérieur suit l'escalier, et la ligne de son bord supérieur décide à quel point l'escalier paraît ouvert et avec quelle douceur court la main courante : parallèle, le mur reste fermé ; une sinusoïde l'ouvre mais rejoint le garde-corps avec un angle ; la courbe douce l'ouvre et se fond dans le garde-corps.","Top edge = stair line + <b>{h}</b>, the parapet height":"Bord supérieur = ligne de foulée + <b>{h}</b>, la hauteur du garde-corps","Top edge = stair line eased over the landing + {h} − <b>A · sin(πx/X)</b>":"Bord supérieur = ligne de foulée adoucie sur le palier + {h} − <b>A · sin(πx/X)</b>","Top edge = stair line eased over the landing + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>":"Bord supérieur = ligne de foulée adoucie sur le palier + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>","Landing":"Palier","parapet top":"haut du garde-corps","upper floor":"étage supérieur","opens {x}":"s'ouvre de {x}","meets the parapet":"rejoint le garde-corps","meets the parapet with a kink":"rejoint le garde-corps avec un angle","meets the parapet smoothly":"rejoint le garde-corps en douceur","handrail, {x}":"main courante, {x}","wall starts":"début du mur","no opening: the top edge stays parallel to the stair":"pas d'ouverture : le bord supérieur reste parallèle à l'escalier","flat middle: {x} lower":"milieu plat : {x} plus bas","flat middle: {x} lower, so the same height above the stair":"milieu plat : {x} plus bas, donc la même hauteur au-dessus de l'escalier","{x} lower at the middle only":"{x} plus bas au milieu seulement","each of {n} risers":"chacune des {n} contremarches","floor to floor":"d'étage à étage","outer diameter":"diamètre extérieur","Bespoke Spiral Staircase in Berlin logo":"Logo de l'escalier hélicoïdal sur mesure à Berlin"},"es":{"← Ramy Maher · Design":"← Ramy Maher · Diseño","Bespoke Spiral Staircase in Berlin":"Escalera de caracol a medida en Berlín","Show hidden lines":"Mostrar líneas ocultas","Hide hidden lines":"Ocultar líneas ocultas","Handrail":"Pasamanos","Outer wall top":"Borde superior del muro exterior","Drag to turn · scroll or pinch to zoom":"Arrastra para girar · desplaza o pellizca para acercar","Drag to turn":"Arrastra para girar","Top edge of the wall":"Borde superior del muro","Parallel":"Paralelo","Sine":"Seno","Smooth":"Suave","Opening":"Apertura","Smoothness":"Suavidad","Units":"Unidades","Metric":"Métrico","Imperial":"Imperial","The wall, unrolled":"El muro, desenrollado","A spiral stair with a landing after three steps. The view on the way up mattered most: the stair had to open up and show more of its surroundings as you climb, not shut you in between walls. Its outer wall follows the stair up, and the line of its top edge decides how open the stair feels and how smoothly the rail runs: parallel keeps the wall closed, a sine opens it but meets the parapet with a kink, and the smooth curve opens it and flows into the parapet.":"Una escalera de caracol con un descansillo después de tres peldaños. Lo que más importaba era la vista al subir: la escalera tenía que abrirse y mostrar más de su entorno a medida que se asciende, no encerrarte entre muros. Su muro exterior acompaña a la escalera hacia arriba, y la línea de su borde superior decide cuán abierta se siente la escalera y cuán suave corre el pasamanos: paralelo mantiene el muro cerrado, un seno lo abre pero se une al antepecho con un quiebro, y la curva suave lo abre y fluye hacia el antepecho.","Top edge = stair line + <b>{h}</b>, the parapet height":"Borde superior = línea de huella + <b>{h}</b>, la altura del antepecho","Top edge = stair line eased over the landing + {h} − <b>A · sin(πx/X)</b>":"Borde superior = línea de huella suavizada sobre el descansillo + {h} − <b>A · sin(πx/X)</b>","Top edge = stair line eased over the landing + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>":"Borde superior = línea de huella suavizada sobre el descansillo + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>","Landing":"Descansillo","parapet top":"borde del antepecho","upper floor":"planta superior","opens {x}":"se abre {x}","meets the parapet":"se une al antepecho","meets the parapet with a kink":"se une al antepecho con un quiebro","meets the parapet smoothly":"se une al antepecho con suavidad","handrail, {x}":"pasamanos, {x}","wall starts":"empieza el muro","no opening: the top edge stays parallel to the stair":"sin apertura: el borde superior sigue paralelo a la escalera","flat middle: {x} lower":"centro plano: {x} más bajo","flat middle: {x} lower, so the same height above the stair":"centro plano: {x} más bajo, así la misma altura sobre la escalera","{x} lower at the middle only":"{x} más bajo solo en el centro","each of {n} risers":"cada una de las {n} contrahuellas","floor to floor":"de planta a planta","outer diameter":"diámetro exterior","Bespoke Spiral Staircase in Berlin logo":"Logotipo de la escalera de caracol a medida en Berlín"},"ar":{"← Ramy Maher · Design":"← رامي ماهر · تصميم","Bespoke Spiral Staircase in Berlin":"درج حلزوني مصمَّم خصيصًا في برلين","Show hidden lines":"إظهار الخطوط المخفية","Hide hidden lines":"إخفاء الخطوط المخفية","Handrail":"الدرابزين","Outer wall top":"أعلى الجدار الخارجي","Drag to turn · scroll or pinch to zoom":"اسحب للتدوير · مرّر أو اقرص للتكبير","Drag to turn":"اسحب للتدوير","Top edge of the wall":"الحافة العليا للجدار","Parallel":"موازٍ","Sine":"جيبي","Smooth":"ناعم","Opening":"الانفتاح","Smoothness":"النعومة","Units":"الوحدات","Metric":"متري","Imperial":"إمبراطوري","The wall, unrolled":"الجدار مفرودًا","A spiral stair with a landing after three steps. The view on the way up mattered most: the stair had to open up and show more of its surroundings as you climb, not shut you in between walls. Its outer wall follows the stair up, and the line of its top edge decides how open the stair feels and how smoothly the rail runs: parallel keeps the wall closed, a sine opens it but meets the parapet with a kink, and the smooth curve opens it and flows into the parapet.":"درج حلزوني فيه بسطة بعد ثلاث درجات. كان المنظر أثناء الصعود هو الأهم: كان على الدرج أن ينفتح ويُظهر المزيد من محيطه كلما صعدت، لا أن يحبسك بين الجدران. يتبع جداره الخارجي الدرج صعودًا، وخط حافته العليا يحدد مدى انفتاح الدرج ومدى انسياب الدرابزين: الموازي يُبقي الجدار مغلقًا، والجيبي يفتحه لكنه يلتقي بالحاجز بانكسار، والمنحنى الناعم يفتحه وينساب في الحاجز.","Top edge = stair line + <b>{h}</b>, the parapet height":"الحافة العليا = خط الدرج + <b>{h}</b>، ارتفاع الحاجز","Top edge = stair line eased over the landing + {h} − <b>A · sin(πx/X)</b>":"الحافة العليا = خط الدرج منعَّمًا فوق البسطة + {h} − <b>A · sin(πx/X)</b>","Top edge = stair line eased over the landing + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>":"الحافة العليا = خط الدرج منعَّمًا فوق البسطة + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>","Landing":"البسطة","parapet top":"أعلى الحاجز","upper floor":"الطابق العلوي","opens {x}":"ينفتح {x}","meets the parapet":"يلتقي بالحاجز","meets the parapet with a kink":"يلتقي بالحاجز بانكسار","meets the parapet smoothly":"يلتقي بالحاجز بنعومة","handrail, {x}":"الدرابزين، {x}","wall starts":"بداية الجدار","no opening: the top edge stays parallel to the stair":"لا انفتاح: تبقى الحافة العليا موازية للدرج","flat middle: {x} lower":"وسط مستوٍ: أخفض بـ {x}","flat middle: {x} lower, so the same height above the stair":"وسط مستوٍ: أخفض بـ {x}، أي الارتفاع نفسه فوق الدرج","{x} lower at the middle only":"أخفض بـ {x} في الوسط فقط","each of {n} risers":"لكل من القوائم الـ {n}","floor to floor":"من طابق إلى طابق","outer diameter":"القطر الخارجي","Bespoke Spiral Staircase in Berlin logo":"شعار الدرج الحلزوني المصمَّم خصيصًا في برلين"}};
+const LANG = (() => { const q = new URLSearchParams(location.search).get('lang'); if (q) return q; try { if (parent !== window) return parent.document.documentElement.lang; } catch (e) {} return 'en'; })().slice(0, 2);
+const tr = (s, v = {}) => ((T[LANG] || {})[s] || s).replace(/\{(\w+)\}/g, (m, k) => v[k]);
+function speak() {
+  if (!T[LANG]) return;
+  document.documentElement.lang = LANG;
+  const walk = document.createTreeWalker(document.querySelector('.wrap'), NodeFilter.SHOW_TEXT);
+  for (let n; (n = walk.nextNode());) { const s = n.data.trim(); if (s && T[LANG][s]) n.data = n.data.replace(s, T[LANG][s]); }
+  for (const e of document.querySelectorAll('[aria-label],[title]')) for (const a of ['aria-label', 'title']) { const v = e.getAttribute(a); if (v && T[LANG][v]) e.setAttribute(a, T[LANG][v]); }
+  for (const e of document.querySelectorAll('label')) { const t = e.firstChild; if (t && t.nodeType === 3 && T[LANG][t.data.trim()]) t.data = T[LANG][t.data.trim()] + (t.data.endsWith(' ') ? ' ' : ''); }
+}
 const S = { mode: 'smooth', A: null, n: 10, ghost: false, units: 'metric' };
 const COL_A = new THREE.Color('#22c3a0'), COL_B = new THREE.Color('#3b82f6');
 
@@ -184,22 +191,14 @@ const len = (m) => {
 };
 
 /* ---------- the stair, from the measured rules ---------- */
-function layout() {
-  const tr = [];
-  let a = M.start;
-  for (let i = 1; i <= M.first; i++) { tr.push({ a0: a, a1: a - M.step, z: i * rise }); a -= M.step; }
-  tr.push({ a0: a, a1: a - M.landing, z: (M.first + 1) * rise, landing: true }); a -= M.landing;
-  for (let j = 1; j <= M.risers - M.first - 2; j++) { tr.push({ a0: a, a1: a - M.step, z: (M.first + 1 + j) * rise }); a -= M.step; }
-  const end = a, wall0 = WALL0, wEnd = PAR0;   // the climbing wall runs on to the arrival's far end
-  // the stair line through the nosings: at the stair's pitch, flat across the landing until one going before the next nosing
-  const pts = [[M.start + M.step, 0]];
-  for (const t of tr) { pts.push([t.a0, t.z]); if (t.landing) pts.push([t.a1 + M.step, t.z]); }
-  pts.push([end, M.floor]);
+// the stair's layout comes baked: the treads and the stair line through their nosings
+function layout(B) {
+  const pts = B.pts;
   const line = (th) => {
     for (let i = 1; i < pts.length; i++) { const [a0, z0] = pts[i - 1], [a1, z1] = pts[i]; if (th <= a0 && th >= a1) return a0 === a1 ? z1 : z0 + (z1 - z0) * (a0 - th) / (a0 - a1); }
     return th > pts[0][0] ? 0 : M.floor;
   };
-  return { tr, end, wall0, wEnd, line, L: (wall0 - wEnd) * D2R * rMid, x: (th) => (wall0 - th) * D2R * rMid };
+  return { ...B, line, x: (th) => (B.wall0 - th) * D2R * rMid };
 }
 const P = {
   parallel: () => 0,
@@ -207,9 +206,9 @@ const P = {
   smooth: (u) => 1 - Math.pow(Math.cos(Math.pow(Math.sin(Math.PI * u), 2)), S.n),
 };
 const EQ = {
-  parallel: () => `Top edge = stair line + <b>${len(M.parapet)}</b>, the parapet height`,
-  sine: () => `Top edge = stair line eased over the landing + ${len(M.parapet)} − <b>A · sin(πx/X)</b>`,
-  smooth: () => `Top edge = stair line eased over the landing + ${len(M.parapet)} − <b>A · (1 − cos(sin²(πx/X))<sup>${S.n}</sup>)</b>`,
+  parallel: () => tr('Top edge = stair line + <b>{h}</b>, the parapet height', { h: len(M.parapet) }),
+  sine: () => tr('Top edge = stair line eased over the landing + {h} − <b>A · sin(πx/X)</b>', { h: len(M.parapet) }),
+  smooth: () => tr('Top edge = stair line eased over the landing + {h} − <b>A · (1 − cos(sin²(πx/X))<sup>{n}</sup>)</b>', { h: len(M.parapet), n: S.n }),
 };
 // handrail height: the stair line, eased over a few degrees either side, plus 90 cm
 const railZ = (th, w) => { let s = 0, c = 0; for (let d = -w; d <= w; d += 1) { s += G.line(th + d); c++; } return Math.min(s / c, M.floor) + M.rail; };
@@ -283,95 +282,35 @@ const boxEdges = (g, angle) => { const p = new THREE.EdgesGeometry(g, angle).att
 const at = (arr, th) => { const n = E.xs.length - 1, i = Math.round((G.wall0 - th) / (G.wall0 - G.wEnd) * n); return i >= 0 && i <= n ? arr[i] : null; };
 
 function build() {
-  G = layout(); E = edges(G);
+  E = edges(G);
   if (group) { scene.remove(group); group.traverse((o) => o.geometry && o.geometry.dispose()); }
   group = new THREE.Group(); scene.add(group); lines = []; hiddenParts.length = 0;
   const n = E.xs.length - 1;
-  const soff = (th) => Math.max(0, G.line(th) - M.soffit);
-  // ground plate and upper slab with its round opening
-  { const g = new THREE.BoxGeometry(4.6, .15, 4.5); g.translate(0, -.075, 0); group.add(new THREE.Mesh(g, WHITE)); boxEdges(g, 1); }
-  { const sh = new THREE.Shape(); sh.moveTo(-2.3, -2.25); sh.lineTo(2.3, -2.25); sh.lineTo(2.3, 2.25); sh.lineTo(-2.3, 2.25); sh.lineTo(-2.3, -2.25);
-    const hp = [], P2 = (r, a) => new THREE.Vector2(r * Math.cos(a * D2R), r * Math.sin(a * D2R));
-    for (let a = G.end + 360; a <= 560; a += 2) hp.push(P2(pIn, a));   // from the top step's nosing, along the wall's outer face
-    for (const [a, , r] of CURVE) hp.push(P2(r + curveShift(a), a));
-    for (let a = 293.5; a <= G.end + 360; a += 2) hp.push(P2(M.rIn, a));
-    sh.holes.push(new THREE.Path(hp));
-    const g = new THREE.ExtrudeGeometry(sh, { depth: .3, bevelEnabled: false, curveSegments: 120 }); g.rotateX(-Math.PI / 2); g.translate(0, M.floor - .3, 0); group.add(new THREE.Mesh(g, WHITE)); boxEdges(g, 70); }
-  // the stair: one smooth underside with the treads sitting on it. Only the treads' outlines,
-  // the risers and the inner edge of the underside are drawn, never the stepped bottom.
-  { const g = ring(M.start, G.end, M.rIn, M.rOut, soff, (th) => soff(th) + .02, Math.ceil((M.start - G.end) / 1.5)); mesh(g.pos, g.idx);
-    lines.push(...arc(M.rIn, M.start, G.end, soff)); }
-  let prev = 0;
-  for (const t of G.tr) {
-    const g = ring(t.a0, t.a1, M.rIn, M.rOut, (th) => Math.min(t.z - .02, soff(th) + .01), () => t.z, Math.ceil((t.a0 - t.a1) / 2)); mesh(g.pos, g.idx);
-    lines.push(...arc(M.rIn, t.a0, t.a1, t.z), ...arc(M.rOut, t.a0, t.a1, t.z), [V3(M.rIn, t.a0, t.z), V3(M.rOut, t.a0, t.z)], [V3(M.rIn, t.a0, prev), V3(M.rOut, t.a0, prev)],
-      [V3(M.rIn, t.a0, prev), V3(M.rIn, t.a0, t.z)], [V3(M.rOut, t.a0, prev), V3(M.rOut, t.a0, t.z)]);
-    prev = t.z;
-  }
+  // everything that never changes comes baked
+  for (const m of BAKE.meshes) mesh(m.p, m.i || m.p.map((_, k) => k).filter((k) => k < m.p.length / 3));
   // the outer wall: both faces' top and bottom edges, and its two ends
-  // where the top edge has reached the upper floor, wall and floor are one surface: no line there
   const w = ring(G.wall0, G.wEnd, M.rOut, rOuter, (th, i) => E.bot[i], (th, i) => E.tops[i], n); mesh(w.pos, w.idx);
-  const free = () => true;
   for (const r of [M.rOut, rOuter]) {
     lines.push(...E.xs.slice(1).map((s, i) => [V3(r, E.xs[i].th, E.bot[i]), V3(r, s.th, E.bot[i + 1])]));
-    lines.push(...E.xs.slice(1).flatMap((s, i) => free(i + 1) ? [[V3(r, E.xs[i].th, E.tops[i]), V3(r, s.th, E.tops[i + 1])]] : []));
+    lines.push(...E.xs.slice(1).map((s, i) => [V3(r, E.xs[i].th, E.tops[i]), V3(r, s.th, E.tops[i + 1])]));
   }
   lines.push([V3(M.rOut, G.wall0, 0), V3(M.rOut, G.wall0, E.tops[0])], [V3(rOuter, G.wall0, 0), V3(rOuter, G.wall0, E.tops[0])], [V3(M.rOut, G.wall0, E.tops[0]), V3(rOuter, G.wall0, E.tops[0])], [V3(M.rOut, G.wall0, 0), V3(rOuter, G.wall0, 0)]);
-  // one ribbon: the parapet round the opening, its curve in to the eye, and the middle wall winding down with the stair
-  const p = ring(PAR0, PAR1, pIn, pOut, () => M.floor, () => E.top, 180); mesh(p.pos, p.idx);
-  for (const r of [pIn, pOut]) lines.push(...arc(r, PAR0, PAR1, E.top));
-  lines.push(...arc(pOut + .002, PAR0, PAR1, M.floor + .003));                                    // where it stands on the floor
-  // the rounded turn at the arrival, from the climbing wall's inner face round to the upstairs wall's outer face
-  const turn = [], turnIn = [];
-  { const a = PAR0 * D2R, u = [Math.cos(a), Math.sin(a)], v = [-Math.sin(a), Math.cos(a)], rc = (pOut + M.rOut) / 2, R1 = (pOut - M.rOut) / 2, R0 = GAP / 2;
-    const at = (rho, s) => [rc * u[0] + rho * (Math.cos(s) * u[0] - Math.sin(s) * v[0]), rc * u[1] + rho * (Math.cos(s) * u[1] - Math.sin(s) * v[1])];
-    for (let k = 0; k <= 32; k++) { const s = Math.PI * (1 - k / 32); turn.push(at(R1, s)); turnIn.push(at(R0, s)); }
-    const sh = new THREE.Shape([...turn, ...turnIn.slice().reverse()].map(([x, y]) => new THREE.Vector2(x, y)));
-    const g = new THREE.ExtrudeGeometry(sh, { depth: E.top - M.floor, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, M.floor, 0); group.add(new THREE.Mesh(g, WHITE));
-    for (const T of [turn, turnIn]) for (let k = 1; k < T.length; k++) for (const z of [E.top, M.floor + .003]) lines.push([new THREE.Vector3(T[k - 1][0], z, -T[k - 1][1]), new THREE.Vector3(T[k][0], z, -T[k][1])]); }
-  const shift = curveShift;
-  const cF = (a) => lerpT(CURVE, a, 1) + shift(a), cS = (a) => lerpT(CURVE, a, 2) + shift(a);
-  const cv = ring(PAR1, 293.5, cS, cF, () => M.floor, () => E.top, 90); mesh(cv.pos, cv.idx);
-  { const pts = []; for (let i = 0; i <= 90; i++) { const a = PAR1 + (293.5 - PAR1) * i / 90; pts.push(V3(cF(a) + .002, a, M.floor + .003)); } for (let i = 1; i < pts.length; i++) lines.push([pts[i - 1], pts[i]]); }
-  for (const f of [cF, cS]) { const pts = []; for (let i = 0; i <= 90; i++) { const a = PAR1 + (293.5 - PAR1) * i / 90; pts.push(V3(f(a), a, E.top)); } for (let i = 1; i < pts.length; i++) lines.push([pts[i - 1], pts[i]]); }
-  const coreFoot = coreB;
-  const co = ring(CORE0, CORE1, .25, M.rIn, coreFoot, coreT, 240); mesh(co.pos, co.idx);
-  for (const r of [.25, M.rIn]) lines.push(...arc(r, CORE0, CORE1, coreT), ...arc(r, CORE0, CORE1, coreB));
-  lines.push(...arc(M.rIn + .002, G.end, CORE1, M.floor + .003));
-  lines.push([V3(.25, CORE0, coreB(CORE0)), V3(M.rIn, CORE0, coreB(CORE0))], [V3(.25, CORE0, coreB(CORE0)), V3(.25, CORE0, coreT(CORE0))], [V3(M.rIn, CORE0, coreB(CORE0)), V3(M.rIn, CORE0, coreT(CORE0))], [V3(.25, CORE0, coreT(CORE0)), V3(M.rIn, CORE0, coreT(CORE0))]);
-  // every chosen line, solid where seen and dashed where hidden (when asked)
-  const pos = []; for (const [a, b] of lines) pos.push(a.x, lift(a.y), a.z, b.x, lift(b.y), b.z);
+  // every line, solid where seen and dashed where hidden (when asked)
+  const pos = BAKE.lines.slice(); for (const [a, b] of lines) pos.push(a.x, lift(a.y), a.z, b.x, lift(b.y), b.z);
   const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   group.add(new THREE.LineSegments(lg, EDGE));
   const hidden = new THREE.LineSegments(lg, HIDDEN); hidden.computeLineDistances(); hidden.renderOrder = 2; hiddenParts.push(hidden); group.add(hidden);
-  // the curved faces' outlines, as seen from where the camera is
   sil = new THREE.LineSegments(new THREE.BufferGeometry(), EDGE); group.add(sil);
   silH = new THREE.LineSegments(new THREE.BufferGeometry(), HIDDEN); silH.renderOrder = 2; hiddenParts.push(silH); group.add(silH);
   // the wall's top edge in the charts' gradient
-  const tp = [], tc = []; E.xs.forEach((s, i) => { if (i > 1 && !free(i - 1)) return; const v = V3(M.rOut - .004, s.th, E.tops[i] + .006); tp.push(v.x, v.y, v.z); const c = COL_A.clone().lerp(COL_B, i / n); tc.push(c.r, c.g, c.b); });
+  const tp = [], tc = []; E.xs.forEach((s, i) => { const v = V3(M.rOut - .004, s.th, E.tops[i] + .006); tp.push(v.x, v.y, v.z); const c = COL_A.clone().lerp(COL_B, i / n); tc.push(c.r, c.g, c.b); });
   const tg = new LineGeometry(); tg.setPositions(tp); tg.setColors(tc); group.add(new Line2(tg, FAT));
-  // one handrail all the way round: up the outer wall, along the parapet, round its end, back along its outside,
-  // round the curve and down the middle wall to the first step
-  const loop = [], P3 = (v) => loop.push(v.x, v.y, v.z), zr = M.floor + M.rail;
-  const railR = () => M.rOut - .06;
-  for (let th = M.start; th >= PAR0; th -= 1) P3(V3(railR(th), th, railZ(th, 23)));
-  { const a = PAR0 * D2R, u = [Math.cos(a), Math.sin(a)], v = [-Math.sin(a), Math.cos(a)], rho = (pOut - M.rOut + .12) / 2, rc = (pOut + M.rOut) / 2;
-    for (let k = 1; k < 24; k++) { const s = Math.PI * (1 - k / 24), x = rc * u[0] + rho * (Math.cos(s) * u[0] - Math.sin(s) * v[0]), y = rc * u[1] + rho * (Math.cos(s) * u[1] - Math.sin(s) * v[1]); P3(new THREE.Vector3(x, zr, -y)); } }
-  for (let th = PAR0; th <= PAR1; th += 1) P3(V3(pOut + .06, th, zr));
-  for (let a = PAR1; a <= 293.5; a += .5) P3(V3(cF(a) + .06, a, zr));
-  for (let th = CORE1; th <= M.start; th += 1) P3(V3(M.rIn + .06, th, railZ(th, 40)));
-  { const rg = new LineGeometry(); rg.setPositions(loop);
+  // the handrail, all the way round
+  { const rg = new LineGeometry(); rg.setPositions(BAKE.rail);
     group.add(new Line2(rg, RAIL));
     const rh = new Line2(rg, RAIL_HIDDEN); rh.computeLineDistances(); rh.renderOrder = 3; hiddenParts.push(rh); group.add(rh); }
-  // the curved faces whose outlines depend on where you stand, as plan points with their heights
-  const face = (n, f) => Array.from({ length: n + 1 }, (_, i) => { const [r, th, zb, zt] = f(i / n); return [r * Math.cos(th * D2R), r * Math.sin(th * D2R), zb, zt]; });
-  silFaces = [
-    ...[rOuter, M.rOut].map((r) => E.xs.map((s, i) => [r * Math.cos(s.th * D2R), r * Math.sin(s.th * D2R), E.bot[i], E.tops[i]])),
-    turn.map(([x, y]) => [x, y, M.floor, E.top]), turnIn.map(([x, y]) => [x, y, M.floor, E.top]),
-    ...[pOut, pIn].map((r) => face(268, (u) => [r, PAR0 + (PAR1 - PAR0) * u, M.floor, E.top])),
-    ...[cF, cS].map((f) => face(190, (u) => { const a = PAR1 + (293.5 - PAR1) * u; return [f(a), a, M.floor, E.top]; })),
-    ...[M.rIn, .25].map((r) => face(410, (u) => { const th = CORE0 + (CORE1 - CORE0) * u; return [r, th, coreB(th), coreT(th)]; })),
-  ];
+  // the curved faces whose outlines depend on where you stand: the wall's two faces, then the baked ones
+  silFaces = [...[rOuter, M.rOut].map((r) => E.xs.map((s, i) => [r * Math.cos(s.th * D2R), r * Math.sin(s.th * D2R), E.bot[i], E.tops[i]])), ...BAKE.sil];
   for (const h of hiddenParts) h.visible = S.ghost;
   drawChart(); facts(); updateSil(true); show();
 }
@@ -417,7 +356,7 @@ function drawChart() {
   for (let x = 0; x * u <= G.L; x += sx) svg.append(txt('tick', X(x * u), H - 5, x + unit, 'middle'));
   const land = G.tr.find((t) => t.landing), lx0 = G.x(land.a0), lx1 = G.x(land.a1);
   svg.append(el('rect', { class: 'band', x: X(lx0), y: pt, width: X(lx1) - X(lx0), height: Math.max(0, H - pt - pb) }));
-  svg.append(txt('bandlbl', (X(lx0) + X(lx1)) / 2, pt + 14, 'Landing', 'middle'));
+  svg.append(txt('bandlbl', (X(lx0) + X(lx1)) / 2, pt + 14, tr('Landing'), 'middle'));
   const pts = E.xs.map((s, i) => `${X(s.x)},${Y(E.bot[i])}`).concat(E.xs.map((s, i) => `${X(s.x)},${Y(E.tops[i])}`).reverse());
   svg.append(el('polygon', { points: pts.join(' '), fill: 'url(#gF)' }));
   svg.append(el('polyline', { class: 'bottom', points: E.xs.map((s, i) => `${X(s.x)},${Y(E.bot[i])}`).join(' ') }));
@@ -429,9 +368,9 @@ function drawChart() {
   const railPts = E.xs.map((s, i) => [s, i]).filter(([s]) => s.th <= M.start);
   svg.append(el('polyline', { class: 'rail', points: railPts.map(([s]) => `${X(s.x)},${Y(railZ(s.th, 23))}`).join(' ') }));
   svg.append(el('line', { class: 'ref', x1: pl, x2: W - pr, y1: Y(E.top), y2: Y(E.top) }));
-  svg.append(txt('tick', X(lx1) + 6, Y(E.top) - 6, 'parapet top'));
+  svg.append(txt('tick', X(lx1) + 6, Y(E.top) - 6, tr('parapet top')));
   svg.append(el('line', { class: 'ref', x1: X(G.x(G.end)), x2: W - pr, y1: Y(M.floor), y2: Y(M.floor) }));
-  svg.append(txt('tick', W - pr, Y(M.floor) + 15, 'upper floor', 'end'));
+  svg.append(txt('tick', W - pr, Y(M.floor) + 15, tr('upper floor'), 'end'));
   if (S.mode !== 'parallel') svg.append(el('polyline', { class: 'ref', points: E.xs.map((s, i) => `${X(s.x)},${Y(E.ref[i])}`).join(' ') }));
   const tp = E.xs.map((s, i) => `${X(s.x)},${Y(E.tops[i])}`).join(' ');
   svg.append(el('polyline', { points: tp, fill: 'none', stroke: 'url(#gL)', 'stroke-width': 6, opacity: .28, filter: 'url(#gG)' }));
@@ -439,12 +378,12 @@ function drawChart() {
   const mark = (i, label, side) => { const x = X(E.xs[i].x), y = Y(E.tops[i]); svg.append(el('circle', { cx: x, cy: y, r: 5, fill: '#fff', stroke: '#3b82f6', 'stroke-width': 2 })); svg.append(txt('evt', x + (side === 'left' ? -9 : 9), y + (side === 'left' ? 18 : 18), label, side === 'left' ? 'end' : 'start')); };
   if (S.mode !== 'parallel' && E.A > .01) {
     let best = -1, k = 0; E.xs.forEach((s, i) => { const v = E.ref[i] - E.tops[i]; if (v > best + 1e-6) { best = v; k = i; } });
-    mark(k, `opens ${len(best)}`, 'right');
+    mark(k, tr('opens {x}', { x: len(best) }), 'right');
   }
   const j = E.tops.findIndex((t) => t >= E.top - .005);
-  if (j > 0) mark(j, { parallel: 'meets the parapet', sine: 'meets the parapet with a kink', smooth: 'meets the parapet smoothly' }[S.mode], 'left');
+  if (j > 0) mark(j, tr({ parallel: 'meets the parapet', sine: 'meets the parapet with a kink', smooth: 'meets the parapet smoothly' }[S.mode]), 'left');
   const hr = railPts[Math.round(railPts.length * .12)];
-  svg.append(txt('evt', X(hr[0].x), Y(railZ(hr[0].th, 23)) + 18, `handrail, ${len(M.rail)}`, 'start'));
+  svg.append(txt('evt', X(hr[0].x), Y(railZ(hr[0].th, 23)) + 18, tr('handrail, {x}', { x: len(M.rail) }), 'start'));
   box.append(svg);
   document.getElementById('eqLine').innerHTML = EQ[S.mode]();
   // what the equation takes off the parallel edge, over the same length as the wall below
@@ -458,19 +397,19 @@ function drawChart() {
   es.append(el('line', { class: 'ref', x1: X(0), x2: X(G.L), y1: EY(0), y2: EY(0) }));
   es.append(el('polyline', { points: cp, fill: 'none', stroke: 'url(#gL)', 'stroke-width': 6, opacity: .28, filter: 'url(#gG)' }));
   es.append(el('polyline', { points: cp, fill: 'none', stroke: 'url(#gL)', 'stroke-width': 2.6, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
-  for (const [x, lbl, anc] of [[0, 'wall starts', 'start'], [E.X, 'meets the parapet', 'end']]) { es.append(el('circle', { cx: X(x), cy: EY(0), r: 4, fill: '#fff', stroke: '#3b82f6', 'stroke-width': 2 })); es.append(txt('tick', X(x), eh - 5, lbl, anc)); }
-  if (!on) es.append(txt('evt', X(G.L / 2), EY(0) + 18, 'no opening: the top edge stays parallel to the stair', 'middle'));
+  for (const [x, lbl, anc] of [[0, tr('wall starts'), 'start'], [E.X, tr('meets the parapet'), 'end']]) { es.append(el('circle', { cx: X(x), cy: EY(0), r: 4, fill: '#fff', stroke: '#3b82f6', 'stroke-width': 2 })); es.append(txt('tick', X(x), eh - 5, lbl, anc)); }
+  if (!on) es.append(txt('evt', X(G.L / 2), EY(0) + 18, tr('no opening: the top edge stays parallel to the stair'), 'middle'));
   else {
     const flat = pv.map((v, i) => v >= E.A * .98 ? i : -1).filter((i) => i >= 0);
     if (S.mode === 'smooth' && flat.length > 4) {
       const xa = X(E.xs[flat[0]].x), xb = X(E.xs[flat[flat.length - 1]].x);
-      es.append(txt('evt', (xa + xb) / 2, EY(E.A) + 19, W < 520 ? `flat middle: ${len(E.A)} lower` : `flat middle: ${len(E.A)} lower, so the same height above the stair`, 'middle'));
-    } else { const k = pv.indexOf(Math.max(...pv)); es.append(txt('evt', X(E.xs[k].x), EY(pv[k]) + 19, `${len(pv[k])} lower at the middle only`, 'middle')); }
+      es.append(txt('evt', (xa + xb) / 2, EY(E.A) + 19, W < 520 ? tr('flat middle: {x} lower', { x: len(E.A) }) : tr('flat middle: {x} lower, so the same height above the stair', { x: len(E.A) }), 'middle'));
+    } else { const k = pv.indexOf(Math.max(...pv)); es.append(txt('evt', X(E.xs[k].x), EY(pv[k]) + 19, tr('{x} lower at the middle only', { x: len(pv[k]) }), 'middle')); }
   }
   eb.append(es);
 }
 function facts() {
-  const items = [[len(rise), `each of ${M.risers} risers`], [len(M.floor), 'floor to floor'], [len(rOuter * 2), 'outer diameter']];
+  const items = [[len(rise), tr('each of {n} risers', { n: M.risers })], [len(M.floor), tr('floor to floor')], [len(rOuter * 2), tr('outer diameter')]];
   document.getElementById('facts').innerHTML = items.map(([b, s]) => `<div class="fact"><b>${b}</b><span>${s}</span></div>`).join('');
 }
 
@@ -486,7 +425,7 @@ function logo() {
   const svgs = out.map(([d, w], k) => `<path d="${d}" pathLength="1" fill="none" stroke="rgb(35,35,35)" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:${(k * .9).toFixed(2)}s"/>`).join('');
   const all = out.map((o) => o[0]).join(' ').match(/-?\d+(\.\d+)?/g).map(Number), xs = all.filter((_, i) => i % 2 === 0), ys = all.filter((_, i) => i % 2 === 1);
   const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), s = Math.max(x1 - x0, y1 - y0) + 6;
-  document.getElementById('logo').innerHTML = `<svg viewBox="${((x0 + x1 - s) / 2).toFixed(1)} ${((y0 + y1 - s) / 2).toFixed(1)} ${s.toFixed(1)} ${s.toFixed(1)}" role="img" aria-label="Bespoke Spiral Staircase in Berlin logo">${svgs}</svg>`;
+  document.getElementById('logo').innerHTML = `<svg viewBox="${((x0 + x1 - s) / 2).toFixed(1)} ${((y0 + y1 - s) / 2).toFixed(1)} ${s.toFixed(1)} ${s.toFixed(1)}" role="img" aria-label="${tr('Bespoke Spiral Staircase in Berlin logo')}">${svgs}</svg>`;
 }
 
 /* ---------- controls ---------- */
@@ -502,7 +441,7 @@ document.querySelectorAll('#mode button').forEach((b) => b.onclick = () => { doc
 document.querySelectorAll('#units button').forEach((b) => b.onclick = () => { document.querySelectorAll('#units button').forEach((x) => x.classList.toggle('on', x === b)); S.units = b.dataset.u; update(); });
 $('ghost').onclick = () => {
   S.ghost = !S.ghost; $('ghost').setAttribute('aria-pressed', S.ghost);
-  $('ghost').title = $('ghost').ariaLabel = S.ghost ? 'Hide hidden lines' : 'Show hidden lines';
+  $('ghost').title = $('ghost').ariaLabel = tr(S.ghost ? 'Hide hidden lines' : 'Show hidden lines');
   for (const h of hiddenParts) h.visible = S.ghost;
 };
 
@@ -514,11 +453,30 @@ function resize() {
 }
 new ResizeObserver(() => { resize(); if (G) drawChart(); }).observe(document.querySelector('.stage'));
 const EMBED = document.documentElement.classList.contains('embed');
-if (EMBED) { ctl.enableZoom = false; ren.domElement.style.touchAction = 'pan-y'; document.querySelector('.hint').textContent = 'Drag to turn'; }
+if (EMBED) { ctl.enableZoom = false; ren.domElement.style.touchAction = 'pan-y'; document.querySelector('.hint').textContent = tr('Drag to turn'); }
 let inView = true;
 new IntersectionObserver((es) => { inView = es[0].isIntersecting; }).observe(host);
 (function loop() { requestAnimationFrame(loop); if (!inView) return; ctl.update(); updateSil(); ren.render(scene, cam); })();
-show(); resize(); build(); logo();
+const BAKE = await fetch(new URL('model.json', import.meta.url)).then((r) => r.json());
+G = layout(BAKE.G);
+show(); resize(); build(); logo(); speak();
+// Opening and Smoothness wear the rainbow ring once, the first time they come into view, so they read as things to move
+for (const id of ['A', 'N']) {
+  const input = $(id), io = new IntersectionObserver((es) => {
+    if (!es.some((e) => e.isIntersecting)) return;
+    io.disconnect(); place();
+  }, { threshold: .9 });
+  // not while the site's greeting still covers the page around it
+  function place() {
+    let covered = false; try { covered = parent !== window && !!parent.document.getElementById('greet'); } catch (e) {}
+    if (covered) { setTimeout(place, 300); return; }
+    const host = input.parentElement, a = input.getBoundingClientRect(), b = host.getBoundingClientRect(), f = (input.value - input.min) / ((input.max - input.min) || 1);
+    const ring = document.createElement('span'); ring.className = 'rb-ring';
+    ring.style.left = (a.left - b.left + 11 + f * (a.width - 22)) + 'px'; ring.style.top = (a.top - b.top + a.height / 2) + 'px';
+    host.append(ring); const end = () => ring.remove(); setTimeout(end, 2600); input.addEventListener('input', end, { once: true });
+  }
+  io.observe(input);
+}
 window.__ready = true;
 </script>
 </body>
