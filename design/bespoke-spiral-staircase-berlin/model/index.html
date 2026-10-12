@@ -159,12 +159,11 @@ const CURVE = [[200,1.95,1.80],[205.1,1.938,1.785],[208.3,1.904,1.75],[211.3,1.8
 const lerpT = (T, a, c) => { for (let i = 1; i < T.length; i++) { const a0 = T[i - 1][0], a1 = T[i][0]; if ((a - a0) * (a - a1) <= 0) { const f = a1 === a0 ? 0 : (a - a0) / (a1 - a0); return T[i - 1][c] + (T[i][c] - T[i - 1][c]) * f; } } return (Math.abs(a - T[0][0]) < Math.abs(a - T[T.length - 1][0]) ? T[0] : T[T.length - 1])[c]; };
 const Z0 = 0.04;   // the model's floor sits 4 cm above zero
 const coreB = (th) => Math.max(0, lerpT(CORE, th, 1) - Z0), coreT = (th) => lerpT(CORE, th, 2) - Z0;
-const PAR0 = -68, PAR1 = 200, CORE0 = 345, CORE1 = -40;   // the middle wall ends where variant 4's curve meets it
-const V4END = -40;               // variant 4's climbing wall ends here, at full height, where the upstairs wall begins
-const V4UNDER = 3.26;            // the underside of variant 4's upper floor
-const pIn = 1.95, pOut = 2.10;   // upstairs the wall runs back round just outside its own climbing part (1.80 to 1.95)
-// the curve into the eye leaves the upstairs wall where it is and eases back to the measured curve within 26 degrees
-const curveShift = (a) => { const u = Math.min(1, Math.max(0, (a - PAR1) / 26)); return (pIn - M.rOut) * (1 - u * u * (3 - 2 * u)); };
+const PAR0 = -68, PAR1 = 200, CORE0 = 345, CORE1 = -66.5;
+const GAP = .15;                  // the open gap round the stair, between the climbing wall and the wall upstairs
+const pIn = 1.95 + GAP, pOut = pIn + .15;   // the wall upstairs, outside the climbing wall (1.80 to 1.95)
+// the curve into the eye leaves the upstairs wall where it is and eases back to the measured curve within 40 degrees
+const curveShift = (a) => { const u = Math.min(1, Math.max(0, (a - PAR1) / 40)); return (pIn - M.rOut) * (1 - u * u * (3 - 2 * u)); };
 // the outer wall's bottom edge, as built in the model: a straight helix that runs into the ground
 const WALL0 = 345, bottomL = (th) => 2.74 - 0.01091 * th;
 const ZM = 3.63 - .3;                         // underside of the upper floor and of the parapet standing on it
@@ -191,7 +190,7 @@ function layout() {
   for (let i = 1; i <= M.first; i++) { tr.push({ a0: a, a1: a - M.step, z: i * rise }); a -= M.step; }
   tr.push({ a0: a, a1: a - M.landing, z: (M.first + 1) * rise, landing: true }); a -= M.landing;
   for (let j = 1; j <= M.risers - M.first - 2; j++) { tr.push({ a0: a, a1: a - M.step, z: (M.first + 1 + j) * rise }); a -= M.step; }
-  const end = a, wall0 = WALL0, wEnd = V4END;   // the climbing wall runs on up to where the upstairs wall begins
+  const end = a, wall0 = WALL0, wEnd = PAR0;   // the climbing wall runs on to the arrival's far end
   // the stair line through the nosings: at the stair's pitch, flat across the landing until one going before the next nosing
   const pts = [[M.start + M.step, 0]];
   for (const t of tr) { pts.push([t.a0, t.z]); if (t.landing) pts.push([t.a1 + M.step, t.z]); }
@@ -219,7 +218,8 @@ function edges(G) {
   // the stair line, carried on at the stair's pitch beyond the first and last steps
   const lineUp = (th) => th < G.end ? M.floor + (G.end - th) * slope : th > M.start + M.step ? -(th - M.start - M.step) * slope : G.line(th);
   const thAt = (x) => G.wall0 - x / (D2R * rMid);
-  for (let i = 0; i <= N; i++) { const th = G.wall0 - (G.wall0 - G.wEnd) * i / N; xs.push({ th, x: G.x(th) }); bot.push(Math.min(V4UNDER, Math.max(0, bottomL(th)))); raw.push(lineUp(th)); }
+  // past the top step the wall stands on the arrival floor
+  for (let i = 0; i <= N; i++) { const th = G.wall0 - (G.wall0 - G.wEnd) * i / N; xs.push({ th, x: G.x(th) }); bot.push(th < G.end ? M.floor : Math.min(ZM, Math.max(0, bottomL(th)))); raw.push(lineUp(th)); }
   // parallel follows the stair exactly, landing and all; the opened variants start from the same line eased over
   // the landing (the compensation curve for the handrail there), so they never break where the landing begins or ends
   let base = raw;
@@ -290,12 +290,13 @@ function build() {
   const soff = (th) => Math.max(0, G.line(th) - M.soffit);
   // ground plate and upper slab with its round opening
   { const g = new THREE.BoxGeometry(4.6, .15, 4.5); g.translate(0, -.075, 0); group.add(new THREE.Mesh(g, WHITE)); boxEdges(g, 1); }
-  // the upper floor and the wall upstairs: variant 4's meshes, faces in white, lines where they fold
-  meshSil.length = 0;
-  for (const part of [...V4.slab, ...V4.upper]) {
-    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(part.pos, 3)); g.setIndex(part.idx);
-    group.add(new THREE.Mesh(g, WHITE)); boxEdges(g, 30); meshSil.push(prepSil(part.pos, part.idx));
-  }
+  { const sh = new THREE.Shape(); sh.moveTo(-2.3, -2.25); sh.lineTo(2.3, -2.25); sh.lineTo(2.3, 2.25); sh.lineTo(-2.3, 2.25); sh.lineTo(-2.3, -2.25);
+    const hp = [], P2 = (r, a) => new THREE.Vector2(r * Math.cos(a * D2R), r * Math.sin(a * D2R));
+    for (let a = G.end + 360; a <= 560; a += 2) hp.push(P2(pIn, a));   // from the top step's nosing, along the wall's outer face
+    for (const [a, , r] of CURVE) hp.push(P2(r + curveShift(a), a));
+    for (let a = 293.5; a <= G.end + 360; a += 2) hp.push(P2(M.rIn, a));
+    sh.holes.push(new THREE.Path(hp));
+    const g = new THREE.ExtrudeGeometry(sh, { depth: .3, bevelEnabled: false, curveSegments: 120 }); g.rotateX(-Math.PI / 2); g.translate(0, M.floor - .3, 0); group.add(new THREE.Mesh(g, WHITE)); boxEdges(g, 70); }
   // the stair: one smooth underside with the treads sitting on it. Only the treads' outlines,
   // the risers and the inner edge of the underside are drawn, never the stepped bottom.
   { const g = ring(M.start, G.end, M.rIn, M.rOut, soff, (th) => soff(th) + .02, Math.ceil((M.start - G.end) / 1.5)); mesh(g.pos, g.idx);
@@ -310,16 +311,33 @@ function build() {
   // the outer wall: both faces' top and bottom edges, and its two ends
   // where the top edge has reached the upper floor, wall and floor are one surface: no line there
   const w = ring(G.wall0, G.wEnd, M.rOut, rOuter, (th, i) => E.bot[i], (th, i) => E.tops[i], n); mesh(w.pos, w.idx);
-  const free = (i) => E.tops[i] < V4UNDER - .003;
+  const free = () => true;
   for (const r of [M.rOut, rOuter]) {
     lines.push(...E.xs.slice(1).map((s, i) => [V3(r, E.xs[i].th, E.bot[i]), V3(r, s.th, E.bot[i + 1])]));
     lines.push(...E.xs.slice(1).flatMap((s, i) => free(i + 1) ? [[V3(r, E.xs[i].th, E.tops[i]), V3(r, s.th, E.tops[i + 1])]] : []));
   }
   lines.push([V3(M.rOut, G.wall0, 0), V3(M.rOut, G.wall0, E.tops[0])], [V3(rOuter, G.wall0, 0), V3(rOuter, G.wall0, E.tops[0])], [V3(M.rOut, G.wall0, E.tops[0]), V3(rOuter, G.wall0, E.tops[0])], [V3(M.rOut, G.wall0, 0), V3(rOuter, G.wall0, 0)]);
-  // the middle wall winding down with the stair
+  // one ribbon: the parapet round the opening, its curve in to the eye, and the middle wall winding down with the stair
+  const p = ring(PAR0, PAR1, pIn, pOut, () => M.floor, () => E.top, 180); mesh(p.pos, p.idx);
+  for (const r of [pIn, pOut]) lines.push(...arc(r, PAR0, PAR1, E.top));
+  lines.push(...arc(pOut + .002, PAR0, PAR1, M.floor + .003));                                    // where it stands on the floor
+  // the rounded turn at the arrival, from the climbing wall's inner face round to the upstairs wall's outer face
+  const turn = [], turnIn = [];
+  { const a = PAR0 * D2R, u = [Math.cos(a), Math.sin(a)], v = [-Math.sin(a), Math.cos(a)], rc = (pOut + M.rOut) / 2, R1 = (pOut - M.rOut) / 2, R0 = GAP / 2;
+    const at = (rho, s) => [rc * u[0] + rho * (Math.cos(s) * u[0] - Math.sin(s) * v[0]), rc * u[1] + rho * (Math.cos(s) * u[1] - Math.sin(s) * v[1])];
+    for (let k = 0; k <= 32; k++) { const s = Math.PI * (1 - k / 32); turn.push(at(R1, s)); turnIn.push(at(R0, s)); }
+    const sh = new THREE.Shape([...turn, ...turnIn.slice().reverse()].map(([x, y]) => new THREE.Vector2(x, y)));
+    const g = new THREE.ExtrudeGeometry(sh, { depth: E.top - M.floor, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, M.floor, 0); group.add(new THREE.Mesh(g, WHITE));
+    for (const T of [turn, turnIn]) for (let k = 1; k < T.length; k++) for (const z of [E.top, M.floor + .003]) lines.push([new THREE.Vector3(T[k - 1][0], z, -T[k - 1][1]), new THREE.Vector3(T[k][0], z, -T[k][1])]); }
+  const shift = curveShift;
+  const cF = (a) => lerpT(CURVE, a, 1) + shift(a), cS = (a) => lerpT(CURVE, a, 2) + shift(a);
+  const cv = ring(PAR1, 293.5, cS, cF, () => M.floor, () => E.top, 90); mesh(cv.pos, cv.idx);
+  { const pts = []; for (let i = 0; i <= 90; i++) { const a = PAR1 + (293.5 - PAR1) * i / 90; pts.push(V3(cF(a) + .002, a, M.floor + .003)); } for (let i = 1; i < pts.length; i++) lines.push([pts[i - 1], pts[i]]); }
+  for (const f of [cF, cS]) { const pts = []; for (let i = 0; i <= 90; i++) { const a = PAR1 + (293.5 - PAR1) * i / 90; pts.push(V3(f(a), a, E.top)); } for (let i = 1; i < pts.length; i++) lines.push([pts[i - 1], pts[i]]); }
   const coreFoot = coreB;
   const co = ring(CORE0, CORE1, .25, M.rIn, coreFoot, coreT, 240); mesh(co.pos, co.idx);
   for (const r of [.25, M.rIn]) lines.push(...arc(r, CORE0, CORE1, coreT), ...arc(r, CORE0, CORE1, coreB));
+  lines.push(...arc(M.rIn + .002, G.end, CORE1, M.floor + .003));
   lines.push([V3(.25, CORE0, coreB(CORE0)), V3(M.rIn, CORE0, coreB(CORE0))], [V3(.25, CORE0, coreB(CORE0)), V3(.25, CORE0, coreT(CORE0))], [V3(M.rIn, CORE0, coreB(CORE0)), V3(M.rIn, CORE0, coreT(CORE0))], [V3(.25, CORE0, coreT(CORE0)), V3(M.rIn, CORE0, coreT(CORE0))]);
   // every chosen line, solid where seen and dashed where hidden (when asked)
   const pos = []; for (const [a, b] of lines) pos.push(a.x, lift(a.y), a.z, b.x, lift(b.y), b.z);
@@ -332,23 +350,26 @@ function build() {
   // the wall's top edge in the charts' gradient
   const tp = [], tc = []; E.xs.forEach((s, i) => { if (i > 1 && !free(i - 1)) return; const v = V3(M.rOut - .004, s.th, E.tops[i] + .006); tp.push(v.x, v.y, v.z); const c = COL_A.clone().lerp(COL_B, i / n); tc.push(c.r, c.g, c.b); });
   const tg = new LineGeometry(); tg.setPositions(tp); tg.setColors(tc); group.add(new Line2(tg, FAT));
-  // the handrails: along the climbing wall to the top, and along the middle wall
-  const rails = [];
-  for (const loop of [[], []]) {
-    const P3 = (v) => loop.push(v.x, v.y, v.z);
-    if (!rails.length) for (let th = M.start; th >= V4END; th -= 1) P3(V3(M.rOut - .06, th, railZ(th, 23)));
-    else for (let th = M.start; th >= CORE1; th -= 1) P3(V3(M.rIn + .06, th, railZ(th, 40)));
-    rails.push(loop);
-  }
-  rails.forEach((loop) => {
-    const rg = new LineGeometry(); rg.setPositions(loop);
+  // one handrail all the way round: up the outer wall, along the parapet, round its end, back along its outside,
+  // round the curve and down the middle wall to the first step
+  const loop = [], P3 = (v) => loop.push(v.x, v.y, v.z), zr = M.floor + M.rail;
+  const railR = () => M.rOut - .06;
+  for (let th = M.start; th >= PAR0; th -= 1) P3(V3(railR(th), th, railZ(th, 23)));
+  { const a = PAR0 * D2R, u = [Math.cos(a), Math.sin(a)], v = [-Math.sin(a), Math.cos(a)], rho = (pOut - M.rOut + .12) / 2, rc = (pOut + M.rOut) / 2;
+    for (let k = 1; k < 24; k++) { const s = Math.PI * (1 - k / 24), x = rc * u[0] + rho * (Math.cos(s) * u[0] - Math.sin(s) * v[0]), y = rc * u[1] + rho * (Math.cos(s) * u[1] - Math.sin(s) * v[1]); P3(new THREE.Vector3(x, zr, -y)); } }
+  for (let th = PAR0; th <= PAR1; th += 1) P3(V3(pOut + .06, th, zr));
+  for (let a = PAR1; a <= 293.5; a += .5) P3(V3(cF(a) + .06, a, zr));
+  for (let th = CORE1; th <= M.start; th += 1) P3(V3(M.rIn + .06, th, railZ(th, 40)));
+  { const rg = new LineGeometry(); rg.setPositions(loop);
     group.add(new Line2(rg, RAIL));
-    const rh = new Line2(rg, RAIL_HIDDEN); rh.computeLineDistances(); rh.renderOrder = 3; hiddenParts.push(rh); group.add(rh);
-  });
+    const rh = new Line2(rg, RAIL_HIDDEN); rh.computeLineDistances(); rh.renderOrder = 3; hiddenParts.push(rh); group.add(rh); }
   // the curved faces whose outlines depend on where you stand, as plan points with their heights
   const face = (n, f) => Array.from({ length: n + 1 }, (_, i) => { const [r, th, zb, zt] = f(i / n); return [r * Math.cos(th * D2R), r * Math.sin(th * D2R), zb, zt]; });
   silFaces = [
-    ...[rOuter, M.rOut].map((r) => E.xs.map((s, i) => [r * Math.cos(s.th * D2R), r * Math.sin(s.th * D2R), E.bot[i], Math.min(E.tops[i], V4UNDER)])),
+    ...[rOuter, M.rOut].map((r) => E.xs.map((s, i) => [r * Math.cos(s.th * D2R), r * Math.sin(s.th * D2R), E.bot[i], E.tops[i]])),
+    turn.map(([x, y]) => [x, y, M.floor, E.top]), turnIn.map(([x, y]) => [x, y, M.floor, E.top]),
+    ...[pOut, pIn].map((r) => face(268, (u) => [r, PAR0 + (PAR1 - PAR0) * u, M.floor, E.top])),
+    ...[cF, cS].map((f) => face(190, (u) => { const a = PAR1 + (293.5 - PAR1) * u; return [f(a), a, M.floor, E.top]; })),
     ...[M.rIn, .25].map((r) => face(410, (u) => { const th = CORE0 + (CORE1 - CORE0) * u; return [r, th, coreB(th), coreT(th)]; })),
   ];
   for (const h of hiddenParts) h.visible = S.ghost;
@@ -357,22 +378,6 @@ function build() {
 // the outlines of the curved walls: wherever the line of sight grazes a face, a vertical line from its foot to its top,
 // recomputed whenever the camera moves (turning, zooming or tilting)
 let silFaces = [], camKey = '';
-// silhouettes of a mesh: its edges between a face turned towards the camera and one turned away
-const meshSil = [];
-function prepSil(pos, idx) {
-  const key = (i) => `${pos[i * 3].toFixed(3)},${pos[i * 3 + 1].toFixed(3)},${pos[i * 3 + 2].toFixed(3)}`, ids = new Map(), P = [];
-  const vid = (i) => { const k = key(i); if (!ids.has(k)) { ids.set(k, P.length / 3); P.push(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]); } return ids.get(k); };
-  const T = [], N = [], C = [], edges = new Map();
-  for (let k = 0; k < idx.length; k += 3) {
-    const [a, b, c] = [vid(idx[k]), vid(idx[k + 1]), vid(idx[k + 2])]; if (a === b || b === c || a === c) continue;
-    const va = new THREE.Vector3(P[a * 3], P[a * 3 + 1], P[a * 3 + 2]), vb = new THREE.Vector3(P[b * 3], P[b * 3 + 1], P[b * 3 + 2]), vc = new THREE.Vector3(P[c * 3], P[c * 3 + 1], P[c * 3 + 2]);
-    const n = new THREE.Vector3().subVectors(vb, va).cross(new THREE.Vector3().subVectors(vc, va)); if (n.lengthSq() < 1e-14) continue;
-    const t = N.length; N.push(n.normalize()); C.push(va.add(vb).add(vc).multiplyScalar(1 / 3));
-    for (const [p, q] of [[a, b], [b, c], [c, a]]) { const kk = p < q ? p + '|' + q : q + '|' + p; if (!edges.has(kk)) edges.set(kk, [p, q]); edges.get(kk).push(t); }
-  }
-  const E2 = [...edges.values()].filter((e) => e.length === 4 && N[e[2]].dot(N[e[3]]) < .99999);
-  return { P, N, C, E: E2 };
-}
 function updateSil(force) {
   if (!sil || !G) return;
   const c = cam.position, key = c.x.toFixed(3) + ',' + c.y.toFixed(3) + ',' + c.z.toFixed(3);
@@ -389,11 +394,6 @@ function updateSil(force) {
       }
       prev = f;
     }
-  }
-  const eye = cam.position, d = new THREE.Vector3();
-  for (const m of meshSil) for (const [p, q, t1, t2] of m.E) {
-    const f1 = m.N[t1].dot(d.subVectors(eye, m.C[t1])), f2 = m.N[t2].dot(d.subVectors(eye, m.C[t2]));
-    if ((f1 > 0) !== (f2 > 0)) pos.push(m.P[p * 3], m.P[p * 3 + 1], m.P[p * 3 + 2], m.P[q * 3], m.P[q * 3 + 1], m.P[q * 3 + 2]);
   }
   for (const L of [sil, silH]) { L.geometry.dispose(); const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); L.geometry = g; L.computeLineDistances(); }
 }
@@ -518,7 +518,6 @@ if (EMBED) { ctl.enableZoom = false; ren.domElement.style.touchAction = 'pan-y';
 let inView = true;
 new IntersectionObserver((es) => { inView = es[0].isIntersecting; }).observe(host);
 (function loop() { requestAnimationFrame(loop); if (!inView) return; ctl.update(); updateSil(); ren.render(scene, cam); })();
-const V4 = await fetch('var4-upper.json').then((r) => r.json());
 show(); resize(); build(); logo();
 window.__ready = true;
 </script>

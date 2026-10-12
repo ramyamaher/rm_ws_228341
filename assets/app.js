@@ -484,11 +484,11 @@ $$('.b8-stage').forEach(st => {
   flip.addEventListener('click', () => openLb(set(), 1, flip));
 });
 
-// Building 8 in 3D: the boards of the bar, from the Rhino model. three.js and the boards (74 kB) load
-// only when the model first comes into view; scrolling it into view drops the boards into place, lowest
-// layer first, and scrolling back lifts them off again
+// Building 8 in 3D: the hall and the bar's boards, from the Rhino model (1 unit = 5 cm); the doors, the metal
+// stair, the bridge and the ramp's railings are added after the render. three.js and the model (60 kB) load only
+// when it first comes into view; the slider drops the boards into place, lowest layer first
 $$('.b8-build').forEach(fig => {
-  const box = $('.b8-3d', fig), bar = $('.b8-bar i', fig), out = $('output', fig);
+  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig);
   let started = false;
   const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
   io.observe(box);
@@ -500,58 +500,84 @@ $$('.b8-build').forEach(fig => {
     ]);
     const ren = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.append(ren.domElement);
-    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 1, 1, 2000);
-    cam.position.set(-6, 122, 103);
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(34, 1, 1, 3000);
+    cam.position.set(-45, 95, -255);   // from the ramp, looking at the glass front, as in the render
     const ctl = new OrbitControls(cam, ren.domElement);
-    ctl.target.set(98, 24, -40); ctl.enablePan = false; ctl.maxPolarAngle = Math.PI * .48; ctl.minDistance = 60; ctl.maxDistance = 420; ctl.update();
-    const face = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
-    const edge = new THREE.LineBasicMaterial({ color: '#94a3b8' }), moving = new THREE.LineBasicMaterial({ color: '#e3120b' }), waiting = new THREE.LineBasicMaterial({ color: '#cbd5e1' });
-    const room = new THREE.LineBasicMaterial({ color: '#cbd5e1' });
-    const theme = () => { const dark = document.documentElement.dataset.theme === 'dark'; face.color.set(getComputedStyle(fig).backgroundColor); room.color.set(dark ? '#3a3d48' : '#cbd5e1'); waiting.color.set(dark ? '#4b4f5c' : '#cbd5e1'); edge.color.set(dark ? '#8b93a7' : '#94a3b8'); draw(); };
-    // the room: its outline and the lines of the plan
-    const P = (x, y, z) => new THREE.Vector3(x, z, -y);
-    const rp = data.room, seg = [];
-    for (let i = 0; i < rp.length; i += 3) seg.push(rp[i], rp[i + 2], -rp[i + 1]);
-    for (const c of data.curves) for (let i = 3; i < c.length; i += 3) seg.push(c[i - 3], c[i - 1], -c[i - 2], c[i], c[i + 2], -c[i + 1]);
-    const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(seg, 3)); scene.add(new THREE.LineSegments(rg, room));
-    // the boards: each outline extruded to its thickness
+    ctl.target.set(78, 18, -40); ctl.enablePan = false; ctl.maxPolarAngle = Math.PI * .47; ctl.minDistance = 60; ctl.maxDistance = 520; ctl.update();
+    scene.add(new THREE.HemisphereLight('#ffffff', '#b9b2a8', 1.1));
+    const sun = new THREE.DirectionalLight('#fff6e8', 1.6); sun.position.set(-120, 260, -60); scene.add(sun);
+    const mat = (c, o = {}) => new THREE.MeshLambertMaterial({ color: c, side: THREE.DoubleSide, ...o });
+    const M = { floor: mat('#e9e7e3'), upper: mat('#dcd9d4'), red: mat('#c4533c'), wood: mat('#c9a26b'), frame: mat('#a98552'), metal: mat('#4a505a'), board: mat('#b98a56'), moving: mat('#e3120b'), waiting: mat('#d9c6ad', { transparent: true, opacity: .55 }) };
+    const P = (x, y, z) => [x, z, -y];                           // the model's plan x, y and height z, in three's axes
+    const solid = (parts, m) => parts.forEach(s => { const g = new THREE.BufferGeometry(); const p = []; for (let i = 0; i < s.pos.length; i += 3) p.push(...P(s.pos[i], s.pos[i + 1], s.pos[i + 2])); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); g.setIndex(s.idx); g.computeVertexNormals(); scene.add(new THREE.Mesh(g, m)); });
+    const boxM = (x0, x1, y0, y1, z0, z1, m) => { const g = new THREE.BoxGeometry(Math.abs(x1 - x0), Math.abs(z1 - z0), Math.abs(y1 - y0)); const o = new THREE.Mesh(g, m); o.position.set((x0 + x1) / 2, (z0 + z1) / 2, -(y0 + y1) / 2); scene.add(o); return o; };
+    const S = data.solids;
+    // the hall: floors, the steps to the upper level, the ramp, and the red wall with its two door openings
+    solid([...S[56], ...S[40], ...S[55]], M.floor); solid([...S[43], ...S[45], ...S[46], ...S[48]], M.upper);
+    solid([...S[51], ...S[52], ...S[53], ...S[54]], M.floor); solid(S[41], M.red);
+    // the doors: a frame and two wooden leaves in each opening
+    for (const [y0, y1, z1] of [[76.7, 111.2, 56.87], [-33.1, 1.4, 53.65]]) {
+      boxM(141, 146.7, y0, y0 + 1.6, 0, z1, M.frame); boxM(141, 146.7, y1 - 1.6, y1, 0, z1, M.frame); boxM(141, 146.7, y0, y1, z1 - 1.6, z1, M.frame);
+      const ym = (y0 + y1) / 2; boxM(143.2, 144.4, y0 + 1.6, ym - .2, 0, z1 - 1.6, M.wood); boxM(143.2, 144.4, ym + .2, y1 - 1.6, 0, z1 - 1.6, M.wood);
+    }
+    // the metal stair against the red wall: up from the upper level, a landing, and back up over the first door
+    const steel = (x0, x1, y0, y1, z0, z1) => boxM(x0, x1, y0, y1, z0, z1, M.metal);
+    const flight = (x0, x1, yA, zA, yB, zB, n, side) => {
+      for (let k = 0; k < n; k++) { const f0 = k / n, f1 = (k + 1) / n, ya = yA + (yB - yA) * f0, yb = yA + (yB - yA) * f1, z = zA + (zB - zA) * f1; steel(x0, x1, Math.min(ya, yb), Math.max(ya, yb), z - .8, z); }
+      const L = Math.hypot(yB - yA, zB - zA), ang = Math.atan2(zB - zA, Math.abs(yB - yA)), dir = Math.sign(yB - yA);
+      for (const x of [x0 - .6, x1 + .6]) { const g = new THREE.BoxGeometry(1.2, 2.2, L); const o = new THREE.Mesh(g, M.metal); o.position.set(x, (zA + zB) / 2 - 1.5, -(yA + yB) / 2); o.rotation.x = dir * ang; scene.add(o); }
+      // the railing on the open side: posts and a handrail 20 units (1 m) above the treads
+      const xr = side < 0 ? x0 - .6 : x1 + .6;
+      for (let k = 0; k <= n; k += 2) { const f = k / n, y = yA + (yB - yA) * f, z = zA + (zB - zA) * f; steel(xr - .25, xr + .25, y - .25, y + .25, z, z + 20); }
+      const g = new THREE.BoxGeometry(.7, .7, L); const o = new THREE.Mesh(g, M.metal); o.position.set(xr, (zA + zB) / 2 + 20, -(yA + yB) / 2); o.rotation.x = dir * ang; scene.add(o);
+    };
+    flight(129, 140, 165, 12, 124, 36, 8, -1);
+    steel(115, 140, 112, 124, 35.2, 36);
+    flight(115, 126, 112, 36, 70, 60, 8, -1);
+    steel(115, 140, 58, 70, 59.2, 60);
+    // the bridge across the glass front, and its railings
+    steel(-22, 141, -52, -44, 58.8, 60);
+    for (const y of [-52, -44]) { for (let x = -22; x <= 141; x += 6) steel(x - .25, x + .25, y - .25, y + .25, 60, 80); steel(-22, 141, y - .35, y + .35, 79.6, 80.4); }
+    // the glass front, with its steel grid
+    boxM(-22, 146.7, -59.6, -59.2, 0, 94.6, new THREE.MeshLambertMaterial({ color: '#cfe3ee', transparent: true, opacity: .28, side: THREE.DoubleSide, depthWrite: false }));
+    for (let x = -22; x <= 146.7; x += 21) steel(x - .5, x + .5, -59.8, -59, 0, 94.6);
+    for (const z of [0, 26, 46, 58.8, 76, 94]) steel(-22, 146.7, -59.8, -59, z, z + .9);
+    // the railings round the ramp, on both sides, 1 m above its slope
+    const rampZ = (y) => -1.11 + (12 + 1.11) * (y + 14.2) / (186 + 14.2);
+    for (const x of [0.4, -22.1]) {
+      for (let y = -14.2; y <= 186; y += 8) { const z = rampZ(y); steel(x - .25, x + .25, y - .25, y + .25, z, z + 20); }
+      const L = Math.hypot(200.2, 13.1), ang = Math.atan2(13.1, 200.2), g = new THREE.BoxGeometry(.7, .7, L), o = new THREE.Mesh(g, M.metal);
+      o.position.set(x, (rampZ(-14.2) + rampZ(186)) / 2 + 20, -(186 - 14.2) / 2); o.rotation.x = ang; scene.add(o);
+    }
+    // the boards: each outline extruded to its thickness, with a fine line round each layer so the layers read
     const levels = [...new Set(data.boards.map(b => b.z))].sort((a, b) => a - b);
+    const lineMat = new THREE.LineBasicMaterial({ color: '#6b4a26', transparent: true, opacity: .45 });
     const boards = data.boards.map(b => {
       const shape = (L) => { const pts = []; for (let i = 0; i < L.length; i += 2) pts.push(new THREE.Vector2(L[i], L[i + 1])); return pts; };
       const s = new THREE.Shape(shape(b.loops[0])); for (const L of b.loops.slice(1)) s.holes.push(new THREE.Path(shape(L)));
       const g = new THREE.ExtrudeGeometry(s, { depth: b.h, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2);
-      const grp = new THREE.Group(); grp.add(new THREE.Mesh(g, face)); const lines = new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), edge); grp.add(lines);
+      const grp = new THREE.Group(), mesh = new THREE.Mesh(g, M.board); grp.add(mesh); grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), lineMat));
       grp.position.y = b.z; scene.add(grp);
-      return { grp, lines, z: b.z, k: levels.indexOf(b.z) };
+      return { grp, mesh, z: b.z, k: levels.indexOf(b.z) };
     });
     const N = levels.length, ease = (p) => p * p * (3 - 2 * p);
     function place() {
-      const t = progress(); let done = 0;
+      const t = range.value / 1000; let done = 0;
       for (const b of boards) {
         const p = ease(Math.min(1, Math.max(0, (t * (N + 2) - b.k) / 2.5)));
         b.grp.position.y = b.z + (1 - p) * (16 + b.k * 1.4);
-        b.lines.material = p >= 1 ? edge : p > 0 ? moving : waiting;
+        b.mesh.material = p >= 1 ? M.board : p > 0 ? M.moving : M.waiting;
         if (p >= 1) done++;
       }
-      out.value = out.textContent = done + ' / ' + boards.length; bar.style.transform = `scaleX(${t})`;
+      out.value = out.textContent = done + ' / ' + boards.length;
       draw();
     }
     let raf = 0; function draw() { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => ren.render(scene, cam)); }
-    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 32 * Math.pow(Math.max(1, 1.3 / cam.aspect), .8); cam.updateProjectionMatrix(); draw(); }
+    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 34 * Math.pow(Math.max(1, 1.3 / cam.aspect), .8); cam.updateProjectionMatrix(); draw(); }
     ctl.addEventListener('change', draw);
-    // how far the model has come into view: 0 as its top enters from below, 1 once all of it (or a screenful) is in
-    // view; on a computer the project scrolls inside its card, on a phone the page scrolls
-    const scroller = fig.closest('.slide');
-    function progress() {
-      const r = box.getBoundingClientRect(); let top = 0, bottom = innerHeight;
-      if (scroller && scroller.scrollHeight > scroller.clientHeight + 1) { const s = scroller.getBoundingClientRect(); top = Math.max(top, s.top); bottom = Math.min(bottom, s.bottom); }
-      return Math.min(1, Math.max(0, (bottom - r.top) / Math.max(1, .85 * Math.min(r.height, bottom - top))));
-    }
-    let tick = 0; const onScroll = () => { if (!tick) tick = requestAnimationFrame(() => { tick = 0; place(); }); };
-    addEventListener('scroll', onScroll, { passive: true, capture: true }); addEventListener('resize', onScroll);
+    range.addEventListener('input', place);
     new ResizeObserver(size).observe(box);
-    new MutationObserver(theme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    size(); theme(); place();
+    size(); place();
   }
 });
 

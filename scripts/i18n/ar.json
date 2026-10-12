@@ -372,8 +372,8 @@
   "Open the interactive model": "افتح النموذج التفاعلي",
   "Bespoke Spiral Staircase in Berlin logo: the outer wall drawn as one line": "شعار الدرج الحلزوني المصمَّم خصيصًا في برلين: الجدار الخارجي مرسوم بخط واحد",
   "The interactive model: the staircase in 3D and its outer wall unrolled": "النموذج التفاعلي: الدرج ثلاثي الأبعاد وجداره الخارجي مبسوطًا",
-  "Scroll to place the boards": "مرّر لتضع الألواح",
-  "The 3D model of the bar: its boards fall into place, layer by layer, as you scroll": "النموذج ثلاثي الأبعاد للبار: تستقر ألواحه في مكانها طبقةً بعد طبقة كلما مرّرت"
+  "Place the boards": "ضع الألواح",
+  "The 3D model of the bar: its boards fall into place, layer by layer, as you move the slider": "النموذج ثلاثي الأبعاد للبار: تستقر ألواحه في مكانها طبقةً بعد طبقة كلما حرّكت المنزلق"
  },
  "plurals": {
   "place": {
