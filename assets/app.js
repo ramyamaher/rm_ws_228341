@@ -657,6 +657,27 @@ $$('.vb-plan').forEach(box => {
   $$('.vb-cut', box).forEach(c => c.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-section-full.webp', c: c.getAttribute('aria-label'), paper: true }], 0, c)));
 });
 
+// the story under the plan: each step lights the room the visitor is in and shows its picture beside the plan;
+// the last shows the city they build
+$$('.vb-story').forEach(st => {
+  const duo = st.previousElementSibling, plan = $('.vb-plan', duo), side = $('.vb-side', duo), pic = $('img', side), steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
+  const back = $('.vb-back', st), next = $('.vb-next', st), end = $('.vb-end', st), n = $('.vb-n', st);
+  function show(i) {
+    const open = i >= 0; go.hidden = open; steps.hidden = !open;
+    if (open) plan.dataset.step = i + 1; else delete plan.dataset.step;
+    secs.forEach((s, j) => s.classList.toggle('on', j === i));
+    side.hidden = !open;
+    if (open) { const s = secs[i]; pic.src = `/assets/img/projects/${s.dataset.pic}.jpg`; pic.alt = side.ariaLabel = $('h4', s).textContent; }
+    n.textContent = `${i + 1}/${secs.length}`; back.disabled = i <= 0; next.hidden = i === secs.length - 1; end.hidden = !next.hidden;
+    st.k = i;
+  }
+  go.addEventListener('click', () => { show(0); next.focus({ preventScroll: true }); });
+  back.addEventListener('click', () => show(st.k - 1));
+  next.addEventListener('click', () => show(st.k + 1));
+  end.addEventListener('click', () => { show(-1); go.focus({ preventScroll: true }); });
+  side.addEventListener('click', () => openLb([{ f: secs[st.k].dataset.pic, c: $('h4', secs[st.k]).textContent }], 0, side));
+});
+
 // Layers of Egypt: the entry's own city, from the competition's Rhino model (assets/data/cairo-city.json), in the frame of
 // its render, with the existing city around it. The buildings come baked, in the order the three rules raise them; the
 // slider only shows the first so many. Drawn like the other models; a line under the slider says which rule is building
