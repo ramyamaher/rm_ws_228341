@@ -1198,12 +1198,14 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   const wrap = (d) => ((d % N) + N + N / 2) % N - N / 2;
   // the tiles keep their shape: the further from the middle, the smaller, nothing turned
   function place() {
-    const g = GAP();
+    const g = GAP(), TILE = flow.clientWidth < 520 ? 56 : 64;
     tiles.forEach((t, i) => {
       const d = wrap(i - pos), a = Math.abs(d);
       const x = d * g * (1 - Math.min(a, 4) * .07), s = 1.14 - Math.min(a, 3.5) * .15;
-      t.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px) scale(${s.toFixed(3)})`;
-      t.style.opacity = a > 4.2 ? 0 : (1 - Math.max(0, a - 2.6) * .55).toFixed(2);
+      // each tile is drawn at its own size, not scaled as a picture, so every logo stays sharp; the far ones fade
+      t.style.setProperty('--sz', (TILE * s).toFixed(1) + 'px');
+      t.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px)`;
+      t.style.opacity = a > 4.2 ? 0 : (1 - Math.max(0, a - 1.6) * .38).toFixed(2);
       t.style.zIndex = 100 - Math.round(a * 10);
       t.tabIndex = a < .5 ? 0 : -1;
     });
