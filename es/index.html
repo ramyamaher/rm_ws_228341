@@ -382,8 +382,8 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .dex-flow.dragging{cursor:grabbing}
 .dex-flow[hidden], .dex-info[hidden], .dex-results[hidden], .dex-hint[hidden]{display:none}
 .prose .dex-hint, .dex-hint{margin:-6px 0 14px; text-align:center; font-size:13px; line-height:1.4; color:var(--ink-3)}
-.dex-item{position:absolute; left:50%; top:50%; padding:0; border:0; background:none; cursor:pointer; transform-style:preserve-3d; will-change:transform; -webkit-tap-highlight-color:transparent}
-.dex-item .logo{pointer-events:none}
+.dex-item{position:absolute; left:50%; top:50%; padding:0; border:0; background:none; cursor:pointer; -webkit-tap-highlight-color:transparent}
+.dex-item .logo{pointer-events:none; width:var(--sz, 64px); height:var(--sz, 64px); border-radius:calc(var(--sz, 64px) * .28)}
 /* a resting copy shows its logo finished; chosen, it plays from the start */
 .dex-still.play, .dex-still .play, .dex-still .play *, .dex-still.play *{animation-delay:-60s !important}
 .logo.dex-archive svg{width:66%; height:auto}
