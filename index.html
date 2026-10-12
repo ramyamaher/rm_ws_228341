@@ -590,6 +590,9 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .b8-3d{position:relative; height:clamp(260px,42vh,440px); cursor:grab; touch-action:pan-y}
 .b8-3d:active{cursor:grabbing}
 .b8-3d canvas{display:block}
+/* the city keeps the render's proportions on every screen, so the view is the render's, only larger or smaller */
+.city-build .b8-3d{height:auto; min-height:0; aspect-ratio:2500/1138; overflow:hidden}
+.city-build .b8-3d canvas{position:absolute; left:0; top:0}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
   .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
