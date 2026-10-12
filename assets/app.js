@@ -686,34 +686,52 @@ const VB_FLOW = (() => {
   };
 })();
 function vbFlow(svg) {
-  const NS = 'http://www.w3.org/2000/svg', g = $('.vb-bands', svg), V = 12, SEG = 5, K = 7, HOLD = 1.1;   // units a second; the glow in K pieces, fading
-  const BAND = SEG * K;
+  const NS = 'http://www.w3.org/2000/svg', g = $('.vb-bands', svg), K = 7;   // the glow in K pieces, each fainter than the one before
+  const LOOP = { v: 30, band: 46 }, LAB = { v: 14, band: 30, hold: 1.1 };   // speeds in units a second; glow lengths
   const line = pts => {
     const e = document.createElementNS(NS, 'g'), d = 'M' + pts.map(p => p.map(v => v.toFixed(2)).join(' ')).join('L');
     for (let k = 0; k < K; k++) { const p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.style.opacity = (Math.pow(1 - k / K, 1.6)).toFixed(3); e.append(p); }
     g.append(e); return { e, len: e.firstChild.getTotalLength() };
   };
-  // the glow's head at s: piece k runs from s - (k + 1) SEG to s - k SEG, each fainter than the one before
-  const head = (b, s) => [...b.e.children].forEach((p, k) => {
-    p.style.strokeDasharray = `${SEG + .6} ${b.len + BAND * 2}`; p.style.strokeDashoffset = (-(s - (k + 1) * SEG)).toFixed(2);
-  });
-  const show = (b, o) => { b.e.style.opacity = o; };
-  let raf = 0, t0 = 0, step = 0, parts = [];
-  function build(s) { g.innerHTML = ''; step = s; const F = VB_FLOW[s]; parts = !F ? [] : F.loop ? [line(F.loop)] : F.legs.map(leg => leg.map(line)); }
+  // the glow's head at s with a tail of length tl behind it
+  const draw = (b, s, tl) => {
+    const seg = tl / K;
+    [...b.e.children].forEach((p, k) => { p.style.strokeDasharray = `${seg + .6} ${b.len + 400}`; p.style.strokeDashoffset = (-(s - (k + 1) * seg)).toFixed(2); });
+  };
+  const len = pts => { let l = 0; for (let i = 1; i < pts.length; i++) l += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); return l; };
+  let raf = 0, t0 = 0, step = 0, parts = [], lab = null;
+  function build(s) {
+    g.innerHTML = ''; step = s; parts = []; lab = null; const F = VB_FLOW[s]; if (!F) return;
+    if (F.loop) { parts = [line(F.loop)]; return; }
+    // the labyrinth: each group walks one unbroken line through all the legs, so nothing jumps when they set off again
+    const groups = [0, 1].map(gi => F.legs.flatMap((leg, k) => (k ? leg[gi].slice(1) : leg[gi])));
+    const legLen = F.legs.map(leg => leg.map(len)), dur = legLen.map(l => Math.max(...l) / LAB.v + LAB.hold);
+    dur[dur.length - 1] += LAB.band / LAB.v;   // the last leg runs on into the white room and out of sight
+    lab = { legLen, dur, total: dur.reduce((x, y) => x + y, 0) + .6 };
+    parts = groups.map(line);
+  }
   function frame(now) {
-    const t = (now - t0) / 1000, F = VB_FLOW[step];
-    if (F.loop) {
+    const t = (now - t0) / 1000;
+    if (!lab) {
       // the glow runs to the end and slips out of sight, then comes again
-      const b = parts[0], cyc = (b.len + BAND) / V + .8, s = (t % cyc) * V;
-      head(b, s); show(b, 1);
+      const b = parts[0], s = (t % ((b.len + LOOP.band) / LOOP.v + .6)) * LOOP.v;
+      draw(b, s, LOOP.band);
     } else {
-      // leg after leg; within a leg both groups start together and the first to arrive waits for the other
-      const dur = parts.map(leg => Math.max(...leg.map(b => b.len)) / V + HOLD), total = dur.reduce((x, y) => x + y, 0) + .6;
-      let c = t % total;
-      parts.forEach((leg, k) => {
-        const last = k === parts.length - 1, on = c >= 0 && c < dur[k] + (last ? BAND / V : 0);
-        leg.forEach(b => { show(b, on ? 1 : 0); if (on) head(b, last ? c * V : Math.min(c * V, b.len)); });
-        c -= dur[k];
+      // leg after leg: both groups leave a meeting point together, their glows growing from it; the first to arrive
+      // draws its tail in and waits; when the other is there too they set off again
+      let c = t % lab.total;
+      parts.forEach((b, gi) => {
+        let off = 0, c2 = c;
+        for (let k = 0; k < lab.dur.length; k++) {
+          const L = lab.legLen[k][gi], last = k === lab.dur.length - 1;
+          if (c2 < lab.dur[k] || last) {
+            const d = c2 * LAB.v;
+            if (last || d <= L) draw(b, off + d, Math.min(LAB.band, d));
+            else draw(b, off + L, Math.min(LAB.band, L) * Math.max(0, 1 - (d - L) / LAB.v / .85));   // drawn in within .85 s, before the wait ends
+            break;
+          }
+          c2 -= lab.dur[k]; off += L;
+        }
       });
     }
     raf = requestAnimationFrame(frame);

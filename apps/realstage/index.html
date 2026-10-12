@@ -599,7 +599,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
 .vb-dot{position:absolute; width:clamp(13px,2.4vw,18px); aspect-ratio:1; transform:translate(-50%,-50%); padding:0; border:0; background:none; cursor:pointer}
-.vb-dot svg{width:100%; height:100%; overflow:visible}
+.vb-dot svg{display:block; width:100%; height:100%; overflow:visible}
 .vb-dot::after{content:""; position:absolute; inset:-12px; border-radius:50%}
 .vb-dot circle{fill:#22c3a0; stroke:#22c3a0; stroke-width:3.5}
 .vb-dot circle.pulse{fill:#22c3a0; stroke:none; transform-box:fill-box; transform-origin:center; animation:vbPulse 2.2s ease-out infinite}
@@ -625,8 +625,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-pa[hidden]{display:none}
 .vb-zones g{display:none}
 .vb-zones .dim{fill:rgba(10,12,16,.5); fill-rule:evenodd}
-.vb-zones .lit{fill:rgba(249,115,22,.07); fill-rule:evenodd; stroke:#f97316; stroke-width:2.5; vector-effect:non-scaling-stroke; animation:vbLit 2.2s ease-in-out infinite}
-@keyframes vbLit{50%{fill:rgba(249,115,22,.16)}}
+.vb-zones .lit{fill:rgba(249,115,22,.07); fill-rule:evenodd; stroke:#f97316; stroke-width:2.5; vector-effect:non-scaling-stroke}
 .vb-plan[data-step="1"] .vb-zones .z1, .vb-plan[data-step="2"] .vb-zones .z2, .vb-plan[data-step="3"] .vb-zones .z3, .vb-plan[data-step="4"] .vb-zones .z4{display:inline}
 .vb-plan[data-step] .vb-zones{opacity:1}
 .vb-flow{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible}
@@ -1115,7 +1114,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="vb-duo">
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="Plan"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="841" alt="Plan" loading="lazy" decoding="async"></button>
-                  <button class="vb-dot" type="button" data-f="vb-004" data-zone="1" style="left:82.6%; top:68.6%" aria-label="The past: texts on Egypt's architecture"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-004" data-zone="1" style="left:82.6%; top:68.8%" aria-label="The past: texts on Egypt's architecture"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-003" data-zone="2" style="left:84.5%; top:40.4%" aria-label="Images on the labyrinth walls"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-002" data-zone="2" style="left:71.6%; top:53.6%" aria-label="The present: the labyrinth"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-005" data-zone="3" style="left:67.2%; top:23.0%" aria-label="Elysium: the city model, where visitors build the future in augmented reality"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
