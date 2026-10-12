@@ -600,6 +600,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
   .city-step span{grid-area:1/1; visibility:hidden}
   .city-step span.on{visibility:visible}
   .city-step b{display:block; font-weight:700; margin-bottom:2px}
+  .city-how{margin-top:-4px; font-size:12.5px; color:var(--ink-3)}
 .vb-plan{position:relative; margin-top:22px}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
@@ -762,6 +763,12 @@ html.fit-tab body{min-height:0}
 .arrow{position:relative}
 @keyframes rbSpin{to{transform:rotate(360deg)}}
 @keyframes rbFade{to{opacity:0}}
+/* a slider's handle wears the rainbow ring once, so it reads as something to move */
+.rb-ring{position:absolute; width:32px; height:32px; margin:-16px 0 0 -16px; border-radius:50%; pointer-events:none; z-index:2;
+  background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+  animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
+.b8-ctl{position:relative}
 .arrow.rainbow::after{
   content:""; position:absolute; inset:-4px; border-radius:50%; pointer-events:none;
   background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
@@ -1118,6 +1125,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <div class="b8-3d" role="img" aria-label="Un modelo 3D de la ciudad futura en tres fases, que se construye al mover el control deslizante"></div>
                   <div class="b8-ctl"><label for="cityRange">Construir el futuro de El Cairo</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   <p class="city-step" aria-live="polite"><span><b>Etapa 1</b>La ciudad vernácula: casas bajas dispersas al azar y giradas en todas direcciones, como en los barrios informales de El Cairo, y solares libres que quedan como parques.</span><span><b>Etapa 2</b>Crecimiento a lo largo de los ejes: las parcelas siguen los ejes principales y el anillo alrededor del parque; los edificios son más altos sobre los ejes y bajan al alejarse de ellos.</span><span><b>Etapa 3</b>El distrito de negocios: una retícula de parcelas alrededor de parques redondos, donde las torres se alzan en grupos entre bloques más bajos.</span></p>
+                  <p class="city-step city-how"><span>Cómo crece: se traza sobre el solar una retícula de parcelas; algunas quedan vacías al azar y se agrupan en espacios verdes, y cada una de las demás recibe una casa baja, escalada y con una altura al azar.</span><span>Cómo crece: se reparten puntos sobre las parcelas y se atraen hacia los ejes principales; la altura de un edificio disminuye con su distancia al eje más cercano según una curva fijada, se gira hacia ese eje, y se eliminan los puntos demasiado cercanos a un eje para que este siga siendo una calle.</span><span>Cómo crece: puntos aleatorios dividen el distrito en parcelas de Voronoi; cada parcela se retranquea de sus bordes, y cuanto más cerca está del centro del distrito, más alta se eleva su torre.</span></p>
                   <p class="b8-note">Los edificios de la propuesta, tomados del modelo del concurso, con la ciudad existente alrededor.</p>
                 </figure>
                 <div class="vb-box">
@@ -1241,7 +1249,7 @@ destined to guide.</script></section>
                 </div>
                 <figure class="b8-build">
                   <div class="b8-3d" role="img" aria-label="El modelo 3D de la barra: sus tableros encajan en su sitio, capa a capa, al mover el control deslizante"></div>
-                  <div class="b8-ctl"><label for="b8Range">Colocar los tableros</label><input id="b8Range" type="range" min="0" max="40" step="1" value="40"><output for="b8Range">40 / 40</output></div>
+                  <div class="b8-ctl"><label for="b8Range">Colocar los tableros</label><input id="b8Range" type="range" min="0" max="40" step="1" value="6"><output for="b8Range">6 / 40</output></div>
                   <p class="b8-note">El modelo está simplificado: sus capas tienen 5 cm de grosor, mientras que la barra está hecha de tableros de 2 cm.</p>
                 </figure>
               </article>

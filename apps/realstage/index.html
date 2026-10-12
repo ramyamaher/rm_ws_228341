@@ -598,6 +598,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
   .city-step span{grid-area:1/1; visibility:hidden}
   .city-step span.on{visibility:visible}
   .city-step b{display:block; font-weight:700; margin-bottom:2px}
+  .city-how{margin-top:-4px; font-size:12.5px; color:var(--ink-3)}
 .vb-plan{position:relative; margin-top:22px}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
@@ -760,6 +761,12 @@ html.fit-tab body{min-height:0}
 .arrow{position:relative}
 @keyframes rbSpin{to{transform:rotate(360deg)}}
 @keyframes rbFade{to{opacity:0}}
+/* a slider's handle wears the rainbow ring once, so it reads as something to move */
+.rb-ring{position:absolute; width:32px; height:32px; margin:-16px 0 0 -16px; border-radius:50%; pointer-events:none; z-index:2;
+  background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+  animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
+.b8-ctl{position:relative}
 .arrow.rainbow::after{
   content:""; position:absolute; inset:-4px; border-radius:50%; pointer-events:none;
   background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
@@ -1116,6 +1123,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <div class="b8-3d" role="img" aria-label="A 3D model of the future city in three phases, built up as you move the slider"></div>
                   <div class="b8-ctl"><label for="cityRange">Build Cairo's Future</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   <p class="city-step" aria-live="polite"><span><b>Stage 1</b>The vernacular city: low houses are scattered at random and turned every way, as in Cairo's informal districts, and open lots are left free as parks.</span><span><b>Stage 2</b>Growth along the axes: the plots follow the main axes and the ring around the park; buildings are tallest on the axes and step down away from them.</span><span><b>Stage 3</b>The business district: a grid of plots around round parks, where towers rise in clusters among lower blocks.</span></p>
+                  <p class="city-step city-how"><span>How it grows: a grid of plots is laid over the site; some plots are left empty at random and gathered into green spaces, and every other plot gets a low house, scaled and given a height at random.</span><span>How it grows: points are scattered over the plots and drawn towards the main axes; a building's height falls off with its distance to the nearest axis along a set curve, it is turned to face that axis, and points too close to an axis are taken out so the axis stays a street.</span><span>How it grows: random points divide the district into Voronoi plots; each plot is set back from its edges, and the closer it lies to the district's centre, the taller its tower rises.</span></p>
                   <p class="b8-note">The entry's buildings, taken from the competition model, with the existing city around them.</p>
                 </figure>
                 <div class="vb-box">
@@ -1239,7 +1247,7 @@ destined to guide.</script></section>
                 </div>
                 <figure class="b8-build">
                   <div class="b8-3d" role="img" aria-label="The 3D model of the bar: its boards fall into place, layer by layer, as you move the slider"></div>
-                  <div class="b8-ctl"><label for="b8Range">Place the boards</label><input id="b8Range" type="range" min="0" max="40" step="1" value="40"><output for="b8Range">40 / 40</output></div>
+                  <div class="b8-ctl"><label for="b8Range">Place the Boards</label><input id="b8Range" type="range" min="0" max="40" step="1" value="6"><output for="b8Range">6 / 40</output></div>
                   <p class="b8-note">The model is simplified: its layers are 5 cm thick, while the bar itself is built from 2 cm boards.</p>
                 </figure>
               </article>

@@ -136,6 +136,26 @@ tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.tab)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.go); }));
 addEventListener('hashchange', () => go(location.hash.slice(1), { push: false }));
 
+// A slider's handle wears the rainbow ring once, the first time it comes into view; touching the slider ends it
+function rainbowOnce(input, thumb = 24) {
+  const io = new IntersectionObserver((es) => {
+    if (!es.some((e) => e.isIntersecting)) return;
+    io.disconnect(); show();
+  }, { threshold: .9 });
+  // not while the greeting still covers the page
+  function show() {
+    if (document.getElementById('greet')) { setTimeout(show, 300); return; }
+    const host = input.parentElement, a = input.getBoundingClientRect(), b = host.getBoundingClientRect();
+    const f = (input.value - input.min) / ((input.max - input.min) || 1);
+    const ring = document.createElement('span'); ring.className = 'rb-ring';
+    ring.style.left = (a.left - b.left + thumb / 2 + f * (a.width - thumb)) + 'px'; ring.style.top = (a.top - b.top + a.height / 2) + 'px';
+    host.append(ring);
+    const end = () => ring.remove(); setTimeout(end, 2600); input.addEventListener('input', end, { once: true });
+  }
+  io.observe(input);
+}
+$$('#cityRange, #b8Range').forEach((r) => rainbowOnce(r));
+
 /* ================= project images and the viewer ================= */
 // Each .thumbs lists its images as "file|caption;file|caption". Thumbnails load small;
 // the click opens the full image. An entry with no file is an empty slot for a later image.
@@ -621,16 +641,16 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
       return { grp, meshes, lns, lit, z: b.z, off: 0, vis: true, leaving: false };
     });
     const DROP = 18;                                               // a board comes down from 90 cm above its place
-    let shown = +range.value, raf = 0;
+    let shown = +range.value, raf = 0, held = true;   // the first boards stay coloured until the slider is first moved
     function paint() { out.value = out.textContent = shown + ' / ' + boards.length; }
     function tick() {
       let moving = false;
-      for (const b of boards) {
+      boards.forEach((b, i) => {
         if (b.leaving) { b.off += (DROP - b.off) * .28; if (b.off > DROP - .5) { b.leaving = false; b.vis = false; b.off = 0; } else moving = true; }
         else if (b.off > .02) { b.off *= .75; moving = true; } else b.off = 0;
-        const lit = b.off > .05; b.meshes.forEach((m) => { m.material = lit ? b.lit.face : WHITE; }); b.lns.forEach((l) => { l.material = lit ? b.lit.line : EDGE; });
+        const lit = b.off > .05 || (held && i < shown); b.meshes.forEach((m) => { m.material = lit ? b.lit.face : WHITE; }); b.lns.forEach((l) => { l.material = lit ? b.lit.line : EDGE; });
         b.grp.visible = b.vis; b.grp.position.y = b.z + b.off;
-      }
+      });
       ren.render(scene, cam); raf = moving ? requestAnimationFrame(tick) : 0;
     }
     const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
@@ -642,7 +662,7 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
     boards.forEach((b, i) => { b.vis = i < shown; });
     function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 50 * Math.pow(Math.max(1, 1.5 / cam.aspect), .7); cam.updateProjectionMatrix(); kick(); }
     ctl.addEventListener('change', kick);
-    range.addEventListener('input', () => set(+range.value));
+    range.addEventListener('input', () => { held = false; set(+range.value); });
     new ResizeObserver(size).observe(box);
     paint(); size();
   }
@@ -809,11 +829,12 @@ $$('.vb-story').forEach(st => {
 // its render, with the existing city around it. The buildings come baked, in the order the three rules raise them; the
 // slider only shows the first so many. Drawn like the other models; a line under the slider says which rule is building
 $$('.city-build').forEach(fig => {
-  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig), steps = $$('.city-step span', fig);
+  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig), rows = $$('.city-step', fig).map((p) => [...p.children]);
   let started = false;
   const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
   io.observe(box);
-  const say = (ph) => steps.forEach((s, i) => s.classList.toggle('on', i === ph));
+  // each stage's words, and below them how its rule grows the city
+  const say = (ph) => rows.forEach((r) => r.forEach((s, i) => s.classList.toggle('on', i === ph)));
   say(0);
   async function start() {
     const [THREE, { OrbitControls }, { mergeGeometries }, D] = await Promise.all([

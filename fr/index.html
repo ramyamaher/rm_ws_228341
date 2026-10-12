@@ -600,6 +600,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
   .city-step span{grid-area:1/1; visibility:hidden}
   .city-step span.on{visibility:visible}
   .city-step b{display:block; font-weight:700; margin-bottom:2px}
+  .city-how{margin-top:-4px; font-size:12.5px; color:var(--ink-3)}
 .vb-plan{position:relative; margin-top:22px}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
@@ -762,6 +763,12 @@ html.fit-tab body{min-height:0}
 .arrow{position:relative}
 @keyframes rbSpin{to{transform:rotate(360deg)}}
 @keyframes rbFade{to{opacity:0}}
+/* a slider's handle wears the rainbow ring once, so it reads as something to move */
+.rb-ring{position:absolute; width:32px; height:32px; margin:-16px 0 0 -16px; border-radius:50%; pointer-events:none; z-index:2;
+  background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+  animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
+.b8-ctl{position:relative}
 .arrow.rainbow::after{
   content:""; position:absolute; inset:-4px; border-radius:50%; pointer-events:none;
   background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
@@ -1117,6 +1124,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <div class="b8-3d" role="img" aria-label="Un modèle 3D de la ville future en trois phases, qui se construit quand on déplace le curseur"></div>
                   <div class="b8-ctl"><label for="cityRange">Construire l’avenir du Caire</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   <p class="city-step" aria-live="polite"><span><b>Étape 1</b>La ville vernaculaire : des maisons basses sont dispersées au hasard et tournées dans tous les sens, comme dans les quartiers informels du Caire, et des parcelles restent libres pour des parcs.</span><span><b>Étape 2</b>La croissance le long des axes : les parcelles suivent les axes principaux et l'anneau autour du parc ; les bâtiments sont les plus hauts sur les axes et s'abaissent en s'en éloignant.</span><span><b>Étape 3</b>Le quartier d'affaires : une trame de parcelles autour de parcs ronds, où des tours s'élèvent en groupes parmi des îlots plus bas.</span></p>
+                  <p class="city-step city-how"><span>Comment elle pousse : une trame de parcelles est posée sur le site ; certaines parcelles restent vides au hasard et sont regroupées en espaces verts, et chaque autre parcelle reçoit une maison basse, mise à l'échelle et dotée d'une hauteur au hasard.</span><span>Comment elle pousse : des points sont répartis sur les parcelles et attirés vers les axes principaux ; la hauteur d'un bâtiment diminue avec sa distance à l'axe le plus proche selon une courbe donnée, il est tourné face à cet axe, et les points trop proches d'un axe sont retirés pour que l'axe reste une rue.</span><span>Comment elle pousse : des points aléatoires divisent le quartier en parcelles de Voronoï ; chaque parcelle est en retrait de ses bords, et plus elle est proche du centre du quartier, plus sa tour s'élève.</span></p>
                   <p class="b8-note">Les bâtiments du projet, tirés du modèle du concours, avec la ville existante autour.</p>
                 </figure>
                 <div class="vb-box">
@@ -1240,7 +1248,7 @@ destined to guide.</script></section>
                 </div>
                 <figure class="b8-build">
                   <div class="b8-3d" role="img" aria-label="Le modèle 3D du bar : ses planches se mettent en place, couche après couche, quand on déplace le curseur"></div>
-                  <div class="b8-ctl"><label for="b8Range">Placer les planches</label><input id="b8Range" type="range" min="0" max="40" step="1" value="40"><output for="b8Range">40 / 40</output></div>
+                  <div class="b8-ctl"><label for="b8Range">Placer les planches</label><input id="b8Range" type="range" min="0" max="40" step="1" value="6"><output for="b8Range">6 / 40</output></div>
                   <p class="b8-note">Le modèle est simplifié : ses couches font 5 cm, alors que le bar lui-même est fait de planches de 2 cm.</p>
                 </figure>
               </article>

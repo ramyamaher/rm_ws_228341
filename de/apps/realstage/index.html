@@ -598,6 +598,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
   .city-step span{grid-area:1/1; visibility:hidden}
   .city-step span.on{visibility:visible}
   .city-step b{display:block; font-weight:700; margin-bottom:2px}
+  .city-how{margin-top:-4px; font-size:12.5px; color:var(--ink-3)}
 .vb-plan{position:relative; margin-top:22px}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
@@ -760,6 +761,12 @@ html.fit-tab body{min-height:0}
 .arrow{position:relative}
 @keyframes rbSpin{to{transform:rotate(360deg)}}
 @keyframes rbFade{to{opacity:0}}
+/* a slider's handle wears the rainbow ring once, so it reads as something to move */
+.rb-ring{position:absolute; width:32px; height:32px; margin:-16px 0 0 -16px; border-radius:50%; pointer-events:none; z-index:2;
+  background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+  animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
+.b8-ctl{position:relative}
 .arrow.rainbow::after{
   content:""; position:absolute; inset:-4px; border-radius:50%; pointer-events:none;
   background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
@@ -1116,6 +1123,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <div class="b8-3d" role="img" aria-label="Ein 3D-Modell der zukünftigen Stadt in drei Phasen, die entsteht, während man den Schieberegler bewegt"></div>
                   <div class="b8-ctl"><label for="cityRange">Kairos Zukunft bauen</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   <p class="city-step" aria-live="polite"><span><b>Stufe 1</b>Die gewachsene Stadt: niedrige Häuser stehen zufällig verstreut und in alle Richtungen gedreht, wie in Kairos informellen Vierteln, und freie Grundstücke bleiben als Parks offen.</span><span><b>Stufe 2</b>Wachstum entlang der Achsen: die Grundstücke folgen den Hauptachsen und dem Ring um den Park; an den Achsen sind die Gebäude am höchsten und werden von ihnen weg niedriger.</span><span><b>Stufe 3</b>Das Geschäftsviertel: ein Raster von Grundstücken um runde Parks, in dem Hochhäuser in Gruppen zwischen niedrigeren Blöcken aufragen.</span></p>
+                  <p class="city-step city-how"><span>So wächst sie: Über das Gelände wird ein Raster von Grundstücken gelegt; einige bleiben zufällig leer und werden zu Grünflächen zusammengefasst, und jedes andere Grundstück erhält ein niedriges Haus, zufällig skaliert und mit zufälliger Höhe.</span><span>So wächst sie: Punkte werden über die Grundstücke verteilt und zu den Hauptachsen hingezogen; die Höhe eines Gebäudes nimmt mit seinem Abstand zur nächsten Achse entlang einer festgelegten Kurve ab, es wird zu dieser Achse ausgerichtet, und Punkte zu nahe an einer Achse werden entfernt, damit die Achse eine Strasse bleibt.</span><span>So wächst sie: Zufällige Punkte teilen das Viertel in Voronoi-Grundstücke; jedes Grundstück rückt von seinen Rändern ab, und je näher es am Zentrum des Viertels liegt, desto höher steigt sein Turm.</span></p>
                   <p class="b8-note">Die Gebäude des Wettbewerbsbeitrags, aus dem Wettbewerbsmodell übernommen, mit der bestehenden Stadt ringsum.</p>
                 </figure>
                 <div class="vb-box">
@@ -1239,7 +1247,7 @@ destined to guide.</script></section>
                 </div>
                 <figure class="b8-build">
                   <div class="b8-3d" role="img" aria-label="Das 3D-Modell der Bar: Ihre Bretter fallen Schicht für Schicht an ihren Platz, während man den Schieberegler bewegt"></div>
-                  <div class="b8-ctl"><label for="b8Range">Bretter platzieren</label><input id="b8Range" type="range" min="0" max="40" step="1" value="40"><output for="b8Range">40 / 40</output></div>
+                  <div class="b8-ctl"><label for="b8Range">Bretter platzieren</label><input id="b8Range" type="range" min="0" max="40" step="1" value="6"><output for="b8Range">6 / 40</output></div>
                   <p class="b8-note">Das Modell ist vereinfacht: Seine Schichten sind 5 cm dick, die Bar selbst besteht aus 2 cm starken Brettern.</p>
                 </figure>
               </article>
