@@ -401,10 +401,14 @@ html[data-theme="dark"] .p-meta b{color:var(--gold-hi)}
 .lb{
   position:fixed; inset:0; z-index:200; display:grid; grid-template-rows:1fr auto; place-items:center;
   padding:calc(env(safe-area-inset-top) + 64px) clamp(12px,5vw,72px) calc(env(safe-area-inset-bottom) + 20px);
-  background:rgba(10,10,12,.92); opacity:0; visibility:hidden; transition:opacity .3s, visibility 0s .3s;
+  background:#0a0a0c; opacity:0; visibility:hidden; transition:opacity .3s, visibility 0s .3s;
   touch-action:pan-y; user-select:none; -webkit-user-select:none;
 }
 .lb.open{opacity:1; visibility:visible; transition:opacity .3s}
+.lb.paper{background:#fff}
+.lb.paper img{border-radius:0}
+.lb.paper figcaption{color:#334155}
+.lb.paper .lb-btn{color:#0f172a; background:rgba(15,23,42,.08)}
 .lb img{max-width:100%; max-height:100%; object-fit:contain; border-radius:10px; transform:scale(.97); transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .2s}
 .lb.open img{transform:none}
 .lb figcaption{margin-top:14px; color:rgba(255,255,255,.78); font-size:14px; text-align:center}
@@ -600,12 +604,12 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-dot circle.pulse{fill:#22c3a0; stroke:none; transform-box:fill-box; transform-origin:center; animation:vbPulse 2.2s ease-out infinite}
 .vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#22c3a0}
 @keyframes vbPulse{0%{transform:scale(1); opacity:.6}100%{transform:scale(3.2); opacity:0}}
-@media (prefers-reduced-motion:reduce){.vb-dot circle.pulse{animation:none; opacity:0}}
-.vb-cut{position:absolute; width:clamp(22px,4vw,34px); transform:translate(-50%,-50%); pointer-events:none; color:var(--ink)}
+.vb-cut{position:absolute; width:clamp(28px,4.6vw,42px); transform:translate(-50%,-50%); pointer-events:none; color:#0f172a}
+html[data-theme="dark"] .vb-cut{color:#e5e7eb}
 .vb-cut svg{display:block; width:100%; overflow:visible}
-.vb-cut path{fill:none; stroke:currentColor; stroke-width:4}
+.vb-cut path{fill:none; stroke:currentColor; stroke-width:5}
 .vb-cut path.tip{fill:currentColor; stroke:none}
-.vb-cut text{fill:currentColor; font:700 13px/1 inherit; text-anchor:middle}
+.vb-cut text{fill:currentColor; font-size:15px; font-weight:700; text-anchor:middle}
 .b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
 .b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
 .b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
@@ -714,6 +718,7 @@ html.fit-tab body{min-height:0}
 .limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
 .slide .thumbs.row{margin-top:18px; margin-bottom:6px}
 .slide:has(> .limericks) > .prize-line{margin:14px 0 20px}
+.slide:has(> .city-build) > .prize-line{margin:0 0 18px}
 
 /* phones and tablets held upright: one column, images first, the page scrolls as a page */
 @media (max-width:900px){
@@ -734,6 +739,7 @@ html.fit-tab body{min-height:0}
   .slide:has(> .limericks) > .prize-line{order:3}
   .slide:has(> .limericks) > .prose{order:4}
   .slide:has(> .limericks) > .chips{order:5}
+  .slide:has(> .city-build) > .prize-line{order:0}
   footer{height:auto; padding-top:10px; padding-bottom:calc(env(safe-area-inset-bottom) + 10px)}
 }
 
@@ -1034,6 +1040,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Pabellón de Egipto, La Biennale di Venezia <i></i> 15.ª Exposición Internacional de Arquitectura, 2016</p>
                     </div>
                   </div>
+                <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Segundo premio</b>, otorgado por el Ministerio de Cultura de Egipto.</p></div>
                 <div class="p-body">
                   <div class="prose">
                     <p>Una propuesta de concurso para el pabellón nacional de Egipto en la Bienal de Arquitectura de Venecia de 2016. El pabellón es un recorrido por tres fases de Egipto. El pasado, donde los visitantes leen sobre la arquitectura de Egipto y sus arquitectos. El presente: Egipto en 2016, en plena época turbulenta, como un laberinto de espacios en penumbra e imágenes del sufrimiento al que los egipcios se habían acostumbrado. Y el futuro, Elysium: la sala luminosa a la que por fin conduce el recorrido, donde una gran maqueta física de la ciudad tiene una parte vacía en el mapa y los visitantes usan la realidad aumentada para construir el futuro de Egipto.</p>
@@ -1046,18 +1053,17 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </dl>
                   </div>
                 </div>
-                <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Segundo premio</b>, otorgado por el Ministerio de Cultura de Egipto.</p></div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="Un modelo 3D de la ciudad futura en tres fases, que se construye al mover el control deslizante"></div>
                   <div class="b8-ctl"><label for="cityRange">Construir la ciudad</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
-                  <p class="city-step" aria-live="polite"><span>Regla 1, la ciudad vernácula: casas bajas dispersas al azar y giradas en todas direcciones, como en los barrios informales de El Cairo, y solares libres que quedan como parques.</span><span>Regla 2, crecimiento a lo largo de los ejes: las parcelas siguen los ejes principales y el anillo alrededor del parque; los edificios son más altos sobre los ejes y bajan al alejarse de ellos.</span><span>Regla 3, el distrito de negocios: una retícula de parcelas alrededor de parques redondos, donde las torres se alzan en grupos entre bloques más bajos.</span></p>
+                  <p class="city-step" aria-live="polite"><span>Etapa 1, la ciudad vernácula: casas bajas dispersas al azar y giradas en todas direcciones, como en los barrios informales de El Cairo, y solares libres que quedan como parques.</span><span>Etapa 2, crecimiento a lo largo de los ejes: las parcelas siguen los ejes principales y el anillo alrededor del parque; los edificios son más altos sobre los ejes y bajan al alejarse de ellos.</span><span>Etapa 3, el distrito de negocios: una retícula de parcelas alrededor de parques redondos, donde las torres se alzan en grupos entre bloques más bajos.</span></p>
                   <p class="b8-note">Los edificios de la propuesta, tomados del modelo del concurso, con la ciudad existente alrededor.</p>
                 </figure>
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="Planta y sección"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="1371" alt="Planta y sección" loading="lazy" decoding="async"></button>
-                  <button class="vb-dot" type="button" data-f="vb-004" style="left:14.7%; top:42.1%" aria-label="El pasado: textos sobre la arquitectura de Egipto"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-dot" type="button" data-f="vb-003" style="left:71.6%; top:32.9%" aria-label="Imágenes en los muros del laberinto"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-dot" type="button" data-f="vb-002" style="left:84.5%; top:24.8%" aria-label="El presente: el laberinto"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-004" style="left:82.6%; top:43.4%" aria-label="El pasado: textos sobre la arquitectura de Egipto"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-003" style="left:84.5%; top:24.8%" aria-label="Imágenes en los muros del laberinto"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-002" style="left:71.6%; top:32.9%" aria-label="El presente: el laberinto"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-005" style="left:67.2%; top:14.1%" aria-label="Elysium: la maqueta de la ciudad, donde los visitantes construyen el futuro en realidad aumentada"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <span class="vb-cut l" style="left:1.9%; top:21.7%" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M6 20H34"/><path class="tip" d="M20 4 28 16H12Z"/><text x="20" y="38">A</text></svg></span>
                   <span class="vb-cut r" style="left:98.1%; top:21.7%" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M6 20H34"/><path class="tip" d="M20 4 28 16H12Z"/><text x="20" y="38">A</text></svg></span>

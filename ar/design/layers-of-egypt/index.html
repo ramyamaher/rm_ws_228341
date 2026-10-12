@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>طبقات مصر: بين المتاهة والجنة | Ramy Maher</title>
-<meta name="description" content="مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر. الماضي، حيث يقرأ الزوار عن عمارة مصر ومعمارييها.">
+<meta name="description" content="الجائزة الثانية، من وزارة الثقافة المصرية. مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر.">
 <meta name="author" content="Ramy Maher">
 <meta name="google-site-verification" content="yuDKJdIt_1y7rSpfkxcoU1A5VrnDaJl2mhG5ETP7dv0">
 <link rel="canonical" href="https://ramymaher.com/ar/design/layers-of-egypt/">
@@ -22,7 +22,7 @@
 <meta property="og:url" content="https://ramymaher.com/ar/design/layers-of-egypt/">
 <meta property="og:locale" content="ar_EG">
 <meta property="og:title" content="طبقات مصر: بين المتاهة والجنة | Ramy Maher">
-<meta property="og:description" content="مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر. الماضي، حيث يقرأ الزوار عن عمارة مصر ومعمارييها.">
+<meta property="og:description" content="الجائزة الثانية، من وزارة الثقافة المصرية. مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر.">
 <meta property="og:image" content="https://ramymaher.com/assets/img/projects/vb-001.jpg">
 <meta property="og:image:alt" content="طبقات مصر: بين المتاهة والجنة، عنوان المشاركة">
 <meta name="twitter:card" content="summary_large_image">
@@ -399,10 +399,14 @@ html[data-theme="dark"] .p-meta b{color:var(--gold-hi)}
 .lb{
   position:fixed; inset:0; z-index:200; display:grid; grid-template-rows:1fr auto; place-items:center;
   padding:calc(env(safe-area-inset-top) + 64px) clamp(12px,5vw,72px) calc(env(safe-area-inset-bottom) + 20px);
-  background:rgba(10,10,12,.92); opacity:0; visibility:hidden; transition:opacity .3s, visibility 0s .3s;
+  background:#0a0a0c; opacity:0; visibility:hidden; transition:opacity .3s, visibility 0s .3s;
   touch-action:pan-y; user-select:none; -webkit-user-select:none;
 }
 .lb.open{opacity:1; visibility:visible; transition:opacity .3s}
+.lb.paper{background:#fff}
+.lb.paper img{border-radius:0}
+.lb.paper figcaption{color:#334155}
+.lb.paper .lb-btn{color:#0f172a; background:rgba(15,23,42,.08)}
 .lb img{max-width:100%; max-height:100%; object-fit:contain; border-radius:10px; transform:scale(.97); transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .2s}
 .lb.open img{transform:none}
 .lb figcaption{margin-top:14px; color:rgba(255,255,255,.78); font-size:14px; text-align:center}
@@ -598,12 +602,12 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-dot circle.pulse{fill:#22c3a0; stroke:none; transform-box:fill-box; transform-origin:center; animation:vbPulse 2.2s ease-out infinite}
 .vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#22c3a0}
 @keyframes vbPulse{0%{transform:scale(1); opacity:.6}100%{transform:scale(3.2); opacity:0}}
-@media (prefers-reduced-motion:reduce){.vb-dot circle.pulse{animation:none; opacity:0}}
-.vb-cut{position:absolute; width:clamp(22px,4vw,34px); transform:translate(-50%,-50%); pointer-events:none; color:var(--ink)}
+.vb-cut{position:absolute; width:clamp(28px,4.6vw,42px); transform:translate(-50%,-50%); pointer-events:none; color:#0f172a}
+html[data-theme="dark"] .vb-cut{color:#e5e7eb}
 .vb-cut svg{display:block; width:100%; overflow:visible}
-.vb-cut path{fill:none; stroke:currentColor; stroke-width:4}
+.vb-cut path{fill:none; stroke:currentColor; stroke-width:5}
 .vb-cut path.tip{fill:currentColor; stroke:none}
-.vb-cut text{fill:currentColor; font:700 13px/1 inherit; text-anchor:middle}
+.vb-cut text{fill:currentColor; font-size:15px; font-weight:700; text-anchor:middle}
 .b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
 .b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
 .b8-ctl input::-webkit-slider-thumb{-webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
@@ -712,6 +716,7 @@ html.fit-tab body{min-height:0}
 .limericks .poem{font-size:clamp(16px,1.8vw,20px); padding:16px 4px 6px}
 .slide .thumbs.row{margin-top:18px; margin-bottom:6px}
 .slide:has(> .limericks) > .prize-line{margin:14px 0 20px}
+.slide:has(> .city-build) > .prize-line{margin:0 0 18px}
 
 /* phones and tablets held upright: one column, images first, the page scrolls as a page */
 @media (max-width:900px){
@@ -732,6 +737,7 @@ html.fit-tab body{min-height:0}
   .slide:has(> .limericks) > .prize-line{order:3}
   .slide:has(> .limericks) > .prose{order:4}
   .slide:has(> .limericks) > .chips{order:5}
+  .slide:has(> .city-build) > .prize-line{order:0}
   footer{height:auto; padding-top:10px; padding-bottom:calc(env(safe-area-inset-bottom) + 10px)}
 }
 
@@ -816,7 +822,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   document.documentElement.classList.add('pre');   /* the greeting is up until it moves on, or a click */
 })();
 </script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"طبقات مصر: بين المتاهة والجنة","description":"مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر. الماضي، حيث يقرأ الزوار عن عمارة مصر ومعمارييها.","url":"https://ramymaher.com/ar/design/layers-of-egypt/","inLanguage":"ar","creator":{"@id":"https://ramymaher.com/#person"},"image":"https://ramymaher.com/assets/img/projects/vb-001.jpg"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"طبقات مصر: بين المتاهة والجنة","description":"الجائزة الثانية، من وزارة الثقافة المصرية. مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر.","url":"https://ramymaher.com/ar/design/layers-of-egypt/","inLanguage":"ar","creator":{"@id":"https://ramymaher.com/#person"},"image":"https://ramymaher.com/assets/img/projects/vb-001.jpg"}</script>
 </head>
 <body>
 
@@ -1033,6 +1039,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">الجناح المصري، بينالي البندقية <i></i> المعرض الدولي الخامس عشر للعمارة، 2016</p>
                     </div>
                   </div>
+                <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الجائزة الثانية</b>، من وزارة الثقافة المصرية.</p></div>
                 <div class="p-body">
                   <div class="prose">
                     <p>مشاركة في مسابقة الجناح الوطني لمصر في بينالي البندقية للعمارة 2016. الجناح ممرّ يعبر ثلاث مراحل من مصر. الماضي، حيث يقرأ الزوار عن عمارة مصر ومعمارييها. والحاضر: مصر في 2016، في قلب زمن مضطرب، متاهة من فضاءات خافتة الإضاءة وصور لمعاناة اعتادها المصريون. والمستقبل، الجنة: الغرفة المضيئة التي ينتهي إليها الممرّ، حيث يضم مجسّم كبير للمدينة جزءًا فارغًا على الخريطة، ويستخدم الزوار الواقع المعزّز لبناء مستقبل مصر.</p>
@@ -1045,18 +1052,17 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </dl>
                   </div>
                 </div>
-                <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>الجائزة الثانية</b>، من وزارة الثقافة المصرية.</p></div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="نموذج ثلاثي الأبعاد للمدينة المستقبلية على ثلاث مراحل، يُبنى كلما حرّكت المنزلق"></div>
                   <div class="b8-ctl"><label for="cityRange">ابنِ المدينة</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
-                  <p class="city-step" aria-live="polite"><span>القاعدة 1، المدينة الشعبية: بيوت منخفضة متناثرة عشوائيًا ومتجهة في كل اتجاه، كما في أحياء القاهرة غير الرسمية، مع ترك قطع أرض خالية كحدائق.</span><span>القاعدة 2، النمو على امتداد المحاور: تتبع قطع الأراضي المحاور الرئيسية والحلقة حول الحديقة؛ والمباني أعلى ما تكون على المحاور وتنخفض كلما ابتعدت عنها.</span><span>القاعدة 3، حي الأعمال: شبكة من قطع الأراضي حول حدائق دائرية، ترتفع فيها الأبراج في مجموعات بين كتل أقل ارتفاعًا.</span></p>
+                  <p class="city-step" aria-live="polite"><span>المرحلة 1، المدينة الشعبية: بيوت منخفضة متناثرة عشوائيًا ومتجهة في كل اتجاه، كما في أحياء القاهرة غير الرسمية، مع ترك قطع أرض خالية كحدائق.</span><span>المرحلة 2، النمو على امتداد المحاور: تتبع قطع الأراضي المحاور الرئيسية والحلقة حول الحديقة؛ والمباني أعلى ما تكون على المحاور وتنخفض كلما ابتعدت عنها.</span><span>المرحلة 3، حي الأعمال: شبكة من قطع الأراضي حول حدائق دائرية، ترتفع فيها الأبراج في مجموعات بين كتل أقل ارتفاعًا.</span></p>
                   <p class="b8-note">مباني المشروع كما في نموذج المسابقة، مع المدينة القائمة من حولها.</p>
                 </figure>
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="مسقط وقطاع"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="1371" alt="مسقط وقطاع" loading="lazy" decoding="async"></button>
-                  <button class="vb-dot" type="button" data-f="vb-004" style="left:14.7%; top:42.1%" aria-label="الماضي: نصوص عن عمارة مصر"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-dot" type="button" data-f="vb-003" style="left:71.6%; top:32.9%" aria-label="صور على جدران المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-dot" type="button" data-f="vb-002" style="left:84.5%; top:24.8%" aria-label="الحاضر: المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-004" style="left:82.6%; top:43.4%" aria-label="الماضي: نصوص عن عمارة مصر"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-003" style="left:84.5%; top:24.8%" aria-label="صور على جدران المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-002" style="left:71.6%; top:32.9%" aria-label="الحاضر: المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-dot" type="button" data-f="vb-005" style="left:67.2%; top:14.1%" aria-label="الجنة: مجسّم المدينة، حيث يبني الزوار المستقبل بالواقع المعزّز"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <span class="vb-cut l" style="left:1.9%; top:21.7%" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M6 20H34"/><path class="tip" d="M20 4 28 16H12Z"/><text x="20" y="38">A</text></svg></span>
                   <span class="vb-cut r" style="left:98.1%; top:21.7%" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M6 20H34"/><path class="tip" d="M20 4 28 16H12Z"/><text x="20" y="38">A</text></svg></span>
