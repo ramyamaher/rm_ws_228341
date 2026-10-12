@@ -536,10 +536,10 @@ $$('.b8-build').forEach(fig => {
       g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, XW, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30);
       for (const [u0, u1] of doors) { const um = (u0 + u1) / 2; blk(XW + 1.6, XW + 4.1, u0 + 1, um - .15, 12, 56); blk(XW + 1.6, XW + 4.1, um + .15, u1 - 1, 12, 56); } }
     // the red wall
-    const RW = 141, RT = 140, LV2 = 70, GAL = [[0, 40], [60, 100], [120, 160]];
-    { const s = new THREE.Shape([[-59.3, 0], [185.6, 0], [185.6, RT], [-59.3, RT], [-59.3, LV2 + 50], [-23, LV2 + 50], [-23, LV2], [-59.3, LV2]].map(([u, v]) => new THREE.Vector2(u, v)));
+    const RW = 141, RT = 140, LV2 = 70, BAND = 120, GAL = [[15, 60], [75, 115], [130, 170.6]];   // GAL: the openings between the piers
+    { const s = new THREE.Shape([[-59.3, 0], [185.6, 0], [185.6, RT], [-59.3, RT], [-59.3, BAND], [0, BAND], [0, LV2], [-59.3, LV2]].map(([u, v]) => new THREE.Vector2(u, v)));
       for (const [u0, u1] of [[76.7, 111.2], [-33.1, 1.4]]) s.holes.push(new THREE.Path([[u0, .01], [u1, .01], [u1, 44], [u0, 44]].map(([u, v]) => new THREE.Vector2(u, v))));
-      for (const [u0, u1] of GAL) s.holes.push(new THREE.Path([[u0, LV2], [u1, LV2], [u1, LV2 + 50], [u0, LV2 + 50]].map(([u, v]) => new THREE.Vector2(u, v))));
+      for (const [u0, u1] of GAL) s.holes.push(new THREE.Path([[u0, LV2], [u1, LV2], [u1, BAND], [u0, BAND]].map(([u, v]) => new THREE.Vector2(u, v))));
       const g = new THREE.ExtrudeGeometry(s, { depth: 5.7, bevelEnabled: false, curveSegments: 1 });
       g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, RW, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30); }
     // the doors: 2.2 m double doors
@@ -566,17 +566,22 @@ $$('.b8-build').forEach(fig => {
     rail(along(XS - W, yL, zL, yT, zT, 8)); rail(along(XS, yL, zL, yT, zT, 8));
     // the bridge across the glass front at gallery height: 1.8 m wide, with posts under its far end
     const zB = zT, by1 = -23;
-    plate([[XW, -59.6], [146.7, -59.6], [146.7, 250], [XW, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
+    plate([[XW, -59.6], [RW, -59.6], [RW, 250], [XW, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
     const railLine = (a, b, n) => rail(Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n, zB]));
     railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
     // the gallery behind the red wall, which the bridge leads to, and the railings in the wall's openings
-    blk(146.7, 176.7, -59.6, 185.6, LV2 - 3, LV2);
-    for (const [y0, y1] of GAL) rail(Array.from({ length: 6 }, (_, k) => [RW + 2.85, y0 + (y1 - y0) * k / 5, LV2]));
-    // the glass front: its steel grid
-    for (let x = -22.1; x <= 146.7; x += 21.1) line([x, -59.6, -1.1], [x, -59.6, 140], segs);
-    for (const z of [-1.1, 26, 46, 67, 100, 120, 140]) line([-22.1, -59.6, z], [146.7, -59.6, z], segs);
-    for (let x = -22.1; x <= 146.7; x += 21.1) line([x, 324.6, 12], [x, 324.6, 140], segs);
-    for (const z of [12, 26, 46, 67, 100, 120, 140]) line([-22.1, 324.6, z], [146.7, 324.6, z], segs);
+    for (const [y0, y1] of [...GAL, [by1, 0]]) rail(Array.from({ length: 6 }, (_, k) => [RW + 2.85, y0 + (y1 - y0) * k / 5, LV2]));
+    // curtain walls, their steel grids, closing the building: both ends, the east side past the red wall, and the
+    // upper storey above the corridor wall
+    const curtain = (a, b, z0, z1) => {
+      const L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(L / 21));
+      for (let i = 0; i <= n; i++) { const f = i / n, x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f; line([x, y, z0], [x, y, z1], segs); }
+      for (const z of [z0, ...[26, 46, 67, 100, 120].filter((z) => z > z0 + 2 && z < z1 - 2), z1]) line([a[0], a[1], z], [b[0], b[1], z], segs);
+    };
+    curtain([XW, -59.6], [146.7, -59.6], -1.1, RT);
+    curtain([XW, 324.6], [146.7, 324.6], 12, RT);
+    curtain([146.7, 185.6], [146.7, 324.6], 12, RT);
+    curtain([XW, -59.6], [XW, 324.6], ZT, RT);
     // the railings round the ramp, on both sides, 1 m above its slope
     const rz = (y) => -1.11 + 13.11 * (y + 14.2) / 200.2;
     for (const x of [0.4, -22.1]) rail(Array.from({ length: 26 }, (_, i) => { const y = -14.2 + 200.2 * i / 25; return [x, y, rz(y)]; }));
