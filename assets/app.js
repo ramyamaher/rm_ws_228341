@@ -824,18 +824,22 @@ $$('.city-build').forEach(fig => {
     ]);
     const ren = new THREE.WebGLRenderer({ antialias: true });
     // drawn finer than the screen, so its many one-pixel lines read thinner
-    ren.setClearColor('#ffffff', 1); ren.setPixelRatio(Math.min(3, Math.max(2, devicePixelRatio * 1.5))); box.append(ren.domElement);
-    const [EX, EY] = D.size, scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, 10, 20000);
+    ren.setClearColor('#ffffff', 1); ren.setPixelRatio(Math.min(4, Math.max(3, devicePixelRatio * 2))); box.append(ren.domElement);
+    const [EX, EY] = D.size, scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, 1000, 30000);
+    // the render's camera: a long lens from far off (fitted to the render: its far edge, front corners and the ring's
+    // centre land where they do in the picture); its width of view is kept at every size, so a resized window shows
+    // the same city, larger or smaller
+    const HFOV = 12 * Math.PI / 180;
     const ctl = new OrbitControls(cam, ren.domElement);
-    cam.position.set(2150, 820, 1350); ctl.target.set(2400, 0, -800);
-    ctl.enablePan = false; ctl.minDistance = 400; ctl.maxDistance = 5000; ctl.maxPolarAngle = Math.PI * .46; ctl.update();
+    cam.position.set(2411, 5000, 11250); ctl.target.set(2411, 0, -1000);
+    ctl.enablePan = false; ctl.minDistance = 3000; ctl.maxDistance = 30000; ctl.maxPolarAngle = Math.PI * .46; ctl.update();
     ren.domElement.style.touchAction = 'pan-y';
     const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
     // nine thousand buildings: their lines a shade lighter than the other models', or the city reads as grey
     const EDGE = new THREE.LineBasicMaterial({ color: '#aab5c4' }), FAINT = new THREE.LineBasicMaterial({ color: '#d5dce6' });
     const ease = (u) => u * u * (3 - 2 * u);
     // the base, cut at the site's south edge like the render
-    { const g = new THREE.BoxGeometry(EX, 30, EY); g.translate(EX / 2, -15, -EY / 2); scene.add(new THREE.Mesh(g, WHITE), new THREE.LineSegments(new THREE.EdgesGeometry(g), EDGE)); }
+    { const g = new THREE.BoxGeometry(EX, 140, EY); g.translate(EX / 2, -70, -EY / 2); scene.add(new THREE.Mesh(g, WHITE), new THREE.LineSegments(new THREE.EdgesGeometry(g), EDGE)); }
     // a footprint (plan points in decimetres) raised to height h, as walls and a roof
     const prism = (pts, h) => {
       const n = pts.length / 2, v = [], idx = [];
@@ -876,7 +880,7 @@ $$('.city-build').forEach(fig => {
     const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
     function set(v) { batches.forEach((b, i) => { b.target = i < v ? 1 : 0; }); out.value = out.textContent = v + ' %'; say(batches[v - 1].ph); kick(); }
     batches.forEach((b, i) => { b.s = b.target = i < +range.value ? 1 : 0; });
-    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 30 * Math.pow(Math.max(1, 1.6 / cam.aspect), .7); cam.updateProjectionMatrix(); kick(); }
+    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 2 * Math.atan(Math.tan(HFOV / 2) / cam.aspect) * 180 / Math.PI; cam.updateProjectionMatrix(); kick(); }
     ctl.addEventListener('change', kick);
     range.addEventListener('input', () => set(+range.value));
     new ResizeObserver(size).observe(box);
