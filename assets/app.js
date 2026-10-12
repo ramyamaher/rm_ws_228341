@@ -590,8 +590,14 @@ $$('.b8-build').forEach(fig => {
     // the railings round the ramp, on both sides, 1 m above its slope
     const rz = (y) => 12 * (y + 14.2) / 200.2;
     for (const x of [0.4, -22.1]) rail(Array.from({ length: 26 }, (_, i) => { const y = -14.2 + 200.2 * i / 25; return [x, y, rz(y)]; }));
-    const seam = (x, h) => (x > RW - .2 && x < RW + .2 && h > ZT - .2 && h < 70.2) || (x > XW - .2 && x < XW + 5.9 && h > ZT - .2 && h < ZT + .2);
-    for (let i = segs.length - 6; i >= 0; i -= 6) if (seam(segs[i], segs[i + 1]) && seam(segs[i + 3], segs[i + 4])) segs.splice(i, 6);
+    const OPEN = [...GAL, [-59.3, 0]], inOpen = (ya, yb) => OPEN.some(([a, b]) => Math.min(ya, yb) >= a - .2 && Math.max(ya, yb) <= b + .2);
+    const near = (v, t, e = .2) => v > t - e && v < t + e;
+    const drop = (ax, ah, ay, bx, bh, by) => {
+      if (near(ax, RW) && near(bx, RW) && ah > ZT - .2 && ah < 70.2 && bh > ZT - .2 && bh < 70.2) return !(near(ah, LV2) && near(bh, LV2) && inOpen(ay, by));   // inner face: only the openings' feet
+      if (near(ax, RW + 5.7) && near(bx, RW + 5.7) && near(ah, LV2) && near(bh, LV2)) return inOpen(ay, by);                                                    // far face: the openings' feet go
+      return near(ax, XW, .3) || near(ax, XW + 5.7, .3) ? near(ah, ZT) && near(bh, ZT) && near(bx, ax, .3) : false;                                              // the two corridor walls: one
+    };
+    for (let i = segs.length - 6; i >= 0; i -= 6) if (drop(segs[i], segs[i + 1], -segs[i + 2], segs[i + 3], segs[i + 4], -segs[i + 5])) segs.splice(i, 6);
     const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3)); scene.add(new THREE.LineSegments(lg, EDGE));
     const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(thin, 3)); scene.add(new THREE.LineSegments(tg, THIN));
     // the boards, lowest first: a board is in the staircase's colours while it moves and white once it lands;
@@ -599,7 +605,10 @@ $$('.b8-build').forEach(fig => {
     const A = new THREE.Color('#22c3a0'), B = new THREE.Color('#3b82f6');
     const boards = data.boards.slice().sort((p, q) => p.z - q.z || p.id - q.id).map((b, i, all) => {
       const shape = (L) => { const pts = []; for (let k = 0; k < L.length; k += 2) pts.push(new THREE.Vector2(L[k], L[k + 1])); return pts; };
-      const s = new THREE.Shape(shape(b.loops[0])); for (const L of b.loops.slice(1)) s.holes.push(new THREE.Path(shape(L)));
+      // the model's outlines run a little into the red wall: cut them at its face
+      const clip = (L, xm = 141) => { const o = []; for (let k = 0; k < L.length; k += 2) { const a = [L[k], L[k + 1]], q = [L[(k + 2) % L.length], L[(k + 3) % L.length]];
+        if (a[0] <= xm) o.push(a[0], a[1]); if ((a[0] <= xm) !== (q[0] <= xm)) { const f = (xm - a[0]) / (q[0] - a[0]); o.push(xm, a[1] + (q[1] - a[1]) * f); } } return o; };
+      const s = new THREE.Shape(shape(clip(b.loops[0]))); for (const L of b.loops.slice(1)) s.holes.push(new THREE.Path(shape(L)));
       const g = new THREE.ExtrudeGeometry(s, { depth: b.h, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2);
       for (const L of b.islands || []) { const gi = new THREE.ExtrudeGeometry(new THREE.Shape(shape(L)), { depth: b.h, bevelEnabled: false, curveSegments: 1 }); gi.rotateX(-Math.PI / 2); g.islands = (g.islands || []).concat(gi); }
       const c = A.clone().lerp(B, i / (all.length - 1));
