@@ -683,6 +683,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 @keyframes ssWrite{from{opacity:1; stroke-dashoffset:1} to{opacity:1; stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){ .ss-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .ss-line{animation:none} }
 .ss-live{position:relative; margin-top:22px}
+.ss-hook{margin:0 0 12px; font-size:17px; font-weight:650; letter-spacing:-.01em}
 .ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
 html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg); box-shadow:none}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
@@ -1225,7 +1226,7 @@ destined to guide.</script></section>
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Building 8 ist ein Lehrgebäude der Universität, und sein Eingang führt in die große Halle. Auf der Brücke, die im Rendering unten zu sehen ist, stellte ich eine Kamera auf, die die Bewegung aller festhielt, die auf ihrem Weg zur Halle vorbeigingen, und ihre Spuren formten den Raum für das Möbel.</p>
+                    <p>Building 8 ist ein Lehrgebäude der Universität, und sein Eingang führt die Menschen in die Haupthalle. Ich habe in Processing einen Bewegungssensor mit einer gewöhnlichen Laptopkamera programmiert: Überschritt die Änderung der RGB-Werte eines Pixels einen Schwellenwert, gemessen als √(x² + y² + z²), wobei x, y und z die Änderungen von Rot, Grün und Blau sind, erkannte der Sensor Bewegung in diesem Pixel. Dann stellte ich die Kamera auf die Brücke, die im Rendering unten zu sehen ist, um die Bewegung aller festzuhalten, die auf dem Weg zur Halle vorbeikamen, und ihre Spuren bauten den Raum für das Möbel auf.</p>
                     <p>Dann übertrug ich diese Bewegung flach auf den Grundriss des Raumes. In die leeren Flächen, wo niemand ging, entwarf ich ein Möbel aus 2 cm starken, gepressten und verleimten Platten: eine Bar für ein Fest, die genau dort steht, wo sie niemandem im Weg ist.</p>
                   </div>
                   <dl class="facts">
@@ -1272,6 +1273,7 @@ destined to guide.</script></section>
                   </dl>
                 </div>
                 <div class="ss-live">
+                  <p class="ss-hook">Haben Sie sich je gefragt, wozu Trigonometrie gut ist?</p>
                   <iframe title="Das interaktive Modell: die Treppe in 3D und ihre abgewickelte Außenwand" data-src="/design/bespoke-spiral-staircase-berlin/model/?embed" allow="fullscreen"></iframe>
                 </div>
               </article>

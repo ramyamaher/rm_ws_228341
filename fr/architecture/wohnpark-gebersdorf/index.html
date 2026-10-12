@@ -683,6 +683,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 @keyframes ssWrite{from{opacity:1; stroke-dashoffset:1} to{opacity:1; stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){ .ss-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .ss-line{animation:none} }
 .ss-live{position:relative; margin-top:22px}
+.ss-hook{margin:0 0 12px; font-size:17px; font-weight:650; letter-spacing:-.01em}
 .ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
 html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg); box-shadow:none}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
@@ -1225,7 +1226,7 @@ destined to guide.</script></section>
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Building 8 est un bâtiment d'enseignement de l'université, dont l'entrée mène au grand hall. Depuis la passerelle visible dans le rendu ci-dessous, j'ai placé une caméra qui a capté le mouvement de tous ceux qui passaient en se rendant au hall, et leurs traînées ont dessiné l'espace du meuble.</p>
+                    <p>Le Building 8 est un bâtiment d'enseignement de l'université, et son entrée mène les gens au hall principal. J'ai programmé un détecteur de mouvement dans Processing avec la caméra ordinaire d'un ordinateur portable : si le changement des valeurs RVB d'un pixel dépassait un seuil, mesuré comme √(x² + y² + z²), où x, y et z sont les changements du rouge, du vert et du bleu, le détecteur comprenait qu'il y avait du mouvement dans ce pixel. J'ai ensuite placé la caméra sur la passerelle visible dans le rendu ci-dessous pour saisir le mouvement de tous ceux qui passaient en se rendant au hall, et leurs traces ont construit l'espace du meuble.</p>
                     <p>J'ai ensuite aplati ce mouvement sur le plan de la salle. Dans les espaces vides, là où personne ne passait, j'ai dessiné un meuble en panneaux de 2 cm d'épaisseur, pressés et collés : un bar pour une fête, posé exactement là où il ne gêne personne.</p>
                   </div>
                   <dl class="facts">
@@ -1272,6 +1273,7 @@ destined to guide.</script></section>
                   </dl>
                 </div>
                 <div class="ss-live">
+                  <p class="ss-hook">Vous êtes-vous déjà demandé à quoi sert la trigonométrie ?</p>
                   <iframe title="Le modèle interactif : l'escalier en 3D et son mur extérieur déroulé" data-src="/design/bespoke-spiral-staircase-berlin/model/?embed" allow="fullscreen"></iframe>
                 </div>
               </article>
