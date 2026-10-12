@@ -379,19 +379,19 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .dex-flow{position:relative; height:170px; margin-top:14px; perspective:900px; touch-action:pan-y; user-select:none; -webkit-user-select:none; cursor:grab; overflow:hidden;
   -webkit-mask:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent); mask:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent)}
 .dex-flow.dragging{cursor:grabbing}
-.dex-flow[hidden], .dex-info[hidden], .dex-results[hidden]{display:none}
+.dex-flow[hidden], .dex-info[hidden], .dex-results[hidden], .dex-hint[hidden]{display:none}
+.prose .dex-hint, .dex-hint{margin:-6px 0 14px; text-align:center; font-size:13px; line-height:1.4; color:var(--ink-3)}
 .dex-item{position:absolute; left:50%; top:50%; padding:0; border:0; background:none; cursor:pointer; transform-style:preserve-3d; will-change:transform; -webkit-tap-highlight-color:transparent}
 .dex-item .logo{pointer-events:none}
 /* a resting copy shows its logo finished; chosen, it plays from the start */
 .dex-still.play, .dex-still .play, .dex-still .play *, .dex-still.play *{animation-delay:-60s !important}
-.logo.dex-archive svg{width:58%; height:58%; fill:none; stroke:rgb(35,35,35); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
-html[data-theme="dark"] .logo.dex-archive{background:var(--soft)} html[data-theme="dark"] .logo.dex-archive svg{stroke:var(--ink)}
+.logo.dex-archive svg{width:66%; height:auto}
 .dex-item.sel .logo{box-shadow:0 0 0 2px var(--ink), 0 14px 26px -12px rgba(0,0,0,.4)}
 .dex-info{min-height:7.5em; text-align:center; padding:4px 6px 0}
 .dex-info h3{margin:6px 0 2px; font-size:19px; font-weight:700; letter-spacing:-.02em}
 .dex-info .meta{margin:0 0 10px; color:var(--ink-3); font-size:13.5px}
 .dex-info p{margin:0 auto 10px; max-width:640px; font-size:15px; line-height:1.6; color:var(--ink-2, var(--ink)); text-align:start}
-.dex-info .vb-pill{margin-top:4px}
+.dex-info .vb-pill{margin:4px 0 12px}
 .dex-info, .dex-results{animation:vbOpen .35s ease-out}
 .dex-results{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap:12px; margin-top:18px}
 .dex-hit{display:flex; gap:14px; align-items:flex-start; padding:14px; border-radius:20px; border:1px solid var(--line); background:var(--card); text-align:start; cursor:pointer; color:inherit; font:inherit; transition:transform .2s}
@@ -1027,6 +1027,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
             <div class="dex" id="dex">
               <label class="dex-search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><input type="search" placeholder="Search the projects: a name, a place, a word" aria-label="Search the projects" autocomplete="off" spellcheck="false"></label>
               <div class="dex-flow" role="listbox" aria-label="All projects"></div>
+              <p class="dex-hint">Swipe to see the projects</p>
               <div class="dex-info" aria-live="polite"></div>
               <div class="dex-results" aria-live="polite" hidden></div>
               <div class="dex-words" hidden>

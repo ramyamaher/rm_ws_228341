@@ -1179,7 +1179,7 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   }
   { // the Archive: its tab's own icon on a tile, its words from the About page
     const tile = document.createElement('span'); tile.className = 'logo dex-archive';
-    tile.innerHTML = $('.tab[data-tab="archive"] svg').outerHTML;
+    tile.innerHTML = '<svg viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="5.6" fill="#ff0033"/><path d="M11.2 5.7v8.6l7.4-4.3z" fill="#fff"/></svg>';   // the Archive is the YouTube channel
     const note = $('.dex-words [data-for="archive"]', box), own = [...note.querySelectorAll('p')].map((p) => p.textContent.trim());
     const lead = (($('#archive .lead') || {}).textContent || '').trim();
     items.push({ tab: 'archive', k: -1, title: W('archive'), meta: W('archive-meta'), logo: tile, desc: own, texts: [...own, lead] });
@@ -1193,45 +1193,52 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
     b.append(copyLogo(it.logo)); b.dataset.i = i; flow.append(b); return b;
   });
   const GAP = () => (flow.clientWidth < 520 ? 74 : 92);
-  let pos = 0, vel = 0, drift = !reduced, target = null, chosen = -1, raf = 0, last = 0;
+  let pos = 0, vel = 0, drift = !reduced, target = null, raf = 0, last = 0;
+  let touched = false, shown = -1, played = -1;   // once the visitor takes the strip, the words follow the tile in the middle
   const wrap = (d) => ((d % N) + N + N / 2) % N - N / 2;
+  // the tiles keep their shape: the further from the middle, the smaller, nothing turned
   function place() {
     const g = GAP();
     tiles.forEach((t, i) => {
       const d = wrap(i - pos), a = Math.abs(d);
-      const x = d * g * (1 - Math.min(a, 4) * .06), s = (i === chosen ? 1.22 : 1.12) - Math.min(a, 3.5) * .13, r = Math.max(-58, Math.min(58, -d * 26));
-      t.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px) translateZ(${(-a * 34).toFixed(1)}px) rotateY(${r.toFixed(1)}deg) scale(${s.toFixed(3)})`;
+      const x = d * g * (1 - Math.min(a, 4) * .07), s = 1.14 - Math.min(a, 3.5) * .15;
+      t.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px) scale(${s.toFixed(3)})`;
       t.style.opacity = a > 4.2 ? 0 : (1 - Math.max(0, a - 2.6) * .55).toFixed(2);
       t.style.zIndex = 100 - Math.round(a * 10);
       t.tabIndex = a < .5 ? 0 : -1;
     });
   }
+  const middle = () => ((Math.round(pos) % N) + N) % N;
   function frame(now) {
     const dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
     if (target !== null) { const d = wrap(target - pos); pos += d * Math.min(1, dt * 9); if (Math.abs(d) < .002) { pos = target; target = null; } }
     else if (!dragging && Math.abs(vel) > .02) { pos += vel * dt; vel *= Math.pow(.04, dt); if (Math.abs(vel) <= .02) { vel = 0; if (!drift) target = Math.round(pos); } }
     else if (drift && !dragging) pos += dt * .32;
     place();
-    raf = (drift || dragging || target !== null || Math.abs(vel) > .02) && !flow.hidden ? requestAnimationFrame(frame) : 0;
+    const moving = (drift || dragging || target !== null || Math.abs(vel) > .02) && !flow.hidden;
+    if (touched) { const c = middle(); if (c !== shown) tell(c); if (!moving && played !== c) play(c); }
+    raf = moving ? requestAnimationFrame(frame) : 0;
   }
   const kick = () => { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } };
   // drag it through; a short press without moving is a click
   let dragging = false, x0 = 0, p0 = 0, moved = 0, lx = 0, lt = 0;
   flow.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    dragging = true; drift = false; target = null; vel = 0; x0 = lx = e.clientX; lt = performance.now(); p0 = pos; moved = 0;
-    flow.classList.add('dragging'); flow.setPointerCapture(e.pointerId); kick();
+    dragging = true; drift = false; touched = true; target = null; vel = 0; x0 = lx = e.clientX; lt = performance.now(); p0 = pos; moved = 0;
+    flow.classList.add('dragging'); kick();
   });
   flow.addEventListener('pointermove', (e) => {
     if (!dragging) return;
     const dx = e.clientX - x0, now = performance.now(); moved = Math.max(moved, Math.abs(dx));
+    // the strip holds on to the pointer only once it is really dragged, so a plain click still reaches its tile
+    if (moved > 6 && !flow.hasPointerCapture(e.pointerId)) flow.setPointerCapture(e.pointerId);
     pos = p0 - dx / GAP() * (RTL ? -1 : 1);
     if (now > lt) vel = -(e.clientX - lx) / GAP() / ((now - lt) / 1000) * (RTL ? -1 : 1);
     lx = e.clientX; lt = now;
   });
   const up = () => { if (!dragging) return; dragging = false; flow.classList.remove('dragging'); if (performance.now() - lt > 80) vel = 0; if (Math.abs(vel) < .3) target = Math.round(pos); kick(); };
   flow.addEventListener('pointerup', up); flow.addEventListener('pointercancel', up);
-  // a click stops the strip on that tile, plays its logo and tells about its project
+  // a click brings that tile to the middle
   flow.addEventListener('click', (e) => {
     const t = e.target.closest('.dex-item'); if (!t || moved > 6) return;
     choose(+t.dataset.i);
@@ -1239,13 +1246,21 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   flow.addEventListener('keydown', (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     e.preventDefault(); const step = (e.key === 'ArrowRight') !== !!RTL ? 1 : -1;
-    choose(((Math.round(pos) + step) % N + N) % N); tiles[chosen].focus({ preventScroll: true });
+    choose(((Math.round(pos) + step) % N + N) % N); tiles[target].focus({ preventScroll: true });
   });
-  function choose(i) {
-    drift = false; vel = 0; target = i; chosen = i; kick();
+  function choose(i) { drift = false; touched = true; vel = 0; target = i; kick(); }
+  // the words about the project in the middle, and its ring
+  function tell(i) {
+    shown = i;
     tiles.forEach((t, j) => { t.classList.toggle('sel', j === i); t.setAttribute('aria-selected', j === i); });
-    const it = items[i], logo = tiles[i].querySelector('.logo');
-    // its logo plays as it does on the project's page
+    const it = items[i];
+    info.innerHTML = `<h3>${esc(it.title)}</h3><button class="vb-pill dex-open" type="button">${esc(W('open'))}</button>${it.meta ? `<p class="meta">${esc(it.meta)}</p>` : ''}${it.desc.map((p) => `<p>${esc(p)}</p>`).join('')}`;
+    $('.dex-open', info).addEventListener('click', () => open(it));
+  }
+  // once the strip rests, the logo in the middle plays as it does on the project's page
+  function play(i) {
+    played = i;
+    const logo = tiles[i].querySelector('.logo');
     logo.classList.remove('dex-still');
     [...(logo.matches('.anim-logo') ? [logo] : []), ...logo.querySelectorAll('.anim-logo')].forEach((svg) => {
       svg.classList.remove('play');
@@ -1253,8 +1268,6 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
       if (player) { player.reset(svg); player.play(svg, reduced); return; }
       svg.style.setProperty('--dir', -1); void svg.getBoundingClientRect(); svg.classList.add('play');
     });
-    info.innerHTML = `<h3>${esc(it.title)}</h3>${it.meta ? `<p class="meta">${esc(it.meta)}</p>` : ''}${it.desc.map((p) => `<p>${esc(p)}</p>`).join('')}<button class="vb-pill dex-open" type="button">${esc(W('open'))}</button>`;
-    $('.dex-open', info).addEventListener('click', () => open(it));
   }
 
   // search: every project's words; the matches side by side, each with the sentences it was found in
@@ -1270,7 +1283,7 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   function search() {
     const q = norm(input.value.trim());
     const on = q.length >= 2;
-    flow.hidden = on; info.hidden = on; results.hidden = !on;
+    flow.hidden = on; info.hidden = on; results.hidden = !on; $('.dex-hint', box).hidden = on;
     if (!on) { kick(); return; }
     const hits = [];
     for (const it of items) {
