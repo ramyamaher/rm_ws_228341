@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -71,6 +72,15 @@ input[type=range]:disabled{opacity:.35}
 .facts{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
 .fact{padding:10px 12px; border-radius:14px; background:#f8fafc; box-shadow:inset 0 0 0 1px var(--line)}
 .fact b{display:block; font-size:16px; letter-spacing:-.01em} .fact small{display:block; font-size:12px; color:var(--ink-2); margin-top:1px} .fact span{font-size:11.5px; color:var(--ink-3)}
+html.embed body{background:#fff}
+html.embed .wrap{max-width:none; padding:0}
+html.embed .back, html.embed .head, html.embed .about{display:none}
+html.embed #three{height:470px}
+html.embed .chart{height:320px}
+html.embed .chart.small{height:165px}
+@media (max-width:900px){ html.embed #three{height:420px} }
+html.embed body{min-height:0}
+html.embed .stage{border:0; border-radius:0; box-shadow:none; padding:clamp(4px,1vw,12px)}
 .about{margin:22px 4px 0; max-width:760px; color:var(--ink-2); font-size:15.5px; line-height:1.65}
 /* the logo writes itself, holds, and writes itself again */
 .logo path{stroke-dasharray:1; stroke-dashoffset:1; animation:write 1.6s ease-in-out forwards}
@@ -145,6 +155,7 @@ const lerpT = (T, a, c) => { for (let i = 1; i < T.length; i++) { const a0 = T[i
 const Z0 = 0.04;   // the model's floor sits 4 cm above zero
 const coreB = (th) => Math.max(0, lerpT(CORE, th, 1) - Z0), coreT = (th) => lerpT(CORE, th, 2) - Z0;
 const PAR0 = -68, PAR1 = 200, CORE0 = 345, CORE1 = -66.5;
+const pIn = 1.95, pOut = 2.10;   // the parapet upstairs, outside the climbing wall (1.80 to 1.95), which ends under the floor
 // the outer wall's bottom edge, as built in the model: a straight helix that runs into the ground
 const WALL0 = 345, bottomL = (th) => 2.74 - 0.01091 * th;
 const ZM = 3.63 - .3;                         // underside of the upper floor and of the parapet standing on it
@@ -299,12 +310,12 @@ function build() {
   }
   lines.push([V3(M.rOut, G.wall0, 0), V3(M.rOut, G.wall0, E.tops[0])], [V3(rOuter, G.wall0, 0), V3(rOuter, G.wall0, E.tops[0])], [V3(M.rOut, G.wall0, E.tops[0]), V3(rOuter, G.wall0, E.tops[0])], [V3(M.rOut, G.wall0, 0), V3(rOuter, G.wall0, 0)]);
   // one ribbon: the parapet round the opening, its curve in to the eye, and the middle wall winding down with the stair
-  const p = ring(PAR0, PAR1, M.rOut, rOuter, () => M.floor, () => E.top, 180); mesh(p.pos, p.idx);
-  for (const r of [M.rOut, rOuter]) lines.push(...arc(r, PAR0, PAR1, E.top));
-  lines.push(...arc(rOuter + .002, PAR0, PAR1, M.floor + .003));                                  // where it stands on the floor
-  lines.push(...arc(M.rOut - .002, PAR0, G.end, M.floor + .003));                                   // and on the arrival, inside
-  lines.push([V3(M.rOut, PAR0, M.floor), V3(M.rOut, PAR0, E.top)], [V3(rOuter, PAR0, M.floor), V3(rOuter, PAR0, E.top)], [V3(M.rOut, PAR0, E.top), V3(rOuter, PAR0, E.top)], [V3(M.rOut, PAR0, M.floor + .003), V3(rOuter, PAR0, M.floor + .003)]);
-  const cF = (a) => lerpT(CURVE, a, 1), cS = (a) => lerpT(CURVE, a, 2);
+  const p = ring(PAR0, PAR1, pIn, pOut, () => M.floor, () => E.top, 180); mesh(p.pos, p.idx);
+  for (const r of [pIn, pOut]) lines.push(...arc(r, PAR0, PAR1, E.top));
+  for (const r of [pIn - .002, pOut + .002]) lines.push(...arc(r, PAR0, PAR1, M.floor + .003));     // where it stands on the floor, both sides
+  lines.push([V3(pIn, PAR0, M.floor), V3(pIn, PAR0, E.top)], [V3(pOut, PAR0, M.floor), V3(pOut, PAR0, E.top)], [V3(pIn, PAR0, E.top), V3(pOut, PAR0, E.top)], [V3(pIn, PAR0, M.floor + .003), V3(pOut, PAR0, M.floor + .003)]);
+  const shift = (a) => { const u = Math.min(1, Math.max(0, (a - PAR1) / 26)); return (pIn - M.rOut) * (1 - u * u * (3 - 2 * u)); };
+  const cF = (a) => lerpT(CURVE, a, 1) + shift(a), cS = (a) => lerpT(CURVE, a, 2) + shift(a);
   const cv = ring(PAR1, 293.5, cS, cF, () => M.floor, () => E.top, 90); mesh(cv.pos, cv.idx);
   { const pts = []; for (let i = 0; i <= 90; i++) { const a = PAR1 + (293.5 - PAR1) * i / 90; pts.push(V3(cF(a) + .002, a, M.floor + .003)); } for (let i = 1; i < pts.length; i++) lines.push([pts[i - 1], pts[i]]); }
   for (const f of [cF, cS]) { const pts = []; for (let i = 0; i <= 90; i++) { const a = PAR1 + (293.5 - PAR1) * i / 90; pts.push(V3(f(a), a, E.top)); } for (let i = 1; i < pts.length; i++) lines.push([pts[i - 1], pts[i]]); }
@@ -327,10 +338,11 @@ function build() {
   // one handrail all the way round: up the outer wall, along the parapet, round its end, back along its outside,
   // round the curve and down the middle wall to the first step
   const loop = [], P3 = (v) => loop.push(v.x, v.y, v.z), zr = M.floor + M.rail;
-  for (let th = M.start; th >= PAR0; th -= 1) P3(V3(M.rOut - .06, th, railZ(th, 23)));
-  { const a = PAR0 * D2R, u = [Math.cos(a), Math.sin(a)], v = [-Math.sin(a), Math.cos(a)], rho = (rOuter - M.rOut + .12) / 2;
-    for (let k = 1; k < 24; k++) { const s = Math.PI * (1 - k / 24), x = rMid * u[0] + rho * (Math.cos(s) * u[0] - Math.sin(s) * v[0]), y = rMid * u[1] + rho * (Math.cos(s) * u[1] - Math.sin(s) * v[1]); P3(new THREE.Vector3(x, zr, -y)); } }
-  for (let th = PAR0; th <= PAR1; th += 1) P3(V3(rOuter + .06, th, zr));
+  const railR = (th) => { const u = Math.min(1, Math.max(0, (G.end + 30 - th) / 30)); return M.rOut - .06 + (pIn - M.rOut) * u * u * (3 - 2 * u); };
+  for (let th = M.start; th >= PAR0; th -= 1) P3(V3(railR(th), th, railZ(th, 23)));
+  { const a = PAR0 * D2R, u = [Math.cos(a), Math.sin(a)], v = [-Math.sin(a), Math.cos(a)], rho = (pOut - pIn + .12) / 2, rc = (pIn + pOut) / 2;
+    for (let k = 1; k < 24; k++) { const s = Math.PI * (1 - k / 24), x = rc * u[0] + rho * (Math.cos(s) * u[0] - Math.sin(s) * v[0]), y = rc * u[1] + rho * (Math.cos(s) * u[1] - Math.sin(s) * v[1]); P3(new THREE.Vector3(x, zr, -y)); } }
+  for (let th = PAR0; th <= PAR1; th += 1) P3(V3(pOut + .06, th, zr));
   for (let a = PAR1; a <= 293.5; a += .5) P3(V3(cF(a) + .06, a, zr));
   for (let th = CORE1; th <= M.start; th += 1) P3(V3(M.rIn + .06, th, railZ(th, 40)));
   { const rg = new LineGeometry(); rg.setPositions(loop);
@@ -340,7 +352,7 @@ function build() {
   const face = (n, f) => Array.from({ length: n + 1 }, (_, i) => { const [r, th, zb, zt] = f(i / n); return [r * Math.cos(th * D2R), r * Math.sin(th * D2R), zb, zt]; });
   silFaces = [
     ...[rOuter, M.rOut].map((r) => E.xs.map((s, i) => [r * Math.cos(s.th * D2R), r * Math.sin(s.th * D2R), E.bot[i], Math.min(E.tops[i], ZM)])),
-    ...[rOuter, M.rOut].map((r) => face(268, (u) => [r, PAR0 + (PAR1 - PAR0) * u, M.floor, E.top])),
+    ...[pOut, pIn].map((r) => face(268, (u) => [r, PAR0 + (PAR1 - PAR0) * u, M.floor, E.top])),
     ...[cF, cS].map((f) => face(190, (u) => { const a = PAR1 + (293.5 - PAR1) * u; return [f(a), a, M.floor, E.top]; })),
     ...[M.rIn, .25].map((r) => face(410, (u) => { const th = CORE0 + (CORE1 - CORE0) * u; return [r, th, coreB(th), coreT(th)]; })),
   ];
@@ -485,7 +497,11 @@ function resize() {
   for (const m of [FAT, RAIL, RAIL_HIDDEN]) m.resolution.set(r.width, r.height);
 }
 new ResizeObserver(() => { resize(); if (G) drawChart(); }).observe(document.querySelector('.stage'));
-(function loop() { requestAnimationFrame(loop); ctl.update(); updateSil(); ren.render(scene, cam); })();
+const EMBED = document.documentElement.classList.contains('embed');
+if (EMBED) { ctl.enableZoom = false; ren.domElement.style.touchAction = 'pan-y'; document.querySelector('.hint').textContent = 'Drag to turn'; }
+let inView = true;
+new IntersectionObserver((es) => { inView = es[0].isIntersecting; }).observe(host);
+(function loop() { requestAnimationFrame(loop); if (!inView) return; ctl.update(); updateSil(); ren.render(scene, cam); })();
 show(); resize(); build(); logo();
 window.__ready = true;
 </script>

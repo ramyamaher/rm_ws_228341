@@ -317,8 +317,6 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
     slides.forEach((s, j) => s.setAttribute('aria-hidden', j !== i));
     car.style.height = slides[i].offsetHeight + 'px';
     if (i !== old) playLogos(car, (i < old ? 1 : -1) * (rtl ? -1 : 1));
-    // on a phone the page scrolls; a new project starts at the top of its card
-    if (i !== old && fromUser && matchMedia('(max-width:900px)').matches) car.closest('.card').scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
     onChange && onChange(i, old, fromUser);
   }
   prev.addEventListener('click', () => show(i - 1));
@@ -545,6 +543,22 @@ $$('.b8-build').forEach(fig => {
     new MutationObserver(theme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     size(); theme(); place();
   }
+});
+
+// The staircase's interactive model, live in its card: loaded when the card first comes into view,
+// and as tall as its content at any width (same origin, so its height can be read directly)
+$$('.ss-live iframe').forEach(fr => {
+  const io = new IntersectionObserver(es => {
+    if (!es.some(e => e.isIntersecting)) return;
+    io.disconnect();
+    fr.addEventListener('load', () => {
+      const doc = fr.contentDocument; if (!doc) return;
+      const fit = () => { fr.style.height = Math.ceil(doc.querySelector('.wrap').getBoundingClientRect().height) + 'px'; };
+      new ResizeObserver(fit).observe(doc.querySelector('.wrap')); fit();
+    });
+    fr.src = fr.dataset.src;
+  }, { rootMargin: '300px' });
+  io.observe(fr);
 });
 
 /* ================= apps ================= */
