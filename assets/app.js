@@ -522,7 +522,19 @@ $$('.b8-build').forEach(fig => {
     // the upper level, the ramp, and the red wall with its two openings
     blk(0, 141, -59.6, 164.8, -1, 0); blk(141, 146.7, 76.7, 111.2, -1, 0); blk(141, 146.7, -33.1, 1.4, -1, 0);
     blk(-22.1, 0, -59.6, -14.2, -2.1, -1.1);
-    solid([...S[55], ...S[51], ...S[52], ...S[53], ...S[54], ...S[43], ...S[45], ...S[48], ...S[41]]);
+    solid([...S[55], ...S[51], ...S[52], ...S[53], ...S[54], ...S[48], ...S[41]]);
+    const plate = (outline, holes, z0, z1) => {
+      const s = new THREE.Shape(outline.map(([x, y]) => new THREE.Vector2(x, y))); for (const h of holes) s.holes.push(new THREE.Path(h.map(([x, y]) => new THREE.Vector2(x, y))));
+      const g = new THREE.ExtrudeGeometry(s, { depth: z1 - z0, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, z0, 0); add(g, 30);
+    };
+    plate([[-80.4, -64], [-22.1, -64], [-22.1, 186], [189.4, 186], [189.4, 324.6], [-80.4, 324.6]], [], 11, 12);
+    const XW = -86.1, ZT = 67;                                                     // the corridor wall, up to the floor above
+    { const s = new THREE.Shape([[ -64, 12], [324.6, 12], [324.6, ZT], [-64, ZT]].map(([u, v]) => new THREE.Vector2(u, v)));
+      const doors = [[40, 74.5], [120, 154.5]];
+      for (const [u0, u1] of doors) s.holes.push(new THREE.Path([[u0, 12.01], [u1, 12.01], [u1, 56], [u0, 56]].map(([u, v]) => new THREE.Vector2(u, v))));
+      const g = new THREE.ExtrudeGeometry(s, { depth: 5.7, bevelEnabled: false, curveSegments: 1 });
+      g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, XW, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30);
+      for (const [u0, u1] of doors) { const um = (u0 + u1) / 2; blk(XW + 1.6, XW + 4.1, u0 + 1, um - .15, 12, 56); blk(XW + 1.6, XW + 4.1, um + .15, u1 - 1, 12, 56); } }
     // the doors: 2.2 m double doors in a frame, the opening above them closed with wall
     for (const [y0, y1, z1] of [[76.7, 111.2, 56.87], [-33.1, 1.4, 53.65]]) {
       blk(141, 146.7, y0, y1, 44, z1);
@@ -531,27 +543,26 @@ $$('.b8-build').forEach(fig => {
     }
     // the metal stair, a U against the red wall: the lower flight away from the wall rises from the hall to a landing,
     // the upper flight turns back along the wall, over the first door, to the gallery; 20 risers of 17.5 cm, 1.1 m wide
-    const RISE = 3.5, GO = 5.6, W = 22;
+    const RISE = 3.625, GO = 5.6, W = 22, LAND = 26;
     const flight = (x0, x1, yA, zA, dir, n) => {
       for (let k = 0; k < n; k++) { const y = yA + dir * k * GO, z = zA + (k + 1) * RISE; blk(x0, x1, Math.min(y, y + dir * GO), Math.max(y, y + dir * GO), z - .8, z); }
       const yB = yA + dir * n * GO, zB = zA + n * RISE;
       for (const x of [x0, x1]) { line([x, yA, zA], [x, yB, zB], segs); line([x, yA, zA - 3], [x, yB, zB - 3], segs); }
       return [yB, zB];
     };
-    const yF = 103, [yL, zL] = flight(119 - W, 119, yF, 0, -1, 10);            // lower flight: from the hall, south
-    blk(119 - W, 141, yL - 12, yL, zL - .8, zL);                                  // landing
-    const [yT, zT] = flight(119, 141, yL, zL, 1, 10);                             // upper flight: back north, against the wall
-    blk(119, 141, yT, yT + 12, zT - .8, zT);                                      // top landing
+    const yF = 185.6, [yL, zL] = flight(119 - W, 119, yF, 12, -1, 8);         // lower flight: from the entrance level, south
+    blk(119 - W, 141, yL - LAND, yL, zL - .8, zL);                                // landing
+    const [yT, zT] = flight(119, 141, yL, zL, 1, 8);                              // upper flight: back north, against the wall, to level 2
     // railings: posts and a handrail 1 m above the treads, on the stair's open sides
     const rail = (pts) => { for (let i = 1; i < pts.length; i++) line([pts[i - 1][0], pts[i - 1][1], pts[i - 1][2] + 20], [pts[i][0], pts[i][1], pts[i][2] + 20]); for (const [x, y, z] of pts) line([x, y, z], [x, y, z + 20]); };
     const along = (x, y0, z0, y1, z1, n) => Array.from({ length: n + 1 }, (_, i) => [x, y0 + (y1 - y0) * i / n, z0 + (z1 - z0) * i / n]);
-    rail(along(119 - W, yF, 0, yL, zL, 8)); rail([[119 - W, yL, zL], [119 - W, yL - 12, zL], [141, yL - 12, zL]]);
-    rail(along(119, yL, zL, yT, zT, 8)); rail([[119, yT, zT], [119, yT + 12, zT]]);
+    rail(along(119 - W, yF, 12, yL, zL, 8)); rail([[119 - W, yL, zL], [119 - W, yL - LAND, zL], [141, yL - LAND, zL]]);
+    rail(along(119, yL, zL, yT, zT, 8));
     // the bridge across the glass front at gallery height: 1.8 m wide, with posts under its far end
-    const zB = zT, by0 = -59, by1 = by0 + 36;
-    blk(-22.1, 141, by0, by1, zB - 3, zB);
-    for (const y of [by0 + .5, by1 - .5]) rail(Array.from({ length: 12 }, (_, i) => [-22.1 + 163.1 * i / 11, y, zB]));
-    for (const y of [by0 + 2, by1 - 2]) blk(-21.6, -19.6, y - 1, y + 1, -1.1, zB - 3);
+    const zB = zT, by1 = -23;
+    plate([[XW, -59.6], [146.7, -59.6], [146.7, 250], [XW, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
+    const railLine = (a, b, n) => rail(Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n, zB]));
+    railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [119 - W, yT], 9);
     // the glass front: its steel grid
     for (let x = -22.1; x <= 146.7; x += 21.1) line([x, -59.6, -1.1], [x, -59.6, 94.6], segs);
     for (const z of [-1.1, 26, 46, 76, 94.6]) line([-22.1, -59.6, z], [146.7, -59.6, z], segs);

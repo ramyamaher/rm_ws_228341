@@ -372,7 +372,8 @@
   "Bespoke Spiral Staircase in Berlin logo: the outer wall drawn as one line": "Logotipo de la escalera de caracol a medida en Berlín: el muro exterior dibujado con una sola línea",
   "The interactive model: the staircase in 3D and its outer wall unrolled": "El modelo interactivo: la escalera en 3D y su muro exterior desplegado",
   "Place the boards": "Colocar los tableros",
-  "The 3D model of the bar: its boards fall into place, layer by layer, as you move the slider": "El modelo 3D de la barra: sus tableros encajan en su sitio, capa a capa, al mover el control deslizante"
+  "The 3D model of the bar: its boards fall into place, layer by layer, as you move the slider": "El modelo 3D de la barra: sus tableros encajan en su sitio, capa a capa, al mover el control deslizante",
+  "The model is simplified: its layers are 5 cm thick, while the bar itself is built from 2 cm boards.": "El modelo está simplificado: sus capas tienen 5 cm de grosor, mientras que la barra está hecha de tableros de 2 cm."
  },
  "plurals": {
   "place": {
