@@ -647,10 +647,16 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
   }
 });
 
+// Layers of Egypt: the plan opens large; each dot opens the render seen from there, and the arrows walk the four in order
+$$('.vb-plan').forEach(box => {
+  const dots = $$('.vb-dot', box), set = dots.map(d => ({ f: d.dataset.f, c: d.getAttribute('aria-label') })), open = $('.vb-open', box);
+  dots.forEach((d, k) => d.addEventListener('click', () => openLb(set, k, d)));
+  open.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-plan-full.webp', c: open.getAttribute('aria-label') }], 0, open));
+});
+
 // Layers of Egypt: the entry's own city, from the competition's Rhino model (assets/data/cairo-city.json), in the frame of
-// its render, with the existing city around it. The slider builds it in the order of the three rules: the vernacular
-// fabric with open lots (Grid with Greens), the plots along the axes and round the park (Growing City), then the business
-// district (Voronoi City). Drawn like the other models; a short line under the slider says what is being built
+// its render, with the existing city around it. The buildings come baked, in the order the three rules raise them; the
+// slider only shows the first so many. Drawn like the other models; a line under the slider says which rule is building
 $$('.city-build').forEach(fig => {
   const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig), steps = $$('.city-step span', fig);
   let started = false;
