@@ -645,7 +645,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-pill:disabled{opacity:.35; cursor:default; transform:none}
 .vb-grow{overflow:hidden; transition:height .55s cubic-bezier(.2,.8,.2,1)}
 .vb-poem{white-space:pre-line; height:7.6em; overflow-y:auto; margin-top:10px; padding:8px 12px; border-left:2px solid var(--line);
-  font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); scrollbar-width:thin}
+  font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); border-left-color:transparent; transition:border-color .5s}
+.vb-poem.on{border-left-color:var(--line)}
 .vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; animation:vbOpen .45s ease-out}
 .vb-steps .vb-nav{grid-column:1 / -1}
 @media (max-width:760px){.vb-steps{grid-template-columns:1fr; gap:14px}}
@@ -1150,7 +1151,7 @@ For every cloud
 there is a silver lining.
 A bright infinitely distant light.
 There comes a place,
-an Elysium
+an Elysium,
 destined to guide.</script></section>
                       <section data-pics="vb-005"><h4>Élysée</h4><p>Le labyrinthe s'ouvre sur la salle blanche. Une longue table porte une maquette de tout Le Caire, où une zone reste non bâtie, avec des casques de réalité virtuelle à côté. Le blanc lumineux et la table, qui rappellent une salle d'opération d'hôpital, comme dans un état de suspension, disent l'espoir pour l'avenir du Caire et ramènent à la vie le passé glorieux de la ville.</p></section>
                       <section data-pics="vb-007"><h4>L'avenir du Caire</h4><p>La zone vide, construite en réalité virtuelle en trois étapes : la ville vernaculaire avec plus d'espaces libres et de parcs, la croissance le long des axes principaux avec les bâtiments les plus hauts sur ceux-ci, et un quartier d'affaires de tours. La maquette ci-dessus la construit quand vous déplacez le curseur.</p></section>

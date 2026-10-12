@@ -687,7 +687,7 @@ const VB_FLOW = (() => {
 })();
 function vbFlow(svg) {
   const NS = 'http://www.w3.org/2000/svg', g = $('.vb-bands', svg), K = 7;   // the glow in K pieces, each fainter than the one before
-  const LOOP = { v: 30, band: 46 }, LAB = { v: 14, band: 30, hold: 1.1 };   // speeds in units a second; glow lengths
+  const LOOP = { v: 30, band: 46 }, LAB = { v: 14, band: 30 };   // speeds in units a second; glow lengths
   const line = pts => {
     const e = document.createElementNS(NS, 'g'), d = 'M' + pts.map(p => p.map(v => v.toFixed(2)).join(' ')).join('L');
     for (let k = 0; k < K; k++) { const p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.style.opacity = (Math.pow(1 - k / K, 1.6)).toFixed(3); e.append(p); }
@@ -705,7 +705,7 @@ function vbFlow(svg) {
     if (F.loop) { parts = [line(F.loop)]; return; }
     // the labyrinth: each group walks one unbroken line through all the legs, so nothing jumps when they set off again
     const groups = [0, 1].map(gi => F.legs.flatMap((leg, k) => (k ? leg[gi].slice(1) : leg[gi])));
-    const legLen = F.legs.map(leg => leg.map(len)), dur = legLen.map(l => Math.max(...l) / LAB.v + LAB.hold);
+    const legLen = F.legs.map(leg => leg.map(len)), dur = legLen.map(l => Math.max(...l) / LAB.v);   // they go on the moment the later one arrives
     dur[dur.length - 1] += LAB.band / LAB.v;   // the last leg runs on into the white room and out of sight
     lab = { legLen, dur, total: dur.reduce((x, y) => x + y, 0) + .6 };
     parts = groups.map(line);
@@ -717,20 +717,16 @@ function vbFlow(svg) {
       const b = parts[0], s = (t % ((b.len + LOOP.band) / LOOP.v + .6)) * LOOP.v;
       draw(b, s, LOOP.band);
     } else {
-      // leg after leg: both groups leave a meeting point together, their glows growing from it; the first to arrive
-      // draws its tail in and waits; when the other is there too they set off again
-      let c = t % lab.total;
+      // leg after leg: both groups leave a meeting point together; the first to arrive draws its tail in and waits, and
+      // the moment the other's head arrives they set off again, each tail simply following on
+      const c = t % lab.total;
       parts.forEach((b, gi) => {
-        let off = 0, c2 = c;
+        let off = 0, c2 = c, tl = 0;
         for (let k = 0; k < lab.dur.length; k++) {
-          const L = lab.legLen[k][gi], last = k === lab.dur.length - 1;
-          if (c2 < lab.dur[k] || last) {
-            const d = c2 * LAB.v;
-            if (last || d <= L) draw(b, off + d, Math.min(LAB.band, d));
-            else draw(b, off + L, Math.min(LAB.band, L) * Math.max(0, 1 - (d - L) / LAB.v / .85));   // drawn in within .85 s, before the wait ends
-            break;
-          }
-          c2 -= lab.dur[k]; off += L;
+          const L = lab.legLen[k][gi], last = k === lab.dur.length - 1, d = Math.min(c2, lab.dur[k]) * LAB.v;
+          const moving = last || d <= L, tlNow = moving ? Math.min(LAB.band, tl + d) : Math.min(LAB.band, tl + L) * Math.max(0, 1 - (d - L) / LAB.v / .85);
+          if (c2 < lab.dur[k] || last) { draw(b, off + (moving ? d : L), tlNow); break; }
+          tl = tlNow; c2 -= lab.dur[k]; off += L;
         }
       });
     }
@@ -752,11 +748,11 @@ $$('.vb-story').forEach(st => {
   let typing = null;
   // type a step's words a letter at a time, with the limericks' caret; the space is kept by the other steps' words
   const poemOf = s => { const src = $('.vb-poem-src', s); return src ? [$('.vb-poem', s), src.textContent.trim()] : null; };
-  const settle = () => secs.forEach((s, j) => { $('p', s).textContent = words[j]; const pm = poemOf(s); if (pm) { pm[0].textContent = pm[1]; pm[0].scrollTop = 0; } });
+  const settle = () => secs.forEach((s, j) => { $('p', s).textContent = words[j]; const pm = poemOf(s); if (pm) { pm[0].textContent = pm[1]; pm[0].scrollTop = 0; pm[0].classList.remove('on'); } });
   function type(i) {
     clearTimeout(typing); settle();
-    if (reduced) return;
     const pm = poemOf(secs[i]);
+    if (reduced) { if (pm) pm[0].classList.add('on'); return; }
     const into = (el, text, then, follow) => {
       const txt = document.createTextNode(''), caret = document.createElement('span'); caret.className = 'caret';
       el.textContent = ''; el.append(txt, caret);
@@ -770,8 +766,8 @@ $$('.vb-story').forEach(st => {
       };
       typing = setTimeout(tick, 300);
     };
-    if (pm) pm[0].textContent = '';
-    into($('p', secs[i]), words[i], pm ? () => into(pm[0], pm[1], null, true) : null);
+    if (pm) { pm[0].textContent = ''; pm[0].classList.remove('on'); }
+    into($('p', secs[i]), words[i], pm ? () => { pm[0].classList.add('on'); into(pm[0], pm[1], null, true); } : null);
   }
   // the story section opens and closes by growing and shrinking; the page does not scroll with it
   let growing = null;
