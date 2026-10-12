@@ -453,7 +453,7 @@ function resize() {
 }
 new ResizeObserver(() => { resize(); if (G) drawChart(); }).observe(document.querySelector('.stage'));
 const EMBED = document.documentElement.classList.contains('embed');
-if (EMBED) { ctl.enableZoom = false; ren.domElement.style.touchAction = 'pan-y'; document.querySelector('.hint').textContent = tr('Drag to turn'); }
+if (EMBED) { ctl.enableZoom = false; ren.domElement.style.touchAction = 'none'; document.querySelector('.hint').textContent = tr('Drag to turn'); }
 let inView = true;
 new IntersectionObserver((es) => { inView = es[0].isIntersecting; }).observe(host);
 (function loop() { requestAnimationFrame(loop); if (!inView) return; ctl.update(); updateSil(); ren.render(scene, cam); })();

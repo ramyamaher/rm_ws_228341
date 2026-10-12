@@ -528,7 +528,7 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
     cam.position.set(-12, 40, -168);                                // on the ramp, looking at the glass front, as in the render
     const ctl = new OrbitControls(cam, ren.domElement);
     ctl.target.set(96, 11, -38); ctl.enablePan = false; ctl.minDistance = 25; ctl.maxDistance = 420; ctl.maxPolarAngle = Math.PI * .49; ctl.update();   // zooms in on the bar
-    ren.domElement.style.touchAction = 'pan-y';
+    ren.domElement.style.touchAction = 'none';   // a drag that starts on the model turns it; outside it, the page scrolls
     const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
     const EDGE = new THREE.LineBasicMaterial({ color: '#94a3b8' }), THIN = new THREE.LineBasicMaterial({ color: '#b6c0ce' });
     const P = (x, y, z) => [x, z, -y];                           // the model's plan x, y and height z, in three's axes
@@ -834,7 +834,13 @@ $$('.city-build').forEach(fig => {
   const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
   io.observe(box);
   // each stage's words, and below them how its rule grows the city
-  const say = (ph) => rows.forEach((r) => r.forEach((s, i) => s.classList.toggle('on', i === ph)));
+  let shownPh = 0;
+  const say = (ph) => {
+    rows.forEach((r) => r.forEach((s, i) => s.classList.toggle('on', i === ph)));
+    // when the city moves on to another stage, its words glow through the rainbow once
+    if (ph !== shownPh && !reduced) rows.forEach((r) => { const s = r[ph]; s.classList.remove('glow'); void s.offsetWidth; s.classList.add('glow'); s.addEventListener('animationend', () => s.classList.remove('glow'), { once: true }); });
+    shownPh = ph;
+  };
   say(0);
   async function start() {
     const [THREE, { OrbitControls }, { mergeGeometries }, D] = await Promise.all([
@@ -854,7 +860,7 @@ $$('.city-build').forEach(fig => {
     const ctl = new OrbitControls(cam, ren.domElement);
     cam.position.set(2411, 5000, 11250); ctl.target.set(2411, 0, -1000);
     ctl.enablePan = false; ctl.minDistance = 3000; ctl.maxDistance = 30000; ctl.maxPolarAngle = Math.PI * .46; ctl.update();
-    ren.domElement.style.touchAction = 'pan-y';
+    ren.domElement.style.touchAction = 'none';   // a drag that starts on the model turns it; outside it, the page scrolls
     const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
     // nine thousand buildings: their lines a shade lighter than the other models', or the city reads as grey
     const EDGE = new THREE.LineBasicMaterial({ color: '#aab5c4' }), FAINT = new THREE.LineBasicMaterial({ color: '#d5dce6' });
