@@ -269,6 +269,7 @@ html[dir="rtl"] a.chip:hover::after{transform:translateX(-3px)}
 .arrow:hover{transform:scale(1.08)}
 .arrow:disabled{opacity:.3; cursor:default; transform:none}
 .dots{display:flex; gap:6px; justify-content:center; margin-top:18px}
+.wrap > .glass.card > .dots{display:none}
 .dots i{width:7px; height:7px; border-radius:99px; background:var(--line); transition:width .35s var(--ease), background .35s}
 html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .dots i.on, html:not([data-theme="dark"]) .dots i.on{width:22px; background:var(--ink)}
@@ -607,8 +608,38 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-cut:hover, .vb-cut:focus-visible{color:#159a7e}
 .vb-cut svg{display:block; width:100%; overflow:visible}
 .vb-cut path{fill:none; stroke:currentColor; stroke-width:5}
-.vb-cut path.tip{fill:currentColor; stroke:none}
-.vb-cut circle.pulse{fill:#22c3a0; transform-box:fill-box; transform-origin:center; animation:vbPulse 2.2s ease-out infinite}
+.vb-cut path.vb-tip{fill:currentColor; stroke:none; opacity:1}
+.vb-zones{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0; transition:opacity .45s}
+.vb-duo{margin-top:22px}
+.vb-duo .vb-plan{margin-top:0}
+.vb-duo:has(> .vb-side:not([hidden])){display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:16px; align-items:center}
+.vb-side{display:block; padding:0; border:0; background:none; cursor:zoom-in; border-radius:12px; overflow:hidden; aspect-ratio:16/10}
+.vb-side img{display:block; width:100%; height:100%; object-fit:cover; animation:vbIn .45s ease-out}
+@keyframes vbIn{from{opacity:0}}
+@media (max-width:760px){.vb-duo:has(> .vb-side:not([hidden])){grid-template-columns:1fr; gap:12px}}
+.vb-zones g{display:none}
+.vb-zones .dim{fill:rgba(10,12,16,.5); fill-rule:evenodd}
+.vb-zones .lit{fill:rgba(34,195,160,.16); fill-rule:evenodd; stroke:#22c3a0; stroke-width:2.5; vector-effect:non-scaling-stroke; animation:vbLit 2.2s ease-in-out infinite}
+@keyframes vbLit{50%{fill:rgba(34,195,160,.3)}}
+.vb-plan[data-step="1"] .vb-zones .z1, .vb-plan[data-step="2"] .vb-zones .z2, .vb-plan[data-step="3"] .vb-zones .z3{display:inline}
+.vb-plan[data-step="1"] .vb-zones, .vb-plan[data-step="2"] .vb-zones, .vb-plan[data-step="3"] .vb-zones{opacity:1}
+.vb-plan[data-step] .vb-dot, .vb-plan[data-step] .vb-cut{opacity:0; pointer-events:none; transition:opacity .3s}
+.vb-plan[data-step="1"] .vb-dot[data-zone="1"], .vb-plan[data-step="2"] .vb-dot[data-zone="2"], .vb-plan[data-step="3"] .vb-dot[data-zone="3"]{opacity:1; pointer-events:auto}
+.vb-story{display:flex; flex-direction:column; align-items:center; margin-top:14px}
+.vb-pill{appearance:none; cursor:pointer; white-space:nowrap; border-radius:999px; padding:9px 18px; font:inherit; font-size:14px; font-weight:600; line-height:1.2;
+  background:var(--btn-bg); color:var(--ink); border:1px solid var(--btn-border); box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .2s cubic-bezier(.3,1.6,.5,1), opacity .2s}
+.vb-pill:hover{transform:scale(1.04)}
+.vb-pill:disabled{opacity:.35; cursor:default; transform:none}
+.vb-steps{width:100%}
+.vb-texts{display:grid}
+.vb-texts section{grid-area:1/1; visibility:hidden}
+.vb-texts section.on{visibility:visible}
+.vb-texts h4{margin:0 0 6px; font-size:16px; font-weight:650}
+.vb-texts p{margin:0; font-size:14.5px; line-height:1.55; color:var(--ink-2, var(--ink))}
+.vb-nav{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px}
+.vb-n{font-size:13px; font-weight:600; color:var(--ink-3); margin-right:6px; font-variant-numeric:tabular-nums}
+.vb-cut svg{animation:vbGlow 2.2s ease-out infinite}
+@keyframes vbGlow{0%{filter:drop-shadow(0 0 0 rgba(34,195,160,.9))}60%{filter:drop-shadow(0 0 7px rgba(34,195,160,.55))}100%{filter:drop-shadow(0 0 10px rgba(34,195,160,0))}}
 .vb-cut text{fill:currentColor; font-size:15px; font-weight:700; text-anchor:middle}
 .b8-ctl label{font-size:14px; font-weight:650; white-space:nowrap}
 .b8-ctl input{flex:1; min-width:0; -webkit-appearance:none; appearance:none; height:6px; border-radius:99px; background:color-mix(in srgb, var(--ink) 13%, transparent); outline:none}
@@ -729,7 +760,8 @@ html.fit-tab body{min-height:0}
   .slide > .thumbs, .slide > .b8-row, .slide > .ss-live{order:1; margin-top:0; margin-bottom:18px}
   .slide > .b8-build{order:1; margin:0 0 18px}
   .slide > .city-build{order:1; margin:0 0 18px}
-  .slide > .vb-plan{order:1; margin:0 0 18px}
+  .slide > .vb-duo{order:1; margin:0 0 12px}
+  .slide > .vb-story{order:1; margin:0 0 18px}
   .slide > .p-body, .slide > .a-body, .slide > .prose{order:2}
   .slide > .prize-line{order:3}
   .slide > .chips{order:4}
@@ -1060,14 +1092,30 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <p class="city-step" aria-live="polite"><span>المرحلة 1، المدينة الشعبية: بيوت منخفضة متناثرة عشوائيًا ومتجهة في كل اتجاه، كما في أحياء القاهرة غير الرسمية، مع ترك قطع أرض خالية كحدائق.</span><span>المرحلة 2، النمو على امتداد المحاور: تتبع قطع الأراضي المحاور الرئيسية والحلقة حول الحديقة؛ والمباني أعلى ما تكون على المحاور وتنخفض كلما ابتعدت عنها.</span><span>المرحلة 3، حي الأعمال: شبكة من قطع الأراضي حول حدائق دائرية، ترتفع فيها الأبراج في مجموعات بين كتل أقل ارتفاعًا.</span></p>
                   <p class="b8-note">مباني المشروع كما في نموذج المسابقة، مع المدينة القائمة من حولها.</p>
                 </figure>
+                <div class="vb-duo">
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="المسقط الأفقي"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="841" alt="المسقط الأفقي" loading="lazy" decoding="async"></button>
-                  <button class="vb-dot" type="button" data-f="vb-004" style="left:82.6%; top:70.7%" aria-label="الماضي: نصوص عن عمارة مصر"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-dot" type="button" data-f="vb-003" style="left:84.5%; top:40.4%" aria-label="صور على جدران المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-dot" type="button" data-f="vb-002" style="left:71.6%; top:53.6%" aria-label="الحاضر: المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-dot" type="button" data-f="vb-005" style="left:67.2%; top:23.0%" aria-label="الجنة: مجسّم المدينة، حيث يبني الزوار المستقبل بالواقع المعزّز"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
-                  <button class="vb-cut l" type="button" style="left:1.9%; top:35.4%" aria-label="القطاع A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><circle class="pulse" cx="20" cy="20" r="7"/><path d="M6 20H34"/><path class="tip" d="M20 4 28 16H12Z"/><text x="20" y="38">A</text></svg></button>
-                  <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="القطاع A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><circle class="pulse" cx="20" cy="20" r="7"/><path d="M6 20H34"/><path class="tip" d="M20 4 28 16H12Z"/><text x="20" y="38">A</text></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-004" data-zone="1" style="left:82.6%; top:70.7%" aria-label="الماضي: نصوص عن عمارة مصر"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-003" data-zone="2" style="left:84.5%; top:40.4%" aria-label="صور على جدران المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-002" data-zone="2" style="left:71.6%; top:53.6%" aria-label="الحاضر: المتاهة"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-dot" type="button" data-f="vb-005" data-zone="3" style="left:67.2%; top:23.0%" aria-label="الجنة: مجسّم المدينة، حيث يبني الزوار المستقبل بالواقع المعزّز"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
+                  <button class="vb-cut l" type="button" style="left:1.9%; top:35.4%" aria-label="القطاع A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
+                  <svg class="vb-zones" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><g class="z1"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M5.3 12H94.9V72.5H60.6V99.2H39.5V72.5H5.3Z M8.6 19.4H91.5V65.8H8.6Z"/><path class="lit" d="M5.3 12H94.9V72.5H60.6V99.2H39.5V72.5H5.3Z M8.6 19.4H91.5V65.8H8.6Z"/></g><g class="z2"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M70.2 19.4H91.5V65.8H70.2Z"/><path class="lit" d="M70.2 19.4H91.5V65.8H70.2Z"/></g><g class="z3"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M8.6 19.4H70.2V65.8H8.6Z"/><path class="lit" d="M8.6 19.4H70.2V65.8H8.6Z"/></g></svg>
+                  <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="القطاع A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
+                </div>
+                <button class="vb-side" type="button" hidden><img alt="الماضي" decoding="async"></button>
+                </div>
+                <div class="vb-story">
+                  <button class="vb-pill vb-go" type="button">افتح القصة</button>
+                  <div class="vb-steps" hidden>
+                    <div class="vb-texts" aria-live="polite">
+                      <section data-pic="vb-004"><h4>الماضي</h4><p>يدخل الزائر ويسير في الممر المحيط بالمتاهة والغرفة البيضاء. تعرض الإسقاطات على جدرانه معماريي مصر في الماضي والطرق التي مورست بها العمارة من قبل.</p></section>
+                      <section data-pic="vb-002"><h4>الحاضر</h4><p>يقود الممر إلى المتاهة: ممرات ضيقة معتمة تملؤها صور المعاناة والاضطراب، وصور عمارة فقدت اتجاهها.</p></section>
+                      <section data-pic="vb-005"><h4>الإليزيوم</h4><p>تنفتح المتاهة على الغرفة البيضاء. تحمل طاولة طويلة نموذجًا للقاهرة كلها تُركت فيه منطقة دون تطوير، وبجانبه نظارات الواقع الافتراضي. يرمز البياض الساطع وحضور الناس في الغرفة إلى الأمل في مستقبل القاهرة.</p></section>
+                      <section data-pic="vb-007"><h4>مستقبل القاهرة</h4><p>المنطقة الفارغة، تُبنى في الواقع الافتراضي على ثلاث مراحل: المدينة الشعبية بمساحات مفتوحة وحدائق أكثر، والنمو على امتداد المحاور الرئيسية حيث أعلى المباني، وحي أعمال من الأبراج. يبنيها النموذج أعلاه كلما حرّكت شريط التمرير.</p></section>
+                    </div>
+                    <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">السابق</button><button class="vb-pill vb-next" type="button">التالي</button><button class="vb-pill vb-end" type="button">إغلاق</button></div>
+                  </div>
                 </div>
               </article>
 
