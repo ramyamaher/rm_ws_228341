@@ -529,12 +529,14 @@ $$('.b8-build').forEach(fig => {
     };
     plate([[-80.4, -64], [-22.1, -64], [-22.1, 186], [189.4, 186], [189.4, 324.6], [-80.4, 324.6]], [], 11, 12);
     const XW = -86.1, ZT = 67;                                                     // the corridor wall, up to the floor above
-    { const s = new THREE.Shape([[ -64, 12], [324.6, 12], [324.6, ZT], [-64, ZT]].map(([u, v]) => new THREE.Vector2(u, v)));
+    for (const [v0, v1, fl] of [[12, ZT, 12], [ZT, 140, 70]]) {                      // level 1, and its copy on level 2
+      const s = new THREE.Shape([[-64, v0], [324.6, v0], [324.6, v1], [-64, v1]].map(([u, v]) => new THREE.Vector2(u, v)));
       const doors = [[40, 74.5], [120, 154.5]];
-      for (const [u0, u1] of doors) s.holes.push(new THREE.Path([[u0, 12.01], [u1, 12.01], [u1, 56], [u0, 56]].map(([u, v]) => new THREE.Vector2(u, v))));
+      for (const [u0, u1] of doors) s.holes.push(new THREE.Path([[u0, Math.max(fl, v0 + .01)], [u1, Math.max(fl, v0 + .01)], [u1, fl + 44], [u0, fl + 44]].map(([u, v]) => new THREE.Vector2(u, v))));
       const g = new THREE.ExtrudeGeometry(s, { depth: 5.7, bevelEnabled: false, curveSegments: 1 });
       g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, XW, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30);
-      for (const [u0, u1] of doors) { const um = (u0 + u1) / 2; blk(XW + 1.6, XW + 4.1, u0 + 1, um - .15, 12, 56); blk(XW + 1.6, XW + 4.1, um + .15, u1 - 1, 12, 56); } }
+      for (const [u0, u1] of doors) { const um = (u0 + u1) / 2; blk(XW + 1.6, XW + 4.1, u0 + 1, um - .15, fl, fl + 44); blk(XW + 1.6, XW + 4.1, um + .15, u1 - 1, fl, fl + 44); }
+    }
     // the red wall
     const RW = 141, RT = 140, LV2 = 70, BAND = 120, GAL = [[15, 60], [75, 115], [130, 170.6]];   // GAL: the openings between the piers
     { const s = new THREE.Shape([[-59.3, 0], [185.6, 0], [185.6, RT], [-59.3, RT], [-59.3, BAND], [0, BAND], [0, LV2], [-59.3, LV2]].map(([u, v]) => new THREE.Vector2(u, v)));
@@ -566,13 +568,12 @@ $$('.b8-build').forEach(fig => {
     rail(along(XS - W, yL, zL, yT, zT, 8)); rail(along(XS, yL, zL, yT, zT, 8));
     // the bridge across the glass front at gallery height: 1.8 m wide, with posts under its far end
     const zB = zT, by1 = -23;
-    plate([[XW, -59.6], [RW, -59.6], [RW, 250], [XW, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
+    plate([[XW + 5.7, -59.6], [RW, -59.6], [RW, 250], [XW + 5.7, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
     const railLine = (a, b, n) => rail(Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n, zB]));
-    railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
+    railLine([XW + 5.7, 250], [RW, 250], 24); railLine([RW, 185.6], [RW, 250], 7); railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
     // the gallery behind the red wall, which the bridge leads to, and the railings in the wall's openings
     for (const [y0, y1] of [...GAL, [by1, 0]]) rail(Array.from({ length: 6 }, (_, k) => [RW + 2.85, y0 + (y1 - y0) * k / 5, LV2]));
-    // curtain walls, their steel grids, closing the building: both ends, the east side past the red wall, and the
-    // upper storey above the corridor wall
+    // curtain walls, their steel grids, closing both ends of the building
     const curtain = (a, b, z0, z1) => {
       const L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(L / 21));
       for (let i = 0; i <= n; i++) { const f = i / n, x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f; line([x, y, z0], [x, y, z1], segs); }
@@ -580,11 +581,12 @@ $$('.b8-build').forEach(fig => {
     };
     curtain([XW, -59.6], [146.7, -59.6], -1.1, RT);
     curtain([XW, 324.6], [146.7, 324.6], 12, RT);
-    curtain([146.7, 185.6], [146.7, 324.6], 12, RT);
-    curtain([XW, -59.6], [XW, 324.6], ZT, RT);
+
     // the railings round the ramp, on both sides, 1 m above its slope
     const rz = (y) => -1.11 + 13.11 * (y + 14.2) / 200.2;
     for (const x of [0.4, -22.1]) rail(Array.from({ length: 26 }, (_, i) => { const y = -14.2 + 200.2 * i / 25; return [x, y, rz(y)]; }));
+    const seam = (x, h) => (x > RW - .2 && x < RW + .2 && h > ZT - .2 && h < 70.2) || (x > XW - .2 && x < XW + 5.9 && h > ZT - .2 && h < ZT + .2);
+    for (let i = segs.length - 6; i >= 0; i -= 6) if (seam(segs[i], segs[i + 1]) && seam(segs[i + 3], segs[i + 4])) segs.splice(i, 6);
     const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3)); scene.add(new THREE.LineSegments(lg, EDGE));
     const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(thin, 3)); scene.add(new THREE.LineSegments(tg, THIN));
     // the boards, lowest first: a board is in the staircase's colours while it moves and white once it lands;
