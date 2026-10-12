@@ -648,11 +648,13 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
   }
 });
 
-// Layers of Egypt: the plan opens large; each dot opens the render seen from there, and the arrows walk the four in order
+// Layers of Egypt: the plan opens large, the section marks open the section; each dot opens the render seen from there,
+// and the arrows walk the four in order
 $$('.vb-plan').forEach(box => {
   const dots = $$('.vb-dot', box), set = dots.map(d => ({ f: d.dataset.f, c: d.getAttribute('aria-label') })), open = $('.vb-open', box);
   dots.forEach((d, k) => d.addEventListener('click', () => openLb(set, k, d)));
   open.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-plan-full.webp', c: open.getAttribute('aria-label'), paper: true }], 0, open));
+  $$('.vb-cut', box).forEach(c => c.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-section-full.webp', c: c.getAttribute('aria-label'), paper: true }], 0, c)));
 });
 
 // Layers of Egypt: the entry's own city, from the competition's Rhino model (assets/data/cairo-city.json), in the frame of
