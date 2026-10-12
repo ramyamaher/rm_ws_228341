@@ -522,7 +522,7 @@ $$('.b8-build').forEach(fig => {
     // the upper level, the ramp, and the red wall with its two openings
     blk(0, 141, -59.6, 164.8, -1, 0); blk(141, 146.7, 76.7, 111.2, -1, 0); blk(141, 146.7, -33.1, 1.4, -1, 0);
     blk(-22.1, 0, -59.6, -14.2, -2.1, -1.1);
-    solid([...S[55], ...S[51], ...S[52], ...S[53], ...S[54], ...S[48], ...S[41]]);
+    solid([...S[55], ...S[51], ...S[52], ...S[53], ...S[54], ...S[48]]);
     const plate = (outline, holes, z0, z1) => {
       const s = new THREE.Shape(outline.map(([x, y]) => new THREE.Vector2(x, y))); for (const h of holes) s.holes.push(new THREE.Path(h.map(([x, y]) => new THREE.Vector2(x, y))));
       const g = new THREE.ExtrudeGeometry(s, { depth: z1 - z0, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, z0, 0); add(g, 30);
@@ -535,37 +535,48 @@ $$('.b8-build').forEach(fig => {
       const g = new THREE.ExtrudeGeometry(s, { depth: 5.7, bevelEnabled: false, curveSegments: 1 });
       g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, XW, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30);
       for (const [u0, u1] of doors) { const um = (u0 + u1) / 2; blk(XW + 1.6, XW + 4.1, u0 + 1, um - .15, 12, 56); blk(XW + 1.6, XW + 4.1, um + .15, u1 - 1, 12, 56); } }
-    // the doors: 2.2 m double doors in a frame, the opening above them closed with wall
-    for (const [y0, y1, z1] of [[76.7, 111.2, 56.87], [-33.1, 1.4, 53.65]]) {
-      blk(141, 146.7, y0, y1, 44, z1);
+    // the red wall
+    const RW = 141, RT = 140, LV2 = 70, GAL = [[0, 40], [60, 100], [120, 160]];
+    { const s = new THREE.Shape([[-59.3, 0], [185.6, 0], [185.6, RT], [-59.3, RT], [-59.3, LV2 + 50], [-23, LV2 + 50], [-23, LV2], [-59.3, LV2]].map(([u, v]) => new THREE.Vector2(u, v)));
+      for (const [u0, u1] of [[76.7, 111.2], [-33.1, 1.4]]) s.holes.push(new THREE.Path([[u0, .01], [u1, .01], [u1, 44], [u0, 44]].map(([u, v]) => new THREE.Vector2(u, v))));
+      for (const [u0, u1] of GAL) s.holes.push(new THREE.Path([[u0, LV2], [u1, LV2], [u1, LV2 + 50], [u0, LV2 + 50]].map(([u, v]) => new THREE.Vector2(u, v))));
+      const g = new THREE.ExtrudeGeometry(s, { depth: 5.7, bevelEnabled: false, curveSegments: 1 });
+      g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, RW, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30); }
+    // the doors: 2.2 m double doors
+    for (const [y0, y1] of [[76.7, 111.2], [-33.1, 1.4]]) {
       const ym = (y0 + y1) / 2; blk(142.6, 145.1, y0 + 1, ym - .15, 0, 44); blk(142.6, 145.1, ym + .15, y1 - 1, 0, 44);
       for (const [y, s] of [[ym - 2.5, 1], [ym + 2.5, -1]]) line([142.4, y, 21], [142.4, y + s * 3, 21], segs);
     }
     // the metal stair, a U against the red wall: the lower flight away from the wall rises from the hall to a landing,
     // the upper flight turns back along the wall, over the first door, to the gallery; 20 risers of 17.5 cm, 1.1 m wide
-    const RISE = 3.625, GO = 5.6, W = 22, LAND = 26;
+    const RISE = 3.625, GO = 5.6, W = 22, LAND = 26, XS = 141 - W;   // XS: the stair's wall side, one flight's width off the wall
     const flight = (x0, x1, yA, zA, dir, n) => {
       for (let k = 0; k < n; k++) { const y = yA + dir * k * GO, z = zA + (k + 1) * RISE; blk(x0, x1, Math.min(y, y + dir * GO), Math.max(y, y + dir * GO), z - .8, z); }
       const yB = yA + dir * n * GO, zB = zA + n * RISE;
       for (const x of [x0, x1]) { line([x, yA, zA], [x, yB, zB], segs); line([x, yA, zA - 3], [x, yB, zB - 3], segs); }
       return [yB, zB];
     };
-    const yF = 185.6, [yL, zL] = flight(119 - W, 119, yF, 12, -1, 8);         // lower flight: from the entrance level, south
-    blk(119 - W, 141, yL - LAND, yL, zL - .8, zL);                                // landing
-    const [yT, zT] = flight(119, 141, yL, zL, 1, 8);                              // upper flight: back north, against the wall, to level 2
+    const yF = 185.6, [yL, zL] = flight(XS - 2 * W, XS - W, yF, 12, -1, 8);   // lower flight: from the entrance level, south
+    blk(XS - 2 * W, XS, yL - LAND, yL, zL - .8, zL);                              // landing
+    const [yT, zT] = flight(XS - W, XS, yL, zL, 1, 8);                            // upper flight: back north, to level 2
     // railings: posts and a handrail 1 m above the treads, on the stair's open sides
     const rail = (pts) => { for (let i = 1; i < pts.length; i++) line([pts[i - 1][0], pts[i - 1][1], pts[i - 1][2] + 20], [pts[i][0], pts[i][1], pts[i][2] + 20]); for (const [x, y, z] of pts) line([x, y, z], [x, y, z + 20]); };
     const along = (x, y0, z0, y1, z1, n) => Array.from({ length: n + 1 }, (_, i) => [x, y0 + (y1 - y0) * i / n, z0 + (z1 - z0) * i / n]);
-    rail(along(119 - W, yF, 12, yL, zL, 8)); rail([[119 - W, yL, zL], [119 - W, yL - LAND, zL], [141, yL - LAND, zL]]);
-    rail(along(119, yL, zL, yT, zT, 8));
+    rail(along(XS - 2 * W, yF, 12, yL, zL, 8)); rail([[XS - 2 * W, yL, zL], [XS - 2 * W, yL - LAND, zL], [XS, yL - LAND, zL], [XS, yL, zL]]);
+    rail(along(XS - W, yL, zL, yT, zT, 8)); rail(along(XS, yL, zL, yT, zT, 8));
     // the bridge across the glass front at gallery height: 1.8 m wide, with posts under its far end
     const zB = zT, by1 = -23;
     plate([[XW, -59.6], [146.7, -59.6], [146.7, 250], [XW, 250]], [[[0.4, by1], [141, by1], [141, yT], [0.4, yT]]], zB - 3, zB);
     const railLine = (a, b, n) => rail(Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n, zB]));
-    railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [119 - W, yT], 9);
+    railLine([0.4, by1], [141, by1], 14); railLine([0.4, by1], [0.4, yT], 18); railLine([0.4, yT], [XS - W, yT], 9); railLine([XS, yT], [141, yT], 2);   // open where the stair arrives
+    // the gallery behind the red wall, which the bridge leads to, and the railings in the wall's openings
+    blk(146.7, 176.7, -59.6, 185.6, LV2 - 3, LV2);
+    for (const [y0, y1] of GAL) rail(Array.from({ length: 6 }, (_, k) => [RW + 2.85, y0 + (y1 - y0) * k / 5, LV2]));
     // the glass front: its steel grid
-    for (let x = -22.1; x <= 146.7; x += 21.1) line([x, -59.6, -1.1], [x, -59.6, 94.6], segs);
-    for (const z of [-1.1, 26, 46, 76, 94.6]) line([-22.1, -59.6, z], [146.7, -59.6, z], segs);
+    for (let x = -22.1; x <= 146.7; x += 21.1) line([x, -59.6, -1.1], [x, -59.6, 140], segs);
+    for (const z of [-1.1, 26, 46, 67, 100, 120, 140]) line([-22.1, -59.6, z], [146.7, -59.6, z], segs);
+    for (let x = -22.1; x <= 146.7; x += 21.1) line([x, 324.6, 12], [x, 324.6, 140], segs);
+    for (const z of [12, 26, 46, 67, 100, 120, 140]) line([-22.1, 324.6, z], [146.7, 324.6, z], segs);
     // the railings round the ramp, on both sides, 1 m above its slope
     const rz = (y) => -1.11 + 13.11 * (y + 14.2) / 200.2;
     for (const x of [0.4, -22.1]) rail(Array.from({ length: 26 }, (_, i) => { const y = -14.2 + 200.2 * i / 25; return [x, y, rz(y)]; }));
@@ -578,11 +589,13 @@ $$('.b8-build').forEach(fig => {
       const shape = (L) => { const pts = []; for (let k = 0; k < L.length; k += 2) pts.push(new THREE.Vector2(L[k], L[k + 1])); return pts; };
       const s = new THREE.Shape(shape(b.loops[0])); for (const L of b.loops.slice(1)) s.holes.push(new THREE.Path(shape(L)));
       const g = new THREE.ExtrudeGeometry(s, { depth: b.h, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2);
+      for (const L of b.islands || []) { const gi = new THREE.ExtrudeGeometry(new THREE.Shape(shape(L)), { depth: b.h, bevelEnabled: false, curveSegments: 1 }); gi.rotateX(-Math.PI / 2); g.islands = (g.islands || []).concat(gi); }
       const c = A.clone().lerp(B, i / (all.length - 1));
       const lit = { face: new THREE.MeshBasicMaterial({ color: c.clone().lerp(new THREE.Color('#fff'), .35), side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }), line: new THREE.LineBasicMaterial({ color: c }) };
-      const grp = new THREE.Group(), mesh = new THREE.Mesh(g, WHITE), ln = new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), EDGE);
-      grp.add(mesh, ln); grp.position.y = b.z; scene.add(grp);
-      return { grp, mesh, ln, lit, z: b.z, off: 0, vis: true, leaving: false };
+      const grp = new THREE.Group(), meshes = [], lns = [];
+      for (const geo of [g, ...(g.islands || [])]) { const m = new THREE.Mesh(geo, WHITE), l = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), EDGE); meshes.push(m); lns.push(l); grp.add(m, l); }
+      grp.position.y = b.z; scene.add(grp);
+      return { grp, meshes, lns, lit, z: b.z, off: 0, vis: true, leaving: false };
     });
     const DROP = 18;                                               // a board comes down from 90 cm above its place
     let shown = +range.value, raf = 0;
@@ -592,7 +605,7 @@ $$('.b8-build').forEach(fig => {
       for (const b of boards) {
         if (b.leaving) { b.off += (DROP - b.off) * .28; if (b.off > DROP - .5) { b.leaving = false; b.vis = false; b.off = 0; } else moving = true; }
         else if (b.off > .02) { b.off *= .75; moving = true; } else b.off = 0;
-        const lit = b.off > .05; b.mesh.material = lit ? b.lit.face : WHITE; b.ln.material = lit ? b.lit.line : EDGE;
+        const lit = b.off > .05; b.meshes.forEach((m) => { m.material = lit ? b.lit.face : WHITE; }); b.lns.forEach((l) => { l.material = lit ? b.lit.line : EDGE; });
         b.grp.visible = b.vis; b.grp.position.y = b.z + b.off;
       }
       ren.render(scene, cam); raf = moving ? requestAnimationFrame(tick) : 0;
