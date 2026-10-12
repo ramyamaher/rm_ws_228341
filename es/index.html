@@ -108,7 +108,8 @@ html[data-theme="dark"]{
   --land:#262830; --land-edge:#16171d; --gold:#eab308; --gold-hi:#facc15; --gold-2:#a16207; --red:#f05252; --red-hi:#fca5a5;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; background:var(--bg); scrollbar-gutter:stable}
+html{-webkit-text-size-adjust:100%; background:var(--bg); scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
 /* Scroll bars as in CongressInsider: a thick grey line with round ends, no track, no arrows */
 ::-webkit-scrollbar{width:10px; height:10px; background:transparent}
 ::-webkit-scrollbar-track{background:transparent}
@@ -596,12 +597,11 @@ html[dir="rtl"] .b8-play{right:auto; left:14px}
 .anim-logo.play .ss-line{animation:ssWrite 1.6s cubic-bezier(.4,0,.3,1) .4s forwards}
 @keyframes ssWrite{from{opacity:1; stroke-dashoffset:1} to{opacity:1; stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){ .ss-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .ss-line{animation:none} }
-.ss-open{position:relative; display:block; width:min(100%,640px); margin-top:22px; border-radius:18px; overflow:hidden; background:#fff; box-shadow:inset 0 0 0 1px var(--line, rgba(0,0,0,.08))}
-.ss-open img{display:block; width:100%; height:auto}
-.ss-go{position:absolute; right:14px; top:14px; display:inline-flex; align-items:center; height:38px; padding:0 18px; border-radius:19px;
-  background:rgba(35,35,35,.92); color:#fff; font:650 14px/1 inherit; box-shadow:0 6px 18px -8px rgba(0,0,0,.45)}
-.ss-open:hover .ss-go{background:rgb(35,35,35)}
-html[dir="rtl"] .ss-go{right:auto; left:14px}
+.ss-live{position:relative; margin-top:22px}
+.ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
+.ss-full{display:inline-block; margin-top:10px; font-size:13.5px; font-weight:600; color:var(--ink-3); text-decoration:none}
+.ss-full::after{content:" ↗"}
+.ss-full:hover{color:var(--ink)}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
 .anim-logo.play .lab-frame{animation:labFrame 1.1s cubic-bezier(.6,0,.3,1) .45s forwards}
@@ -701,7 +701,7 @@ html.fit-tab body{min-height:0}
   .b8-row{grid-template-columns:1fr}
   .slide.project, .slide.app{display:flex; flex-direction:column}
   .slide > .p-head, .slide > .a-head{order:0}
-  .slide > .thumbs, .slide > .b8-row, .slide > .ss-open{order:1; margin-top:0; margin-bottom:18px}
+  .slide > .thumbs, .slide > .b8-row, .slide > .ss-live{order:1; margin-top:0; margin-bottom:18px}
   .slide > .b8-build{order:1; margin:0 0 18px}
   .slide > .p-body, .slide > .a-body, .slide > .prose{order:2}
   .slide > .prize-line{order:3}
@@ -1125,10 +1125,10 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <div><dt>Geometría</dt><dd>20 contrahuellas, 3,63 m de planta a planta, 3,90 m de diámetro</dd></div>
                   </dl>
                 </div>
-                <a class="ss-open" href="/design/bespoke-spiral-staircase-berlin/model/">
-                  <img src="/assets/img/projects/ss-model.jpg" alt="El modelo interactivo: la escalera en 3D y su muro exterior desplegado" loading="lazy" decoding="async">
-                  <span class="ss-go">Abrir el modelo interactivo</span>
-                </a>
+                <div class="ss-live">
+                  <iframe title="El modelo interactivo: la escalera en 3D y su muro exterior desplegado" data-src="/design/bespoke-spiral-staircase-berlin/model/?embed" allow="fullscreen"></iframe>
+                  <a class="ss-full" href="/design/bespoke-spiral-staircase-berlin/model/">Abrir el modelo interactivo</a>
+                </div>
               </article>
 
             </div></div>
