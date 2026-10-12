@@ -591,7 +591,7 @@ html[dir="rtl"] .b8-play{right:auto; left:14px}
 .b8-build{margin:14px 0 0; border-radius:18px; overflow:hidden; background:#fff; border:1px solid var(--line)}   /* a border, not an inset shadow: the canvas would paint over a shadow */
 html[data-theme="dark"] .b8-build{background:var(--soft)}
 html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
-.b8-3d{position:relative; height:clamp(260px,42vh,440px); cursor:grab; touch-action:pan-y}
+.b8-3d{position:relative; height:clamp(260px,42vh,440px); cursor:grab; touch-action:none}
 .b8-3d:active{cursor:grabbing}
 .b8-3d canvas{display:block}
 /* the city keeps the render's proportions on every screen, so the view is the render's, only larger or smaller */
@@ -602,6 +602,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
   .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
   .city-step span{grid-area:1/1; visibility:hidden}
   .city-step span.on{visibility:visible}
+  .city-step span.glow, .city-step span.glow b{background:linear-gradient(90deg, currentColor 0 30%, #ef4444 38%, #f97316 44%, #eab308 50%, #22c55e 56%, #3b82f6 62%, #a855f7 68%, currentColor 76% 100%) 100% 0 / 340% 100% no-repeat; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:stageGlow 1.6s ease-in-out both}
+  @keyframes stageGlow{to{background-position:0 0}}
   .city-step b{display:block; font-weight:700; margin-bottom:2px}
   .city-how{margin-top:-4px; font-size:12.5px; color:var(--ink-3)}
 .vb-plan{position:relative; margin-top:22px}
@@ -680,6 +682,11 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .b8-ctl input::-moz-range-thumb{width:24px; height:24px; border-radius:50%; background:var(--pill); border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.25); cursor:pointer}
 .b8-ctl input:focus-visible::-webkit-slider-thumb{outline:2px solid #e3120b; outline-offset:2px}
 .b8-ctl output{font-size:13px; color:var(--ink-3); font-variant-numeric:tabular-nums; min-width:4.2em; text-align:end}
+@media (max-width:760px){
+  .b8-ctl{flex-wrap:wrap; row-gap:12px}
+  .b8-ctl label{flex:1; white-space:normal}
+  .b8-ctl input{order:3; flex:1 1 100%; height:8px}
+}
 /* the spiral staircase: its logo draws the outer wall, its picture opens the interactive model */
 .logo .ss-logo{width:82%; height:82%}
 .ss-line{fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; stroke-dashoffset:1; opacity:0}
