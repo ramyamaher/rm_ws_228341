@@ -326,6 +326,8 @@ function carousel({ car, trackEl, prev, next, count, dots, onChange }) {
   car.addEventListener('pointerdown', e => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     if (e.target.closest('.car') !== car) return;
+    // Sliders and the 3D models keep their own gestures.
+    if (e.target.closest('input, .b8-build, .ss-live')) return;
     // A sideways-scrolling strip of screenshots (phones) keeps its own swipe.
     const strip = e.target.closest('.thumbs.phones, .thumbs.wide');
     if (strip && strip.scrollWidth > strip.clientWidth) return;
@@ -484,9 +486,10 @@ $$('.b8-stage').forEach(st => {
   flip.addEventListener('click', () => openLb(set(), 1, flip));
 });
 
-// Building 8 in 3D: the hall and the bar's boards, from the Rhino model (1 unit = 5 cm); the doors, the metal
-// stair, the bridge and the ramp's railings are added after the render. three.js and the model (60 kB) load only
-// when it first comes into view; the slider drops the boards into place, lowest layer first
+// Building 8 in 3D: the hall and the bar's boards from the Rhino model (1 unit = 5 cm), drawn like the
+// staircase: white faces, grey lines, colour only for the board being placed. The doors, the metal stair, the
+// gallery, the bridge and the ramp's railings are added after the render. three.js and the model (60 kB) load
+// only when it first comes into view; the slider places one board per step
 $$('.b8-build').forEach(fig => {
   const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig);
   let started = false;
@@ -498,86 +501,101 @@ $$('.b8-build').forEach(fig => {
       import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js/+esm'),
       fetch('/assets/data/b8-layers.json').then(r => r.json()),
     ]);
-    const ren = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.append(ren.domElement);
-    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(34, 1, 1, 3000);
-    cam.position.set(-45, 95, -255);   // from the ramp, looking at the glass front, as in the render
+    const ren = new THREE.WebGLRenderer({ antialias: true });
+    ren.setClearColor('#ffffff', 1); ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.append(ren.domElement);
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(50, 1, 1, 3000);
+    cam.position.set(-12, 40, -168);                                // on the ramp, looking at the glass front, as in the render
     const ctl = new OrbitControls(cam, ren.domElement);
-    ctl.target.set(78, 18, -40); ctl.enablePan = false; ctl.maxPolarAngle = Math.PI * .47; ctl.minDistance = 60; ctl.maxDistance = 520; ctl.update();
-    scene.add(new THREE.HemisphereLight('#ffffff', '#b9b2a8', 1.1));
-    const sun = new THREE.DirectionalLight('#fff6e8', 1.6); sun.position.set(-120, 260, -60); scene.add(sun);
-    const mat = (c, o = {}) => new THREE.MeshLambertMaterial({ color: c, side: THREE.DoubleSide, ...o });
-    const M = { floor: mat('#e9e7e3'), upper: mat('#dcd9d4'), red: mat('#c4533c'), wood: mat('#c9a26b'), frame: mat('#a98552'), metal: mat('#4a505a'), board: mat('#b98a56'), moving: mat('#e3120b'), waiting: mat('#d9c6ad', { transparent: true, opacity: .55 }) };
+    ctl.target.set(88, 14, -30); ctl.enablePan = false; ctl.enableZoom = false; ctl.maxPolarAngle = Math.PI * .49; ctl.update();
+    ren.domElement.style.touchAction = 'pan-y';
+    const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+    const EDGE = new THREE.LineBasicMaterial({ color: '#94a3b8' }), THIN = new THREE.LineBasicMaterial({ color: '#b6c0ce' });
     const P = (x, y, z) => [x, z, -y];                           // the model's plan x, y and height z, in three's axes
-    const solid = (parts, m) => parts.forEach(s => { const g = new THREE.BufferGeometry(); const p = []; for (let i = 0; i < s.pos.length; i += 3) p.push(...P(s.pos[i], s.pos[i + 1], s.pos[i + 2])); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); g.setIndex(s.idx); g.computeVertexNormals(); scene.add(new THREE.Mesh(g, m)); });
-    const boxM = (x0, x1, y0, y1, z0, z1, m) => { const g = new THREE.BoxGeometry(Math.abs(x1 - x0), Math.abs(z1 - z0), Math.abs(y1 - y0)); const o = new THREE.Mesh(g, m); o.position.set((x0 + x1) / 2, (z0 + z1) / 2, -(y0 + y1) / 2); scene.add(o); return o; };
+    const segs = [], thin = [];
+    const edges = (g, ang = 30, into = segs) => { const p = new THREE.EdgesGeometry(g, ang).attributes.position.array; for (let i = 0; i < p.length; i++) into.push(p[i]); };
+    const add = (g, ang) => { scene.add(new THREE.Mesh(g, WHITE)); edges(g, ang); };
+    const solid = (parts) => parts.forEach(s => { const g = new THREE.BufferGeometry(), p = []; for (let i = 0; i < s.pos.length; i += 3) p.push(...P(s.pos[i], s.pos[i + 1], s.pos[i + 2])); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); g.setIndex(s.idx); add(g, 30); });
+    const blk = (x0, x1, y0, y1, z0, z1) => { const g = new THREE.BoxGeometry(x1 - x0, z1 - z0, y1 - y0); g.translate((x0 + x1) / 2, (z0 + z1) / 2, -(y0 + y1) / 2); add(g, 30); };
+    const line = (a, b, into = thin) => into.push(...P(...a), ...P(...b));
     const S = data.solids;
-    // the hall: floors, the steps to the upper level, the ramp, and the red wall with its two door openings
-    solid([...S[56], ...S[40], ...S[55]], M.floor); solid([...S[43], ...S[45], ...S[46], ...S[48]], M.upper);
-    solid([...S[51], ...S[52], ...S[53], ...S[54]], M.floor); solid(S[41], M.red);
-    // the doors: a frame and two wooden leaves in each opening
+    // the floor, out to the glass front and into the door openings; the low landing by the glass doors; the steps,
+    // the upper level, the ramp, and the red wall with its two openings
+    blk(0, 141, -59.6, 164.8, -1, 0); blk(141, 146.7, 76.7, 111.2, -1, 0); blk(141, 146.7, -33.1, 1.4, -1, 0);
+    blk(-22.1, 0, -59.6, -14.2, -2.1, -1.1);
+    solid([...S[55], ...S[51], ...S[52], ...S[53], ...S[54], ...S[43], ...S[45], ...S[48], ...S[41]]);
+    // the doors: 2.2 m double doors in a frame, the opening above them closed with wall
     for (const [y0, y1, z1] of [[76.7, 111.2, 56.87], [-33.1, 1.4, 53.65]]) {
-      boxM(141, 146.7, y0, y0 + 1.6, 0, z1, M.frame); boxM(141, 146.7, y1 - 1.6, y1, 0, z1, M.frame); boxM(141, 146.7, y0, y1, z1 - 1.6, z1, M.frame);
-      const ym = (y0 + y1) / 2; boxM(143.2, 144.4, y0 + 1.6, ym - .2, 0, z1 - 1.6, M.wood); boxM(143.2, 144.4, ym + .2, y1 - 1.6, 0, z1 - 1.6, M.wood);
+      blk(141, 146.7, y0, y1, 44, z1);
+      const ym = (y0 + y1) / 2; blk(142.6, 145.1, y0 + 1, ym - .15, 0, 44); blk(142.6, 145.1, ym + .15, y1 - 1, 0, 44);
+      for (const [y, s] of [[ym - 2.5, 1], [ym + 2.5, -1]]) line([142.4, y, 21], [142.4, y + s * 3, 21], segs);
     }
-    // the metal stair against the red wall: up from the upper level, a landing, and back up over the first door
-    const steel = (x0, x1, y0, y1, z0, z1) => boxM(x0, x1, y0, y1, z0, z1, M.metal);
-    const flight = (x0, x1, yA, zA, yB, zB, n, side) => {
-      for (let k = 0; k < n; k++) { const f0 = k / n, f1 = (k + 1) / n, ya = yA + (yB - yA) * f0, yb = yA + (yB - yA) * f1, z = zA + (zB - zA) * f1; steel(x0, x1, Math.min(ya, yb), Math.max(ya, yb), z - .8, z); }
-      const L = Math.hypot(yB - yA, zB - zA), ang = Math.atan2(zB - zA, Math.abs(yB - yA)), dir = Math.sign(yB - yA);
-      for (const x of [x0 - .6, x1 + .6]) { const g = new THREE.BoxGeometry(1.2, 2.2, L); const o = new THREE.Mesh(g, M.metal); o.position.set(x, (zA + zB) / 2 - 1.5, -(yA + yB) / 2); o.rotation.x = dir * ang; scene.add(o); }
-      // the railing on the open side: posts and a handrail 20 units (1 m) above the treads
-      const xr = side < 0 ? x0 - .6 : x1 + .6;
-      for (let k = 0; k <= n; k += 2) { const f = k / n, y = yA + (yB - yA) * f, z = zA + (zB - zA) * f; steel(xr - .25, xr + .25, y - .25, y + .25, z, z + 20); }
-      const g = new THREE.BoxGeometry(.7, .7, L); const o = new THREE.Mesh(g, M.metal); o.position.set(xr, (zA + zB) / 2 + 20, -(yA + yB) / 2); o.rotation.x = dir * ang; scene.add(o);
+    // the metal stair, a U against the red wall: the lower flight away from the wall rises from the hall to a landing,
+    // the upper flight turns back along the wall, over the first door, to the gallery; 20 risers of 17.5 cm, 1.1 m wide
+    const RISE = 3.5, GO = 5.6, W = 22;
+    const flight = (x0, x1, yA, zA, dir, n) => {
+      for (let k = 0; k < n; k++) { const y = yA + dir * k * GO, z = zA + (k + 1) * RISE; blk(x0, x1, Math.min(y, y + dir * GO), Math.max(y, y + dir * GO), z - .8, z); }
+      const yB = yA + dir * n * GO, zB = zA + n * RISE;
+      for (const x of [x0, x1]) { line([x, yA, zA], [x, yB, zB], segs); line([x, yA, zA - 3], [x, yB, zB - 3], segs); }
+      return [yB, zB];
     };
-    flight(129, 140, 165, 12, 124, 36, 8, -1);
-    steel(115, 140, 112, 124, 35.2, 36);
-    flight(115, 126, 112, 36, 70, 60, 8, -1);
-    steel(115, 140, 58, 70, 59.2, 60);
-    // the bridge across the glass front, and its railings
-    steel(-22, 141, -52, -44, 58.8, 60);
-    for (const y of [-52, -44]) { for (let x = -22; x <= 141; x += 6) steel(x - .25, x + .25, y - .25, y + .25, 60, 80); steel(-22, 141, y - .35, y + .35, 79.6, 80.4); }
-    // the glass front, with its steel grid
-    boxM(-22, 146.7, -59.6, -59.2, 0, 94.6, new THREE.MeshLambertMaterial({ color: '#cfe3ee', transparent: true, opacity: .28, side: THREE.DoubleSide, depthWrite: false }));
-    for (let x = -22; x <= 146.7; x += 21) steel(x - .5, x + .5, -59.8, -59, 0, 94.6);
-    for (const z of [0, 26, 46, 58.8, 76, 94]) steel(-22, 146.7, -59.8, -59, z, z + .9);
+    const yF = 103, [yL, zL] = flight(119 - W, 119, yF, 0, -1, 10);            // lower flight: from the hall, south
+    blk(119 - W, 141, yL - 12, yL, zL - .8, zL);                                  // landing
+    const [yT, zT] = flight(119, 141, yL, zL, 1, 10);                             // upper flight: back north, against the wall
+    blk(119, 141, yT, yT + 12, zT - .8, zT);                                      // top landing
+    // railings: posts and a handrail 1 m above the treads, on the stair's open sides
+    const rail = (pts) => { for (let i = 1; i < pts.length; i++) line([pts[i - 1][0], pts[i - 1][1], pts[i - 1][2] + 20], [pts[i][0], pts[i][1], pts[i][2] + 20]); for (const [x, y, z] of pts) line([x, y, z], [x, y, z + 20]); };
+    const along = (x, y0, z0, y1, z1, n) => Array.from({ length: n + 1 }, (_, i) => [x, y0 + (y1 - y0) * i / n, z0 + (z1 - z0) * i / n]);
+    rail(along(119 - W, yF, 0, yL, zL, 8)); rail([[119 - W, yL, zL], [119 - W, yL - 12, zL], [141, yL - 12, zL]]);
+    rail(along(119, yL, zL, yT, zT, 8)); rail([[119, yT, zT], [119, yT + 12, zT]]);
+    // the bridge across the glass front at gallery height: 1.8 m wide, with posts under its far end
+    const zB = zT, by0 = -59, by1 = by0 + 36;
+    blk(-22.1, 141, by0, by1, zB - 3, zB);
+    for (const y of [by0 + .5, by1 - .5]) rail(Array.from({ length: 12 }, (_, i) => [-22.1 + 163.1 * i / 11, y, zB]));
+    for (const y of [by0 + 2, by1 - 2]) blk(-21.6, -19.6, y - 1, y + 1, -1.1, zB - 3);
+    // the glass front: its steel grid
+    for (let x = -22.1; x <= 146.7; x += 21.1) line([x, -59.6, -1.1], [x, -59.6, 94.6], segs);
+    for (const z of [-1.1, 26, 46, 76, 94.6]) line([-22.1, -59.6, z], [146.7, -59.6, z], segs);
     // the railings round the ramp, on both sides, 1 m above its slope
-    const rampZ = (y) => -1.11 + (12 + 1.11) * (y + 14.2) / (186 + 14.2);
-    for (const x of [0.4, -22.1]) {
-      for (let y = -14.2; y <= 186; y += 8) { const z = rampZ(y); steel(x - .25, x + .25, y - .25, y + .25, z, z + 20); }
-      const L = Math.hypot(200.2, 13.1), ang = Math.atan2(13.1, 200.2), g = new THREE.BoxGeometry(.7, .7, L), o = new THREE.Mesh(g, M.metal);
-      o.position.set(x, (rampZ(-14.2) + rampZ(186)) / 2 + 20, -(186 - 14.2) / 2); o.rotation.x = ang; scene.add(o);
-    }
-    // the boards: each outline extruded to its thickness, with a fine line round each layer so the layers read
-    const levels = [...new Set(data.boards.map(b => b.z))].sort((a, b) => a - b);
-    const lineMat = new THREE.LineBasicMaterial({ color: '#6b4a26', transparent: true, opacity: .45 });
-    const boards = data.boards.map(b => {
-      const shape = (L) => { const pts = []; for (let i = 0; i < L.length; i += 2) pts.push(new THREE.Vector2(L[i], L[i + 1])); return pts; };
+    const rz = (y) => -1.11 + 13.11 * (y + 14.2) / 200.2;
+    for (const x of [0.4, -22.1]) rail(Array.from({ length: 26 }, (_, i) => { const y = -14.2 + 200.2 * i / 25; return [x, y, rz(y)]; }));
+    const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3)); scene.add(new THREE.LineSegments(lg, EDGE));
+    const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(thin, 3)); scene.add(new THREE.LineSegments(tg, THIN));
+    // the boards, lowest first; the one just placed in the staircase's colours, the others white, those above not yet there
+    const A = new THREE.Color('#22c3a0'), B = new THREE.Color('#3b82f6');
+    const boards = data.boards.slice().sort((p, q) => p.z - q.z || p.id - q.id).map((b, i, all) => {
+      const shape = (L) => { const pts = []; for (let k = 0; k < L.length; k += 2) pts.push(new THREE.Vector2(L[k], L[k + 1])); return pts; };
       const s = new THREE.Shape(shape(b.loops[0])); for (const L of b.loops.slice(1)) s.holes.push(new THREE.Path(shape(L)));
       const g = new THREE.ExtrudeGeometry(s, { depth: b.h, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2);
-      const grp = new THREE.Group(), mesh = new THREE.Mesh(g, M.board); grp.add(mesh); grp.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), lineMat));
-      grp.position.y = b.z; scene.add(grp);
-      return { grp, mesh, z: b.z, k: levels.indexOf(b.z) };
+      const c = A.clone().lerp(B, i / (all.length - 1));
+      const lit = { face: new THREE.MeshBasicMaterial({ color: c.clone().lerp(new THREE.Color('#fff'), .35), side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }), line: new THREE.LineBasicMaterial({ color: c }) };
+      const grp = new THREE.Group(), mesh = new THREE.Mesh(g, WHITE), ln = new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), EDGE);
+      grp.add(mesh, ln); grp.position.y = b.z; scene.add(grp);
+      return { grp, mesh, ln, lit, z: b.z, off: 0, vis: true, leaving: false };
     });
-    const N = levels.length, ease = (p) => p * p * (3 - 2 * p);
-    function place() {
-      const t = range.value / 1000; let done = 0;
+    const DROP = 18;                                               // a board comes down from 90 cm above its place
+    let shown = +range.value, raf = 0;
+    function paint() { boards.forEach((b, i) => { const cur = i === shown - 1; b.mesh.material = cur ? b.lit.face : WHITE; b.ln.material = cur ? b.lit.line : EDGE; }); out.value = out.textContent = shown + ' / ' + boards.length; }
+    function tick() {
+      let moving = false;
       for (const b of boards) {
-        const p = ease(Math.min(1, Math.max(0, (t * (N + 2) - b.k) / 2.5)));
-        b.grp.position.y = b.z + (1 - p) * (16 + b.k * 1.4);
-        b.mesh.material = p >= 1 ? M.board : p > 0 ? M.moving : M.waiting;
-        if (p >= 1) done++;
+        if (b.leaving) { b.off += (DROP - b.off) * .28; if (b.off > DROP - .5) { b.leaving = false; b.vis = false; b.off = 0; } else moving = true; }
+        else if (b.off > .02) { b.off *= .75; moving = true; } else b.off = 0;
+        b.grp.visible = b.vis; b.grp.position.y = b.z + b.off;
       }
-      out.value = out.textContent = done + ' / ' + boards.length;
-      draw();
+      ren.render(scene, cam); raf = moving ? requestAnimationFrame(tick) : 0;
     }
-    let raf = 0; function draw() { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => ren.render(scene, cam)); }
-    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 34 * Math.pow(Math.max(1, 1.3 / cam.aspect), .8); cam.updateProjectionMatrix(); draw(); }
-    ctl.addEventListener('change', draw);
-    range.addEventListener('input', place);
+    const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    function set(v) {
+      if (v > shown) for (let i = shown; i < v; i++) { const b = boards[i]; b.vis = true; b.leaving = false; b.off = i === v - 1 ? DROP : 0; }
+      else for (let i = v; i < shown; i++) boards[i].leaving = true;
+      shown = v; paint(); kick();
+    }
+    boards.forEach((b, i) => { b.vis = i < shown; });
+    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 50 * Math.pow(Math.max(1, 1.5 / cam.aspect), .7); cam.updateProjectionMatrix(); kick(); }
+    ctl.addEventListener('change', kick);
+    range.addEventListener('input', () => set(+range.value));
     new ResizeObserver(size).observe(box);
-    size(); place();
+    paint(); size();
   }
 });
 
