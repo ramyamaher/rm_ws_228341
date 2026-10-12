@@ -203,6 +203,18 @@ function page(html, { lang, path, start, title, desc, image, imageAlt }) {
   return html;
 }
 
+// the scripts carry a mark of their contents: browsers may keep a script for ten minutes, and a new page
+// with the old script shows nothing that is new; a changed script has a new address, so it is fetched fresh
+{
+  const { createHash } = await import('node:crypto');
+  let h = await readFile(join(ROOT, 'index.html'), 'utf8');
+  const before = h;
+  for (const f of ['app.js', 'data/places.js']) {
+    const v = createHash('sha1').update(await readFile(join(ROOT, 'assets', f))).digest('hex').slice(0, 10);
+    h = h.replace(new RegExp(`(<script src="/assets/${f.replace('.', '\\.')})(\\?v=\\w+)?(">)`), `$1?v=${v}$3`);
+  }
+  if (h !== before) await writeFile(join(ROOT, 'index.html'), h);
+}
 const src = await readFile(join(ROOT, 'index.html'), 'utf8');
 const flagOf = (l) => src.match(new RegExp(`data-lang="${l}"[^>]*>(<span class="flag">[\\s\\S]*?</svg></span>)`))[1];
 const sitemap = [];
@@ -222,8 +234,8 @@ for (const lang of LANGS) {
       (m, a, b, c) => `${a}${esc((T['Language'] || 'Language') + ': ' + NAME[lang])}${b}${NAME[lang]}${c}${flagOf(lang)}`);
     const js = {};
     for (const k of [...JS, ...places]) if (T[k]) js[k] = T[k];
-    home = home.replace('<script src="/assets/app.js"></script>',
-      `<script>window.I18N=${JSON.stringify({ lang, locale: LOCALE[lang], t: js, plurals })}</script>\n<script src="/assets/app.js"></script>`);
+    home = home.replace(/<script src="\/assets\/app\.js(\?v=\w+)?"><\/script>/,
+      (m) => `<script>window.I18N=${JSON.stringify({ lang, locale: LOCALE[lang], t: js, plurals })}</script>\n${m}`);
   }
   const dir = lang === 'en' ? ROOT : join(ROOT, lang);
   const out = async (path, html) => {

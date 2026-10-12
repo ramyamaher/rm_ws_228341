@@ -1234,7 +1234,7 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
     if (!dragging) return;
     const dx = e.clientX - x0, now = performance.now(); moved = Math.max(moved, Math.abs(dx));
     // the strip holds on to the pointer only once it is really dragged, so a plain click still reaches its tile
-    if (moved > 6 && !flow.hasPointerCapture(e.pointerId)) flow.setPointerCapture(e.pointerId);
+    if (moved > 6 && !flow.hasPointerCapture(e.pointerId)) try { flow.setPointerCapture(e.pointerId); } catch (_) {}
     pos = p0 - dx / GAP() * (RTL ? -1 : 1);
     if (now > lt) vel = -(e.clientX - lx) / GAP() / ((now - lt) / 1000) * (RTL ? -1 : 1);
     lx = e.clientX; lt = now;
