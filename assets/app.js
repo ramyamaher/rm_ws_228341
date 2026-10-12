@@ -744,28 +744,44 @@ function vbFlow(svg) {
 // buttons below both; the last step lights the table with the
 // model of Cairo and shows the city built on its empty part
 $$('.vb-story').forEach(st => {
-  const duo = st.previousElementSibling, plan = $('.vb-plan', duo), flow = vbFlow($('.vb-flow', plan));
+  const duo = st.previousElementSibling, plan = $('.vb-plan', duo), story = st, flow = vbFlow($('.vb-flow', plan));
   const steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
   const media = $('.vb-media', st), pic = $('.vb-pic', media), img = $('img', pic), pPrev = $('.vb-pa.prev', media), pNext = $('.vb-pa.next', media);
   const back = $('.vb-back', st), next = $('.vb-next', st), end = $('.vb-end', st), n = $('.vb-n', st);
   const words = secs.map(s => $('p', s).textContent);
   let typing = null;
   // type a step's words a letter at a time, with the limericks' caret; the space is kept by the other steps' words
+  const poemOf = s => { const src = $('.vb-poem-src', s); return src ? [$('.vb-poem', s), src.textContent.trim()] : null; };
+  const settle = () => secs.forEach((s, j) => { $('p', s).textContent = words[j]; const pm = poemOf(s); if (pm) { pm[0].textContent = pm[1]; pm[0].scrollTop = 0; } });
   function type(i) {
-    clearTimeout(typing);
-    secs.forEach((s, j) => { $('p', s).textContent = words[j]; });
-    const p = $('p', secs[i]), text = words[i];
+    clearTimeout(typing); settle();
     if (reduced) return;
-    const txt = document.createTextNode(''), caret = document.createElement('span'); caret.className = 'caret';
-    p.textContent = ''; p.append(txt, caret);
-    let k = 0;
-    const tick = () => {
-      k++; txt.data = text.slice(0, k);
-      if (k >= text.length) { caret.remove(); return; }
-      const ch = text[k - 1];
-      typing = setTimeout(tick, /[.;:]/.test(ch) ? 220 : ch === ',' ? 120 : 14 + Math.random() * 18);
+    const pm = poemOf(secs[i]);
+    const into = (el, text, then, follow) => {
+      const txt = document.createTextNode(''), caret = document.createElement('span'); caret.className = 'caret';
+      el.textContent = ''; el.append(txt, caret);
+      let k = 0;
+      const tick = () => {
+        k++; txt.data = text.slice(0, k);
+        if (follow) el.scrollTop = el.scrollHeight;
+        if (k >= text.length) { caret.remove(); if (then) then(); return; }
+        const ch = text[k - 1];
+        typing = setTimeout(tick, ch === '\n' ? 260 : /[.;:]/.test(ch) ? 220 : ch === ',' ? 120 : 14 + Math.random() * 18);
+      };
+      typing = setTimeout(tick, 300);
     };
-    typing = setTimeout(tick, 300);
+    if (pm) pm[0].textContent = '';
+    into($('p', secs[i]), words[i], pm ? () => into(pm[0], pm[1], null, true) : null);
+  }
+  // the story section opens and closes by growing and shrinking; the page does not scroll with it
+  let growing = null;
+  function grow(open, done) {
+    clearTimeout(growing);
+    const from = story.offsetHeight; story.classList.add('vb-grow'); story.style.height = from + 'px';
+    done(); const to = story.scrollHeight;
+    if (reduced) { story.style.height = ''; story.classList.remove('vb-grow'); return; }
+    requestAnimationFrame(() => { story.style.height = to + 'px'; });
+    growing = setTimeout(() => { story.style.height = ''; story.classList.remove('vb-grow'); }, 600);
   }
   const cap = f => { const d = $(`.vb-dot[data-f="${f}"]`, plan); return d ? d.getAttribute('aria-label') : $('h4', secs[st.k]).textContent; };
   const pics = () => secs[st.k].dataset.pics.split(' ');
@@ -778,16 +794,16 @@ $$('.vb-story').forEach(st => {
     const open = i >= 0; st.k = i; go.hidden = open; steps.hidden = !open;
     if (open) plan.dataset.step = i + 1; else delete plan.dataset.step;
     flow.play(open ? i + 1 : 0);
-    if (!open) { clearTimeout(typing); secs.forEach((s, j) => { $('p', s).textContent = words[j]; }); return; }
+    if (!open) { clearTimeout(typing); settle(); return; }
     secs.forEach((s, j) => s.classList.toggle('on', j === i));
     type(i); showPic(0);
     // Back and Next keep their place; on the last step Next rests and Close story appears to their right
     n.textContent = `${i + 1}/${secs.length}`; back.disabled = i <= 0; next.disabled = i === secs.length - 1; end.hidden = !next.disabled;
   }
-  go.addEventListener('click', () => { show(0); next.focus({ preventScroll: true }); });
+  go.addEventListener('click', () => { grow(true, () => show(0)); next.focus({ preventScroll: true }); });
   back.addEventListener('click', () => show(st.k - 1));
   next.addEventListener('click', () => show(st.k + 1));
-  end.addEventListener('click', () => { show(-1); go.focus({ preventScroll: true }); });
+  end.addEventListener('click', () => { grow(false, () => show(-1)); go.focus({ preventScroll: true }); });
   pPrev.addEventListener('click', () => showPic(st.p - 1));
   pNext.addEventListener('click', () => showPic(st.p + 1));
   pic.addEventListener('click', () => openLb(pics().map(f => ({ f, c: cap(f) })), st.p, pic));
