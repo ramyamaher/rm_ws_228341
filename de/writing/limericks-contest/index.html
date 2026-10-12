@@ -596,11 +596,12 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-plan{position:relative; margin-top:22px}
 .vb-open{display:block; width:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-open img{display:block; width:100%; height:auto}
-.vb-dot{position:absolute; width:clamp(20px,3.8vw,28px); aspect-ratio:1; transform:translate(-50%,-50%); padding:0; border:0; background:none; cursor:pointer}
+.vb-dot{position:absolute; width:clamp(13px,2.4vw,18px); aspect-ratio:1; transform:translate(-50%,-50%); padding:0; border:0; background:none; cursor:pointer}
 .vb-dot svg{width:100%; height:100%; overflow:visible}
-.vb-dot circle{fill:#fff; stroke:#22c3a0; stroke-width:3.5}
+.vb-dot::after{content:""; position:absolute; inset:-12px; border-radius:50%}
+.vb-dot circle{fill:#22c3a0; stroke:#22c3a0; stroke-width:3.5}
 .vb-dot circle.pulse{fill:#22c3a0; stroke:none; transform-box:fill-box; transform-origin:center; animation:vbPulse 2.2s ease-out infinite}
-.vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#22c3a0}
+.vb-dot:hover circle:not(.pulse), .vb-dot:focus-visible circle:not(.pulse){fill:#159a7e; stroke:#159a7e}
 @keyframes vbPulse{0%{transform:scale(1); opacity:.6}100%{transform:scale(3.2); opacity:0}}
 .vb-cut{position:absolute; width:clamp(28px,4.6vw,42px); transform:translate(-50%,-50%); pointer-events:none; color:#0f172a}
 html[data-theme="dark"] .vb-cut{color:#e5e7eb}
@@ -1054,7 +1055,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <figure class="b8-build city-build">
                   <div class="b8-3d" role="img" aria-label="Ein 3D-Modell der zukünftigen Stadt in drei Phasen, die entsteht, während man den Schieberegler bewegt"></div>
-                  <div class="b8-ctl"><label for="cityRange">Die Stadt bauen</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  <div class="b8-ctl"><label for="cityRange">Kairos Zukunft bauen</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   <p class="city-step" aria-live="polite"><span>Stufe 1, die gewachsene Stadt: niedrige Häuser stehen zufällig verstreut und in alle Richtungen gedreht, wie in Kairos informellen Vierteln, und freie Grundstücke bleiben als Parks offen.</span><span>Stufe 2, Wachstum entlang der Achsen: die Grundstücke folgen den Hauptachsen und dem Ring um den Park; an den Achsen sind die Gebäude am höchsten und werden von ihnen weg niedriger.</span><span>Stufe 3, das Geschäftsviertel: ein Raster von Grundstücken um runde Parks, in dem Hochhäuser in Gruppen zwischen niedrigeren Blöcken aufragen.</span></p>
                   <p class="b8-note">Die Gebäude des Wettbewerbsbeitrags, aus dem Wettbewerbsmodell übernommen, mit der bestehenden Stadt ringsum.</p>
                 </figure>
