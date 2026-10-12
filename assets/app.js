@@ -520,9 +520,14 @@ $$('.b8-build').forEach(fig => {
     const S = data.solids;
     // the floor, out to the glass front and into the door openings; the low landing by the glass doors; the steps,
     // the upper level, the ramp, and the red wall with its two openings
-    blk(0, 141, -59.6, 164.8, -1, 0); blk(141, 146.7, 76.7, 111.2, -1, 0); blk(141, 146.7, -33.1, 1.4, -1, 0);
-    blk(-22.1, 0, -59.6, -14.2, -2.1, -1.1);
-    solid([...S[55], ...S[51], ...S[52], ...S[53], ...S[54], ...S[48]]);
+    blk(-22.1, 141, -59.6, 164.8, -1, 0); blk(141, 146.7, 76.7, 111.2, -1, 0); blk(141, 146.7, -33.1, 1.4, -1, 0);
+    // the four steps up to the entrance level: equal risers of 15 cm on 26 cm treads, one stepped piece
+    { const pr = [[164.8, -1]]; for (let k = 0; k < 4; k++) pr.push([164.8 + 5.2 * k, 3 * (k + 1)], [164.8 + 5.2 * (k + 1), 3 * (k + 1)]); pr.push([185.6, -1]);
+      const g = new THREE.ExtrudeGeometry(new THREE.Shape(pr.map(([u, v]) => new THREE.Vector2(u, v))), { depth: 140.6, bevelEnabled: false, curveSegments: 1 });
+      g.applyMatrix4(new THREE.Matrix4().set(0, 0, 1, .4, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1)); add(g, 30); }
+    // the ramp, from the hall floor up to the entrance level
+    { const p = (x, y, z) => P(x, y, z), v = [p(-22.1, -14.2, 0), p(.4, -14.2, 0), p(.4, 186, 12), p(-22.1, 186, 12)].flat();
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3)); g.setIndex([0, 1, 2, 0, 2, 3]); add(g, 30); }
     const plate = (outline, holes, z0, z1) => {
       const s = new THREE.Shape(outline.map(([x, y]) => new THREE.Vector2(x, y))); for (const h of holes) s.holes.push(new THREE.Path(h.map(([x, y]) => new THREE.Vector2(x, y))));
       const g = new THREE.ExtrudeGeometry(s, { depth: z1 - z0, bevelEnabled: false, curveSegments: 1 }); g.rotateX(-Math.PI / 2); g.translate(0, z0, 0); add(g, 30);
@@ -583,7 +588,7 @@ $$('.b8-build').forEach(fig => {
     curtain([XW, 324.6], [146.7, 324.6], 12, RT);
 
     // the railings round the ramp, on both sides, 1 m above its slope
-    const rz = (y) => -1.11 + 13.11 * (y + 14.2) / 200.2;
+    const rz = (y) => 12 * (y + 14.2) / 200.2;
     for (const x of [0.4, -22.1]) rail(Array.from({ length: 26 }, (_, i) => { const y = -14.2 + 200.2 * i / 25; return [x, y, rz(y)]; }));
     const seam = (x, h) => (x > RW - .2 && x < RW + .2 && h > ZT - .2 && h < 70.2) || (x > XW - .2 && x < XW + 5.9 && h > ZT - .2 && h < ZT + .2);
     for (let i = segs.length - 6; i >= 0; i -= 6) if (seam(segs[i], segs[i + 1]) && seam(segs[i + 3], segs[i + 4])) segs.splice(i, 6);
