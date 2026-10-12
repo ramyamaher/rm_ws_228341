@@ -739,13 +739,14 @@ function vbFlow(svg) {
   return { play(s) { cancelAnimationFrame(raf); raf = 0; build(s); if (VB_FLOW[s]) { t0 = performance.now(); raf = requestAnimationFrame(frame); } } };
 }
 
-// The story: each step lights its room on the plan and puts the room's pictures beside it (under it on a narrow
-// screen); its words are typed like the limericks, and the buttons sit below; the last step lights the table with the
+// The story: each step lights its room on the plan, which stays as it is, and opens a section below with the room's
+// picture on the left and its words on the right (one under the other on a phone), typed like the limericks, and the
+// buttons below both; the last step lights the table with the
 // model of Cairo and shows the city built on its empty part
 $$('.vb-story').forEach(st => {
   const duo = st.previousElementSibling, plan = $('.vb-plan', duo), flow = vbFlow($('.vb-flow', plan));
   const steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
-  const media = $('.vb-media', duo), pic = $('.vb-pic', media), img = $('img', pic), pPrev = $('.vb-pa.prev', media), pNext = $('.vb-pa.next', media);
+  const media = $('.vb-media', st), pic = $('.vb-pic', media), img = $('img', pic), pPrev = $('.vb-pa.prev', media), pNext = $('.vb-pa.next', media);
   const back = $('.vb-back', st), next = $('.vb-next', st), end = $('.vb-end', st), n = $('.vb-n', st);
   const words = secs.map(s => $('p', s).textContent);
   let typing = null;
@@ -774,7 +775,7 @@ $$('.vb-story').forEach(st => {
     pPrev.hidden = pNext.hidden = list.length < 2;
   }
   function show(i) {
-    const open = i >= 0; st.k = i; go.hidden = open; steps.hidden = media.hidden = !open; duo.classList.toggle('on', open);
+    const open = i >= 0; st.k = i; go.hidden = open; steps.hidden = !open;
     if (open) plan.dataset.step = i + 1; else delete plan.dataset.step;
     flow.play(open ? i + 1 : 0);
     if (!open) { clearTimeout(typing); secs.forEach((s, j) => { $('p', s).textContent = words[j]; }); return; }
