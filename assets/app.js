@@ -648,34 +648,105 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
   }
 });
 
-// Layers of Egypt: the plan opens large, the section marks open the section; each dot opens the render seen from there,
-// and the arrows walk the four in order
+// Layers of Egypt: the plan opens large, the section marks open the section; each dot opens the render seen from there.
+// While the story runs, a dot opens only the renders of the room the story is in
 $$('.vb-plan').forEach(box => {
-  const dots = $$('.vb-dot', box), set = dots.map(d => ({ f: d.dataset.f, c: d.getAttribute('aria-label') })), open = $('.vb-open', box);
-  dots.forEach((d, k) => d.addEventListener('click', () => openLb(set, k, d)));
+  const dots = $$('.vb-dot', box), open = $('.vb-open', box);
+  const item = d => ({ f: d.dataset.f, c: d.getAttribute('aria-label') });
+  dots.forEach(d => d.addEventListener('click', () => {
+    const set = box.dataset.step ? dots.filter(e => e.dataset.zone === box.dataset.step) : dots;
+    openLb(set.map(item), set.indexOf(d), d);
+  }));
   open.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-plan-full.webp', c: open.getAttribute('aria-label'), paper: true }], 0, open));
   $$('.vb-cut', box).forEach(c => c.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-section-full.webp', c: c.getAttribute('aria-label'), paper: true }], 0, c)));
 });
 
-// the story under the plan: each step lights the room the visitor is in and shows its picture beside the plan;
-// the last shows the city they build
+// The visitors' way through the pavilion, in the plan's percent (x is stretched by 2.14, the plan's proportion).
+// The past: in from the entrance, round the corridor to the labyrinth's door. The present: through the labyrinth, where
+// visitors scatter into its side passages and wait for each other at the way out. Elysium: round the table and out.
+const VB_FLOW = (() => {
+  const P = pts => pts.map(([x, y]) => [x * 2.14, y]);
+  const IN = [[93, 38], [88.6, 38]], OUT = [[74.2, 24], [70, 24]];
+  const A = [[88.6, 22.9], [76.9, 22.9], [76.9, 27.8], [82.4, 27.8], [82.4, 33.6], [79.3, 33.6], [79.3, 61.4], [71.7, 61.4], [71.7, 31.4], [74.2, 31.4]];
+  return {
+    1: { stream: P([[46, 99], [46, 69], [6.9, 69], [6.9, 15.3], [93, 15.3], [93, 38], [90.2, 38]]) },
+    2: {
+      routes: [
+        [...IN, ...A, ...OUT],
+        [...IN, [88.6, 62.4], [85.9, 62.4], [85.9, 27.8], ...A.slice(3), ...OUT],
+        [...IN, ...A.slice(0, 3), [84.2, 27.8], [84.2, 62.4], [82, 62.4], [82, 39], [82, 62.4], [84.2, 62.4], [84.2, 33.6], ...A.slice(5), ...OUT],
+        [...IN, ...A, [74.2, 57.6], [76.7, 57.6], [76.7, 33], [76.7, 57.6], [74.2, 57.6], ...OUT],
+      ].map(P),
+      tail: P([[70, 24], [62, 24]]),
+    },
+    3: { stream: P([[70, 24], [12.5, 24], [12.5, 60], [67, 60], [67, 69], [53, 69], [53, 99]]) },
+  };
+})();
+function vbFlow(svg) {
+  const NS = 'http://www.w3.org/2000/svg', V = 15, GAP = 34;   // units a second; spacing in a stream
+  const walk = pts => { const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])); return { pts, cum, len: cum[cum.length - 1] }; };
+  const at = (w, d) => { d = Math.max(0, Math.min(w.len, d)); let i = 1; while (i < w.cum.length - 1 && w.cum[i] < d) i++; const f = (d - w.cum[i - 1]) / ((w.cum[i] - w.cum[i - 1]) || 1), a = w.pts[i - 1], b = w.pts[i]; return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]; };
+  const dot = () => { const g = document.createElementNS(NS, 'g'); g.innerHTML = '<circle class="halo" r="3"/><circle class="core" r="1.3"/>'; svg.append(g); return g; };
+  const put = (g, [x, y], o, t) => { g.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`); g.style.opacity = o.toFixed(2); g.firstChild.setAttribute('r', (2.6 + Math.sin(t * 3.2) * .9).toFixed(2)); };
+  let raf = 0, step = 0, t0 = 0, items = [];
+  function build(s) {
+    svg.innerHTML = ''; items = []; step = s; const F = VB_FLOW[s]; if (!F) return;
+    if (F.stream) { const w = walk(F.stream), n = Math.max(2, Math.round(w.len / GAP)); for (let k = 0; k < n; k++) items.push({ w, k, n, g: dot() }); }
+    else { const ws = F.routes.map(walk), tail = walk(F.tail); ws.forEach(w => items.push({ w, tail, ws, g: dot() })); }
+  }
+  function frame(now) {
+    const t = (now - t0) / 1000, F = VB_FLOW[step];
+    if (F.stream) items.forEach(it => {
+      const loop = it.w.len + GAP, d = ((t * V - it.k * (loop / it.n)) % loop + loop) % loop;
+      put(it.g, at(it.w, d), d > it.w.len ? 0 : Math.min(1, d / 10, (it.w.len - d) / 10), t + it.k);
+    });
+    else {
+      // all leave together, scatter, wait at the way out for the last one, then walk on into the white room together
+      const max = Math.max(...items[0].ws.map(w => w.len)), hold = 1.4, tl = items[0].tail.len, cyc = max / V + hold + tl / V + .8, c = t % cyc;
+      items.forEach((it, i) => {
+        const d = c * V;
+        if (d <= max) put(it.g, at(it.w, d), Math.min(1, d / 6), t + i);
+        else if (c < max / V + hold) put(it.g, at(it.w, it.w.len), 1, t + i);
+        else { const e = (c - max / V - hold) * V; put(it.g, at(it.tail, e), Math.max(0, Math.min(1, (tl + 8 - e) / 8)), t + i); }
+      });
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  return {
+    play(s) { cancelAnimationFrame(raf); raf = 0; build(s); if (VB_FLOW[s]) { t0 = performance.now(); raf = requestAnimationFrame(frame); } },
+  };
+}
+
+// The story under the plan: each step lights its room on the plan and opens a section below with the room's pictures
+// and the words; the last lights the table with the model of Cairo and shows the city built on its empty part
 $$('.vb-story').forEach(st => {
-  const duo = st.previousElementSibling, plan = $('.vb-plan', duo), side = $('.vb-side', duo), pic = $('img', side), steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
+  const duo = st.previousElementSibling, plan = $('.vb-plan', duo), flow = vbFlow($('.vb-flow', plan));
+  const steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
+  const pic = $('.vb-pic', st), img = $('img', pic), pPrev = $('.vb-pa.prev', st), pNext = $('.vb-pa.next', st);
   const back = $('.vb-back', st), next = $('.vb-next', st), end = $('.vb-end', st), n = $('.vb-n', st);
+  const cap = f => { const d = $(`.vb-dot[data-f="${f}"]`, plan); return d ? d.getAttribute('aria-label') : $('h4', secs[st.k]).textContent; };
+  const pics = () => secs[st.k].dataset.pics.split(' ');
+  function showPic(j) {
+    const list = pics(); st.p = (j + list.length) % list.length;
+    img.src = `/assets/img/projects/${list[st.p]}.jpg`; img.alt = pic.ariaLabel = cap(list[st.p]);
+    pPrev.hidden = pNext.hidden = list.length < 2;
+  }
   function show(i) {
-    const open = i >= 0; go.hidden = open; steps.hidden = !open;
+    const open = i >= 0; st.k = i; go.hidden = open; steps.hidden = !open;
     if (open) plan.dataset.step = i + 1; else delete plan.dataset.step;
+    flow.play(open ? i + 1 : 0);
+    if (!open) return;
     secs.forEach((s, j) => s.classList.toggle('on', j === i));
-    side.hidden = !open;
-    if (open) { const s = secs[i]; pic.src = `/assets/img/projects/${s.dataset.pic}.jpg`; pic.alt = side.ariaLabel = $('h4', s).textContent; }
+    showPic(0);
     n.textContent = `${i + 1}/${secs.length}`; back.disabled = i <= 0; next.hidden = i === secs.length - 1; end.hidden = !next.hidden;
-    st.k = i;
   }
   go.addEventListener('click', () => { show(0); next.focus({ preventScroll: true }); });
   back.addEventListener('click', () => show(st.k - 1));
   next.addEventListener('click', () => show(st.k + 1));
   end.addEventListener('click', () => { show(-1); go.focus({ preventScroll: true }); });
-  side.addEventListener('click', () => openLb([{ f: secs[st.k].dataset.pic, c: $('h4', secs[st.k]).textContent }], 0, side));
+  pPrev.addEventListener('click', () => showPic(st.p - 1));
+  pNext.addEventListener('click', () => showPic(st.p + 1));
+  pic.addEventListener('click', () => openLb(pics().map(f => ({ f, c: cap(f) })), st.p, pic));
 });
 
 // Layers of Egypt: the entry's own city, from the competition's Rhino model (assets/data/cairo-city.json), in the frame of
