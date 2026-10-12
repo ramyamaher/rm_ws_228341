@@ -631,27 +631,30 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-plan[data-step="1"] .vb-zones .z1, .vb-plan[data-step="2"] .vb-zones .z2, .vb-plan[data-step="3"] .vb-zones .z3, .vb-plan[data-step="4"] .vb-zones .z4{display:inline}
 .vb-plan[data-step] .vb-zones{opacity:1}
 .vb-flow{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible}
-.vb-flow .halo{fill:#fbbf24; opacity:.35}
-.vb-flow .core{fill:#f97316}
+.vb-flow path{fill:none; stroke-linecap:round; stroke-linejoin:round}
+.vb-flow .glow{stroke:#fbbf24; stroke-width:5.5; opacity:.55; filter:url(#vbBlur)}
+.vb-flow .band{stroke:#f97316; stroke-width:2.6; opacity:.9; filter:url(#vbSoft)}
 .vb-plan[data-step] .vb-dot, .vb-plan[data-step] .vb-cut{opacity:0; pointer-events:none; transition:opacity .3s}
 .vb-plan[data-step="1"] .vb-dot[data-zone="1"], .vb-plan[data-step="2"] .vb-dot[data-zone="2"], .vb-plan[data-step="3"] .vb-dot[data-zone="3"]{opacity:1; pointer-events:auto}
 .vb-story{display:flex; flex-direction:column; align-items:center; margin-top:14px}
+.vb-texts{max-width:760px; margin:0 auto}
 .vb-pill{appearance:none; cursor:pointer; white-space:nowrap; border-radius:999px; padding:9px 18px; font:inherit; font-size:14px; font-weight:600; line-height:1.2;
   background:var(--btn-bg); color:var(--ink); border:1px solid var(--btn-border); box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .2s cubic-bezier(.3,1.6,.5,1), opacity .2s}
 .vb-pill:hover{transform:scale(1.04)}
 .vb-pill:disabled{opacity:.35; cursor:default; transform:none}
-.vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:22px; align-items:start; animation:vbOpen .45s ease-out}
-.vb-steps[hidden]{display:none}
+.vb-steps{width:100%; animation:vbOpen .45s ease-out}
+.vb-steps[hidden], .vb-media[hidden]{display:none}
+.vb-duo.on{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:20px; align-items:center}
+.vb-duo.on .vb-media{animation:vbOpen .45s ease-out}
+@media (max-width:900px){.vb-duo.on{grid-template-columns:1fr; gap:14px}}
 @keyframes vbOpen{from{opacity:0; transform:translateY(-8px)}}
-.vb-col{display:flex; flex-direction:column; min-height:100%}
-@media (max-width:760px){.vb-steps{grid-template-columns:1fr; gap:14px}}
+
 .vb-texts{display:grid}
 .vb-texts section{grid-area:1/1; visibility:hidden}
 .vb-texts section.on{visibility:visible}
 .vb-texts h4{margin:0 0 6px; font-size:16px; font-weight:650}
 .vb-texts p{margin:0; font-size:14.5px; line-height:1.55; color:var(--ink-2, var(--ink))}
-.vb-nav{display:flex; align-items:center; justify-content:flex-start; gap:8px; margin-top:16px}
-@media (max-width:760px){.vb-nav{justify-content:center}}
+.vb-nav{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:16px}
 .vb-n{font-size:13px; font-weight:600; color:var(--ink-3); margin-right:6px; font-variant-numeric:tabular-nums}
 .vb-cut svg{animation:vbGlow 2.2s ease-out infinite}
 @keyframes vbGlow{0%{filter:drop-shadow(0 0 0 rgba(34,195,160,.9))}60%{filter:drop-shadow(0 0 7px rgba(34,195,160,.55))}100%{filter:drop-shadow(0 0 10px rgba(34,195,160,0))}}
@@ -1115,27 +1118,25 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="vb-dot" type="button" data-f="vb-005" data-zone="3" style="left:67.2%; top:23.0%" aria-label="Elysium: la maqueta de la ciudad, donde los visitantes construyen el futuro en realidad aumentada"><svg viewBox="-14 -14 28 28" aria-hidden="true"><circle class="pulse" r="7"/><circle r="9.5"/></svg></button>
                   <button class="vb-cut l" type="button" style="left:1.9%; top:35.4%" aria-label="Sección A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                   <svg class="vb-zones" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><g class="z1"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M5.3 12H94.9V72.5H60.6V99.2H39.5V72.5H5.3Z M8.6 19.4H91.5V65.8H8.6Z"/><path class="lit" d="M5.3 12H94.9V72.5H60.6V99.2H39.5V72.5H5.3Z M8.6 19.4H91.5V65.8H8.6Z"/></g><g class="z2"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M70.2 19.4H91.5V65.8H70.2Z"/><path class="lit" d="M70.2 19.4H91.5V65.8H70.2Z"/></g><g class="z3"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M8.6 19.4H70.2V65.8H8.6Z"/><path class="lit" d="M8.6 19.4H70.2V65.8H8.6Z"/></g><g class="z4"><path class="dim" d="M4.4 10H95.8V74.5H61.5V100H38.6V74.5H4.4Z M16.5 27.5H62.5V55.3H16.5Z"/><path class="lit" d="M16.5 27.5H62.5V55.3H16.5Z"/></g></svg>
-                  <svg class="vb-flow" viewBox="0 0 214 100" aria-hidden="true"></svg>
+                  <svg class="vb-flow" viewBox="0 0 214 100" aria-hidden="true"><defs><filter id="vbBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter><filter id="vbSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".5"/></filter></defs><g class="vb-bands"></g></svg>
                   <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="Sección A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                 </div>
+                  <div class="vb-media" hidden>
+                    <button class="vb-pic" type="button"><img alt="El pasado" decoding="async"></button>
+                    <button class="vb-pa prev" type="button" aria-label="Imagen anterior"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+                    <button class="vb-pa next" type="button" aria-label="Imagen siguiente"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+                  </div>
                 </div>
                 <div class="vb-story">
                   <button class="vb-pill vb-go" type="button">Abrir la historia</button>
                   <div class="vb-steps" hidden>
-                    <div class="vb-media">
-                      <button class="vb-pic" type="button"><img alt="El pasado" decoding="async"></button>
-                      <button class="vb-pa prev" type="button" aria-label="Imagen anterior"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-                      <button class="vb-pa next" type="button" aria-label="Imagen siguiente"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-                    </div>
-                    <div class="vb-col">
                     <div class="vb-texts" aria-live="polite">
                       <section data-pics="vb-004"><h4>El pasado</h4><p>El visitante entra y recorre el pasillo que rodea el laberinto y la sala blanca. Proyecciones en sus muros muestran a los arquitectos egipcios del pasado y las formas en que se practicaba la arquitectura antes.</p></section>
                       <section data-pics="vb-003 vb-002"><h4>El presente</h4><p>El pasillo lleva al laberinto: pasajes estrechos y oscuros cubiertos de imágenes de sufrimiento y tumulto, y de una arquitectura que ha perdido el rumbo.</p></section>
                       <section data-pics="vb-005"><h4>Elíseo</h4><p>El laberinto se abre a la sala blanca. Una larga mesa sostiene una maqueta de todo El Cairo, con una zona sin urbanizar, y gafas de realidad virtual a su lado. El blanco luminoso y la presencia de la gente en la sala representan la esperanza en el futuro de El Cairo.</p></section>
                       <section data-pics="vb-007"><h4>El futuro de El Cairo</h4><p>La zona vacía, construida en realidad virtual en tres etapas: la ciudad vernácula con más espacio libre y parques, el crecimiento a lo largo de los ejes principales con los edificios más altos sobre ellos, y un distrito de negocios de torres. La maqueta de arriba la construye al mover el control.</p></section>
                     </div>
-                    <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">Atrás</button><button class="vb-pill vb-next" type="button">Siguiente</button><button class="vb-pill vb-end" type="button">Cerrar</button></div>
-                    </div>
+                    <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">Atrás</button><button class="vb-pill vb-next" type="button">Siguiente</button><button class="vb-pill vb-end" type="button">Cerrar la historia</button></div>
                   </div>
                 </div>
               </article>

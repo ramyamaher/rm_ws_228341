@@ -661,68 +661,70 @@ $$('.vb-plan').forEach(box => {
   $$('.vb-cut', box).forEach(c => c.addEventListener('click', () => openLb([{ src: '/assets/img/projects/vb-section-full.webp', c: c.getAttribute('aria-label'), paper: true }], 0, c)));
 });
 
-// The visitors' way through the pavilion, in the plan's percent (x is stretched by 2.14, the plan's proportion).
-// The past: in from the entrance, round the corridor to the labyrinth's door. The present: through the labyrinth, where
-// visitors scatter into its side passages and wait for each other at the way out. Elysium: round the table and out.
+// The visitors' way through the pavilion, in the plan's percent (x is stretched by 2.14, the plan's proportion), shown
+// as a band of light moving through the rooms. The past: in from the entrance, round the corridor to the labyrinth's
+// door. The present: two groups at a time take different ways through the labyrinth; whoever reaches a meeting point
+// first waits for the other, and they go on together, three times, then into the white room. Elysium: round the table
+// and out.
 const VB_FLOW = (() => {
   const P = pts => pts.map(([x, y]) => [x * 2.14, y]);
-  const IN = [[93, 38], [88.6, 38]], OUT = [[74.2, 24], [70, 24]];
-  const A = [[88.6, 22.9], [76.9, 22.9], [76.9, 27.8], [82.4, 27.8], [82.4, 33.6], [79.3, 33.6], [79.3, 61.4], [71.7, 61.4], [71.7, 31.4], [74.2, 31.4]];
+  const X3 = [85.5, 32.1], X2 = [79.1, 39.4], X1 = [73.8, 30.4];
   return {
-    1: { stream: P([[46, 99], [46, 69], [6.9, 69], [6.9, 15.3], [93, 15.3], [93, 38], [90.2, 38]]) },
+    1: { loop: P([[46, 99], [46, 69], [6.9, 69], [6.9, 15.3], [93, 15.3], [93, 38], [90.2, 38]]) },
     2: {
-      routes: [
-        [...IN, ...A, ...OUT],
-        [...IN, [88.6, 62.4], [85.9, 62.4], [85.9, 27.8], ...A.slice(3), ...OUT],
-        [...IN, ...A.slice(0, 3), [84.2, 27.8], [84.2, 62.4], [82, 62.4], [82, 39], [82, 62.4], [84.2, 62.4], [84.2, 33.6], ...A.slice(5), ...OUT],
-        [...IN, ...A, [74.2, 57.6], [76.7, 57.6], [76.7, 33], [76.7, 57.6], [74.2, 57.6], ...OUT],
-      ].map(P),
-      tail: P([[70, 24], [62, 24]]),
+      legs: [
+        [[[93, 38], [88.6, 38], [88.6, 22.9], [76.9, 22.9], [76.9, 27.8], [85.5, 27.8], X3],
+         [[93, 38], [88.6, 38], [88.6, 62.4], [85.9, 62.4], [85.9, 32.1], X3]],
+        [[X3, [84.2, 33.6], [79.3, 33.6], [79.3, 39.4], X2],
+         [X3, [84.2, 34], [84.2, 62.4], [82, 62.4], [82, 39.4], X2]],
+        [[X2, [79.3, 61.4], [71.7, 61.4], [71.7, 31.4], X1],
+         [X2, [79.3, 61.4], [71.7, 61.4], [71.7, 31.4], [74.2, 32], [74.2, 57.6], [76.7, 57.6], [76.7, 32], [76.7, 57.6], [74.2, 57.6], [74.2, 32], X1]],
+        [[X1, [74.2, 24], [70, 24], [62, 24]], [X1, [74.2, 24], [70, 24], [62, 24]]],
+      ].map(leg => leg.map(P)),
     },
-    3: { stream: P([[70, 24], [12.5, 24], [12.5, 60], [67, 60], [67, 69], [53, 69], [53, 99]]) },
+    3: { loop: P([[70, 24], [12.5, 24], [12.5, 60], [67, 60], [67, 69], [53, 69], [53, 99]]) },
   };
 })();
 function vbFlow(svg) {
-  const NS = 'http://www.w3.org/2000/svg', V = 15, GAP = 34;   // units a second; spacing in a stream
-  const walk = pts => { const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])); return { pts, cum, len: cum[cum.length - 1] }; };
-  const at = (w, d) => { d = Math.max(0, Math.min(w.len, d)); let i = 1; while (i < w.cum.length - 1 && w.cum[i] < d) i++; const f = (d - w.cum[i - 1]) / ((w.cum[i] - w.cum[i - 1]) || 1), a = w.pts[i - 1], b = w.pts[i]; return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]; };
-  const dot = () => { const g = document.createElementNS(NS, 'g'); g.innerHTML = '<circle class="halo" r="3"/><circle class="core" r="1.3"/>'; svg.append(g); return g; };
-  const put = (g, [x, y], o, t) => { g.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`); g.style.opacity = o.toFixed(2); g.firstChild.setAttribute('r', (2.6 + Math.sin(t * 3.2) * .9).toFixed(2)); };
-  let raf = 0, step = 0, t0 = 0, items = [];
+  const NS = 'http://www.w3.org/2000/svg', g = $('.vb-bands', svg), V = 13, BAND = 26, HOLD = 1.1;   // units a second; band length; wait at a meeting point
+  const line = pts => { const e = document.createElementNS(NS, 'g'); const d = 'M' + pts.map(p => p.map(v => v.toFixed(2)).join(' ')).join('L');
+    e.innerHTML = `<path class="glow" d="${d}"/><path class="band" d="${d}"/>`; g.append(e); const len = e.firstChild.getTotalLength(); return { e, len }; };
+  // the band's head at s along the line: visible from s - BAND to s
+  const head = (b, s) => { for (const p of b.e.children) { p.style.strokeDasharray = `${BAND} ${b.len + BAND * 2}`; p.style.strokeDashoffset = (BAND - s).toFixed(2); } };
+  const show = (b, o) => { b.e.style.opacity = o; };
+  let raf = 0, t0 = 0, step = 0, parts = [];
   function build(s) {
-    svg.innerHTML = ''; items = []; step = s; const F = VB_FLOW[s]; if (!F) return;
-    if (F.stream) { const w = walk(F.stream), n = Math.max(2, Math.round(w.len / GAP)); for (let k = 0; k < n; k++) items.push({ w, k, n, g: dot() }); }
-    else { const ws = F.routes.map(walk), tail = walk(F.tail); ws.forEach(w => items.push({ w, tail, ws, g: dot() })); }
+    g.innerHTML = ''; parts = []; step = s; const F = VB_FLOW[s]; if (!F) return;
+    if (F.loop) parts = [line(F.loop)];
+    else parts = F.legs.map(leg => leg.map(line));
   }
   function frame(now) {
     const t = (now - t0) / 1000, F = VB_FLOW[step];
-    if (F.stream) items.forEach(it => {
-      const loop = it.w.len + GAP, d = ((t * V - it.k * (loop / it.n)) % loop + loop) % loop;
-      put(it.g, at(it.w, d), d > it.w.len ? 0 : Math.min(1, d / 10, (it.w.len - d) / 10), t + it.k);
-    });
-    else {
-      // all leave together, scatter, wait at the way out for the last one, then walk on into the white room together
-      const max = Math.max(...items[0].ws.map(w => w.len)), hold = 1.4, tl = items[0].tail.len, cyc = max / V + hold + tl / V + .8, c = t % cyc;
-      items.forEach((it, i) => {
-        const d = c * V;
-        if (d <= max) put(it.g, at(it.w, d), Math.min(1, d / 6), t + i);
-        else if (c < max / V + hold) put(it.g, at(it.w, it.w.len), 1, t + i);
-        else { const e = (c - max / V - hold) * V; put(it.g, at(it.tail, e), Math.max(0, Math.min(1, (tl + 8 - e) / 8)), t + i); }
+    if (F.loop) {
+      const b = parts[0], cyc = (b.len + BAND) / V + .6, s = (t % cyc) * V;
+      head(b, Math.min(s, b.len + BAND)); show(b, 1);
+    } else {
+      // leg after leg; within a leg both groups start together and the first to arrive waits, glowing, for the other
+      const dur = parts.map(leg => Math.max(...leg.map(b => b.len)) / V + HOLD), total = dur.reduce((x, y) => x + y, 0) + .6;
+      let c = t % total;
+      parts.forEach((leg, k) => {
+        const on = c >= 0 && c < dur[k];
+        leg.forEach(b => { show(b, on ? 1 : 0); if (on) head(b, Math.min(c * V, b.len)); });
+        c -= dur[k];
       });
     }
     raf = requestAnimationFrame(frame);
   }
-  return {
-    play(s) { cancelAnimationFrame(raf); raf = 0; build(s); if (VB_FLOW[s]) { t0 = performance.now(); raf = requestAnimationFrame(frame); } },
-  };
+  return { play(s) { cancelAnimationFrame(raf); raf = 0; build(s); if (VB_FLOW[s]) { t0 = performance.now(); raf = requestAnimationFrame(frame); } } };
 }
 
-// The story under the plan: each step lights its room on the plan and opens a section below with the room's pictures
-// and the words; the last lights the table with the model of Cairo and shows the city built on its empty part
+// The story: each step lights its room on the plan and puts the room's pictures beside it (under it on a narrow
+// screen), with the words and the buttons below; the last lights the table with the model of Cairo and shows the city
+// built on its empty part
 $$('.vb-story').forEach(st => {
   const duo = st.previousElementSibling, plan = $('.vb-plan', duo), flow = vbFlow($('.vb-flow', plan));
   const steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
-  const pic = $('.vb-pic', st), img = $('img', pic), pPrev = $('.vb-pa.prev', st), pNext = $('.vb-pa.next', st);
+  const media = $('.vb-media', duo), pic = $('.vb-pic', media), img = $('img', pic), pPrev = $('.vb-pa.prev', media), pNext = $('.vb-pa.next', media);
   const back = $('.vb-back', st), next = $('.vb-next', st), end = $('.vb-end', st), n = $('.vb-n', st);
   const cap = f => { const d = $(`.vb-dot[data-f="${f}"]`, plan); return d ? d.getAttribute('aria-label') : $('h4', secs[st.k]).textContent; };
   const pics = () => secs[st.k].dataset.pics.split(' ');
@@ -732,7 +734,7 @@ $$('.vb-story').forEach(st => {
     pPrev.hidden = pNext.hidden = list.length < 2;
   }
   function show(i) {
-    const open = i >= 0; st.k = i; go.hidden = open; steps.hidden = !open;
+    const open = i >= 0; st.k = i; go.hidden = open; steps.hidden = media.hidden = !open; duo.classList.toggle('on', open);
     if (open) plan.dataset.step = i + 1; else delete plan.dataset.step;
     flow.play(open ? i + 1 : 0);
     if (!open) return;
