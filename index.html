@@ -702,7 +702,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 .vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
 .vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
 .vb-media{margin-top:14px}
-.vb-render{position:absolute; right:12px; top:12px; z-index:3}
+.vb-stage{position:relative}   /* the city, or the render, with the button on it */
+.vb-render{position:absolute; right:12px; top:26px; z-index:3}
 .vb-render[hidden], .vb-render span[hidden]{display:none}
 html[dir="rtl"] .vb-render{right:auto; left:12px}
 .vb-texts section:not(.on) .city-step span{visibility:hidden}   /* a stage's own "on" would show through the hidden step */
@@ -1262,12 +1263,14 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="Section A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                 </div>
                 </div>
+                  <div class="vb-stage">
                   <figure class="b8-build city-build" hidden>
                     <div class="b8-3d" role="img" aria-label="A 3D model of the future city in three phases, built up as you move the slider"></div>
                     <div class="b8-ctl"><label for="cityRange">Build Cairo's Future</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   </figure>
                   <img class="vb-rimg" src="/assets/img/projects/vb-007.jpg" alt="Cairo's future" loading="lazy" decoding="async" hidden>
                   <button class="vb-pill vb-render" type="button" hidden><span>Show render</span><span hidden>Show slider</span></button>
+                  </div>
                 </div>
                 <div class="vb-row">
                 <div class="vb-media" hidden>
@@ -1596,6 +1599,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=d72a88b0aa"></script>
-<script src="/assets/app.js?v=e8302c7cb3"></script>
+<script src="/assets/app.js?v=63eaffb8b7"></script>
 </body>
 </html>

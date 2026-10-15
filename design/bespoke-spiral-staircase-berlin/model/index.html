@@ -179,6 +179,14 @@ function speak() {
   for (let n; (n = walk.nextNode());) { const s = n.data.trim(); if (s && T[LANG][s]) n.data = n.data.replace(s, T[LANG][s]); }
   for (const e of document.querySelectorAll('[aria-label],[title]')) for (const a of ['aria-label', 'title']) { const v = e.getAttribute(a); if (v && T[LANG][v]) e.setAttribute(a, T[LANG][v]); }
   for (const e of document.querySelectorAll('label')) { const t = e.firstChild; if (t && t.nodeType === 3 && T[LANG][t.data.trim()]) t.data = T[LANG][t.data.trim()] + (t.data.endsWith(' ') ? ' ' : ''); }
+  // in Arabic, the digits used in Arabic-speaking countries, also in the numbers the page writes as things change
+  if (LANG === 'ar') {
+    const AR = '٠١٢٣٤٥٦٧٨٩';
+    const fix = (n) => { const v = n.data.replace(/[0-9]/g, (d) => AR[d]); if (v !== n.data) n.data = v; };
+    const walk = (root) => { if (root.nodeType === 3) return fix(root); const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); for (let n; (n = w.nextNode());) if (n.parentElement && n.parentElement.tagName !== 'SCRIPT' && n.parentElement.tagName !== 'STYLE') fix(n); };
+    walk(document.body);
+    new MutationObserver((ms) => { for (const m of ms) { if (m.type === 'characterData') fix(m.target); else m.addedNodes.forEach(walk); } }).observe(document.body, { subtree: true, childList: true, characterData: true });
+  }
 }
 const S = { mode: 'smooth', A: null, n: 10, ghost: false, units: 'metric' };
 const COL_A = new THREE.Color('#22c3a0'), COL_B = new THREE.Color('#3b82f6');
