@@ -625,7 +625,8 @@ html[dir="rtl"] .b8-play{right:auto; left:14px}
 /* Building 8 in 3D: a slider places the boards, layer by layer */
 .b8-build{margin:14px 0 0; border-radius:18px; overflow:hidden; background:#fff; border:1px solid var(--line)}   /* a border, not an inset shadow: the canvas would paint over a shadow */
 html[data-theme="dark"] .b8-build{background:var(--soft)}
-html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#liftSoft)}   /* its white turns the figure's own colour, not black */
+.dark-lifts{position:absolute; width:0; height:0; overflow:hidden}
 .b8-3d{position:relative; height:clamp(260px,42vh,440px); cursor:grab; touch-action:none}
 .b8-3d:active{cursor:grabbing}
 .b8-3d canvas{display:block}
@@ -691,9 +692,22 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-poem{white-space:pre-line; height:7.6em; overflow-y:auto; margin-top:10px; padding:8px 12px; border-left:2px solid var(--line);
   font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); border-left-color:transparent; transition:border-color .5s}
 .vb-poem.on{border-left-color:var(--line)}
-.vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; animation:vbOpen .45s ease-out}
-.vb-steps .vb-nav{grid-column:1 / -1}
-@media (max-width:760px){.vb-steps{grid-template-columns:1fr; gap:14px}}
+.vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; align-items:start; animation:vbOpen .45s ease-out}
+/* the picture of the step, under the plan; on the last step the city being built takes its place */
+/* the plan, as wide as the card allows with the story under it in view; on the last step the city being built takes its
+   place at its width, or the render does */
+.vb-big{position:relative; width:var(--vbw, 100%); max-width:100%; margin:0 auto}
+.vb-big .city-build{margin:0}
+.vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
+.vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
+.vb-media{margin-top:14px}
+.vb-render{position:absolute; right:12px; top:12px; z-index:3}
+.vb-render[hidden], .vb-render span[hidden]{display:none}
+html[dir="rtl"] .vb-render{right:auto; left:12px}
+.vb-texts section:not(.on) .city-step span{visibility:hidden}   /* a stage's own "on" would show through the hidden step */
+.vb-texts .city-step{margin:0 0 10px; font-size:14.5px; line-height:1.55; color:var(--ink-2, var(--ink))}
+.vb-texts .city-how{margin:0 0 10px; font-size:13px; color:var(--ink-3)}
+.vb-texts .b8-note{margin:0; font-size:12.5px}
 .vb-steps[hidden], .vb-media[hidden]{display:none}
 @keyframes vbOpen{from{opacity:0; transform:translateY(-8px)}}
 
@@ -731,7 +745,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .ss-live{position:relative; margin-top:22px}
 .ss-hook{margin:0 0 12px; font-size:17px; font-weight:650; letter-spacing:-.01em}
 .ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
-html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg); box-shadow:none}
+html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg) url(#liftCard); box-shadow:none}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
 .anim-logo.play .lab-frame{animation:labFrame 1.1s cubic-bezier(.6,0,.3,1) .45s forwards}
@@ -794,6 +808,19 @@ html.fit-tab body{min-height:0}
 .panel.fit .card-scroll{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; margin:0 -6px; padding:4px 6px 0}
 .panel.fit .card-scroll .lead{margin-top:0}
 .panel.fit .card-scroll .chips{margin-top:14px}
+.vb-box.telling{display:flex; flex-direction:column; height:var(--vbh, auto)}
+.vb-box.telling .vb-big{flex:none}
+.vb-box.telling .vb-big .city-build:not([hidden]){aspect-ratio:1800/841; display:flex; flex-direction:column}   /* the plan's own size, so the story stays in view */
+.vb-box.telling .vb-big .city-build .b8-3d{flex:1; min-height:0; aspect-ratio:auto}
+.vb-box.telling .vb-big .b8-ctl{padding:10px 16px 12px}
+/* under the plan: the picture a fifth of the width, the words and the buttons beside it */
+.vb-box.telling .vb-row{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,4fr); gap:22px; margin-top:14px}
+.vb-box.telling .vb-row.solo{grid-template-columns:minmax(0,1fr)}
+.vb-box.telling .vb-media{margin-top:0; align-self:start}
+.vb-box.telling .vb-story{margin-top:0; min-height:0; align-items:stretch}
+.vb-box.telling .vb-steps{height:100%; grid-template-rows:minmax(0,1fr) auto; gap:12px}
+.vb-box.telling .vb-texts{align-self:stretch; min-height:0; overflow-y:auto; overscroll-behavior:contain}
+.vb-box.telling .vb-nav{margin-top:0}
 /* the Archive alone: everything on one screen, the map taking whatever height is left */
 .panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
 .archive-fit .lead{flex:none; margin-bottom:14px}
@@ -942,6 +969,12 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Layers of Egypt: Between Labyrinth and Elysium","description":"Zweiter Preis, verliehen vom ägyptischen Kulturministerium. Ein Wettbewerbsbeitrag für Ägyptens Nationalpavillon auf der Architekturbiennale Venedig 2016.","url":"https://ramymaher.com/de/design/layers-of-egypt/","inLanguage":"de","creator":{"@id":"https://ramymaher.com/#person"},"image":"https://ramymaher.com/assets/img/projects/vb-001.jpg"}</script>
 </head>
 <body>
+<!-- dark mode draws the white models inverted; these lift their black to the colour around them, so a model's
+     background is the card's own (the numbers are the dark --soft and --card, keep them in step) -->
+<svg class="dark-lifts" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+  <filter id="liftSoft" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="linear" slope=".8902" intercept=".1098"/><feFuncG type="linear" slope=".8863" intercept=".1137"/><feFuncB type="linear" slope=".8588" intercept=".1412"/></feComponentTransfer></filter>
+  <filter id="liftCard" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="linear" slope=".9137" intercept=".0863"/><feFuncG type="linear" slope=".9098" intercept=".0902"/><feFuncB type="linear" slope=".8863" intercept=".1137"/></feComponentTransfer></filter>
+</defs></svg>
 
 <div class="greet" id="greet" role="button" tabindex="0" aria-label="Website betreten">
   <div class="greet-in">
@@ -1043,7 +1076,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div data-for="design-1">
                 <h4>Robotische philosophische Untersuchung der Architektur</h4>
-                <p>In dieser Masterarbeit habe ich die Architektur bis auf ihre nackten Silben zerlegt, um zu verstehen, was ich mit diesem Beruf verbinden will. Weil Architekten seit jeher eine Dienstleistung waren, die sich nur die Reichen leisten, wurde das Abschlussprojekt ein Werkzeug, mit dem Menschen aus der Ferne und auf ihre eigene, ortsübliche Weise bauen können. Dabei kamen Bewegungssensoren, VR und Sintern zum Einsatz.</p>
+                <p>In dieser Masterarbeit habe ich die Architektur bis auf ihre nackten Silben zerlegt, um zu verstehen, was ich mit diesem Beruf verbinden will. Weil Architektur seit jeher eine Dienstleistung war, die sich nur die Reichen leisten, wurde das Abschlussprojekt ein Werkzeug, mit dem Menschen aus der Ferne und auf ihre eigene, ortsübliche Weise bauen können. Dabei kamen Bewegungssensoren, VR und Sintern zum Einsatz.</p>
                 </div>
                 <div data-for="design-2">
                 <h4>Möbel, von Schritten gezeichnet</h4>
@@ -1198,7 +1231,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Ägyptischer Pavillon, La Biennale di Venezia <i></i> 15. Internationale Architekturausstellung, 2016</p>
                     </div>
                   </div>
-                <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Zweiter Preis</b>, verliehen vom ägyptischen Kulturministerium.</p></div>
+                <div class="prize-line silver top"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Zweiter Preis</b>, verliehen vom ägyptischen Kulturministerium.</p></div>
                 <div class="p-body">
                   <div class="prose">
                     <p>Ein Wettbewerbsbeitrag für Ägyptens Nationalpavillon auf der Architekturbiennale Venedig 2016. Der Pavillon ist ein Gang durch drei Phasen Ägyptens. Die Vergangenheit, in der die Besucher über Ägyptens Architektur und seine Architekten lesen. Die Gegenwart: Ägypten im Jahr 2016, mitten in einer unruhigen Zeit, als Labyrinth aus schwach beleuchteten Räumen und Bildern des Leids, an das sich die Ägypter gewöhnt hatten. Und die Zukunft, Elysium: der helle Raum, zu dem der Gang schließlich führt, wo ein großes physisches Stadtmodell eine leere Stelle auf der Karte hat und die Besucher mit Augmented Reality Ägyptens Zukunft bauen.</p>
@@ -1211,14 +1244,8 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </dl>
                   </div>
                 </div>
-                <figure class="b8-build city-build">
-                  <div class="b8-3d" role="img" aria-label="Ein 3D-Modell der zukünftigen Stadt in drei Phasen, die entsteht, während man den Schieberegler bewegt"></div>
-                  <div class="b8-ctl"><label for="cityRange">Kairos Zukunft bauen</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
-                  <p class="city-step" aria-live="polite"><span><b>Stufe 1</b>Die gewachsene Stadt: niedrige Häuser stehen zufällig verstreut und in alle Richtungen gedreht, wie in Kairos informellen Vierteln, und freie Grundstücke bleiben als Parks offen.</span><span><b>Stufe 2</b>Wachstum entlang der Achsen: die Grundstücke folgen den Hauptachsen und dem Ring um den Park; an den Achsen sind die Gebäude am höchsten und werden von ihnen weg niedriger.</span><span><b>Stufe 3</b>Das Geschäftsviertel: ein Raster von Grundstücken um runde Parks, in dem Hochhäuser in Gruppen zwischen niedrigeren Blöcken aufragen.</span></p>
-                  <p class="city-step city-how"><span>So wächst sie: Über das Gelände wird ein Raster von Grundstücken gelegt; einige bleiben zufällig leer und werden zu Grünflächen zusammengefasst, und jedes andere Grundstück erhält ein niedriges Haus, zufällig skaliert und mit zufälliger Höhe.</span><span>So wächst sie: Punkte werden über die Grundstücke verteilt und zu den Hauptachsen hingezogen; die Höhe eines Gebäudes nimmt mit seinem Abstand zur nächsten Achse entlang einer festgelegten Kurve ab, es wird zu dieser Achse ausgerichtet, und Punkte zu nahe an einer Achse werden entfernt, damit die Achse eine Strasse bleibt.</span><span>So wächst sie: Zufällige Punkte teilen das Viertel in organisch geformte Grundstücke; jedes Grundstück rückt von seinen Rändern ab, und je näher es am Zentrum des Viertels liegt, desto höher steigt sein Turm.</span></p>
-                  <p class="b8-note">Die Gebäude des Wettbewerbsbeitrags, aus dem Wettbewerbsmodell übernommen, mit der bestehenden Stadt ringsum.</p>
-                </figure>
                 <div class="vb-box">
+                <div class="vb-big">
                 <div class="vb-duo">
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="Grundriss"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="841" alt="Grundriss" loading="lazy" decoding="async"></button>
@@ -1232,14 +1259,22 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="Schnitt A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                 </div>
                 </div>
+                  <figure class="b8-build city-build" hidden>
+                    <div class="b8-3d" role="img" aria-label="Ein 3D-Modell der zukünftigen Stadt in drei Phasen, die entsteht, während man den Schieberegler bewegt"></div>
+                    <div class="b8-ctl"><label for="cityRange">Kairos Zukunft bauen</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  </figure>
+                  <img class="vb-rimg" src="/assets/img/projects/vb-007.jpg" alt="Kairos Zukunft" loading="lazy" decoding="async" hidden>
+                  <button class="vb-pill vb-render" type="button" hidden><span>Rendering zeigen</span><span hidden>Schieberegler zeigen</span></button>
+                </div>
+                <div class="vb-row">
+                <div class="vb-media" hidden>
+                  <button class="vb-pic" type="button"><img alt="Die Vergangenheit" decoding="async"></button>
+                  <button class="vb-pa prev" type="button" aria-label="Vorheriges Bild"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+                  <button class="vb-pa next" type="button" aria-label="Nächstes Bild"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+                </div>
                 <div class="vb-story">
                   <button class="vb-pill vb-go" type="button">Erzählung starten</button>
                   <div class="vb-steps" hidden>
-                    <div class="vb-media">
-                      <button class="vb-pic" type="button"><img alt="Die Vergangenheit" decoding="async"></button>
-                      <button class="vb-pa prev" type="button" aria-label="Vorheriges Bild"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-                      <button class="vb-pa next" type="button" aria-label="Nächstes Bild"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-                    </div>
                     <div class="vb-texts" aria-live="polite">
                       <section data-pics="vb-004"><h4>Die Vergangenheit</h4><p>Die Besucher treten ein und gehen durch den Gang um das Labyrinth und den weissen Raum. Projektionen an seinen Wänden zeigen Ägyptens Architekten der Vergangenheit und die Art, wie Architektur früher betrieben wurde.</p></section>
                       <section data-pics="vb-003 vb-002"><h4>Die Gegenwart</h4><p>Der Gang führt ins Labyrinth: enge, dunkle Wege voller Bilder von Leid und Aufruhr und von einer Architektur, die ihre Richtung verloren hat. Am Ende, sobald man weisses Licht vor sich sieht, steht neben der Quelle des Lichts dieses Gedicht:</p>
@@ -1256,10 +1291,11 @@ There comes a place,
 an Elysium,
 destined to guide.</script></section>
                       <section data-pics="vb-005"><h4>Elysium</h4><p>Das Labyrinth öffnet sich in den weissen Raum. Ein langer Tisch trägt ein Modell von ganz Kairo, in dem ein Gebiet unbebaut bleibt, daneben VR-Brillen. Das helle Weiss und der Tisch, die an einen Operationssaal im Spital erinnern, wie in einem Schwebezustand, stehen für die Hoffnung auf Kairos Zukunft und erwecken die glorreiche Vergangenheit der Stadt wieder zum Leben.</p></section>
-                      <section data-pics="vb-007"><h4>Kairos Zukunft</h4><p>Das leere Gebiet, in der virtuellen Realität in drei Stufen bebaut: die gewachsene Stadt mit mehr Freiraum und Parks, Wachstum entlang der Hauptachsen mit den höchsten Gebäuden an ihnen, und ein Geschäftsviertel mit Hochhäusern. Das Modell oben baut es, während du den Regler bewegst.</p></section>
+                      <section data-pics="vb-007"><h4>Kairos Zukunft</h4><p class="city-step"><span><b>Stufe 1</b>Die gewachsene Stadt: niedrige Häuser stehen zufällig verstreut und in alle Richtungen gedreht, wie in Kairos informellen Vierteln, und freie Grundstücke bleiben als Parks offen.</span><span><b>Stufe 2</b>Wachstum entlang der Achsen: die Grundstücke folgen den Hauptachsen und dem Ring um den Park; an den Achsen sind die Gebäude am höchsten und werden von ihnen weg niedriger.</span><span><b>Stufe 3</b>Das Geschäftsviertel: ein Raster von Grundstücken um runde Parks, in dem Hochhäuser in Gruppen zwischen niedrigeren Blöcken aufragen.</span></p><p class="city-step city-how"><span>So wächst sie: Über das Gelände wird ein Raster von Grundstücken gelegt; einige bleiben zufällig leer und werden zu Grünflächen zusammengefasst, und jedes andere Grundstück erhält ein niedriges Haus, zufällig skaliert und mit zufälliger Höhe.</span><span>So wächst sie: Punkte werden über die Grundstücke verteilt und zu den Hauptachsen hingezogen; die Höhe eines Gebäudes nimmt mit seinem Abstand zur nächsten Achse entlang einer festgelegten Kurve ab, es wird zu dieser Achse ausgerichtet, und Punkte zu nahe an einer Achse werden entfernt, damit die Achse eine Strasse bleibt.</span><span>So wächst sie: Zufällige Punkte teilen das Viertel in organisch geformte Grundstücke; jedes Grundstück rückt von seinen Rändern ab, und je näher es am Zentrum des Viertels liegt, desto höher steigt sein Turm.</span></p><p class="b8-note">Die Gebäude des Wettbewerbsbeitrags, aus dem Wettbewerbsmodell übernommen, mit der bestehenden Stadt ringsum.</p></section>
                     </div>
                     <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">Zurück</button><button class="vb-pill vb-next" type="button">Weiter</button><button class="vb-pill vb-end" type="button">Geschichte schliessen</button></div>
                   </div>
+                </div>
                 </div>
                 </div>
               </article>
@@ -1558,6 +1594,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=d72a88b0aa"></script>
 <script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the last line":"Klicken für die letzte Zeile","Tap for the last line":"Tippen für die letzte Zeile","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich vom Kanal aktualisiert; letzte Aktualisierung {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arosa":"Arosa","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cairo":"Kairo","Cannes":"Cannes","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Dessau":"Dessau","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Faro":"Faro","Fes":"Fès","Flims":"Flims","Florence":"Florenz","Flúðir":"Flúðir","Fort Lauderdale":"Fort Lauderdale","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Huningue":"Hüningen","Keflavík":"Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","La Jolla":"La Jolla","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Malibu":"Malibu","Marrakech":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Fuji","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle":"Newcastle","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National Park":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Seljalandsfoss":"Seljalandsfoss","Siwa":"Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Tarifa":"Tarifa","Tokyo":"Tokio","Varna":"Varna","Varosha":"Varosha","Washington, D.C.":"Washington, D.C.","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zurich":"Zürich","Þingvellir":"Þingvellir"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
-<script src="/assets/app.js?v=14272ff4b8"></script>
+<script src="/assets/app.js?v=07a97a133a"></script>
 </body>
 </html>
