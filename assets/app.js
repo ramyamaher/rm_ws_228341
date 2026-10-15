@@ -507,6 +507,15 @@ $$('.b8-stage').forEach(st => {
   flip.addEventListener('click', () => openLb(set(), 1, flip));
 });
 
+// A model zooms with the wheel only when the wheel starts on it. A scroll that began beside it goes on scrolling the
+// page when the model slides under the pointer, instead of turning into a zoom (a pause of a third of a second ends one
+// turn of the wheel, a trackpad's glide included)
+const wheelOnly = (() => {
+  let last = -1e9, owner = null;
+  addEventListener('wheel', (e) => { if (e.timeStamp - last > 330) owner = e.target.closest ? e.target.closest('.b8-3d') : null; last = e.timeStamp; }, { capture: true, passive: true });
+  return (box) => box.addEventListener('wheel', (e) => { if (owner !== box) e.stopPropagation(); }, { capture: true });
+})();
+
 // Building 8 in 3D: the hall and the bar's boards from the Rhino model (1 unit = 5 cm), drawn like the
 // staircase: white faces, grey lines, colour only for the board being placed. The doors, the metal stair, the
 // gallery, the bridge and the ramp's railings are added after the render. three.js and the model (60 kB) load
@@ -529,6 +538,7 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
     const ctl = new OrbitControls(cam, ren.domElement);
     ctl.target.set(96, 11, -38); ctl.enablePan = false; ctl.minDistance = 25; ctl.maxDistance = 420; ctl.maxPolarAngle = Math.PI * .49; ctl.update();   // zooms in on the bar
     ren.domElement.style.touchAction = 'none';   // a drag that starts on the model turns it; outside it, the page scrolls
+    wheelOnly(box);
     const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
     const EDGE = new THREE.LineBasicMaterial({ color: '#94a3b8' }), THIN = new THREE.LineBasicMaterial({ color: '#b6c0ce' });
     const P = (x, y, z) => [x, z, -y];                           // the model's plan x, y and height z, in three's axes
@@ -755,22 +765,29 @@ function vbFlow(svg) {
   return { play(s) { cancelAnimationFrame(raf); raf = 0; build(s); if (VB_FLOW[s]) { t0 = performance.now(); raf = requestAnimationFrame(frame); } } };
 }
 
-// The story: each step lights its room on the plan, which stays as it is, and opens a section below with the room's
-// picture on the left and its words on the right (one under the other on a phone), typed like the limericks, and the
-// buttons below both; the last step lights the table with the
-// model of Cairo and shows the city built on its empty part
+// The story: each step lights its room on the plan, which keeps its size, and shows the room's picture under it, a
+// fifth of its width, with its words beside the picture (one under the other on a phone), typed like the limericks, and
+// the buttons under the words. The last step builds the city in the plan's place with a slider, its words under it
+// saying the stage the slider has reached; once the city is built, a button shows the render there instead, and the
+// slider again. On a computer the plan is as wide as leaves the story under it in view, before the story and during it
 $$('.vb-story').forEach(st => {
-  const duo = st.previousElementSibling, plan = $('.vb-plan', duo), story = st, flow = vbFlow($('.vb-flow', plan));
+  const box = st.closest('.vb-box'), plan = $('.vb-plan', box), flow = vbFlow($('.vb-flow', plan));
   const steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
-  const media = $('.vb-media', st), pic = $('.vb-pic', media), img = $('img', pic), pPrev = $('.vb-pa.prev', media), pNext = $('.vb-pa.next', media);
+  const media = $('.vb-media', box), pic = $('.vb-pic', media), img = $('img', pic), pPrev = $('.vb-pa.prev', media), pNext = $('.vb-pa.next', media);
+  const big = $('.vb-big', box), duo = $('.vb-duo', big), city = $('.city-build', big), rimg = $('.vb-rimg', big), row = $('.vb-row', box);
+  const rbtn = $('.vb-render', big), [rShow, rBack] = $$('span', rbtn);
   const back = $('.vb-back', st), next = $('.vb-next', st), end = $('.vb-end', st), n = $('.vb-n', st);
-  const words = secs.map(s => $('p', s).textContent);
-  let typing = null;
+  const slide = box.closest('.slide'), wide = matchMedia('(min-width:901px)');
+  // the words that are typed: a step's own paragraph (the last step's words follow the slider instead)
+  const para = s => $('p:not([class])', s);
+  const words = secs.map(s => (para(s) || {}).textContent || '');
+  let typing = null, built = false, render = false;
   // type a step's words a letter at a time, with the limericks' caret; the space is kept by the other steps' words
   const poemOf = s => { const src = $('.vb-poem-src', s); return src ? [$('.vb-poem', s), src.textContent.trim()] : null; };
-  const settle = () => secs.forEach((s, j) => { $('p', s).textContent = words[j]; const pm = poemOf(s); if (pm) { pm[0].textContent = pm[1]; pm[0].scrollTop = 0; pm[0].classList.remove('on'); } });
+  const settle = () => secs.forEach((s, j) => { const p = para(s); if (p) p.textContent = words[j]; const pm = poemOf(s); if (pm) { pm[0].textContent = pm[1]; pm[0].scrollTop = 0; pm[0].classList.remove('on'); } });
   function type(i) {
     clearTimeout(typing); settle();
+    const p = para(secs[i]); if (!p) return;
     const pm = poemOf(secs[i]);
     if (reduced) { if (pm) pm[0].classList.add('on'); return; }
     const into = (el, text, then, follow) => {
@@ -787,18 +804,21 @@ $$('.vb-story').forEach(st => {
       typing = setTimeout(tick, 300);
     };
     if (pm) { pm[0].textContent = ''; pm[0].classList.remove('on'); }
-    into($('p', secs[i]), words[i], pm ? () => { pm[0].classList.add('on'); into(pm[0], pm[1], null, true); } : null);
+    into(p, words[i], pm ? () => { pm[0].classList.add('on'); into(pm[0], pm[1], null, true); } : null);
   }
-  // the story section opens and closes by growing and shrinking; the page does not scroll with it
-  let growing = null;
-  function grow(open, done) {
-    clearTimeout(growing);
-    const from = story.offsetHeight; story.classList.add('vb-grow'); story.style.height = from + 'px';
-    done(); const to = story.scrollHeight;
-    if (reduced) { story.style.height = ''; story.classList.remove('vb-grow'); return; }
-    requestAnimationFrame(() => { story.style.height = to + 'px'; });
-    growing = setTimeout(() => { story.style.height = ''; story.classList.remove('vb-grow'); }, 600);
+  // on a computer: the plan as wide as the card, or narrower if the story under it would not fit on the screen with
+  // it; the same before the story and during it. While the story runs, it is as tall as the card's inside
+  const ROW = 210;   // the least height the picture and the words need under the plan
+  function fit() {
+    if (!wide.matches || !slide) { box.style.removeProperty('--vbh'); box.style.removeProperty('--vbw'); return; }
+    const cs = getComputedStyle(slide), bs = getComputedStyle(box);
+    const H = slide.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    const inH = H - parseFloat(bs.paddingTop) - parseFloat(bs.paddingBottom) - 2;
+    box.style.setProperty('--vbw', Math.max(320, Math.floor((inH - 14 - ROW) * 1800 / 841)) + 'px');
+    if (box.classList.contains('telling')) box.style.setProperty('--vbh', Math.max(360, Math.floor(H)) + 'px'); else box.style.removeProperty('--vbh');
   }
+  if (slide) new ResizeObserver(fit).observe(slide);
+  wide.addEventListener('change', fit);
   const cap = f => { const d = $(`.vb-dot[data-f="${f}"]`, plan); return d ? d.getAttribute('aria-label') : $('h4', secs[st.k]).textContent; };
   const pics = () => secs[st.k].dataset.pics.split(' ');
   function showPic(j) {
@@ -806,20 +826,33 @@ $$('.vb-story').forEach(st => {
     img.src = `/assets/img/projects/${list[st.p]}.jpg`; img.alt = pic.ariaLabel = cap(list[st.p]);
     pPrev.hidden = pNext.hidden = list.length < 2;
   }
+  // the last step: the city and its slider in the plan's place, or once it is built, the render; its words under it
+  function place() {
+    const isCity = st.k >= 0 && !!$('.city-step', secs[st.k]);
+    duo.hidden = isCity; city.hidden = !(isCity && !render); rimg.hidden = !(isCity && render);
+    rbtn.hidden = !(isCity && built); rShow.hidden = render; rBack.hidden = !render;
+    media.hidden = st.k < 0 || isCity; row.classList.toggle('solo', isCity);
+    if (st.k >= 0 && !isCity) showPic(0);
+  }
+  city.addEventListener('built', () => { built = true; place(); });
+  rbtn.addEventListener('click', () => { render = !render; place(); });
   function show(i) {
     const open = i >= 0; st.k = i; go.hidden = open; steps.hidden = !open;
+    box.classList.toggle('telling', open); fit();
     if (open) plan.dataset.step = i + 1; else delete plan.dataset.step;
     flow.play(open ? i + 1 : 0);
-    if (!open) { clearTimeout(typing); settle(); return; }
+    if (!open) { clearTimeout(typing); settle(); render = false; place(); return; }
     secs.forEach((s, j) => s.classList.toggle('on', j === i));
-    type(i); showPic(0);
+    render = false; type(i); place();
     // Back and Next keep their place; on the last step Next rests and Close story appears to their right
     n.textContent = `${i + 1}/${secs.length}`; back.disabled = i <= 0; next.disabled = i === secs.length - 1; end.hidden = !next.disabled;
   }
-  go.addEventListener('click', () => { grow(true, () => show(0)); next.focus({ preventScroll: true }); });
+  // on a computer, the story's top comes to the card's top, so all of it is in view
+  const bring = () => { if (!wide.matches || !slide) return; const d = box.getBoundingClientRect().top - slide.getBoundingClientRect().top - parseFloat(getComputedStyle(slide).paddingTop); slide.scrollBy({ top: d, behavior: reduced ? 'auto' : 'smooth' }); };
+  go.addEventListener('click', () => { show(0); bring(); next.focus({ preventScroll: true }); });
   back.addEventListener('click', () => show(st.k - 1));
   next.addEventListener('click', () => show(st.k + 1));
-  end.addEventListener('click', () => { grow(false, () => show(-1)); go.focus({ preventScroll: true }); });
+  end.addEventListener('click', () => { show(-1); go.focus({ preventScroll: true }); });
   pPrev.addEventListener('click', () => showPic(st.p - 1));
   pNext.addEventListener('click', () => showPic(st.p + 1));
   pic.addEventListener('click', () => openLb(pics().map(f => ({ f, c: cap(f) })), st.p, pic));
@@ -829,7 +862,7 @@ $$('.vb-story').forEach(st => {
 // its render, with the existing city around it. The buildings come baked, in the order the three rules raise them; the
 // slider only shows the first so many. Drawn like the other models; a line under the slider says which rule is building
 $$('.city-build').forEach(fig => {
-  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig), rows = $$('.city-step', fig).map((p) => [...p.children]);
+  const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig), rows = $$('.city-step', fig.closest('.vb-box') || fig).map((p) => [...p.children]);   // the stage's words stand beside the city, in the story
   let started = false;
   const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
   io.observe(box);
@@ -861,9 +894,11 @@ $$('.city-build').forEach(fig => {
     cam.position.set(2411, 5000, 11250); ctl.target.set(2411, 0, -1000);
     ctl.enablePan = false; ctl.minDistance = 3000; ctl.maxDistance = 30000; ctl.maxPolarAngle = Math.PI * .46; ctl.update();
     ren.domElement.style.touchAction = 'none';   // a drag that starts on the model turns it; outside it, the page scrolls
+    wheelOnly(box);
     const WHITE = new THREE.MeshBasicMaterial({ color: '#fff', polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
-    // nine thousand buildings: their lines a shade lighter than the other models', or the city reads as grey
-    const EDGE = new THREE.LineBasicMaterial({ color: '#aab5c4' }), FAINT = new THREE.LineBasicMaterial({ color: '#d5dce6' });
+    // nine thousand buildings: their lines a shade lighter than the other models', or the city reads as grey (and a
+    // touch stronger than they were, so the outlines still read in the dark)
+    const EDGE = new THREE.LineBasicMaterial({ color: '#9eaabb' }), FAINT = new THREE.LineBasicMaterial({ color: '#cbd3de' });
     const ease = (u) => u * u * (3 - 2 * u);
     // the base, cut at the site's south edge like the render
     { const g = new THREE.BoxGeometry(EX, 140, EY); g.translate(EX / 2, -70, -EY / 2); scene.add(new THREE.Mesh(g, WHITE), new THREE.LineSegments(new THREE.EdgesGeometry(g), EDGE)); }
@@ -905,7 +940,7 @@ $$('.city-build').forEach(fig => {
       ren.render(scene, cam); raf = moving ? requestAnimationFrame(tick) : 0;
     }
     const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
-    function set(v) { batches.forEach((b, i) => { b.target = i < v ? 1 : 0; }); out.value = out.textContent = v + ' %'; say(batches[v - 1].ph); kick(); }
+    function set(v) { batches.forEach((b, i) => { b.target = i < v ? 1 : 0; }); out.value = out.textContent = v + ' %'; say(batches[v - 1].ph); kick(); if (v >= STEPS) fig.dispatchEvent(new Event('built')); }   // built: the story may now offer the render
     batches.forEach((b, i) => { b.s = b.target = i < +range.value ? 1 : 0; });
     function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 2 * Math.atan(Math.tan(HFOV / 2) / cam.aspect) * 180 / Math.PI; cam.updateProjectionMatrix(); kick(); }
     ctl.addEventListener('change', kick);

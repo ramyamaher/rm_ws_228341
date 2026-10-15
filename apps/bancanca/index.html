@@ -625,7 +625,8 @@ html[dir="rtl"] .b8-play{right:auto; left:14px}
 /* Building 8 in 3D: a slider places the boards, layer by layer */
 .b8-build{margin:14px 0 0; border-radius:18px; overflow:hidden; background:#fff; border:1px solid var(--line)}   /* a border, not an inset shadow: the canvas would paint over a shadow */
 html[data-theme="dark"] .b8-build{background:var(--soft)}
-html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#liftSoft)}   /* its white turns the figure's own colour, not black */
+.dark-lifts{position:absolute; width:0; height:0; overflow:hidden}
 .b8-3d{position:relative; height:clamp(260px,42vh,440px); cursor:grab; touch-action:none}
 .b8-3d:active{cursor:grabbing}
 .b8-3d canvas{display:block}
@@ -691,9 +692,22 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .vb-poem{white-space:pre-line; height:7.6em; overflow-y:auto; margin-top:10px; padding:8px 12px; border-left:2px solid var(--line);
   font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); border-left-color:transparent; transition:border-color .5s}
 .vb-poem.on{border-left-color:var(--line)}
-.vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; animation:vbOpen .45s ease-out}
-.vb-steps .vb-nav{grid-column:1 / -1}
-@media (max-width:760px){.vb-steps{grid-template-columns:1fr; gap:14px}}
+.vb-steps{width:100%; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; align-items:start; animation:vbOpen .45s ease-out}
+/* the picture of the step, under the plan; on the last step the city being built takes its place */
+/* the plan, as wide as the card allows with the story under it in view; on the last step the city being built takes its
+   place at its width, or the render does */
+.vb-big{position:relative; width:var(--vbw, 100%); max-width:100%; margin:0 auto}
+.vb-big .city-build{margin:0}
+.vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
+.vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
+.vb-media{margin-top:14px}
+.vb-render{position:absolute; right:12px; top:12px; z-index:3}
+.vb-render[hidden], .vb-render span[hidden]{display:none}
+html[dir="rtl"] .vb-render{right:auto; left:12px}
+.vb-texts section:not(.on) .city-step span{visibility:hidden}   /* a stage's own "on" would show through the hidden step */
+.vb-texts .city-step{margin:0 0 10px; font-size:14.5px; line-height:1.55; color:var(--ink-2, var(--ink))}
+.vb-texts .city-how{margin:0 0 10px; font-size:13px; color:var(--ink-3)}
+.vb-texts .b8-note{margin:0; font-size:12.5px}
 .vb-steps[hidden], .vb-media[hidden]{display:none}
 @keyframes vbOpen{from{opacity:0; transform:translateY(-8px)}}
 
@@ -731,7 +745,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg)}
 .ss-live{position:relative; margin-top:22px}
 .ss-hook{margin:0 0 12px; font-size:17px; font-weight:650; letter-spacing:-.01em}
 .ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
-html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg); box-shadow:none}
+html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg) url(#liftCard); box-shadow:none}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
 .anim-logo.play .lab-frame{animation:labFrame 1.1s cubic-bezier(.6,0,.3,1) .45s forwards}
@@ -794,6 +808,19 @@ html.fit-tab body{min-height:0}
 .panel.fit .card-scroll{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; margin:0 -6px; padding:4px 6px 0}
 .panel.fit .card-scroll .lead{margin-top:0}
 .panel.fit .card-scroll .chips{margin-top:14px}
+.vb-box.telling{display:flex; flex-direction:column; height:var(--vbh, auto)}
+.vb-box.telling .vb-big{flex:none}
+.vb-box.telling .vb-big .city-build:not([hidden]){aspect-ratio:1800/841; display:flex; flex-direction:column}   /* the plan's own size, so the story stays in view */
+.vb-box.telling .vb-big .city-build .b8-3d{flex:1; min-height:0; aspect-ratio:auto}
+.vb-box.telling .vb-big .b8-ctl{padding:10px 16px 12px}
+/* under the plan: the picture a fifth of the width, the words and the buttons beside it */
+.vb-box.telling .vb-row{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,4fr); gap:22px; margin-top:14px}
+.vb-box.telling .vb-row.solo{grid-template-columns:minmax(0,1fr)}
+.vb-box.telling .vb-media{margin-top:0; align-self:start}
+.vb-box.telling .vb-story{margin-top:0; min-height:0; align-items:stretch}
+.vb-box.telling .vb-steps{height:100%; grid-template-rows:minmax(0,1fr) auto; gap:12px}
+.vb-box.telling .vb-texts{align-self:stretch; min-height:0; overflow-y:auto; overscroll-behavior:contain}
+.vb-box.telling .vb-nav{margin-top:0}
 /* the Archive alone: everything on one screen, the map taking whatever height is left */
 .panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
 .archive-fit .lead{flex:none; margin-bottom:14px}
@@ -942,6 +969,12 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Bancanca","description":"Bancanca helps you analyse your expenses and see where your money goes.","url":"https://ramymaher.com/apps/bancanca/","inLanguage":"en","creator":{"@id":"https://ramymaher.com/#person"},"image":"https://ramymaher.com/assets/img/projects/app-bancanca-1.jpg"}</script>
 </head>
 <body>
+<!-- dark mode draws the white models inverted; these lift their black to the colour around them, so a model's
+     background is the card's own (the numbers are the dark --soft and --card, keep them in step) -->
+<svg class="dark-lifts" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+  <filter id="liftSoft" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="linear" slope=".8902" intercept=".1098"/><feFuncG type="linear" slope=".8863" intercept=".1137"/><feFuncB type="linear" slope=".8588" intercept=".1412"/></feComponentTransfer></filter>
+  <filter id="liftCard" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="linear" slope=".9137" intercept=".0863"/><feFuncG type="linear" slope=".9098" intercept=".0902"/><feFuncB type="linear" slope=".8863" intercept=".1137"/></feComponentTransfer></filter>
+</defs></svg>
 
 <div class="greet" id="greet" role="button" tabindex="0" aria-label="Enter the website">
   <div class="greet-in">
@@ -1043,11 +1076,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div data-for="design-1">
                 <h4>Robotic Philosophical Enquiry about Architecture</h4>
-                <p>In this Master's thesis, I deconstructed architecture to its bare syllables to understand what I am willing to associate with this profession. Realizing that architects have always been services adopted only by the rich, the final project was a tool that enables users to build remotely and vernacularly. It used motion sensors, VR, and sintering in the process.</p>
+                <p>In this Master's thesis, I deconstructed architecture to its bare syllables to understand what I am willing to associate with this profession. Realizing that architecture has always been a service adopted only by the rich, the final project was a tool that enables users to build remotely and vernacularly. It used motion sensors, VR, and sintering in the process.</p>
                 </div>
                 <div data-for="design-2">
                 <h4>Furniture Drawn by Footsteps</h4>
-                <p>I watched how people moved through an educational building, every path and every pause. Then I let their footsteps decide where the furniture should stand and what shape it should take. What grew out of those trails was a bar and seating for a student event.</p>
+                <p>I watched how people moved through an educational building, every path and every pause. Then, I let their footsteps decide where the furniture should stand and what shape it should take. What grew out of those trails was a bar and seating for a student event.</p>
                 </div>
                 <div data-for="design-3">
                 <h4>A Staircase With a View</h4>
@@ -1198,7 +1231,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Egyptian Pavilion, La Biennale di Venezia <i></i> 15th International Architecture Exhibition, 2016</p>
                     </div>
                   </div>
-                <div class="prize-line silver"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Second prize</b>, awarded by the Egyptian Ministry of Culture.</p></div>
+                <div class="prize-line silver top"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Second prize</b>, awarded by the Egyptian Ministry of Culture.</p></div>
                 <div class="p-body">
                   <div class="prose">
                     <p>A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale. The pavilion is a passage through three phases of Egypt. The past, where visitors read about Egypt's architecture and its architects. The present: Egypt in 2016, in the middle of a turbulent time, as a labyrinth of dimly lit spaces and images of the suffering Egyptians had grown used to. And the future, Elysium: the bright room the passage finally leads to, where a large physical model of the city has an empty part on the map, and visitors use augmented reality to build Egypt's future.</p>
@@ -1211,14 +1244,8 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     </dl>
                   </div>
                 </div>
-                <figure class="b8-build city-build">
-                  <div class="b8-3d" role="img" aria-label="A 3D model of the future city in three phases, built up as you move the slider"></div>
-                  <div class="b8-ctl"><label for="cityRange">Build Cairo's Future</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
-                  <p class="city-step" aria-live="polite"><span><b>Stage 1</b>The vernacular city: low houses are scattered at random and turned every way, as in Cairo's informal districts, and open lots are left free as parks.</span><span><b>Stage 2</b>Growth along the axes: the plots follow the main axes and the ring around the park; buildings are tallest on the axes and step down away from them.</span><span><b>Stage 3</b>The business district: a grid of plots around round parks, where towers rise in clusters among lower blocks.</span></p>
-                  <p class="city-step city-how"><span>How it grows: a grid of plots is laid over the site; some plots are left empty at random and gathered into green spaces, and every other plot gets a low house, scaled and given a height at random.</span><span>How it grows: points are scattered over the plots and drawn towards the main axes; a building's height falls off with its distance to the nearest axis along a set curve, it is turned to face that axis, and points too close to an axis are taken out so the axis stays a street.</span><span>How it grows: random points divide the district into organic plots; each plot is set back from its edges, and the closer it lies to the district's centre, the taller its tower rises.</span></p>
-                  <p class="b8-note">The entry's buildings, taken from the competition model, with the existing city around them.</p>
-                </figure>
                 <div class="vb-box">
+                <div class="vb-big">
                 <div class="vb-duo">
                 <div class="vb-plan">
                   <button class="vb-open" type="button" aria-label="Plan"><img src="/assets/img/projects/vb-plan.webp" width="1800" height="841" alt="Plan" loading="lazy" decoding="async"></button>
@@ -1232,14 +1259,22 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="Section A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                 </div>
                 </div>
+                  <figure class="b8-build city-build" hidden>
+                    <div class="b8-3d" role="img" aria-label="A 3D model of the future city in three phases, built up as you move the slider"></div>
+                    <div class="b8-ctl"><label for="cityRange">Build Cairo's Future</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
+                  </figure>
+                  <img class="vb-rimg" src="/assets/img/projects/vb-007.jpg" alt="Cairo's future" loading="lazy" decoding="async" hidden>
+                  <button class="vb-pill vb-render" type="button" hidden><span>Show render</span><span hidden>Show slider</span></button>
+                </div>
+                <div class="vb-row">
+                <div class="vb-media" hidden>
+                  <button class="vb-pic" type="button"><img alt="The past" decoding="async"></button>
+                  <button class="vb-pa prev" type="button" aria-label="Previous image"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+                  <button class="vb-pa next" type="button" aria-label="Next image"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+                </div>
                 <div class="vb-story">
                   <button class="vb-pill vb-go" type="button">Start Narration</button>
                   <div class="vb-steps" hidden>
-                    <div class="vb-media">
-                      <button class="vb-pic" type="button"><img alt="The past" decoding="async"></button>
-                      <button class="vb-pa prev" type="button" aria-label="Previous image"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-                      <button class="vb-pa next" type="button" aria-label="Next image"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-                    </div>
                     <div class="vb-texts" aria-live="polite">
                       <section data-pics="vb-004"><h4>The past</h4><p>The visitor comes in and walks the corridor around the labyrinth and the white room. Projections on its walls show Egypt's architects of the past and the ways architecture was practised before.</p></section>
                       <section data-pics="vb-003 vb-002"><h4>The present</h4><p>The corridor leads into the labyrinth: narrow, dim passages hung with pictures of suffering and tumult, and of an architecture that has lost its direction. At the end, as soon as one sees white light coming ahead, this poem is written next to the source of the white light:</p>
@@ -1256,10 +1291,11 @@ There comes a place,
 an Elysium,
 destined to guide.</script></section>
                       <section data-pics="vb-005"><h4>Elysium</h4><p>The labyrinth opens into the white room. A long table carries a model of all of Cairo, with one area left undeveloped, and VR headsets beside it. The bright white and the table, reminiscent of an operating theatre in a hospital, as if in a state of limbo, stand for hope for Cairo's future, bringing the city's glorious past back to life.</p></section>
-                      <section data-pics="vb-007"><h4>Cairo's future</h4><p>The empty area, built in virtual reality in three stages: the vernacular city with more open space and parks, growth along the main axes with the tallest buildings on them, and a business district of towers. The model above builds it as you move the slider.</p></section>
+                      <section data-pics="vb-007"><h4>Cairo's future</h4><p class="city-step"><span><b>Stage 1</b>The vernacular city: low houses are scattered at random and turned every way, as in Cairo's informal districts, and open lots are left free as parks.</span><span><b>Stage 2</b>Growth along the axes: the plots follow the main axes and the ring around the park; buildings are tallest on the axes and step down away from them.</span><span><b>Stage 3</b>The business district: a grid of plots around round parks, where towers rise in clusters among lower blocks.</span></p><p class="city-step city-how"><span>How it grows: a grid of plots is laid over the site; some plots are left empty at random and gathered into green spaces, and every other plot gets a low house, scaled and given a height at random.</span><span>How it grows: points are scattered over the plots and drawn towards the main axes; a building's height falls off with its distance to the nearest axis along a set curve, it is turned to face that axis, and points too close to an axis are taken out so the axis stays a street.</span><span>How it grows: random points divide the district into organic plots; each plot is set back from its edges, and the closer it lies to the district's centre, the taller its tower rises.</span></p><p class="b8-note">The entry's buildings, taken from the competition model, with the existing city around them.</p></section>
                     </div>
                     <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">Back</button><button class="vb-pill vb-next" type="button">Next</button><button class="vb-pill vb-end" type="button">Close Story</button></div>
                   </div>
+                </div>
                 </div>
                 </div>
               </article>
@@ -1557,6 +1593,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=d72a88b0aa"></script>
-<script src="/assets/app.js?v=14272ff4b8"></script>
+<script src="/assets/app.js?v=07a97a133a"></script>
 </body>
 </html>
