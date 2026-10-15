@@ -30,6 +30,8 @@ body{margin:0; min-height:100vh; color:var(--ink); background:#fff;
   background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
   -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
   animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
+.rb-ring.live{animation:rbSpin 1s linear infinite; transition:opacity .35s}
+.rb-ring.live.out{opacity:0}
 @keyframes rbSpin{to{transform:rotate(360deg)}}
 @keyframes rbFade{to{opacity:0}}
 .back{display:inline-flex; align-items:center; gap:6px; margin:0 0 14px; color:var(--ink-3); font-size:13.5px; font-weight:600; text-decoration:none}
@@ -460,22 +462,56 @@ new IntersectionObserver((es) => { inView = es[0].isIntersecting; }).observe(hos
 const BAKE = await fetch(new URL('model.json', import.meta.url)).then((r) => r.json());
 G = layout(BAKE.G);
 show(); resize(); build(); logo(); speak();
-// Opening and Smoothness wear the rainbow ring once, the first time they come into view, so they read as things to move
-for (const id of ['A', 'N']) {
-  const input = $(id), io = new IntersectionObserver((es) => {
-    if (!es.some((e) => e.isIntersecting)) return;
-    io.disconnect(); place();
-  }, { threshold: .9 });
-  // not while the site's greeting still covers the page around it
-  function place() {
-    let covered = false; try { covered = parent !== window && !!parent.document.getElementById('greet'); } catch (e) {}
-    if (covered) { setTimeout(place, 300); return; }
+// Until the visitor touches a control, the controls show every five seconds that they move: Opening glides right and
+// left and back, then Smoothness, then Parallel is chosen for a moment and Smooth again, everything back as it was.
+// A slider wears the rainbow ring only while it moves; the first touch on any control ends it for good
+{
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ctl = [$('A'), $('N'), ...document.querySelectorAll('#mode button')];
+  let done = reduced, busy = false, seen = false, timer = 0;
+  const stop = () => { done = true; clearTimeout(timer); };
+  for (const el of ctl) for (const t of ['pointerdown', 'keydown', 'input']) el.addEventListener(t, (e) => { if (e.isTrusted) stop(); }, { passive: true });
+  const queue = (ms) => { clearTimeout(timer); if (!done) timer = setTimeout(cycle, ms); };
+  new IntersectionObserver((es) => { seen = es.some((e) => e.isIntersecting); if (seen && !busy) queue(1200); }, { threshold: .9 }).observe($('A'));
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const ringAt = (input, ring) => {
     const host = input.parentElement, a = input.getBoundingClientRect(), b = host.getBoundingClientRect(), f = (input.value - input.min) / ((input.max - input.min) || 1);
-    const ring = document.createElement('span'); ring.className = 'rb-ring';
     ring.style.left = (a.left - b.left + 11 + f * (a.width - 22)) + 'px'; ring.style.top = (a.top - b.top + a.height / 2) + 'px';
-    host.append(ring); const end = () => ring.remove(); setTimeout(end, 2600); input.addEventListener('input', end, { once: true });
+  };
+  // one slider through its values and back, the ring on its handle
+  async function slide(input, stops) {
+    const ring = document.createElement('span'); ring.className = 'rb-ring live'; input.parentElement.append(ring); ringAt(input, ring);
+    const span = (+input.max - +input.min) || 1, step = +input.step || 1;
+    for (const to of [...stops, +input.value]) {
+      if (done) break;
+      await new Promise((res) => {
+        const from = +input.value, T = 500 + 1200 * Math.abs(to - from) / span, t0 = performance.now();
+        const frame = (now) => {
+          if (done) return res();
+          const u = Math.min(1, (now - t0) / T), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+          const v = Math.round((from + (to - from) * e) / step) * step;
+          if (Math.abs(v - +input.value) > 1e-9) { input.value = v; input.dispatchEvent(new Event('input')); }
+          ringAt(input, ring);
+          if (u < 1) requestAnimationFrame(frame); else res();
+        };
+        requestAnimationFrame(frame);
+      });
+    }
+    ring.classList.add('out'); setTimeout(() => ring.remove(), 400);
   }
-  io.observe(input);
+  async function cycle() {
+    if (done || busy || !seen) return;
+    let covered = false; try { covered = parent !== window && !!parent.document.getElementById('greet'); } catch (e) {}
+    if (covered || document.hidden || S.mode !== 'smooth') { queue(1000); return; }
+    busy = true;
+    const A0 = S.A, A = $('A'), top = +A.max;
+    await slide(A, [top, top * .2]);
+    if (!done) await slide($('N'), [Math.min(20, S.n + 6), Math.max(1, S.n - 6)]);
+    if (!done) { await wait(400); document.querySelector('#mode [data-m="parallel"]').click(); await wait(1600); }
+    // Smooth again, with the opening it had
+    if (S.mode !== 'smooth') { document.querySelector('#mode [data-m="smooth"]').click(); S.A = A0; update(); }
+    busy = false; queue(5000);
+  }
 }
 window.__ready = true;
 </script>

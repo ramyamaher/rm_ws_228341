@@ -136,25 +136,48 @@ tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.tab)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.go); }));
 addEventListener('hashchange', () => go(location.hash.slice(1), { push: false }));
 
-// A slider's handle wears the rainbow ring once, the first time it comes into view; touching the slider ends it
-function rainbowOnce(input, thumb = 24) {
-  const io = new IntersectionObserver((es) => {
-    if (!es.some((e) => e.isIntersecting)) return;
-    io.disconnect(); show();
-  }, { threshold: .9 });
-  // not while the greeting still covers the page
-  function show() {
-    if (document.getElementById('greet')) { setTimeout(show, 300); return; }
-    const host = input.parentElement, a = input.getBoundingClientRect(), b = host.getBoundingClientRect();
-    const f = (input.value - input.min) / ((input.max - input.min) || 1);
-    const ring = document.createElement('span'); ring.className = 'rb-ring';
+// Until the visitor touches a slider, it shows every five seconds that it moves: the handle glides through a few
+// values and back to where it was, wearing the rainbow ring only while it moves, and the model follows. The moment
+// the visitor touches the slider, it stops for good and the ring never comes back
+function sliderHint(input, stops, { every = 5000, thumb = 24 } = {}) {
+  if (reduced) return;
+  let done = false, busy = false, seen = false, timer = 0;
+  const stop = () => { done = true; clearTimeout(timer); };
+  for (const t of ['pointerdown', 'keydown', 'input']) input.addEventListener(t, (e) => { if (e.isTrusted) stop(); }, { passive: true });
+  const queue = (ms) => { clearTimeout(timer); if (!done) timer = setTimeout(cycle, ms); };
+  new IntersectionObserver((es) => { seen = es.some((e) => e.isIntersecting); if (seen && !busy) queue(1200); }, { threshold: .9 }).observe(input);
+  const span = () => (+input.max - +input.min) || 1, step = () => +input.step || 1;
+  // the ring sits on the handle, wherever the handle is
+  function ringAt(ring) {
+    const host = input.parentElement, a = input.getBoundingClientRect(), b = host.getBoundingClientRect(), f = (input.value - input.min) / span();
     ring.style.left = (a.left - b.left + thumb / 2 + f * (a.width - thumb)) + 'px'; ring.style.top = (a.top - b.top + a.height / 2) + 'px';
-    host.append(ring);
-    const end = () => ring.remove(); setTimeout(end, 2600); input.addEventListener('input', end, { once: true });
   }
-  io.observe(input);
+  const glide = (to, ring) => new Promise((res) => {
+    const from = +input.value, T = 500 + 1200 * Math.abs(to - from) / span(), t0 = performance.now();
+    const frame = (now) => {
+      if (done) return res();
+      const u = Math.min(1, (now - t0) / T), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+      const v = Math.round((from + (to - from) * e) / step()) * step();
+      if (Math.abs(v - +input.value) > 1e-9) { input.value = v; input.dispatchEvent(new Event('input', { bubbles: true })); }
+      ringAt(ring);
+      if (u < 1) requestAnimationFrame(frame); else res();
+    };
+    requestAnimationFrame(frame);
+  });
+  async function cycle() {
+    if (done || busy || !seen) return;
+    // not while the greeting covers the page, nor in a tab out of sight
+    if (document.getElementById('greet') || document.hidden) { queue(1000); return; }
+    busy = true;
+    const ring = document.createElement('span'); ring.className = 'rb-ring live'; input.parentElement.append(ring); ringAt(ring);
+    const back = +input.value;
+    for (const v of [...stops, back]) { if (done) break; await glide(v, ring); }
+    ring.classList.add('out'); setTimeout(() => ring.remove(), 400);
+    busy = false; queue(every);
+  }
 }
-$$('#cityRange, #b8Range').forEach((r) => rainbowOnce(r));
+sliderHint($('#cityRange'), [10]);          // 1 % to 10 % and back
+sliderHint($('#b8Range'), [3, 10]);         // 6 to 3 to 10 and back to 6 of 40 layers
 
 /* ================= project images and the viewer ================= */
 // Each .thumbs lists its images as "file|caption;file|caption". Thumbnails load small;
@@ -516,6 +539,20 @@ const wheelOnly = (() => {
   return (box) => box.addEventListener('wheel', (e) => { if (owner !== box) e.stopPropagation(); }, { capture: true });
 })();
 
+// On a computer a project card scrolls inside itself and the page around it does not; a wheel turned on the card's
+// margins, beside a model, or on the page around the card scrolls the card's project too, instead of doing nothing
+addEventListener('wheel', (e) => {
+  if (e.ctrlKey || !document.documentElement.classList.contains('fit-tab') || !e.target.closest) return;
+  const panel = e.target.closest('.panel.fit'); if (!panel) return;
+  if (e.target.closest('.slide, .card-scroll, .map, .b8-3d, iframe, .pop')) return;   // those scroll, or zoom, on their own
+  const card = panel.querySelector('.wrap > .glass.card'); if (!card) return;
+  const mid = card.getBoundingClientRect(), cx = mid.left + mid.width / 2;
+  let best = null, dist = 1e9;
+  for (const s of card.querySelectorAll('.car-track > .slide, .card-scroll')) { const r = s.getBoundingClientRect(); const d = Math.abs(r.left + r.width / 2 - cx); if (r.width && d < dist) { dist = d; best = s; } }
+  if (!best) return;
+  best.scrollBy(0, e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? best.clientHeight : 1)); e.preventDefault();
+}, { passive: false });
+
 // Building 8 in 3D: the hall and the bar's boards from the Rhino model (1 unit = 5 cm), drawn like the
 // staircase: white faces, grey lines, colour only for the board being placed. The doors, the metal stair, the
 // gallery, the bridge and the ramp's railings are added after the render. three.js and the model (60 kB) load
@@ -672,7 +709,7 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
     boards.forEach((b, i) => { b.vis = i < shown; });
     function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 50 * Math.pow(Math.max(1, 1.5 / cam.aspect), .7); cam.updateProjectionMatrix(); kick(); }
     ctl.addEventListener('change', kick);
-    range.addEventListener('input', () => { held = false; set(+range.value); });
+    range.addEventListener('input', (e) => { if (e.isTrusted) held = false; set(+range.value); });   // the slider's own demonstration keeps the first boards coloured
     new ResizeObserver(size).observe(box);
     paint(); size();
   }
@@ -767,9 +804,9 @@ function vbFlow(svg) {
 
 // The story: each step lights its room on the plan, which keeps its size, and shows the room's picture under it, a
 // fifth of its width, with its words beside the picture (one under the other on a phone), typed like the limericks, and
-// the buttons under the words. The last step builds the city in the plan's place with a slider, its words under it
-// saying the stage the slider has reached; once the city is built, a button shows the render there instead, and the
-// slider again. On a computer the plan is as wide as leaves the story under it in view, before the story and during it
+// the buttons under the words. The last step builds the city under the plan with a slider, the card gliding slowly
+// down to it, and its words under it say the stage the slider has reached; once the city is built, a button shows the
+// render there instead, and the slider again. On a computer the plan is as wide as leaves the story under it in view, before the story and during it
 $$('.vb-story').forEach(st => {
   const box = st.closest('.vb-box'), plan = $('.vb-plan', box), flow = vbFlow($('.vb-flow', plan));
   const steps = $('.vb-steps', st), go = $('.vb-go', st), secs = $$('.vb-texts section', st);
@@ -815,7 +852,7 @@ $$('.vb-story').forEach(st => {
     const H = slide.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
     const inH = H - parseFloat(bs.paddingTop) - parseFloat(bs.paddingBottom) - 2;
     box.style.setProperty('--vbw', Math.max(320, Math.floor((inH - 14 - ROW) * 1800 / 841)) + 'px');
-    if (box.classList.contains('telling')) box.style.setProperty('--vbh', Math.max(360, Math.floor(H)) + 'px'); else box.style.removeProperty('--vbh');
+    if (box.classList.contains('telling') && !box.classList.contains('city')) box.style.setProperty('--vbh', Math.max(360, Math.floor(H)) + 'px'); else box.style.removeProperty('--vbh');
   }
   if (slide) new ResizeObserver(fit).observe(slide);
   wide.addEventListener('change', fit);
@@ -826,10 +863,10 @@ $$('.vb-story').forEach(st => {
     img.src = `/assets/img/projects/${list[st.p]}.jpg`; img.alt = pic.ariaLabel = cap(list[st.p]);
     pPrev.hidden = pNext.hidden = list.length < 2;
   }
-  // the last step: the city and its slider in the plan's place, or once it is built, the render; its words under it
+  // the last step: the city and its slider under the plan, or once it is built, the render; its words under it
   function place() {
     const isCity = st.k >= 0 && !!$('.city-step', secs[st.k]);
-    duo.hidden = isCity; city.hidden = !(isCity && !render); rimg.hidden = !(isCity && render);
+    box.classList.toggle('city', isCity); city.hidden = !(isCity && !render); rimg.hidden = !(isCity && render);
     rbtn.hidden = !(isCity && built); rShow.hidden = render; rBack.hidden = !render;
     media.hidden = st.k < 0 || isCity; row.classList.toggle('solo', isCity);
     if (st.k >= 0 && !isCity) showPic(0);
@@ -843,9 +880,24 @@ $$('.vb-story').forEach(st => {
     flow.play(open ? i + 1 : 0);
     if (!open) { clearTimeout(typing); settle(); render = false; place(); return; }
     secs.forEach((s, j) => s.classList.toggle('on', j === i));
-    render = false; type(i); place();
+    const was = box.classList.contains('city');
+    render = false; type(i); place(); fit();
+    if (!was && box.classList.contains('city')) requestAnimationFrame(() => glideTo(city));
     // Back and Next keep their place; on the last step Next rests and Close story appears to their right
     n.textContent = `${i + 1}/${secs.length}`; back.disabled = i <= 0; next.disabled = i === secs.length - 1; end.hidden = !next.disabled;
+  }
+  // the card (or on a phone, the page) glides slowly until the city and the words under it are in view
+  function glideTo(el) {
+    const inCard = wide.matches && slide, top = inCard ? slide.getBoundingClientRect().top : 0;
+    const want = el.getBoundingClientRect().top - top - 12;   // the city's top to the top of what is seen
+    const from = inCard ? slide.scrollTop : scrollY, T = reduced ? 0 : 1600, t0 = performance.now();
+    if (want <= 0) return;
+    const step = (now) => {
+      const u = T ? Math.min(1, (now - t0) / T) : 1, e = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2, y = from + want * e;
+      if (inCard) slide.scrollTop = y; else scrollTo(0, y);
+      if (u < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   }
   // on a computer, the story's top comes to the card's top, so all of it is in view
   const bring = () => { if (!wide.matches || !slide) return; const d = box.getBoundingClientRect().top - slide.getBoundingClientRect().top - parseFloat(getComputedStyle(slide).paddingTop); slide.scrollBy({ top: d, behavior: reduced ? 'auto' : 'smooth' }); };

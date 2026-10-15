@@ -699,7 +699,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 /* the plan, as wide as the card allows with the story under it in view; on the last step the city being built takes its
    place at its width, or the render does */
 .vb-big{position:relative; width:var(--vbw, 100%); max-width:100%; margin:0 auto}
-.vb-big .city-build{margin:0}
+.vb-big .city-build, .vb-rimg{margin:14px 0 0}
 .vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
 .vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
 .vb-media{margin-top:14px}
@@ -812,9 +812,9 @@ html.fit-tab body{min-height:0}
 .panel.fit .card-scroll .chips{margin-top:14px}
 .vb-box.telling{display:flex; flex-direction:column; height:var(--vbh, auto)}
 .vb-box.telling .vb-big{flex:none}
-.vb-box.telling .vb-big .city-build:not([hidden]){aspect-ratio:1800/841; display:flex; flex-direction:column}   /* the plan's own size, so the story stays in view */
-.vb-box.telling .vb-big .city-build .b8-3d{flex:1; min-height:0; aspect-ratio:auto}
-.vb-box.telling .vb-big .b8-ctl{padding:10px 16px 12px}
+/* the last step: the city under the plan, at its width, and its words under it; the story grows and the card scrolls */
+.vb-box.telling.city{height:auto}
+.vb-box.telling.city .vb-row{flex:none}
 /* under the plan: the picture a fifth of the width, the words and the buttons beside it */
 .vb-box.telling .vb-row{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,4fr); gap:22px; margin-top:14px}
 .vb-box.telling .vb-row.solo{grid-template-columns:minmax(0,1fr)}
@@ -846,6 +846,9 @@ html.fit-tab body{min-height:0}
   -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
   animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
 .b8-ctl{position:relative}
+/* while a slider shows that it moves, the ring turns with it, and fades when it stops */
+.rb-ring.live{animation:rbSpin 1s linear infinite; transition:opacity .35s}
+.rb-ring.live.out{opacity:0}
 .arrow.rainbow::after{
   content:""; position:absolute; inset:-4px; border-radius:50%; pointer-events:none;
   background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
@@ -1595,6 +1598,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=d72a88b0aa"></script>
 <script>window.I18N={"lang":"fr","locale":"fr-FR","t":{"Hello.":"Bonjour.","Good morning.":"Bonjour.","Good afternoon.":"Bon après-midi.","Good evening.":"Bonsoir.","Click for the last line":"Cliquez pour le dernier vers","Tap for the last line":"Touchez pour le dernier vers","Open image: {c}":"Ouvrir l'image : {c}","Image to come":"Image à venir","The numbers are refreshed from the channel every day; last update {d}.":"Les chiffres sont actualisés chaque jour depuis la chaîne ; dernière mise à jour : {d}.","World map of {p} places documented in {c} countries":"Carte du monde de {p} lieux documentés dans {c} pays","Not documented yet":"Pas encore documenté","Go to playlist":"Voir la playlist","Watch a video":"Regarder une vidéo","The map could not be loaded. Please reload the page.":"La carte n'a pas pu être chargée. Veuillez recharger la page.","England | UK":"Angleterre | R.-U.","Scotland | UK":"Écosse | R.-U.","Wales | UK":"Pays de Galles | R.-U.","Northern Ireland | UK":"Irlande du Nord | R.-U.","Gibraltar | UK":"Gibraltar | R.-U.","Alexandria":"Alexandria","Algeciras":"Algésiras","Almada":"Almada","Andorra la Vella":"Andorre-la-Vieille","Arles":"Arles","Arosa":"Arosa","Barcelona":"Barcelone","Basel":"Bâle","Belgrade":"Belgrade","Berlin":"Berlin","Bern":"Berne","Bilbao":"Bilbao","Bucharest":"Bucarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cairo":"Le Caire","Cannes":"Cannes","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Cologne","Cottbus":"Cottbus","Dessau":"Dessau","Döttingen":"Döttingen","Edinburgh":"Édimbourg","Faro":"Faro","Fes":"Fès","Flims":"Flims","Florence":"Florence","Flúðir":"Flúðir","Fort Lauderdale":"Fort Lauderdale","Geneva":"Genève","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss":"Gullfoss","Hamburg":"Hambourg","Helsinki":"Helsinki","Huningue":"Huningue","Keflavík":"Keflavík","Kraków":"Cracovie","Kyoto":"Kyoto","La Jolla":"La Jolla","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lisbonne","London":"Londres","Los Angeles":"Los Angeles","Lucerne":"Lucerne","Luxembourg":"Luxembourg","Malibu":"Malibu","Marrakech":"Marrakech","Marseille":"Marseille","Miami":"Miami","Milan":"Milan","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Mont Fuji","Mulhouse":"Mulhouse","Munich":"Munich","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle":"Newcastle","Nicosia":"Nicosie","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National Park":"Parc national de Redwood","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"Saint-Marin","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Seljalandsfoss":"Seljalandsfoss","Siwa":"Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Tarifa":"Tarifa","Tokyo":"Tokyo","Varna":"Varna","Varosha":"Varosha","Washington, D.C.":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Wrocław","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zurich":"Zurich","Þingvellir":"Þingvellir"},"plurals":{"place":{"one":"{n} lieu","many":"{n} de lieux","other":"{n} lieux"},"video":{"one":"{n} vidéo","many":"{n} de vidéos","other":"{n} vidéos"}}}</script>
-<script src="/assets/app.js?v=07a97a133a"></script>
+<script src="/assets/app.js?v=e8302c7cb3"></script>
 </body>
 </html>
