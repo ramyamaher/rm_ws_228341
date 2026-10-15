@@ -17,6 +17,22 @@ const RTL = document.documentElement.dir === 'rtl';
 // in a right-to-left page the slides sit to the left of one another, so they move the other way
 const isRtl = (el) => getComputedStyle(el).direction === 'rtl';
 
+// In Arabic the numbers are written in the digits used in Arabic-speaking countries, also those the page writes
+// later (counters, sliders, the map). A name written in Latin letters keeps its own digits (Building 8, C++)
+if (LANG === 'ar') {
+  const AR = '٠١٢٣٤٥٦٧٨٩', SKIP = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'CODE', 'NOSCRIPT']);
+  const fix = (n) => {
+    const s = n.data; if (!/[0-9]/.test(s) || (/[A-Za-z]/.test(s) && !/[\u0600-\u06FF]/.test(s))) return;
+    const p = n.parentElement; if (!p || SKIP.has(p.tagName) || p.closest('[data-latin]')) return;
+    const v = s.replace(/[0-9]/g, (d) => AR[d]).replace(/([٠-٩])\s?%/g, '$1٪');
+    if (v !== s) n.data = v;
+  };
+  const walk = (root) => { if (root.nodeType === 3) return fix(root); const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); for (let n; (n = w.nextNode());) fix(n); };
+  walk(document.body);
+  new MutationObserver((ms) => { for (const m of ms) { if (m.type === 'characterData') fix(m.target); else m.addedNodes.forEach(walk); } })
+    .observe(document.body, { subtree: true, childList: true, characterData: true });
+}
+
 /* ================= categories: pills on top, panels slide sideways ================= */
 const ORDER = ['about', 'architecture', 'design', 'writing', 'archive', 'apps'];
 const ALIASES = { documentation: 'archive' };   // old links keep working
@@ -150,7 +166,8 @@ function sliderHint(input, stops, { every = 5000, thumb = 24 } = {}) {
   // the ring sits on the handle, wherever the handle is
   function ringAt(ring) {
     const host = input.parentElement, a = input.getBoundingClientRect(), b = host.getBoundingClientRect(), f = (input.value - input.min) / span();
-    ring.style.left = (a.left - b.left + thumb / 2 + f * (a.width - thumb)) + 'px'; ring.style.top = (a.top - b.top + a.height / 2) + 'px';
+    const x = isRtl(input) ? a.right - b.left - thumb / 2 - f * (a.width - thumb) : a.left - b.left + thumb / 2 + f * (a.width - thumb);   // a right-to-left slider starts on the right
+    ring.style.left = x + 'px'; ring.style.top = (a.top - b.top + a.height / 2) + 'px';
   }
   const glide = (to, ring) => new Promise((res) => {
     const from = +input.value, T = 500 + 1200 * Math.abs(to - from) / span(), t0 = performance.now();
@@ -778,6 +795,7 @@ function vbFlow(svg) {
     parts = groups.map(line);
   }
   function frame(now) {
+    if (!parts.length) return;   // a step without a way through the plan
     const t = (now - t0) / 1000;
     if (!lab) {
       // the glow runs to the end and slips out of sight, then comes again

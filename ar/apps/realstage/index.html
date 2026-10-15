@@ -701,7 +701,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 .vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
 .vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
 .vb-media{margin-top:14px}
-.vb-render{position:absolute; right:12px; top:12px; z-index:3}
+.vb-stage{position:relative}   /* the city, or the render, with the button on it */
+.vb-render{position:absolute; right:12px; top:26px; z-index:3}
 .vb-render[hidden], .vb-render span[hidden]{display:none}
 html[dir="rtl"] .vb-render{right:auto; left:12px}
 .vb-texts section:not(.on) .city-step span{visibility:hidden}   /* a stage's own "on" would show through the hidden step */
@@ -1054,18 +1055,18 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
           <h2 class="sr-title">نبذة</h2>
           <figure class="me"><img src="/assets/img/ramy-maher.jpg" width="400" height="400" alt="Ramy Maher" decoding="async"></figure>
           <div class="prose">
-            <p class="first">أنا معماري. عملت في عدة دول، على مشاريع بكل المقاييس، من أكبر متحف في ألمانيا إلى رقعة شطرنج. عشت في ثلاث دول وأتحدث خمس لغات، وقد ترك كل مكان أثره في طريقتي في قراءة شارع أو مخطط أو جملة. رؤية منظورين تفتح الأفق لوجود المزيد.</p>
+            <p class="first">أنا معماري. عملت في عدة دول، على مشروعات بكل المقاييس، من أكبر متحف في ألمانيا إلى رقعة شطرنج. عشت في ثلاث دول وأتحدث خمس لغات، وقد ترك كل مكان أثره في طريقتي في قراءة شارع أو مخطط أو جملة. رؤية منظورين تفتح الأفق لوجود المزيد.</p>
             <p>معظم ما أصنعه، داخل العمارة أو خارجها، بدأ بسؤال لم أستطع أن أتركه. بعض هذه الأسئلة جاء من التكنولوجيا والبرمجة، وبعضها من المال، وكثير منها من الثقافات والسفر.</p>
 
             <h2>الخبرة المهنية</h2>
-            <p>تمتد مسيرتي المهنية لأكثر من عشر سنوات في العمارة والتصميم الحاسوبي وBIM والتحوّل الرقمي في قطاع AEC، بين مصر وألمانيا وسويسرا أساسًا. أحمل اعتماد LEED Accredited Professional. درست Python وHTML وCSS وJavaScript، وأنجزت مشاريع باستخدام Processing وC# وC++.</p>
+            <p>تمتد مسيرتي المهنية لأكثر من عشر سنوات في العمارة والبرمجة وBIM والتحوّل الرقمي في قطاع AEC، بين مصر وألمانيا وسويسرا أساسًا. أحمل اعتماد LEED Accredited Professional. درست Python وHTML وCSS وJavaScript، وأنجزت مشروعات باستخدام Processing وC# وC++.</p>
             <div class="chips"><a class="chip" href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">ملفي الكامل على LinkedIn</a></div>
 
             <!-- every project of every tab: search them, or browse their logos -->
             <div class="dex" id="dex">
-              <label class="dex-search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><input type="search" placeholder="ابحث في المشاريع: اسم، مكان، كلمة" aria-label="ابحث في المشاريع" autocomplete="off" spellcheck="false"></label>
-              <div class="dex-flow" role="listbox" aria-label="كل المشاريع"></div>
-              <p class="dex-hint">اسحب لترى المشاريع</p>
+              <label class="dex-search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><input type="search" placeholder="ابحث في المشروعات: اسم، مكان، كلمة" aria-label="ابحث في المشروعات" autocomplete="off" spellcheck="false"></label>
+              <div class="dex-flow" role="listbox" aria-label="كل المشروعات"></div>
+              <p class="dex-hint">اسحب لترى المشروعات</p>
               <div class="dex-info" aria-live="polite"></div>
               <div class="dex-results" aria-live="polite" hidden></div>
               <div class="dex-words" hidden>
@@ -1099,7 +1100,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div data-for="apps-3">
                 <h4>عقارات قابلة للتخصيص</h4>
-                <p>مع صعود الواقع الافتراضي في 2016، شاركت في تأسيس Plug لمساعدة وكالات العقارات على تسويق مشاريعها، وربطها لحظيًا بما بيع أو حُجز. كان بإمكان عملائها التجول في المشروع وتغيير قطع الأثاث والطلاء ولون الجدران وورق الحائط، بل وأنواع المباني كاملة على قطعة أرضهم.</p>
+                <p>مع صعود الواقع الافتراضي في 2016، شاركت في تأسيس Plug لمساعدة وكالات العقارات على تسويق مشروعاتها، وربطها لحظيًا بما بيع أو حُجز. كان بإمكان عملائها التجول في المشروع وتغيير قطع الأثاث والطلاء ولون الجدران وورق الحائط، بل وأنواع المباني كاملة على قطعة أرضهم.</p>
                 </div>
                 <div data-for="Revitesse">
                 <p>برامج العمارة والهندسة مصمَّمة لتخدم 90 إلى 95 في المئة من السوق. أما الـ5 إلى 10 في المئة الباقية فهي حيث يصبح العمل شديد التخصص، وهناك يضيع معظم الوقت.</p>
@@ -1139,7 +1140,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p>تحت سقف واحد عريض مائل، وبواجهات من الطوب المفرّغ، صُمّم المبنى قطعةً مسقوفة من المدينة. يعبره ممرّان من الداخل ويصلانه بالشوارع والساحات من كل جانب، فيلتقي الزائر بالفن على أطراف المبنى بقدر ما يلتقيه في قاعات العرض. وإلى جانب مقتنيات Nationalgalerie سيعرض مجموعات ماركس وبيتش ومارتسونا، ويربطه نفق تحت الأرض بالمتحف الوطني الجديد.</p>
                   </div>
                   <dl class="facts">
-                    <div><dt>الدور</dt><dd>معماري ومنسّق نمذجة معلومات البناء (BIM)</dd></div>
+                    <div><dt>الدور</dt><dd>معماري و BIM Coordinator</dd></div>
                     <div><dt>العميل</dt><dd>Stiftung Preußischer Kulturbesitz</dd></div>
                     <div><dt>الصور</dt><dd>© Herzog &amp; de Meuron</dd></div>
                   </dl>
@@ -1162,8 +1163,8 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p>كل ذلك يُبنى بينما تواصل قطارات المحطة الرئيسية سيرها، وهذا النظام الإنشائي هو التحدّي الذي جذبني إلى المشروع. تُبنى المحطة من الأعلى إلى الأسفل. تُحفر الأرض وتُصبّ بلاطة الأرضية؛ ثم يُحفر المستوى التالي تحتها ويُسند إلى أعمدة مؤقتة قبل أن تُصبّ بلاطته، وهكذا حتى عمق تسعة مستويات. بعد ذلك فقط تُصبّ الأعمدة الدائمة وتُزال المؤقتة.</p>
                   </div>
                   <dl class="facts">
-                    <div><dt>الدور</dt><dd>معماري ومدير نمذجة معلومات البناء (BIM)</dd></div>
-                    <div><dt>النطاق</dt><dd>التصميم الداخلي للمحطات تحت الأرض</dd></div>
+                    <div><dt>الدور</dt><dd>معماري و BIM Manager</dd></div>
+                    <div><dt>النطاق</dt><dd>التصميم المعماري في داخل المحطات تحت الأرض</dd></div>
                     <div><dt>الصور</dt><dd>© Atelier 4d Architekten</dd></div>
                   </dl>
                 </div>
@@ -1230,7 +1231,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                       </g>
                     </svg></span>
                     <div>
-                    <h2>طبقات مصر: بين المتاهة والجنة</h2>
+                    <h2>طبقات مصر: من المتاهة للجنة</h2>
                     <p class="p-meta">الجناح المصري، بينالي البندقية <i></i> المعرض الدولي الخامس عشر للعمارة، 2016</p>
                     </div>
                   </div>
@@ -1241,7 +1242,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p>يتكشّف تصميم ذلك المستقبل على ثلاث مراحل. الأولى تحافظ على عمارة المدينة القائمة، مع مساحات خضراء وعامة أكثر. والثانية تتبع محاور المدينة الرئيسية: ترتفع المباني على امتدادها، وحيث تبقى منخفضة تفسح المجال لمزيد من المساحات الخضراء. والثالثة حيّ للأعمال، يعزّز فرص المدينة في أن تصبح عاصمة مالية لشمال أفريقيا والشرق الأوسط.</p>
                   </div>
                   <div class="p-aside">
-                    <div class="thumbs solo" data-imgs="vb-001|طبقات مصر: بين المتاهة والجنة، عنوان المشاركة"></div>
+                    <div class="thumbs solo" data-imgs="vb-001|طبقات مصر: من المتاهة للجنة، عنوان المشاركة"></div>
                     <dl class="facts">
                       <div><dt>الفريق</dt><dd>كامل لقمان<br>رامي ماهر</dd></div>
                     </dl>
@@ -1262,12 +1263,14 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="القطاع A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                 </div>
                 </div>
+                  <div class="vb-stage">
                   <figure class="b8-build city-build" hidden>
                     <div class="b8-3d" role="img" aria-label="نموذج ثلاثي الأبعاد للمدينة المستقبلية على ثلاث مراحل، يُبنى كلما حرّكت المنزلق"></div>
                     <div class="b8-ctl"><label for="cityRange">ابنِ مستقبل القاهرة</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   </figure>
                   <img class="vb-rimg" src="/assets/img/projects/vb-007.jpg" alt="مستقبل القاهرة" loading="lazy" decoding="async" hidden>
                   <button class="vb-pill vb-render" type="button" hidden><span>عرض الصورة المجسمة</span><span hidden>عرض شريط التمرير</span></button>
+                  </div>
                 </div>
                 <div class="vb-row">
                 <div class="vb-media" hidden>
@@ -1569,7 +1572,7 @@ destined to guide.</script></section>
                   <div><h3>RealStage</h3><p class="tag">العقارات في الواقع الافتراضي، من PLUG Interactive.</p></div>
                 </div>
                 <div class="a-body">
-                  <p>كان RealStage تطبيق واقع افتراضي لتسويق العقارات، صُنع في PLUG Interactive بين 2016 و2018. أتاح للمطوّرين عرض مشاريعهم قبل بنائها: يستطيع المشترون التجوّل بالسيارة في الحيّ، والبحث عن الوحدات حسب المساحة والسعر والاتجاه، ورؤية الوحدة المختارة مضاءة على المبنى، وفتح مخططها والتجوّل داخل الشقة المفروشة، على الشاشة أو بنظارة واقع افتراضي.</p>
+                  <p>كان RealStage تطبيق واقع افتراضي لتسويق العقارات، صُنع في PLUG Interactive بين 2016 و2018. أتاح للمطوّرين عرض مشروعاتهم قبل بنائها: يستطيع المشترون التجوّل بالسيارة في الحيّ، والبحث عن الوحدات حسب المساحة والسعر والاتجاه، ورؤية الوحدة المختارة مضاءة على المبنى، وفتح مخططها والتجوّل داخل الشقة المفروشة، على الشاشة أو بنظارة واقع افتراضي.</p>
                   <ul class="feats">
                     <li>تجوّل بالسيارة وسيرًا داخل مشروع قبل بنائه</li>
                     <li>صفِّ الوحدات حسب غرف النوم والمساحة والسعر والاتجاه</li>
@@ -1597,6 +1600,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=d72a88b0aa"></script>
 <script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arosa":"أروزا","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cairo":"القاهرة","Cannes":"كان","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Dessau":"ديساو","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Faro":"فارو","Fes":"فاس","Flims":"فليمس","Florence":"فلورنسا","Flúðir":"فلوذير","Fort Lauderdale":"فورت لودرديل","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss":"غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Huningue":"هونينغ","Keflavík":"كيفلافيك","Kraków":"كراكوف","Kyoto":"كيوتو","La Jolla":"لا هويا","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Malibu":"ماليبو","Marrakech":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle":"نيوكاسل","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National Park":"متنزه ريدوود الوطني","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Rovinj":"روفين","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Seljalandsfoss":"سيليالاندسفوس","Siwa":"سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","Tarifa":"طريفة","Tokyo":"طوكيو","Varna":"فارنا","Varosha":"فاروشا","Washington, D.C.":"واشنطن العاصمة","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zurich":"زيورخ","Þingvellir":"ثينغفيلير"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
-<script src="/assets/app.js?v=e8302c7cb3"></script>
+<script src="/assets/app.js?v=63eaffb8b7"></script>
 </body>
 </html>

@@ -703,7 +703,8 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 .vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
 .vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
 .vb-media{margin-top:14px}
-.vb-render{position:absolute; right:12px; top:12px; z-index:3}
+.vb-stage{position:relative}   /* the city, or the render, with the button on it */
+.vb-render{position:absolute; right:12px; top:26px; z-index:3}
 .vb-render[hidden], .vb-render span[hidden]{display:none}
 html[dir="rtl"] .vb-render{right:auto; left:12px}
 .vb-texts section:not(.on) .city-step span{visibility:hidden}   /* a stage's own "on" would show through the hidden step */
@@ -1264,12 +1265,14 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="vb-cut r" type="button" style="left:98.1%; top:35.4%" aria-label="Coupe A-A"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 21H36"/><path class="vb-tip" d="M20 1 30 16H10Z"/><text x="20" y="39">A</text></svg></button>
                 </div>
                 </div>
+                  <div class="vb-stage">
                   <figure class="b8-build city-build" hidden>
                     <div class="b8-3d" role="img" aria-label="Un modèle 3D de la ville future en trois phases, qui se construit quand on déplace le curseur"></div>
                     <div class="b8-ctl"><label for="cityRange">Construire l’avenir du Caire</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   </figure>
                   <img class="vb-rimg" src="/assets/img/projects/vb-007.jpg" alt="L'avenir du Caire" loading="lazy" decoding="async" hidden>
                   <button class="vb-pill vb-render" type="button" hidden><span>Afficher le rendu</span><span hidden>Afficher le curseur</span></button>
+                  </div>
                 </div>
                 <div class="vb-row">
                 <div class="vb-media" hidden>
@@ -1599,6 +1602,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=d72a88b0aa"></script>
 <script>window.I18N={"lang":"fr","locale":"fr-FR","t":{"Hello.":"Bonjour.","Good morning.":"Bonjour.","Good afternoon.":"Bon après-midi.","Good evening.":"Bonsoir.","Click for the last line":"Cliquez pour le dernier vers","Tap for the last line":"Touchez pour le dernier vers","Open image: {c}":"Ouvrir l'image : {c}","Image to come":"Image à venir","The numbers are refreshed from the channel every day; last update {d}.":"Les chiffres sont actualisés chaque jour depuis la chaîne ; dernière mise à jour : {d}.","World map of {p} places documented in {c} countries":"Carte du monde de {p} lieux documentés dans {c} pays","Not documented yet":"Pas encore documenté","Go to playlist":"Voir la playlist","Watch a video":"Regarder une vidéo","The map could not be loaded. Please reload the page.":"La carte n'a pas pu être chargée. Veuillez recharger la page.","England | UK":"Angleterre | R.-U.","Scotland | UK":"Écosse | R.-U.","Wales | UK":"Pays de Galles | R.-U.","Northern Ireland | UK":"Irlande du Nord | R.-U.","Gibraltar | UK":"Gibraltar | R.-U.","Alexandria":"Alexandria","Algeciras":"Algésiras","Almada":"Almada","Andorra la Vella":"Andorre-la-Vieille","Arles":"Arles","Arosa":"Arosa","Barcelona":"Barcelone","Basel":"Bâle","Belgrade":"Belgrade","Berlin":"Berlin","Bern":"Berne","Bilbao":"Bilbao","Bucharest":"Bucarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cairo":"Le Caire","Cannes":"Cannes","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Cologne","Cottbus":"Cottbus","Dessau":"Dessau","Döttingen":"Döttingen","Edinburgh":"Édimbourg","Faro":"Faro","Fes":"Fès","Flims":"Flims","Florence":"Florence","Flúðir":"Flúðir","Fort Lauderdale":"Fort Lauderdale","Geneva":"Genève","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss":"Gullfoss","Hamburg":"Hambourg","Helsinki":"Helsinki","Huningue":"Huningue","Keflavík":"Keflavík","Kraków":"Cracovie","Kyoto":"Kyoto","La Jolla":"La Jolla","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lisbonne","London":"Londres","Los Angeles":"Los Angeles","Lucerne":"Lucerne","Luxembourg":"Luxembourg","Malibu":"Malibu","Marrakech":"Marrakech","Marseille":"Marseille","Miami":"Miami","Milan":"Milan","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Mont Fuji","Mulhouse":"Mulhouse","Munich":"Munich","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle":"Newcastle","Nicosia":"Nicosie","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National Park":"Parc national de Redwood","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"Saint-Marin","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Seljalandsfoss":"Seljalandsfoss","Siwa":"Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Tarifa":"Tarifa","Tokyo":"Tokyo","Varna":"Varna","Varosha":"Varosha","Washington, D.C.":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Wrocław","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zurich":"Zurich","Þingvellir":"Þingvellir"},"plurals":{"place":{"one":"{n} lieu","many":"{n} de lieux","other":"{n} lieux"},"video":{"one":"{n} vidéo","many":"{n} de vidéos","other":"{n} vidéos"}}}</script>
-<script src="/assets/app.js?v=e8302c7cb3"></script>
+<script src="/assets/app.js?v=63eaffb8b7"></script>
 </body>
 </html>
