@@ -697,7 +697,7 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 /* the plan, as wide as the card allows with the story under it in view; on the last step the city being built takes its
    place at its width, or the render does */
 .vb-big{position:relative; width:var(--vbw, 100%); max-width:100%; margin:0 auto}
-.vb-big .city-build{margin:0}
+.vb-big .city-build, .vb-rimg{margin:14px 0 0}
 .vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
 .vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
 .vb-media{margin-top:14px}
@@ -810,9 +810,9 @@ html.fit-tab body{min-height:0}
 .panel.fit .card-scroll .chips{margin-top:14px}
 .vb-box.telling{display:flex; flex-direction:column; height:var(--vbh, auto)}
 .vb-box.telling .vb-big{flex:none}
-.vb-box.telling .vb-big .city-build:not([hidden]){aspect-ratio:1800/841; display:flex; flex-direction:column}   /* the plan's own size, so the story stays in view */
-.vb-box.telling .vb-big .city-build .b8-3d{flex:1; min-height:0; aspect-ratio:auto}
-.vb-box.telling .vb-big .b8-ctl{padding:10px 16px 12px}
+/* the last step: the city under the plan, at its width, and its words under it; the story grows and the card scrolls */
+.vb-box.telling.city{height:auto}
+.vb-box.telling.city .vb-row{flex:none}
 /* under the plan: the picture a fifth of the width, the words and the buttons beside it */
 .vb-box.telling .vb-row{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,4fr); gap:22px; margin-top:14px}
 .vb-box.telling .vb-row.solo{grid-template-columns:minmax(0,1fr)}
@@ -844,6 +844,9 @@ html.fit-tab body{min-height:0}
   -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
   animation:rbSpin 1s linear 2, rbFade .5s 2s forwards}
 .b8-ctl{position:relative}
+/* while a slider shows that it moves, the ring turns with it, and fades when it stops */
+.rb-ring.live{animation:rbSpin 1s linear infinite; transition:opacity .35s}
+.rb-ring.live.out{opacity:0}
 .arrow.rainbow::after{
   content:""; position:absolute; inset:-4px; border-radius:50%; pointer-events:none;
   background:conic-gradient(#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
@@ -1594,6 +1597,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=d72a88b0aa"></script>
 <script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arosa":"أروزا","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cairo":"القاهرة","Cannes":"كان","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Dessau":"ديساو","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Faro":"فارو","Fes":"فاس","Flims":"فليمس","Florence":"فلورنسا","Flúðir":"فلوذير","Fort Lauderdale":"فورت لودرديل","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss":"غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Huningue":"هونينغ","Keflavík":"كيفلافيك","Kraków":"كراكوف","Kyoto":"كيوتو","La Jolla":"لا هويا","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Malibu":"ماليبو","Marrakech":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle":"نيوكاسل","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National Park":"متنزه ريدوود الوطني","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Rovinj":"روفين","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Seljalandsfoss":"سيليالاندسفوس","Siwa":"سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","Tarifa":"طريفة","Tokyo":"طوكيو","Varna":"فارنا","Varosha":"فاروشا","Washington, D.C.":"واشنطن العاصمة","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zurich":"زيورخ","Þingvellir":"ثينغفيلير"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
-<script src="/assets/app.js?v=07a97a133a"></script>
+<script src="/assets/app.js?v=e8302c7cb3"></script>
 </body>
 </html>
