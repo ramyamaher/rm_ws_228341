@@ -588,9 +588,10 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .logo .zs-logo{width:88%; height:88%}
 .zs-t1{transform:translateX(-410px)}
 .zs-t2{transform:translateX(-46px)}
-.anim-logo.play .zs-t1{animation:zsPass 1.9s cubic-bezier(.4,0,.75,.7) .4s both}
-.anim-logo.play .zs-t2{animation:zsArrive 2.6s cubic-bezier(.12,.62,.28,1) 2.35s both}
-@keyframes zsPass{from{transform:translateX(-410px)} to{transform:translateX(380px)}}
+/* the train stands where the logo ends, departs, and the next one pulls in to the same place */
+.anim-logo.play .zs-t1{animation:zsPass 1.6s cubic-bezier(.55,0,.85,.55) .5s both}
+.anim-logo.play .zs-t2{animation:zsArrive 2.6s cubic-bezier(.12,.62,.28,1) 2.1s both}
+@keyframes zsPass{from{transform:translateX(-46px)} to{transform:translateX(380px)}}
 @keyframes zsArrive{from{transform:translateX(-410px)} to{transform:translateX(-46px)}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .zs-t1,.anim-logo.play .zs-t2{animation:none} }
 /* Building 8 logo: the trails, simplified from the plan of the motion, walk in from the entrances at the bottom */
@@ -817,10 +818,18 @@ html.fit-tab body{min-height:0}
 /* under the plan: the picture a fifth of the width, the words and the buttons beside it */
 .vb-box.telling .vb-row{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,4fr); gap:22px; margin-top:14px}
 .vb-box.telling .vb-row.solo{grid-template-columns:minmax(0,1fr)}
+/* the buttons under both, centred on the whole width: the story's own boxes step aside so its words and buttons sit in this grid */
+.vb-box.telling .vb-row{grid-template-rows:minmax(0,1fr) auto; row-gap:12px}
+.vb-box.telling .vb-story, .vb-box.telling .vb-steps{display:contents}
+.vb-box.telling .vb-texts{grid-column:-2; grid-row:1}
+.vb-box.telling .vb-media{grid-column:1; grid-row:1}
+.vb-box.telling .vb-nav{grid-column:1 / -1; grid-row:2}
+.vb-box.telling .vb-go{display:none}
 .vb-box.telling .vb-media{margin-top:0; align-self:start}
 .vb-box.telling .vb-story{margin-top:0; min-height:0; align-items:stretch}
 .vb-box.telling .vb-steps{height:100%; grid-template-rows:minmax(0,1fr) auto; gap:12px}
-.vb-box.telling .vb-texts{align-self:stretch; min-height:0; overflow-y:auto; overscroll-behavior:contain}
+.vb-box.telling .vb-texts{align-self:stretch; min-height:0; overflow-y:auto}   /* no containing: at its end, or with nothing to scroll, the wheel scrolls the card */
+.vb-box.telling.city .vb-texts{overflow:visible}
 .vb-box.telling .vb-nav{margin-top:0}
 /* the Archive alone: everything on one screen, the map taking whatever height is left */
 .panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
@@ -1269,7 +1278,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <div class="b8-ctl"><label for="cityRange">ابنِ مستقبل القاهرة</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   </figure>
                   <img class="vb-rimg" src="/assets/img/projects/vb-007.jpg" alt="مستقبل القاهرة" loading="lazy" decoding="async" hidden>
-                  <button class="vb-pill vb-render" type="button" hidden><span>عرض الصورة المجسمة</span><span hidden>عرض شريط التمرير</span></button>
+                  <button class="vb-pill vb-render" type="button" hidden><span>عرض الصورة المجسمة</span><span hidden>عرض شريط البناء</span></button>
                   </div>
                 </div>
                 <div class="vb-row">
