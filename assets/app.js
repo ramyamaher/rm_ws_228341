@@ -87,6 +87,70 @@ function go(id, { push = true } = {}) {
 }
 // Shuin's tile plays the app's splash (a 1 MB SVG, fetched once, the first time it is needed),
 // then fades to the stamp. A fresh blob URL per play restarts the splash from its first frame.
+// Revitesse: a parallelogram of paper in three triangles, folded the way the logo was made. The big triangle is the R's
+// body, the middle one lies between the stem and the slanted crease, the far one beyond the crease. The far triangle
+// folds about the crease to behind the middle one, then both fold about the stem to behind the body, and the corners
+// round. Each piece turns exactly in 3D and is drawn through a mild perspective; the shading stays where it is in the
+// finished logo and comes in as the paper goes behind
+const rvBuild = (() => {
+  const U = 272 / 42, SY = 152 - 13.84 * U, px = ([x, y]) => [57 + x * U, SY + y * U], PAPER = [0x82, 0x99, 0x6d];
+  const STEM = 57, TOP = 152, FOOT = 424, FAR = 329, K = [STEM - 17.41 * U, TOP], D = [STEM, FOOT], APEX = px([0, -3.53]);
+  const l = Math.hypot(D[0] - K[0], D[1] - K[1]), ux = [(D[0] - K[0]) / l, (D[1] - K[1]) / l];
+  const reflC = ([x, y]) => { const v = [x - K[0], y - K[1]], q = v[0] * ux[0] + v[1] * ux[1]; return [K[0] + 2 * q * ux[0] - v[0], K[1] + 2 * q * ux[1] - v[1]]; };
+  const A = reflC(APEX), BODY = [[STEM, TOP], D, [FAR, FOOT]], STRIP = [K, [STEM, TOP], D], TRI = [A, K, D];
+  const R_TOP = 6.08 * U, R_FAR = 6.08 * U, R_FOOT = 2.52 * U, GQ = 13.84 / 26.13, GY = SY + 26.13 * U;
+  // a point turned about the axis through a (unit direction u in the page) by t radians
+  function turn([x, y, z], a, u, t) {
+    const v = [x - a[0], y - a[1], z], c = Math.cos(t), s = Math.sin(t), k = [u[0], u[1], 0];
+    const cr = [k[1] * v[2] - k[2] * v[1], k[2] * v[0] - k[0] * v[2], k[0] * v[1] - k[1] * v[0]], dot = k[0] * v[0] + k[1] * v[1];
+    return [0, 1, 2].map((i) => (i < 2 ? a[i] : 0) + v[i] * c + cr[i] * s + k[i] * dot * (1 - c));
+  }
+  const ease = (u) => (u <= 0 ? 0 : u >= 1 ? 1 : u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+  const towards = (p, q, r) => { const d = Math.hypot(q[0] - p[0], q[1] - p[1]) || 1; return [p[0] + (q[0] - p[0]) * r / d, p[1] + (q[1] - p[1]) * r / d]; };
+  // a polygon's outline, each corner rounded by its own r
+  const pathOf = (pts, rs = []) => {
+    const n = pts.length, f = (p) => p[0].toFixed(2) + ' ' + p[1].toFixed(2);
+    const seg = pts.map((p, i) => [towards(p, pts[(i + n - 1) % n], rs[i] || 0), p, towards(p, pts[(i + 1) % n], rs[i] || 0)]);
+    return 'M' + f(seg[0][2]) + seg.slice(1).map(([a, p, b]) => 'L' + f(a) + 'Q' + f(p) + ' ' + f(b)).join('') + 'L' + f(seg[0][0]) + 'Q' + f(seg[0][1]) + ' ' + f(seg[0][2]) + 'Z';
+  };
+  const F = 1500, proj = ([x, y, z]) => { const s = F / (F - z); return [180 + (x - 180) * s, 288 + (y - 288) * s]; };
+  // how squarely a piece faces the viewer: it darkens a little as it turns away
+  const facing = ([a, b, c]) => {
+    const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+    const n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+    return Math.abs(n[2] / (Math.hypot(...n) || 1));
+  };
+  const colour = (f) => `rgb(${PAPER.map((c) => Math.round(c * (.9 + .1 * f))).join(',')})`;
+  const S0 = 360 / 600, CX0 = (A[0] + FAR) / 2, CY0 = (TOP + FOOT) / 2;
+  let n = 0;
+  return (svg) => {
+    const id = 'rvShade' + (++n);
+    svg.innerHTML = `<defs><linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${STEM}" y1="${SY}" x2="${STEM}" y2="${GY}">`
+      + `<stop offset="${.23 * GQ}" stop-color="#82996d" stop-opacity=".0025"/><stop offset="${GQ}" stop-opacity=".25"/>`
+      + `<stop offset="${GQ}" stop-color="#82996d" stop-opacity=".5"/><stop offset="1" stop-opacity=".5"/></linearGradient></defs>`
+      + `<g>${'<g><path stroke-width=".8" stroke-linejoin="round"/><path/></g>'.repeat(3)}</g>`;
+    const view = svg.lastElementChild, slots = [...view.children].map((g) => [...g.children]);
+    return (ms) => {
+      const t1 = ease((ms - 500) / 1300), t2 = ease((ms - 1950) / 1300), t3 = ease((ms - 3150) / 1100), tv = ease((ms - 1900) / 1700);
+      const z0 = (p) => [p[0], p[1], 0], f2 = (p) => turn(p, [STEM, TOP], [0, 1], Math.PI * t2);
+      const tri = TRI.map(z0).map((p) => turn(p, K, ux, -Math.PI * t1)).map(f2), strip = STRIP.map(z0).map(f2), body = BODY.map(z0);
+      // the far triangle is behind the strip while the strip faces the viewer, in front of it once the strip has turned
+      // its back (it lies on the strip's back); the body is in front of both
+      const [sa, sb, sc] = strip, front = (sb[0] - sa[0]) * (sc[1] - sa[1]) - (sb[1] - sa[1]) * (sc[0] - sa[0]) > 0;
+      const k = .5 * ease((t1 - .45) / .55) + .5 * ease((t2 - .45) / .55);
+      const rounds = new Map([[strip, [0, 0, R_FOOT * t3]], [tri, [R_TOP * t3, 0, R_FOOT * t3]], [body, [0, R_FOOT * t3, R_FAR * t3]]]);
+      (front ? [tri, strip, body] : [strip, tri, body]).forEach((pts, i) => {
+        const [el, sh] = slots[i], d = pathOf(pts.map(proj), rounds.get(pts)), c = colour(facing(pts));
+        el.setAttribute('d', d); el.setAttribute('fill', c); el.setAttribute('stroke', c);
+        sh.setAttribute('d', pts === tri ? d : ''); sh.setAttribute('fill', `url(#${id})`); sh.setAttribute('opacity', k.toFixed(3));
+      });
+      // from the whole open sheet to the logo's own frame
+      const s = S0 + (1 - S0) * tv, cx = CX0 + (180 - CX0) * tv, cy = CY0 + (230 - CY0) * tv;
+      view.setAttribute('transform', `translate(180 230) scale(${s.toFixed(4)}) translate(${(-cx).toFixed(2)} ${(-cy).toFixed(2)})`);
+    };
+  };
+})();
+let ssFrames = null;
 let shuinSplash = null;
 const PLAYERS = {
   shuin: {
@@ -109,6 +173,67 @@ const PLAYERS = {
       }).catch(() => {});
     },
     reset(el) { el._run = (el._run || 0) + 1; clearTimeout(el._t); el.classList.remove('splashing'); },
+  },
+  // Building 8: a grid of sensor cells over the trails; each wakes at its own moment and flickers the way a motion
+  // sensor's readings jump, then settles at the strength of its area, a few spots of strong movement fading into
+  // each other
+  b8: {
+    play(el, still) {
+      if (still) return;
+      const g = el.querySelector('mask g'), N = 30, S = 300 / N;
+      if (!g._cells) {
+        g._cells = [];
+        g.replaceChildren();
+        for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+          const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          r.setAttribute('x', i * S); r.setAttribute('y', j * S); r.setAttribute('width', S + .4); r.setAttribute('height', S + .4);
+          r.setAttribute('fill', '#fff'); r.setAttribute('shape-rendering', 'crispEdges');
+          g.append(r); g._cells.push([r, (i + .5) * S, (j + .5) * S]);
+        }
+      }
+      const spots = Array.from({ length: 4 }, () => ({ x: 30 + Math.random() * 240, y: 30 + Math.random() * 240, s: 55 + Math.random() * 60, w: .6 + Math.random() * .4 }));
+      const field = (x, y) => Math.min(1, spots.reduce((v, p) => v + p.w * Math.exp(-((x - p.x) ** 2 + (y - p.y) ** 2) / (2 * p.s * p.s)), 0));
+      g._cells.forEach(([r, x, y]) => {
+        const end = .22 + .78 * field(x, y), t0 = Math.random() * 900, total = 1500 + Math.random() * 700;
+        const a = Math.random() * .9, b = Math.random() * .3, c = .2 + Math.random() * .8;
+        r.animate([{ opacity: 0 }, { opacity: 0, offset: t0 / total }, { opacity: a, offset: (t0 + 120) / total }, { opacity: b, offset: (t0 + 260) / total },
+          { opacity: c, offset: (t0 + 420) / total }, { opacity: c * .6, offset: Math.min(.95, (t0 + 600) / total) }, { opacity: end }],
+        { duration: total, easing: 'steps(18, end)', fill: 'both' });
+      });
+    },
+    reset(el) { (el.querySelector('mask g')._cells || []).forEach(([r]) => r.getAnimations().forEach((x) => x.cancel())); },
+  },
+  // the spiral staircase: lines of the model seen from the side; the climbing wall's top edge comes down step by step
+  // from parallel to all the way open, as if the Opening slider were pulled, and settles back to about 60 % open
+  ss: {
+    play(el, still) {
+      const run = ++el._run || (el._run = 1);
+      if (still) return;
+      ssFrames = ssFrames || fetch('/assets/img/logos/staircase-frames.json').then((r) => r.json());
+      ssFrames.then((F) => {
+        if (run !== el._run) return;
+        const wall = el.querySelector('.ss-wall'), edge = el.querySelector('.ss-edge');
+        const show = (k) => { wall.setAttribute('d', F[k].wall); edge.setAttribute('d', F[k].edge); };
+        const N = F.length, REST = Math.round((N - 1) * .55), seq = [];
+        for (let k = 1; k < N; k++) seq.push([k, 1100 / (N - 1)]);
+        for (let k = N - 2; k >= REST; k--) seq.push([k, 120]);
+        let i = 0;
+        const next = () => { if (run !== el._run) return; show(seq[i][0]); i++; if (i < seq.length) el._t = setTimeout(next, seq[i][1]); };
+        show(0); el._t = setTimeout(next, 600);
+      }).catch(() => {});
+    },
+    reset(el) { el._run = (el._run || 0) + 1; clearTimeout(el._t); },
+  },
+  // Revitesse: the sheet of paper folds into the logo, drawn frame by frame
+  rv: {
+    play(el, still) {
+      const draw = el._draw || (el._draw = rvBuild(el));
+      cancelAnimationFrame(el._raf);
+      if (still) { draw(1e4); return; }
+      const t0 = performance.now(), frame = (now) => { const ms = now - t0; draw(ms); if (ms < 4400) el._raf = requestAnimationFrame(frame); };
+      draw(0); el._raf = requestAnimationFrame(frame);
+    },
+    reset(el) { cancelAnimationFrame(el._raf); },
   },
   // RealStage: SMIL morphs, begun after a pause; removing a frozen morph puts its field back across
   plug: {
