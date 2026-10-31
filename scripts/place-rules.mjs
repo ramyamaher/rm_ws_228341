@@ -114,3 +114,16 @@ export const RULES = [
 // Playlist titles on the channel that are not simply the country's name.
 // The UK is counted as its four countries plus Gibraltar, as on the channel's playlists.
 export const PLAYLIST_ALIASES = { USA: 'United States', Gibraltar: 'Gibraltar | UK', Wales: 'Wales | UK', 'Northern Ireland': 'Northern Ireland | UK' };
+
+// Locations set on videos that OpenStreetMap finds in the wrong spot by their name alone, keyed
+// by the name YouTube shows above the title: [name on the map, country, lat, lon]. These win
+// over the lookup; a region given its city's name counts with that city.
+export const PLACE_FIXES = {
+  'Gleisdreieck - Skatepark': ['Gleisdreieck - Skatepark', 'Germany', 52.4975, 13.3745],
+  'Twin Peaks': ['Twin Peaks', 'United States', 37.7544, -122.4477],
+  'The Green Arcade': ['The Green Arcade', 'United States', 37.7733, -122.4235],
+  'Santa Monica Beach': ['Santa Monica Beach', 'United States', 34.0094, -118.4973],
+  'Sankt Jakob': ['Sankt Jakob', 'Switzerland', 47.539, 7.62],
+  'Metropolitan City of Florence': ['Florence', 'Italy', 43.7698, 11.2556],
+  'Province of Rimini': ['Rimini', 'Italy', 44.0594, 12.5684],
+};
