@@ -151,7 +151,8 @@ const rvBuild = (() => {
 let ssFrames = null;
 // Shuin's tile plays the app's splash (a 1 MB SVG, fetched once per theme, the first time it is needed),
 // then fades to the torii seal. A fresh blob URL per play restarts the splash from its first frame. As an
-// image the SVG cannot see the page's theme, so dark mode has its own copy
+// image the SVG cannot see the page's theme, so the light and the dark copy play together, in step, and the
+// page's theme shows one of them: switching the theme mid-splash changes it at once
 const shuinSplash = {};
 const PLAYERS = {
   shuin: {
@@ -159,19 +160,22 @@ const PLAYERS = {
       if (still) return;
       const box = el.querySelector('.shuin-splash');
       const run = ++el._run || (el._run = 1);
-      const theme = document.documentElement.dataset.theme === 'dark' ? '-dark' : '';
-      shuinSplash[theme] = shuinSplash[theme] || fetch(`/assets/img/logos/shuin-splash${theme}.svg`).then(r => r.blob());
-      shuinSplash[theme].then(blob => {
+      const themes = ['light', 'dark'];
+      themes.forEach(t => { shuinSplash[t] = shuinSplash[t] || fetch(`/assets/img/logos/shuin-splash${t === 'dark' ? '-dark' : ''}.svg`).then(r => r.blob()); });
+      Promise.all(themes.map(t => shuinSplash[t])).then(blobs => {
         if (run !== el._run || el.closest('[aria-hidden="true"]')) return;
-        const img = new Image();
-        img.alt = '';
-        img.src = URL.createObjectURL(blob);
-        img.onload = () => {
+        const imgs = blobs.map((blob, i) => {
+          const img = new Image();
+          img.alt = ''; img.className = themes[i];
+          return img;
+        });
+        // both start the moment they go into the tile, after both are ready
+        Promise.all(imgs.map((img, i) => new Promise(ok => { img.onload = img.onerror = ok; img.src = URL.createObjectURL(blobs[i]); }))).then(() => {
           if (run !== el._run) return;
-          box.replaceChildren(img);
+          box.replaceChildren(...imgs);
           el.classList.add('splashing');
-          el._t = setTimeout(() => { el.classList.remove('splashing'); URL.revokeObjectURL(img.src); }, 8200);
-        };
+          el._t = setTimeout(() => { el.classList.remove('splashing'); imgs.forEach(img => URL.revokeObjectURL(img.src)); }, 8200);
+        });
       }).catch(() => {});
     },
     reset(el) { el._run = (el._run || 0) + 1; clearTimeout(el._t); el.classList.remove('splashing'); },
