@@ -13,7 +13,7 @@
 // A place is looked up once; one found in the wrong spot can be corrected by hand in that
 // file's "places" section (each video there carries its title, to see what it is).
 import { writeFile, readFile } from 'node:fs/promises';
-import { RULES, PLAYLIST_ALIASES, PLACE_FIXES } from './place-rules.mjs';
+import { RULES, PLAYLIST_ALIASES, PLACE_FIXES, CITY_FIXES, CITY_PARTS, CITY_NAMES } from './place-rules.mjs';
 
 const CHANNEL = 'UCDRz8yeFDCXvv6AOuUssFmg';
 const OUT = new URL('../assets/data/places.js', import.meta.url);
@@ -206,26 +206,86 @@ for (const v of videos) {
 }
 for (const [pid, { q, titles }] of titled) {
   const fix = PLACE_FIXES[q];
-  if (fix) { cache.places[pid] = { name: fix[0], country: fix[1], lat: fix[2], lon: fix[3] }; continue; }
+  if (fix) { const was = cache.places[pid] || {}; cache.places[pid] = { name: fix[0], country: fix[1], lat: fix[2], lon: fix[3], ...(was.kind ? { kind: was.kind, in: was.in } : {}) }; continue; }
   if (cache.places[pid]) continue;
   try { const p = await geocode(q, hintOf(titles)); if (p) cache.places[pid] = p; }
   catch (e) { console.log(`Could not place "${q}": ${e.message}`); }
 }
 
-// Count the videos of each place, newest first, so each place shows its latest video
+// The map shows cities, not the spots in them: a park, a museum, a square or a district counts for the city or town it
+// is in. A place that is itself a city, town or village, a country or a region, or a natural site (a mountain, a
+// waterfall, a national park) stays as it is. For each place OpenStreetMap is asked once what kind of place it is and
+// which city or town its spot belongs to
+async function nominatim(path) {
+  await new Promise((r) => setTimeout(r, Math.max(0, lastAsk + 1100 - Date.now())));
+  lastAsk = Date.now();
+  const r = await fetch('https://nominatim.openstreetmap.org/' + path, { headers: { 'user-agent': 'ramymaher.com Wandering Wayfarer map (https://ramymaher.com)' } });
+  if (!r.ok) throw new Error(`OpenStreetMap answered ${r.status}`);
+  return r.json();
+}
+const near = (h, p) => km([+h.lat, +h.lon], [p.lat, p.lon]);
+for (const [pid, { q }] of titled) {
+  const p = cache.places[pid];
+  if (!p || p.kind) continue;
+  try {
+    // what the tagged place is: the match of its name nearest to where it was placed
+    const hits = await nominatim(`search?format=jsonv2&limit=8&accept-language=en&q=${encodeURIComponent(q)}`);
+    const h = hits.sort((x, y) => near(x, p) - near(y, p))[0];
+    p.kind = h && near(h, p) < 30 ? [h.category, h.type, h.addresstype].join('/') : '?';
+    // the city or town its spot is in
+    const a = (await nominatim(`reverse?format=jsonv2&zoom=18&addressdetails=1&accept-language=en&lat=${p.lat}&lon=${p.lon}`)).address || {};
+    p.in = a.city || a.town || null;
+  } catch (e) { console.log(`Could not ask what "${q}" is: ${e.message}`); }
+}
+// kinds as "category/type/addresstype": a settlement or a region, and a natural site, stay as they are
+const SETTLEMENT = new RegExp('^(place/(city|town|village|hamlet|isolated_dwelling|state|country|region|province|county)'
+  + '|boundary/administrative/(country|state|region|province|county|city|town|village|municipality))');
+const NATURE = new RegExp('^(natural/(peak|volcano|waterfall|glacier|hot_spring|geyser)|boundary/national_park)');
+const plainName = (s) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+cache.cities ||= {};
+async function cityPlace(name, country) {
+  const key = name + '|' + country;
+  if (!cache.cities[key]) {
+    // a place on the channel that is this city, or else OpenStreetMap's
+    const own = Object.values(cache.places).find((x) => x.country === country && plainName(x.name) === plainName(name) && SETTLEMENT.test(x.kind || ''));
+    if (own) cache.cities[key] = { lat: own.lat, lon: own.lon };
+    else {
+      const h = (await osm(`${name}, ${country.replace(' | UK', '')}`))[0];
+      if (!h) return null;
+      cache.cities[key] = { lat: +(+h.lat).toFixed(4), lon: +(+h.lon).toFixed(4) };
+    }
+  }
+  return { name, country, ...cache.cities[key] };
+}
+// what a place counts as on the map: the city or town its spot is in, or itself
+const shownOf = new Map();
+for (const [pid, { q }] of titled) {
+  const p = cache.places[pid];
+  if (!p) continue;
+  // Ireland's municipal districts come back as cities; they are not
+  const inCity = p.in && !/Municipal District/i.test(p.in) ? p.in : null;
+  let city = q in CITY_FIXES ? CITY_FIXES[q] : !p.kind || SETTLEMENT.test(p.kind) || NATURE.test(p.kind) ? null : inCity;
+  if (city) city = CITY_PARTS[city] || CITY_NAMES[city] || city;
+  try { shownOf.set(pid, (city && plainName(city) !== plainName(p.name) && await cityPlace(city, p.country)) || p); }
+  catch (e) { shownOf.set(pid, p); }
+}
+
+// Count the videos of each place, newest first, so each place shows its latest video. Names that differ only in
+// accents ("Zürich" from the map, "Zurich" from a title) are one place
 const places = new Map();
-const add = (key, p, id) => {
-  const e = places.get(key);
-  if (e) e.n++; else places.set(key, { name: p.name, country: p.country, lat: p.lat, lon: p.lon, n: 1, v: id });
+const plain = (s) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+const add = (p, id) => {
+  const key = plainName(p.name) + '|' + p.country, e = places.get(key);
+  if (e) { e.n++; if (e.v === id) e.n--; } else places.set(key, { name: p.name, country: p.country, lat: p.lat, lon: p.lon, n: 1, v: id });
 };
 const untagged = [], unmapped = [];
 for (const v of videos) {
   const c = cache.videos[v.id], p = c?.pid && cache.places[c.pid];
-  if (p) { add(p.name + '|' + p.country, p, v.id); continue; }
+  if (p) { add(shownOf.get(c.pid) || p, v.id); continue; }
   untagged.push(v.t);
   const hits = byTitle(v.t);
   if (!hits.length) unmapped.push(v.t);
-  hits.forEach((h) => add(h.name + '|' + h.country, h, v.id));
+  hits.forEach((h) => add(h, v.id));
 }
 
 // A country playlist is one whose title, without flags and emoji, is exactly a country we film in.
