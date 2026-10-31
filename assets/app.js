@@ -85,8 +85,6 @@ function go(id, { push = true } = {}) {
   if (!firstShow[id] && entered) { firstShow[id] = true; (onFirstShow[id] || (() => {}))(); }
   playLogos(document, (from > i ? 1 : -1) * (RTL ? -1 : 1), !changed);
 }
-// Shuin's tile plays the app's splash (a 1 MB SVG, fetched once, the first time it is needed),
-// then fades to the stamp. A fresh blob URL per play restarts the splash from its first frame.
 // Revitesse: a parallelogram of paper in three triangles, folded the way the logo was made. The big triangle is the R's
 // body, the middle one lies between the stem and the slanted crease, the far one beyond the crease. The far triangle
 // folds about the crease to behind the middle one, then both fold about the stem to behind the body, and the corners
@@ -151,15 +149,19 @@ const rvBuild = (() => {
   };
 })();
 let ssFrames = null;
-let shuinSplash = null;
+// Shuin's tile plays the app's splash (a 1 MB SVG, fetched once per theme, the first time it is needed),
+// then fades to the torii seal. A fresh blob URL per play restarts the splash from its first frame. As an
+// image the SVG cannot see the page's theme, so dark mode has its own copy
+const shuinSplash = {};
 const PLAYERS = {
   shuin: {
     play(el, still) {
       if (still) return;
       const box = el.querySelector('.shuin-splash');
       const run = ++el._run || (el._run = 1);
-      shuinSplash = shuinSplash || fetch('/assets/img/logos/shuin-splash.svg').then(r => r.blob());
-      shuinSplash.then(blob => {
+      const theme = document.documentElement.dataset.theme === 'dark' ? '-dark' : '';
+      shuinSplash[theme] = shuinSplash[theme] || fetch(`/assets/img/logos/shuin-splash${theme}.svg`).then(r => r.blob());
+      shuinSplash[theme].then(blob => {
         if (run !== el._run || el.closest('[aria-hidden="true"]')) return;
         const img = new Image();
         img.alt = '';
@@ -324,15 +326,18 @@ sliderHint($('#b8Range'), [3, 10]);         // 6 to 3 to 10 and back to 6 of 40 
 /* ================= project images and the viewer ================= */
 // Each .thumbs lists its images as "file|caption;file|caption". Thumbnails load small;
 // the click opens the full image. An entry with no file is an empty slot for a later image.
+// A box marked data-dark has a "-dark" copy of each image, shown when the site is in dark mode.
 const lb = $('#lightbox'), lbImg = $('#lbImg'), lbCap = $('#lbCap');
 let lbSet = [], lbAt = 0, lbFrom = null;
+const themed = (s) => s.f + (s.dark && document.documentElement.dataset.theme === 'dark' ? '-dark' : '');
 $$('.thumbs').forEach(box => {
-  const set = box.dataset.imgs.split(';').map(s => { const [f, c, ar] = s.split('|'); return { f: f.trim(), c: (c || '').trim(), ar: +ar || 0 }; });
+  const dark = box.hasAttribute('data-dark');
+  const set = box.dataset.imgs.split(';').map(s => { const [f, c, ar] = s.split('|'); return { f: f.trim(), c: (c || '').trim(), ar: +ar || 0, dark }; });
   const row = box.classList.contains('row');
   // A row keeps each image's proportions; capped so two phone screenshots do not grow huge.
   if (row) box.style.maxWidth = Math.round(set.reduce((t, s) => t + (s.ar || 1), 0) * 420) + 'px';
   box.innerHTML = set.map((s, k) => s.f
-    ? `<button class="thumb" type="button" data-k="${k}"${row ? ` style="flex:${s.ar || 1} 1 0"` : ''} aria-label="${t('Open image: {c}', { c: s.c })}"><img src="/assets/img/projects/thumbs/${s.f}.jpg" alt="${s.c}" loading="lazy" decoding="async"></button>`
+    ? `<button class="thumb" type="button" data-k="${k}"${row ? ` style="flex:${s.ar || 1} 1 0"` : ''} aria-label="${t('Open image: {c}', { c: s.c })}"><img src="/assets/img/projects/thumbs/${themed(s)}.jpg"${dark ? ` data-f="${s.f}"` : ''} alt="${s.c}" loading="lazy" decoding="async"></button>`
     : `<div class="thumb" aria-hidden="true"><span class="slot">${t('Image to come')}</span></div>`).join('');
   box.addEventListener('click', e => {
     const b = e.target.closest('button.thumb'); if (!b) return;
@@ -350,7 +355,7 @@ function showLb(k) {
     let n = 0;
     const step = () => { lbImg.src = s.frames[n]; lbFlip = setTimeout(step, n === s.frames.length - 1 ? 1450 : 250); n = (n + 1) % s.frames.length; };
     step();
-  } else lbImg.src = s.src || `/assets/img/projects/${s.f}.jpg`;
+  } else lbImg.src = s.src || `/assets/img/projects/${themed(s)}.jpg`;
   lbImg.alt = s.c;
   lbCap.innerHTML = `${s.c}${lbSet.length > 1 ? `<span>${lbAt + 1}/${lbSet.length}</span>` : ''}`;
   $('#lbPrev').hidden = $('#lbNext').hidden = lbSet.length < 2;
@@ -433,7 +438,12 @@ try {
 // The OS decides until the visitor presses the button; that choice is then remembered.
 const darkOS = matchMedia('(prefers-color-scheme: dark)');
 const savedTheme = () => { try { return localStorage.getItem('theme'); } catch (_) { return null; } };
-function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); }
+// the app screenshots that have a dark copy change with the theme, in the row and in the open viewer
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  $$('.thumbs img[data-f]').forEach(img => { img.src = `/assets/img/projects/thumbs/${themed({ f: img.dataset.f, dark: true })}.jpg`; });
+  if (lb.classList.contains('open') && lbSet[lbAt]?.dark) lbImg.src = `/assets/img/projects/${themed(lbSet[lbAt])}.jpg`;
+}
 $('#themeBtn').addEventListener('click', () => {
   const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   applyTheme(t);

@@ -14,12 +14,6 @@
 <link rel="alternate" hreflang="es" href="https://ramymaher.com/es/apps/bancanca/">
 <link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/apps/bancanca/">
 <link rel="alternate" hreflang="x-default" href="https://ramymaher.com/apps/bancanca/">
-
-
-
-
-
-
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d0e12" media="(prefers-color-scheme: dark)">
 <!-- how the link looks when shared on LinkedIn, WhatsApp, X and others -->
@@ -29,9 +23,7 @@
 <meta property="og:locale" content="fr_FR">
 <meta property="og:title" content="Bancanca | Ramy Maher">
 <meta property="og:description" content="Bancanca vous aide à analyser vos dépenses et à voir où va votre argent.">
-<meta property="og:image" content="https://ramymaher.com/assets/img/og.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://ramymaher.com/assets/img/projects/app-bancanca-1.jpg">
 <meta property="og:image:alt" content="Le livre de comptes, avec des données d'exemple">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -414,7 +406,6 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .p-aside .facts:first-child{margin-top:4px}
 /* in dark mode the project logos are inverted, on a dark tile; invert plus a half turn of hue keeps the laser red */
 html[data-theme="dark"] .p-head.has-logo .logo, html[data-theme="dark"] .a-head .logo, html[data-theme="dark"] .dex .logo{background:var(--soft)}
-html[data-theme="dark"] .shuin-splash{background:var(--soft)}
 html[data-theme="dark"] .p-head.has-logo .logo .p-logo, html[data-theme="dark"] .dex .logo .p-logo{filter:invert(1) hue-rotate(180deg)}
 .p-head h2{font-size:clamp(20px,2.4vw,26px); line-height:1.25}
 .p-meta{margin:8px 0 0; color:var(--ink-3); font-size:14px; line-height:1.6}
@@ -574,11 +565,15 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
   66%{opacity:1; transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .4)); animation-timing-function:ease-in}
   100%{opacity:0; transform:translate(calc(var(--x) * 1.5),160px) rotate(var(--r))}
 }
-/* Shuin: the app's splash in the tile, cropped to the globe, then the stamp */
+/* Shuin: the app's splash in the tile, cropped to the globe, then the torii seal where the splash leaves it. As in
+   the app, light mode is on white with a white torii, dark mode on black with a black torii */
 .shuin-logo{position:relative}
-/* the static stamp at the size the splash leaves it: its ring fills the tile as the splash ring does */
-.logo.shuin-logo > img.roomy{width:100%; height:100%; transform:scale(1.11); transition:opacity .7s ease}
+.logo.shuin-logo > img{width:100%; height:100%; transition:opacity .7s ease}
+.logo.shuin-logo > img.dark, html[data-theme="dark"] .logo.shuin-logo > img.light{display:none}
+html[data-theme="dark"] .logo.shuin-logo > img.dark{display:block}
+html[data-theme="dark"] .logo.shuin-logo, html[data-theme="dark"] .dex .logo.shuin-logo{background:#000}
 .shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; transition:opacity .7s ease; pointer-events:none; background:#fff}
+html[data-theme="dark"] .shuin-splash{background:#000}
 .logo .shuin-splash img{position:absolute; width:166.7%; height:178.6%; left:-33.3%; top:-33.3%; max-width:none; object-fit:fill}
 .shuin-logo.splashing .shuin-splash{opacity:1}
 .shuin-logo.splashing > img{opacity:0}
@@ -1512,25 +1507,26 @@ destined to guide.</script></section>
 
               <article class="slide app" style="--acc:#dc2626">
                 <div class="a-head">
-                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="roomy" src="/assets/img/logos/shuin.png" alt="Logo de Shuin"><span class="shuin-splash" aria-hidden="true"></span></span>
+                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="light" src="/assets/img/logos/shuin-seal.svg" alt="Logo de Shuin"><img class="dark" src="/assets/img/logos/shuin-seal-dark.svg" alt="Logo de Shuin"><span class="shuin-splash" aria-hidden="true"></span></span>
                   <div><h3>Shuin <span class="sub-ja">朱印</span></h3><p class="tag">Un tampon de voyage pour le monde entier.</p></div>
                 </div>
                 <div class="a-body">
                   <div>
                     <p>Shuin est une application de voyage complète. Elle enregistre les lieux que vous visitez, la façon dont vous vous déplacez de l'un à l'autre, où vous logez et les dossiers photo de chaque voyage, puis anime vos itinéraires pour que vous puissiez les partager avec vos amis.</p>
                     <p>D'où que vous veniez, Shuin donne à chaque voyageur le même passeport, valable pour toujours.</p>
-                    <p>Vous pouvez l'utiliser entièrement hors ligne et tout garder sur votre appareil, ou la connecter à des services comme Booking.com, Airbnb, Ryanair et easyJet pour récupérer vos données de voyage et les ajouter à vos voyages.</p>
+                    <p>Vous pouvez l’utiliser entièrement hors ligne et tout garder sur votre appareil, ou ajouter des amis et comparer vos voyages aux leurs dans des classements.</p>
                   </div>
                   <ul class="feats">
                     <li>Visites, transports et hébergements sur une même carte du monde</li>
                     <li>Des dossiers photo pour chaque voyage</li>
                     <li>Un passeport pour tous, avec un tampon pour chaque pays</li>
                     <li>Les itinéraires rejoués en animation, à partager avec vos amis</li>
-                    <li>Entièrement hors ligne, ou connecté à vos applis de réservation</li>
+                    <li>Des classements pour comparer vos voyages avec vos amis</li>
+                    <li>Entièrement hors ligne, tout reste sur votre appareil</li>
                     <li>Statistiques, dépenses et CO2 de chaque trajet</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-imgs="app-shuin-1|La carte, avec des voyages d'exemple;app-shuin-2|Les voyages regroupés par itinéraire, avec le CO2 de chaque trajet;app-shuin-3|Le passeport;app-shuin-4|Un itinéraire rejoué"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-shuin-1|La carte, avec des voyages d'exemple;app-shuin-2|Les voyages regroupés par itinéraire, avec le CO2 de chaque trajet;app-shuin-3|Le passeport;app-shuin-4|Un itinéraire rejoué"></div>
               </article>
 
               <article class="slide app" style="--acc:#7d9b6a">
@@ -1578,7 +1574,7 @@ destined to guide.</script></section>
                     <li>Verrouillage par code PIN et mode sombre</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-imgs="app-bancanca-1|Le livre de comptes, avec des données d'exemple;app-bancanca-2|Où va l'argent : les flux de trésorerie;app-bancanca-3|Une projection d'ETF sur vingt ans;app-bancanca-4|Apprendre : ce que l'inflation fait à l'argent qui dort"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-bancanca-1|Le livre de comptes, avec des données d'exemple;app-bancanca-2|Où va l'argent : les flux de trésorerie;app-bancanca-3|Une projection d'ETF sur vingt ans;app-bancanca-4|Apprendre : ce que l'inflation fait à l'argent qui dort"></div>
               </article>
 
               <article class="slide app" style="--acc:#e8775a">
@@ -1613,8 +1609,8 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=07cdc13650"></script>
-<script>window.I18N={"lang":"fr","locale":"fr-FR","t":{"Hello.":"Bonjour.","Good morning.":"Bonjour.","Good afternoon.":"Bon après-midi.","Good evening.":"Bonsoir.","Click for the last line":"Cliquez pour le dernier vers","Tap for the last line":"Touchez pour le dernier vers","Open image: {c}":"Ouvrir l'image : {c}","Image to come":"Image à venir","The numbers are refreshed from the channel every day; last update {d}.":"Les chiffres sont actualisés chaque jour depuis la chaîne ; dernière mise à jour : {d}.","World map of {p} places documented in {c} countries":"Carte du monde de {p} lieux documentés dans {c} pays","Not documented yet":"Pas encore documenté","Go to playlist":"Voir la playlist","Watch a video":"Regarder une vidéo","The map could not be loaded. Please reload the page.":"La carte n'a pas pu être chargée. Veuillez recharger la page.","England | UK":"Angleterre | R.-U.","Scotland | UK":"Écosse | R.-U.","Wales | UK":"Pays de Galles | R.-U.","Northern Ireland | UK":"Irlande du Nord | R.-U.","Gibraltar | UK":"Gibraltar | R.-U.","Alexandria":"Alexandria","Algeciras":"Algésiras","Almada":"Almada","Andorra la Vella":"Andorre-la-Vieille","Arles":"Arles","Arosa":"Arosa","Barcelona":"Barcelone","Basel":"Bâle","Belgrade":"Belgrade","Berlin":"Berlin","Bern":"Berne","Bilbao":"Bilbao","Bucharest":"Bucarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cairo":"Le Caire","Cannes":"Cannes","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Cologne","Cottbus":"Cottbus","Dessau":"Dessau","Döttingen":"Döttingen","Edinburgh":"Édimbourg","Faro":"Faro","Fes":"Fès","Flims":"Flims","Florence":"Florence","Flúðir":"Flúðir","Fort Lauderdale":"Fort Lauderdale","Geneva":"Genève","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss":"Gullfoss","Hamburg":"Hambourg","Helsinki":"Helsinki","Huningue":"Huningue","Keflavík":"Keflavík","Kraków":"Cracovie","Kyoto":"Kyoto","La Jolla":"La Jolla","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lisbonne","London":"Londres","Los Angeles":"Los Angeles","Lucerne":"Lucerne","Luxembourg":"Luxembourg","Malibu":"Malibu","Marrakech":"Marrakech","Marseille":"Marseille","Miami":"Miami","Milan":"Milan","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Mont Fuji","Mulhouse":"Mulhouse","Munich":"Munich","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle":"Newcastle","Nicosia":"Nicosie","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National Park":"Parc national de Redwood","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"Saint-Marin","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Seljalandsfoss":"Seljalandsfoss","Siwa":"Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Tarifa":"Tarifa","Tokyo":"Tokyo","Varna":"Varna","Varosha":"Varosha","Washington, D.C.":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Wrocław","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zurich":"Zurich","Þingvellir":"Þingvellir"},"plurals":{"place":{"one":"{n} lieu","many":"{n} de lieux","other":"{n} lieux"},"video":{"one":"{n} vidéo","many":"{n} de vidéos","other":"{n} vidéos"}}}</script>
-<script src="/assets/app.js?v=0c70d27a03"></script>
+<script src="/assets/data/places.js?v=3a9b14c3fd"></script>
+<script>window.I18N={"lang":"fr","locale":"fr-FR","t":{"Hello.":"Bonjour.","Good morning.":"Bonjour.","Good afternoon.":"Bon après-midi.","Good evening.":"Bonsoir.","Click for the last line":"Cliquez pour le dernier vers","Tap for the last line":"Touchez pour le dernier vers","Open image: {c}":"Ouvrir l'image : {c}","Image to come":"Image à venir","The numbers are refreshed from the channel every day; last update {d}.":"Les chiffres sont actualisés chaque jour depuis la chaîne ; dernière mise à jour : {d}.","World map of {p} places documented in {c} countries":"Carte du monde de {p} lieux documentés dans {c} pays","Not documented yet":"Pas encore documenté","Go to playlist":"Voir la playlist","Watch a video":"Regarder une vidéo","The map could not be loaded. Please reload the page.":"La carte n'a pas pu être chargée. Veuillez recharger la page.","England | UK":"Angleterre | R.-U.","Scotland | UK":"Écosse | R.-U.","Wales | UK":"Pays de Galles | R.-U.","Northern Ireland | UK":"Irlande du Nord | R.-U.","Gibraltar | UK":"Gibraltar | R.-U.","6th of October City":"Ville du 6-Octobre","Alexanderplatz":"Alexanderplatz","Alexandria":"Alexandria","Algeciras":"Algésiras","Almada":"Almada","Andorra":"Andorre","Andorra la Vella":"Andorre-la-Vieille","Arles":"Arles","Arosa":"Arosa","Asakusa":"Asakusa","Ayia Napa":"Ayia Napa","Azabudai Hills Gallery":"Azabudai Hills Gallery","Balboa Park":"Balboa Park","Ballynahinch":"Ballynahinch","Barcelona":"Barcelone","Basel":"Bâle","Belgrade":"Belgrade","Berlin":"Berlin","Berlin Cathedral":"Cathédrale de Berlin","Bern":"Berne","Bilbao":"Bilbao","Brooklyn":"Brooklyn","Brooklyn Heights Promenade":"Promenade de Brooklyn Heights","Bucharest":"Bucarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cahir Castle":"Château de Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Central Park":"Central Park","Chinatown":"Chinatown","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Cologne","Cottbus":"Cottbus","Cyprus":"Chypre","Dessau":"Dessau","District of Columbia":"District de Columbia","Dotonbori":"Dōtonbori","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Édimbourg","Elbphilharmonie Hamburg":"Elbphilharmonie de Hambourg","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florence","Florida":"Floride","Fondation Louis Vuitton":"Fondation Louis Vuitton","Fort Lauderdale":"Fort Lauderdale","France":"France","Galway":"Galway","Geneva":"Genève","Geysir":"Geysir","Gibraltar":"Gibraltar","Ginza":"Ginza","Giza":"Gizeh","Glasgow":"Glasgow","Gleisdreieck - Skatepark":"Gleisdreieck - skatepark","Golden Gate Park":"Golden Gate Park","Gullfoss Falls":"Chutes de Gullfoss","Hamburg":"Hambourg","Helsinki":"Helsinki","Helsinki Central Library Oodi":"Bibliothèque centrale Oodi d'Helsinki","Hollywood":"Hollywood","Hollywood Boulevard":"Hollywood Boulevard","Ibaraki":"Ibaraki","Iceland":"Islande","Kadriorg":"Kadriorg","Keflavík International Airport":"Aéroport international de Keflavík","Kottbusser Tor":"Kottbusser Tor","Kraków":"Cracovie","Kyoto":"Kyoto","Köpenick":"Köpenick","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lisbonne","Little Island":"Little Island","London":"Londres","Los Angeles":"Los Angeles","Lucerne":"Lucerne","Luxembourg":"Luxembourg","Magdalena Peninsula":"Péninsule de la Magdalena","Manhattan":"Manhattan","Maraş":"Maraş (Varosha)","Marrakesh":"Marrakech","Marseille":"Marseille","Miami":"Miami","Milan":"Milan","Mitte":"Mitte","Monaco":"Monaco","Montreuil":"Montreuil","Moritzplatz":"Moritzplatz","Mount Fuji":"Mont Fuji","Mulhouse":"Mulhouse","Munich":"Munich","Museum Island":"Île aux Musées","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nicosie","Nîmes":"Nîmes","Odaiba":"Odaiba","Olney":"Olney","Olympiapark München":"Parc olympique de Munich","One World Trade Center":"One World Trade Center","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Park am Gleisdreieck":"Park am Gleisdreieck","Playa Vista":"Playa Vista","Playa de San Juan de la Canal":"Plage de San Juan de la Canal","Plovdiv":"Plovdiv","Portland":"Portland","Potsdamer Platz":"Potsdamer Platz","Prairie du Triangle":"Prairie du Triangle","Presidio of San Francisco":"Presidio de San Francisco","Pristina":"Pristina","Pyramids of Giza":"Pyramides de Gizeh","Rabat":"Rabat","Redwood National and State Parks":"Parcs national et d'État de Redwood","Reethaus":"Reethaus","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roosevelt Island":"Roosevelt Island","Rosslyn":"Rosslyn","Roundstone":"Roundstone","Rovinj":"Rovinj","Salk Institute for Biological Studies":"Institut Salk","San Diego":"San Diego","San Francisco":"San Francisco","San Francisco Museum of Modern Art":"Musée d'art moderne de San Francisco","San Marino":"Saint-Marin","Sankt Jakob":"Sankt Jakob","Santa Monica":"Santa Monica","Santa Monica Beach":"Plage de Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Shibuya Scramble Crossing":"Carrefour de Shibuya","Siwa Oasis":"Oasis de Siwa","Skopje":"Skopje","Sofia":"Sofia","Spandau Citadel":"Citadelle de Spandau","St. Jakob-Park":"St. Jakob-Park","Tallinn":"Tallinn","Tangier":"Tanger","The Getty Villa":"Villa Getty","The Green Arcade":"The Green Arcade","The High Line":"High Line","Thingvellir National Park":"Parc national de Þingvellir","Tokyo":"Tokyo","Tokyo Skytree":"Tokyo Skytree","Twin Peaks":"Twin Peaks","Union Square":"Union Square","Upper East Side":"Upper East Side","Varna":"Varna","Volkspark am Weinberg":"Volkspark am Weinberg","Walt Disney Concert Hall":"Walt Disney Concert Hall","Washington":"Washington","Washington Park":"Washington Park","Weil am Rhein":"Weil am Rhein","Wrocław":"Wrocław","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zurich"},"plurals":{"place":{"one":"{n} lieu","many":"{n} de lieux","other":"{n} lieux"},"video":{"one":"{n} vidéo","many":"{n} de vidéos","other":"{n} vidéos"}}}</script>
+<script src="/assets/app.js?v=5199afa48a"></script>
 </body>
 </html>

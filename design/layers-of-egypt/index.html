@@ -14,12 +14,6 @@
 <link rel="alternate" hreflang="es" href="https://ramymaher.com/es/design/layers-of-egypt/">
 <link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/design/layers-of-egypt/">
 <link rel="alternate" hreflang="x-default" href="https://ramymaher.com/design/layers-of-egypt/">
-
-
-
-
-
-
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d0e12" media="(prefers-color-scheme: dark)">
 <!-- how the link looks when shared on LinkedIn, WhatsApp, X and others -->
@@ -29,9 +23,7 @@
 <meta property="og:locale" content="en_GB">
 <meta property="og:title" content="Layers of Egypt: Between Labyrinth and Elysium | Ramy Maher">
 <meta property="og:description" content="Second prize, awarded by the Egyptian Ministry of Culture. A competition entry for Egypt's national pavilion at the 2016 Venice Architecture Biennale.">
-<meta property="og:image" content="https://ramymaher.com/assets/img/og.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://ramymaher.com/assets/img/projects/vb-001.jpg">
 <meta property="og:image:alt" content="Layers of Egypt: Between Labyrinth and Elysium, the title of the entry">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -414,7 +406,6 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .p-aside .facts:first-child{margin-top:4px}
 /* in dark mode the project logos are inverted, on a dark tile; invert plus a half turn of hue keeps the laser red */
 html[data-theme="dark"] .p-head.has-logo .logo, html[data-theme="dark"] .a-head .logo, html[data-theme="dark"] .dex .logo{background:var(--soft)}
-html[data-theme="dark"] .shuin-splash{background:var(--soft)}
 html[data-theme="dark"] .p-head.has-logo .logo .p-logo, html[data-theme="dark"] .dex .logo .p-logo{filter:invert(1) hue-rotate(180deg)}
 .p-head h2{font-size:clamp(20px,2.4vw,26px); line-height:1.25}
 .p-meta{margin:8px 0 0; color:var(--ink-3); font-size:14px; line-height:1.6}
@@ -574,11 +565,15 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
   66%{opacity:1; transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .4)); animation-timing-function:ease-in}
   100%{opacity:0; transform:translate(calc(var(--x) * 1.5),160px) rotate(var(--r))}
 }
-/* Shuin: the app's splash in the tile, cropped to the globe, then the stamp */
+/* Shuin: the app's splash in the tile, cropped to the globe, then the torii seal where the splash leaves it. As in
+   the app, light mode is on white with a white torii, dark mode on black with a black torii */
 .shuin-logo{position:relative}
-/* the static stamp at the size the splash leaves it: its ring fills the tile as the splash ring does */
-.logo.shuin-logo > img.roomy{width:100%; height:100%; transform:scale(1.11); transition:opacity .7s ease}
+.logo.shuin-logo > img{width:100%; height:100%; transition:opacity .7s ease}
+.logo.shuin-logo > img.dark, html[data-theme="dark"] .logo.shuin-logo > img.light{display:none}
+html[data-theme="dark"] .logo.shuin-logo > img.dark{display:block}
+html[data-theme="dark"] .logo.shuin-logo, html[data-theme="dark"] .dex .logo.shuin-logo{background:#000}
 .shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; transition:opacity .7s ease; pointer-events:none; background:#fff}
+html[data-theme="dark"] .shuin-splash{background:#000}
 .logo .shuin-splash img{position:absolute; width:166.7%; height:178.6%; left:-33.3%; top:-33.3%; max-width:none; object-fit:fill}
 .shuin-logo.splashing .shuin-splash{opacity:1}
 .shuin-logo.splashing > img{opacity:0}
@@ -1512,25 +1507,26 @@ destined to guide.</script></section>
 
               <article class="slide app" style="--acc:#dc2626">
                 <div class="a-head">
-                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="roomy" src="/assets/img/logos/shuin.png" alt="Shuin logo"><span class="shuin-splash" aria-hidden="true"></span></span>
+                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="light" src="/assets/img/logos/shuin-seal.svg" alt="Shuin logo"><img class="dark" src="/assets/img/logos/shuin-seal-dark.svg" alt="Shuin logo"><span class="shuin-splash" aria-hidden="true"></span></span>
                   <div><h3>Shuin <span class="sub-ja">朱印</span></h3><p class="tag">A world travel stamp.</p></div>
                 </div>
                 <div class="a-body">
                   <div>
                     <p>Shuin is a complete travel app. It records the places you visit, how you travel between them, where you stay and the photo folders of every trip, then animates your journeys so you can share them with friends.</p>
                     <p>Wherever you come from, Shuin gives every traveller the same passport, valid forever.</p>
-                    <p>You can use it entirely offline and keep everything on your device, or connect it to services such as Booking.com, Airbnb, Ryanair and easyJet to pull in your travel data and add it to your trips.</p>
+                    <p>You can use it entirely offline and keep everything on your device, or add friends and compare your travels with theirs in leaderboards.</p>
                   </div>
                   <ul class="feats">
                     <li>Visits, transport and stays on one world map</li>
                     <li>Photo folders for every trip</li>
                     <li>One passport for everyone, with a stamp for every country</li>
                     <li>Journeys played back as animations, to share with friends</li>
-                    <li>Fully offline, or connected to your booking apps</li>
+                    <li>Leaderboards to compare your travels with friends</li>
+                    <li>Fully offline, with everything kept on your device</li>
                     <li>Statistics, expenses and the CO2 of every leg</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-imgs="app-shuin-1|The map, with sample trips;app-shuin-2|Trips grouped by journey, with the CO2 of each leg;app-shuin-3|The passport;app-shuin-4|A journey played back"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-shuin-1|The map, with sample trips;app-shuin-2|Trips grouped by journey, with the CO2 of each leg;app-shuin-3|The passport;app-shuin-4|A journey played back"></div>
               </article>
 
               <article class="slide app" style="--acc:#7d9b6a">
@@ -1578,7 +1574,7 @@ destined to guide.</script></section>
                     <li>PIN lock and dark mode</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-imgs="app-bancanca-1|The ledger, with sample data;app-bancanca-2|Where the money goes: the cash flow;app-bancanca-3|An ETF projection over twenty years;app-bancanca-4|Learning: what inflation does to idle cash"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-bancanca-1|The ledger, with sample data;app-bancanca-2|Where the money goes: the cash flow;app-bancanca-3|An ETF projection over twenty years;app-bancanca-4|Learning: what inflation does to idle cash"></div>
               </article>
 
               <article class="slide app" style="--acc:#e8775a">
@@ -1613,7 +1609,7 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=07cdc13650"></script>
-<script src="/assets/app.js?v=0c70d27a03"></script>
+<script src="/assets/data/places.js?v=3a9b14c3fd"></script>
+<script src="/assets/app.js?v=5199afa48a"></script>
 </body>
 </html>

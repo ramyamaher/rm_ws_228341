@@ -14,12 +14,6 @@
 <link rel="alternate" hreflang="es" href="https://ramymaher.com/es/architecture/wohnpark-gebersdorf/">
 <link rel="alternate" hreflang="ar" href="https://ramymaher.com/ar/architecture/wohnpark-gebersdorf/">
 <link rel="alternate" hreflang="x-default" href="https://ramymaher.com/architecture/wohnpark-gebersdorf/">
-
-
-
-
-
-
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d0e12" media="(prefers-color-scheme: dark)">
 <!-- how the link looks when shared on LinkedIn, WhatsApp, X and others -->
@@ -29,9 +23,7 @@
 <meta property="og:locale" content="ar_EG">
 <meta property="og:title" content="Wohnpark Gebersdorf | Ramy Maher">
 <meta property="og:description" content="الجائزة الأولى في المسابقة بالدعوة، ديسمبر 2016. حيّ سكني جديد على أرض محطة تحويل كهربائي سابقة بين شارعي Gebersdorfer Straße وBibertstraße في نورنبرغ.">
-<meta property="og:image" content="https://ramymaher.com/assets/img/og.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://ramymaher.com/assets/img/projects/gb-0002.jpg">
 <meta property="og:image:alt" content="منظر من الشارع على امتداد الممشى">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -414,7 +406,6 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .p-aside .facts:first-child{margin-top:4px}
 /* in dark mode the project logos are inverted, on a dark tile; invert plus a half turn of hue keeps the laser red */
 html[data-theme="dark"] .p-head.has-logo .logo, html[data-theme="dark"] .a-head .logo, html[data-theme="dark"] .dex .logo{background:var(--soft)}
-html[data-theme="dark"] .shuin-splash{background:var(--soft)}
 html[data-theme="dark"] .p-head.has-logo .logo .p-logo, html[data-theme="dark"] .dex .logo .p-logo{filter:invert(1) hue-rotate(180deg)}
 .p-head h2{font-size:clamp(20px,2.4vw,26px); line-height:1.25}
 .p-meta{margin:8px 0 0; color:var(--ink-3); font-size:14px; line-height:1.6}
@@ -574,11 +565,15 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
   66%{opacity:1; transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .4)); animation-timing-function:ease-in}
   100%{opacity:0; transform:translate(calc(var(--x) * 1.5),160px) rotate(var(--r))}
 }
-/* Shuin: the app's splash in the tile, cropped to the globe, then the stamp */
+/* Shuin: the app's splash in the tile, cropped to the globe, then the torii seal where the splash leaves it. As in
+   the app, light mode is on white with a white torii, dark mode on black with a black torii */
 .shuin-logo{position:relative}
-/* the static stamp at the size the splash leaves it: its ring fills the tile as the splash ring does */
-.logo.shuin-logo > img.roomy{width:100%; height:100%; transform:scale(1.11); transition:opacity .7s ease}
+.logo.shuin-logo > img{width:100%; height:100%; transition:opacity .7s ease}
+.logo.shuin-logo > img.dark, html[data-theme="dark"] .logo.shuin-logo > img.light{display:none}
+html[data-theme="dark"] .logo.shuin-logo > img.dark{display:block}
+html[data-theme="dark"] .logo.shuin-logo, html[data-theme="dark"] .dex .logo.shuin-logo{background:#000}
 .shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; transition:opacity .7s ease; pointer-events:none; background:#fff}
+html[data-theme="dark"] .shuin-splash{background:#000}
 .logo .shuin-splash img{position:absolute; width:166.7%; height:178.6%; left:-33.3%; top:-33.3%; max-width:none; object-fit:fill}
 .shuin-logo.splashing .shuin-splash{opacity:1}
 .shuin-logo.splashing > img{opacity:0}
@@ -1512,25 +1507,26 @@ destined to guide.</script></section>
 
               <article class="slide app" style="--acc:#dc2626">
                 <div class="a-head">
-                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="roomy" src="/assets/img/logos/shuin.png" alt="شعار Shuin"><span class="shuin-splash" aria-hidden="true"></span></span>
+                  <span class="logo shuin-logo anim-logo" data-player="shuin"><img class="light" src="/assets/img/logos/shuin-seal.svg" alt="شعار Shuin"><img class="dark" src="/assets/img/logos/shuin-seal-dark.svg" alt="شعار Shuin"><span class="shuin-splash" aria-hidden="true"></span></span>
                   <div><h3>Shuin <span class="sub-ja">朱印</span></h3><p class="tag">ختم سفر عالمي.</p></div>
                 </div>
                 <div class="a-body">
                   <div>
                     <p>Shuin تطبيق سفر متكامل. يسجّل الأماكن التي تزورها، وكيف تتنقّل بينها، وأين تقيم، ومجلدات الصور لكل رحلة، ثم يحوّل رحلاتك إلى رسوم متحركة لتشاركها مع أصدقائك.</p>
                     <p>أيًّا كان البلد الذي جئت منه، يمنح Shuin كل مسافر جواز السفر نفسه، صالحًا إلى الأبد.</p>
-                    <p>يمكنك استخدامه دون اتصال بالإنترنت تمامًا والاحتفاظ بكل شيء على جهازك، أو ربطه بخدمات مثل Booking.com وAirbnb وRyanair وeasyJet لجلب بيانات سفرك وإضافتها إلى رحلاتك.</p>
+                    <p>يمكنك استخدامه دون اتصال بالإنترنت تمامًا والاحتفاظ بكل شيء على جهازك، أو إضافة أصدقائك ومقارنة رحلاتك برحلاتهم في لوحات الصدارة.</p>
                   </div>
                   <ul class="feats">
                     <li>الزيارات والتنقّلات والإقامات على خريطة عالمية واحدة</li>
                     <li>مجلدات صور لكل رحلة</li>
                     <li>جواز سفر واحد للجميع، مع ختم لكل دولة</li>
                     <li>رحلات تُعرض في رسوم متحركة لمشاركتها مع الأصدقاء</li>
-                    <li>دون اتصال تمامًا، أو متصل بتطبيقات الحجز لديك</li>
+                    <li>لوحات صدارة لمقارنة رحلاتك برحلات أصدقائك</li>
+                    <li>دون اتصال تمامًا، وكل شيء يبقى على جهازك</li>
                     <li>إحصاءات ومصروفات وانبعاثات CO2 لكل مرحلة</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-imgs="app-shuin-1|الخريطة، مع رحلات تجريبية;app-shuin-2|رحلات مجمّعة حسب المسار، مع انبعاثات CO2 لكل مرحلة;app-shuin-3|جواز السفر;app-shuin-4|رحلة تُعرض من جديد"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-shuin-1|الخريطة، مع رحلات تجريبية;app-shuin-2|رحلات مجمّعة حسب المسار، مع انبعاثات CO2 لكل مرحلة;app-shuin-3|جواز السفر;app-shuin-4|رحلة تُعرض من جديد"></div>
               </article>
 
               <article class="slide app" style="--acc:#7d9b6a">
@@ -1578,7 +1574,7 @@ destined to guide.</script></section>
                     <li>قفل برمز PIN والوضع الداكن</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-imgs="app-bancanca-1|دفتر الحسابات، مع بيانات تجريبية;app-bancanca-2|أين تذهب الأموال: التدفق النقدي;app-bancanca-3|توقّع لصندوق ETF على مدى عشرين عامًا;app-bancanca-4|التعلّم: ما يفعله التضخم بالنقود المجمّدة"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-bancanca-1|دفتر الحسابات، مع بيانات تجريبية;app-bancanca-2|أين تذهب الأموال: التدفق النقدي;app-bancanca-3|توقّع لصندوق ETF على مدى عشرين عامًا;app-bancanca-4|التعلّم: ما يفعله التضخم بالنقود المجمّدة"></div>
               </article>
 
               <article class="slide app" style="--acc:#e8775a">
@@ -1613,8 +1609,8 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=07cdc13650"></script>
-<script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arosa":"أروزا","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cairo":"القاهرة","Cannes":"كان","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Dessau":"ديساو","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Faro":"فارو","Fes":"فاس","Flims":"فليمس","Florence":"فلورنسا","Flúðir":"فلوذير","Fort Lauderdale":"فورت لودرديل","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss":"غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Huningue":"هونينغ","Keflavík":"كيفلافيك","Kraków":"كراكوف","Kyoto":"كيوتو","La Jolla":"لا هويا","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Malibu":"ماليبو","Marrakech":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle":"نيوكاسل","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National Park":"متنزه ريدوود الوطني","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Rovinj":"روفين","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Seljalandsfoss":"سيليالاندسفوس","Siwa":"سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","Tarifa":"طريفة","Tokyo":"طوكيو","Varna":"فارنا","Varosha":"فاروشا","Washington, D.C.":"واشنطن العاصمة","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zurich":"زيورخ","Þingvellir":"ثينغفيلير"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
-<script src="/assets/app.js?v=0c70d27a03"></script>
+<script src="/assets/data/places.js?v=3a9b14c3fd"></script>
+<script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","6th of October City":"مدينة السادس من أكتوبر","Alexanderplatz":"ألكسندربلاتز","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra":"أندورا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arosa":"أروزا","Asakusa":"أساكوسا","Ayia Napa":"آيا نابا","Azabudai Hills Gallery":"معرض أزابوداي هيلز","Balboa Park":"حديقة بالبوا","Ballynahinch":"بالينهينش","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Berlin Cathedral":"كاتدرائية برلين","Bern":"برن","Bilbao":"بلباو","Brooklyn":"بروكلين","Brooklyn Heights Promenade":"ممشى بروكلين هايتس","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cahir Castle":"قلعة كاهير","Cannes":"كان","Carmel-by-the-Sea":"كارمل باي ذا سي","Central Park":"سنترال بارك","Chinatown":"الحي الصيني","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Cyprus":"قبرص","Dessau":"ديساو","District of Columbia":"مقاطعة كولومبيا","Dotonbori":"دوتونبوري","Dublin":"دبلن","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Elbphilharmonie Hamburg":"إلبفيلهارموني هامبورغ","Faro":"فارو","Fes":"فاس","Flims Dorf":"فليمس دورف","Florence":"فلورنسا","Florida":"فلوريدا","Fondation Louis Vuitton":"مؤسسة لويس فويتون","Fort Lauderdale":"فورت لودرديل","France":"فرنسا","Galway":"غالواي","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Ginza":"غينزا","Giza":"الجيزة","Glasgow":"غلاسكو","Gleisdreieck - Skatepark":"غلايسدرايك - حديقة التزلج","Golden Gate Park":"حديقة البوابة الذهبية","Gullfoss Falls":"شلالات غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Helsinki Central Library Oodi":"مكتبة هلسنكي المركزية أودي","Hollywood":"هوليوود","Hollywood Boulevard":"شارع هوليوود","Ibaraki":"إيباراكي","Iceland":"آيسلندا","Kadriorg":"كادريورغ","Keflavík International Airport":"مطار كفلافيك الدولي","Kottbusser Tor":"كوتبوسر تور","Kraków":"كراكوف","Kyoto":"كيوتو","Köpenick":"كوبنيك","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","Little Island":"ليتل آيلاند","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Magdalena Peninsula":"شبه جزيرة ماغدالينا","Manhattan":"مانهاتن","Maraş":"ماراش (فاروشا)","Marrakesh":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Mitte":"ميته","Monaco":"موناكو","Montreuil":"مونتروي","Moritzplatz":"موريتسبلاتس","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Museum Island":"جزيرة المتاحف","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle upon Tyne":"نيوكاسل أبون تاين","Nicosia":"نيقوسيا","Nîmes":"نيم","Odaiba":"أودايبا","Olney":"أولني","Olympiapark München":"الحديقة الأولمبية في ميونخ","One World Trade Center":"مركز التجارة العالمي واحد","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Park am Gleisdreieck":"حديقة غلايسدرايك","Playa Vista":"بلايا فيستا","Playa de San Juan de la Canal":"شاطئ سان خوان دي لا كانال","Plovdiv":"بلوفديف","Portland":"بورتلاند","Potsdamer Platz":"بوتسدامر بلاتس","Prairie du Triangle":"مرج المثلث","Presidio of San Francisco":"بريسيديو سان فرانسيسكو","Pristina":"بريشتينا","Pyramids of Giza":"أهرامات الجيزة","Rabat":"الرباط","Redwood National and State Parks":"متنزهات ريدوود الوطنية","Reethaus":"ريتهاوس","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Roosevelt Island":"جزيرة روزفلت","Rosslyn":"روسلين","Roundstone":"راوندستون","Rovinj":"روفين","Salk Institute for Biological Studies":"معهد سالك للدراسات البيولوجية","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Francisco Museum of Modern Art":"متحف سان فرانسيسكو للفن الحديث","San Marino":"سان مارينو","Sankt Jakob":"سانكت ياكوب","Santa Monica":"سانتا مونيكا","Santa Monica Beach":"شاطئ سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Secret Lagoon":"البحيرة السرية","Shibuya Scramble Crossing":"تقاطع شيبويا","Siwa Oasis":"واحة سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Spandau Citadel":"قلعة شبانداو","St. Jakob-Park":"ملعب سانت ياكوب بارك","Tallinn":"تالين","Tangier":"طنجة","The Getty Villa":"فيلا غيتي","The Green Arcade":"ذا غرين آركيد","The High Line":"هاي لاين","Thingvellir National Park":"منتزه ثينغفيلير الوطني","Tokyo":"طوكيو","Tokyo Skytree":"طوكيو سكاي تري","Twin Peaks":"توين بيكس","Union Square":"يونيون سكوير","Upper East Side":"أبر إيست سايد","Varna":"فارنا","Volkspark am Weinberg":"حديقة فولكسبارك آم فاينبرغ","Walt Disney Concert Hall":"قاعة والت ديزني للحفلات","Washington":"واشنطن","Washington Park":"حديقة واشنطن","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zürich":"زيورخ"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
+<script src="/assets/app.js?v=5199afa48a"></script>
 </body>
 </html>
