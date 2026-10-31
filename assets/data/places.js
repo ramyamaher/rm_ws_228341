@@ -22,7 +22,7 @@ window.WW = {
    "country": "United States",
    "lat": 40.7127,
    "lon": -74.006,
-   "n": 30,
+   "n": 49,
    "v": "izXLA7O-W8Y"
   },
   {
@@ -30,7 +30,7 @@ window.WW = {
    "country": "Germany",
    "lat": 52.5174,
    "lon": 13.3951,
-   "n": 44,
+   "n": 57,
    "v": "vszsgN012Q8"
   },
   {
@@ -38,7 +38,7 @@ window.WW = {
    "country": "United States",
    "lat": 37.7879,
    "lon": -122.4075,
-   "n": 11,
+   "n": 18,
    "v": "woppFtn_Qoc"
   },
   {
@@ -46,7 +46,7 @@ window.WW = {
    "country": "France",
    "lat": 48.8535,
    "lon": 2.3484,
-   "n": 9,
+   "n": 11,
    "v": "coxEuyrv3os"
   },
   {
@@ -62,7 +62,7 @@ window.WW = {
    "country": "Switzerland",
    "lat": 47.56,
    "lon": 7.59,
-   "n": 36,
+   "n": 38,
    "v": "QiPv4nXZw8w"
   },
   {
@@ -86,7 +86,7 @@ window.WW = {
    "country": "United States",
    "lat": 38.8951,
    "lon": -77.0364,
-   "n": 3,
+   "n": 4,
    "v": "YXbXCoVkQvU"
   },
   {
@@ -110,7 +110,7 @@ window.WW = {
    "country": "Japan",
    "lat": 34.6938,
    "lon": 135.5015,
-   "n": 3,
+   "n": 4,
    "v": "JPl5Tdw_sRE"
   },
   {
@@ -130,28 +130,20 @@ window.WW = {
    "v": "-uTy63M8dzA"
   },
   {
-   "name": "Shibuya Scramble Crossing",
+   "name": "Tokyo",
    "country": "Japan",
-   "lat": 35.6595,
-   "lon": 139.7005,
-   "n": 1,
+   "lat": 35.6769,
+   "lon": 139.7639,
+   "n": 22,
    "v": "Fy08rAi-XDw"
-  },
-  {
-   "name": "Cahir Castle",
-   "country": "Ireland",
-   "lat": 52.3745,
-   "lon": -7.927,
-   "n": 1,
-   "v": "H4qv_HShlw4"
   },
   {
    "name": "Cahir",
    "country": "Ireland",
    "lat": 52.375,
    "lon": -7.9242,
-   "n": 2,
-   "v": "vjV1Z2BJArc"
+   "n": 3,
+   "v": "H4qv_HShlw4"
   },
   {
    "name": "Cyprus",
@@ -168,14 +160,6 @@ window.WW = {
    "lon": 9.2875,
    "n": 1,
    "v": "sd8P8g_7-pw"
-  },
-  {
-   "name": "Tokyo",
-   "country": "Japan",
-   "lat": 35.6769,
-   "lon": 139.7639,
-   "n": 16,
-   "v": "w_UIC35hA4w"
   },
   {
    "name": "Belgrade",
@@ -218,22 +202,6 @@ window.WW = {
    "v": "eXzTC8jcKP0"
   },
   {
-   "name": "St. Jakob-Park",
-   "country": "Switzerland",
-   "lat": 47.5416,
-   "lon": 7.6201,
-   "n": 1,
-   "v": "GdwLJL_xe3g"
-  },
-  {
-   "name": "Tokyo Skytree",
-   "country": "Japan",
-   "lat": 35.7101,
-   "lon": 139.8107,
-   "n": 1,
-   "v": "WidKDwEPLqU"
-  },
-  {
    "name": "Zagreb",
    "country": "Croatia",
    "lat": 45.8131,
@@ -246,7 +214,7 @@ window.WW = {
    "country": "England | UK",
    "lat": 51.5074,
    "lon": -0.1278,
-   "n": 22,
+   "n": 23,
    "v": "kkXUDtuOHq4"
   },
   {
@@ -290,18 +258,10 @@ window.WW = {
    "v": "8VPlUfblKJM"
   },
   {
-   "name": "Central Park",
-   "country": "United States",
-   "lat": 40.7828,
-   "lon": -73.9654,
-   "n": 1,
-   "v": "4yHdtEqklCM"
-  },
-  {
-   "name": "Maraş",
+   "name": "Famagusta",
    "country": "Cyprus",
-   "lat": 35.1128,
-   "lon": 33.952,
+   "lat": 35.1205,
+   "lon": 33.9388,
    "n": 2,
    "v": "aYCvLyOjswc"
   },
@@ -322,10 +282,10 @@ window.WW = {
    "v": "cVQyIxQIrco"
   },
   {
-   "name": "Rosslyn",
+   "name": "Arlington",
    "country": "United States",
-   "lat": 38.896,
-   "lon": -77.0709,
+   "lat": 32.7356,
+   "lon": -97.1071,
    "n": 1,
    "v": "5X5lJsqN2l0"
   },
@@ -334,24 +294,8 @@ window.WW = {
    "country": "United States",
    "lat": 34.05,
    "lon": -118.24,
-   "n": 8,
+   "n": 14,
    "v": "7y83SEceFzw"
-  },
-  {
-   "name": "Manhattan",
-   "country": "United States",
-   "lat": 40.758,
-   "lon": -73.9855,
-   "n": 8,
-   "v": "3h9Ix67YKt4"
-  },
-  {
-   "name": "District of Columbia",
-   "country": "United States",
-   "lat": 38.8951,
-   "lon": -77.0364,
-   "n": 1,
-   "v": "7W9Voryegqc"
   },
   {
    "name": "Siwa Oasis",
@@ -402,18 +346,10 @@ window.WW = {
    "v": "LnTfXp7JEqc"
   },
   {
-   "name": "Odaiba",
-   "country": "Japan",
-   "lat": 35.6275,
-   "lon": 139.7715,
-   "n": 1,
-   "v": "STuG8E2qoas"
-  },
-  {
-   "name": "The Getty Villa",
+   "name": "Malibu",
    "country": "United States",
-   "lat": 34.045,
-   "lon": -118.565,
+   "lat": 34.0356,
+   "lon": -118.6894,
    "n": 1,
    "v": "a8Ly1lK7oOk"
   },
@@ -430,7 +366,7 @@ window.WW = {
    "country": "Egypt",
    "lat": 29.98,
    "lon": 31.13,
-   "n": 1,
+   "n": 2,
    "v": "UoqBhkeZwA0"
   },
   {
@@ -442,28 +378,12 @@ window.WW = {
    "v": "XPbm45_GHOE"
   },
   {
-   "name": "Playa de San Juan de la Canal",
+   "name": "Santa Cruz de Bezana",
    "country": "Spain",
-   "lat": 43.4725,
-   "lon": -3.8962,
+   "lat": 43.4429,
+   "lon": -3.9049,
    "n": 1,
    "v": "YbsN7UYRkQ4"
-  },
-  {
-   "name": "Pyramids of Giza",
-   "country": "Egypt",
-   "lat": 29.9995,
-   "lon": 31.0927,
-   "n": 1,
-   "v": "zohcgyAtBes"
-  },
-  {
-   "name": "Sankt Jakob",
-   "country": "Switzerland",
-   "lat": 47.539,
-   "lon": 7.62,
-   "n": 1,
-   "v": "8XUkaCvnC_U"
   },
   {
    "name": "Lucerne",
@@ -530,28 +450,12 @@ window.WW = {
    "v": "RUL_spY8PGw"
   },
   {
-   "name": "Magdalena Peninsula",
+   "name": "Santander",
    "country": "Spain",
-   "lat": 43.4695,
-   "lon": -3.7685,
-   "n": 1,
+   "lat": 43.4619,
+   "lon": -3.81,
+   "n": 5,
    "v": "NShP0VIuFY4"
-  },
-  {
-   "name": "Volkspark am Weinberg",
-   "country": "Germany",
-   "lat": 52.5324,
-   "lon": 13.4013,
-   "n": 1,
-   "v": "m-V6E1lKby4"
-  },
-  {
-   "name": "Brooklyn",
-   "country": "United States",
-   "lat": 40.6526,
-   "lon": -73.9497,
-   "n": 4,
-   "v": "zOLH7drZvuw"
   },
   {
    "name": "Bilbao",
@@ -566,16 +470,8 @@ window.WW = {
    "country": "United States",
    "lat": 32.7157,
    "lon": -117.1638,
-   "n": 4,
+   "n": 6,
    "v": "zzWiNZIhiy0"
-  },
-  {
-   "name": "Santander",
-   "country": "Spain",
-   "lat": 43.4619,
-   "lon": -3.81,
-   "n": 4,
-   "v": "Mu2vDes8WQY"
   },
   {
    "name": "Santoña",
@@ -602,14 +498,6 @@ window.WW = {
    "v": "9AK5cjDSoZI"
   },
   {
-   "name": "Roosevelt Island",
-   "country": "United States",
-   "lat": 40.7613,
-   "lon": -73.9503,
-   "n": 1,
-   "v": "FZPBRWznvLI"
-  },
-  {
    "name": "Geysir",
    "country": "Iceland",
    "lat": 64.3089,
@@ -624,14 +512,6 @@ window.WW = {
    "lon": -80.1936,
    "n": 3,
    "v": "QjOGYoYvb18"
-  },
-  {
-   "name": "Upper East Side",
-   "country": "United States",
-   "lat": 40.7755,
-   "lon": -73.955,
-   "n": 1,
-   "v": "ZYS5X28Ze08"
   },
   {
    "name": "Wrocław",
@@ -660,8 +540,8 @@ window.WW = {
   {
    "name": "Florida",
    "country": "United States",
-   "lat": 26.1223,
-   "lon": -80.1434,
+   "lat": 27.7568,
+   "lon": -81.464,
    "n": 1,
    "v": "YjJUEQR3C-g"
   },
@@ -682,11 +562,11 @@ window.WW = {
    "v": "xN6YfOyCro8"
   },
   {
-   "name": "Kadriorg",
+   "name": "Tallinn",
    "country": "Estonia",
-   "lat": 59.4387,
-   "lon": 24.7842,
-   "n": 1,
+   "lat": 59.4372,
+   "lon": 24.7573,
+   "n": 6,
    "v": "pn_NOjn2KDU"
   },
   {
@@ -750,7 +630,7 @@ window.WW = {
    "country": "Germany",
    "lat": 48.1371,
    "lon": 11.5754,
-   "n": 5,
+   "n": 6,
    "v": "u4UgAHCLHM0"
   },
   {
@@ -770,14 +650,6 @@ window.WW = {
    "v": "2zmvr5x7_-U"
   },
   {
-   "name": "Chinatown",
-   "country": "England | UK",
-   "lat": 51.5116,
-   "lon": -0.1305,
-   "n": 1,
-   "v": "8mRzyKQNjcE"
-  },
-  {
    "name": "Ibaraki",
    "country": "Japan",
    "lat": 34.8161,
@@ -786,76 +658,12 @@ window.WW = {
    "v": "PRJ1aQ9wD38"
   },
   {
-   "name": "Helsinki Central Library Oodi",
-   "country": "Finland",
-   "lat": 60.1739,
-   "lon": 24.938,
-   "n": 1,
-   "v": "T7-ENP_fWxk"
-  },
-  {
-   "name": "Azabudai Hills Gallery",
-   "country": "Japan",
-   "lat": 35.6625,
-   "lon": 139.743,
-   "n": 1,
-   "v": "zoYMBKNJfiQ"
-  },
-  {
-   "name": "Park am Gleisdreieck",
-   "country": "Germany",
-   "lat": 52.5016,
-   "lon": 13.3723,
-   "n": 1,
-   "v": "tT-ojBBuuTQ"
-  },
-  {
-   "name": "San Francisco Museum of Modern Art",
-   "country": "United States",
-   "lat": 37.7859,
-   "lon": -122.4007,
-   "n": 2,
-   "v": "R_MCJTt7TRc"
-  },
-  {
-   "name": "Walt Disney Concert Hall",
-   "country": "United States",
-   "lat": 34.0554,
-   "lon": -118.2499,
-   "n": 1,
-   "v": "cK3VNjm_2Ko"
-  },
-  {
-   "name": "Salk Institute for Biological Studies",
-   "country": "United States",
-   "lat": 32.8876,
-   "lon": -117.2453,
-   "n": 1,
-   "v": "tf4exmKuh4w"
-  },
-  {
    "name": "Helsinki",
    "country": "Finland",
    "lat": 60.1666,
    "lon": 24.9435,
-   "n": 2,
-   "v": "GLUuWrdQMro"
-  },
-  {
-   "name": "Twin Peaks",
-   "country": "United States",
-   "lat": 37.7544,
-   "lon": -122.4477,
-   "n": 1,
-   "v": "nKsojHAnGso"
-  },
-  {
-   "name": "Hollywood",
-   "country": "United States",
-   "lat": 34.098,
-   "lon": -118.3295,
    "n": 3,
-   "v": "VmUT17xWz90"
+   "v": "T7-ENP_fWxk"
   },
   {
    "name": "Mount Fuji",
@@ -866,59 +674,19 @@ window.WW = {
    "v": "PCGbBA1FEg8"
   },
   {
-   "name": "Dotonbori",
-   "country": "Japan",
-   "lat": 34.669,
-   "lon": 135.5016,
-   "n": 1,
-   "v": "sMdvMOo5WlI"
-  },
-  {
-   "name": "Balboa Park",
-   "country": "United States",
-   "lat": 32.7317,
-   "lon": -117.1465,
-   "n": 1,
-   "v": "eSpeNFaaz30"
-  },
-  {
-   "name": "Moritzplatz",
-   "country": "Germany",
-   "lat": 52.5037,
-   "lon": 13.4107,
-   "n": 1,
-   "v": "CSBbWEVvH2s"
-  },
-  {
-   "name": "Santa Monica Beach",
-   "country": "United States",
-   "lat": 34.0094,
-   "lon": -118.4973,
-   "n": 1,
-   "v": "WEh8PR9B5ss"
-  },
-  {
    "name": "Santa Monica",
    "country": "United States",
    "lat": 34.0195,
    "lon": -118.4912,
-   "n": 1,
-   "v": "iUNPwn-cDdY"
-  },
-  {
-   "name": "Playa Vista",
-   "country": "United States",
-   "lat": 33.976,
-   "lon": -118.4182,
-   "n": 1,
-   "v": "r0g36rK6n4o"
+   "n": 2,
+   "v": "WEh8PR9B5ss"
   },
   {
    "name": "Hamburg",
    "country": "Germany",
    "lat": 53.5502,
    "lon": 10.0013,
-   "n": 3,
+   "n": 4,
    "v": "AMDKgH_Wj_w"
   },
   {
@@ -946,30 +714,6 @@ window.WW = {
    "v": "7lHfCOmmcOM"
   },
   {
-   "name": "Köpenick",
-   "country": "Germany",
-   "lat": 52.4586,
-   "lon": 13.5815,
-   "n": 1,
-   "v": "OrxEwcmLLPA"
-  },
-  {
-   "name": "Mitte",
-   "country": "Germany",
-   "lat": 52.5179,
-   "lon": 13.4041,
-   "n": 1,
-   "v": "tlOg5YaMLjo"
-  },
-  {
-   "name": "Elbphilharmonie Hamburg",
-   "country": "Germany",
-   "lat": 53.5413,
-   "lon": 9.9842,
-   "n": 1,
-   "v": "hXFQ-jQd31c"
-  },
-  {
    "name": "Rovinj",
    "country": "Croatia",
    "lat": 45.0826,
@@ -978,36 +722,12 @@ window.WW = {
    "v": "z11G2I__-yY"
   },
   {
-   "name": "Reethaus",
-   "country": "Germany",
-   "lat": 52.4907,
-   "lon": 13.4911,
-   "n": 1,
-   "v": "MRiHT6C1Rsw"
-  },
-  {
-   "name": "Fondation Louis Vuitton",
-   "country": "France",
-   "lat": 48.874,
-   "lon": 2.297,
-   "n": 1,
-   "v": "cPcqtQrgH4E"
-  },
-  {
    "name": "Cottbus",
    "country": "Germany",
    "lat": 51.7567,
    "lon": 14.3357,
    "n": 1,
    "v": "9iUs0gA0eco"
-  },
-  {
-   "name": "Tallinn",
-   "country": "Estonia",
-   "lat": 59.4372,
-   "lon": 24.7573,
-   "n": 5,
-   "v": "qDInLjD38GY"
   },
   {
    "name": "Sofia",
@@ -1058,60 +778,12 @@ window.WW = {
    "v": "f5_Ek9f3lJM"
   },
   {
-   "name": "Museum Island",
-   "country": "Germany",
-   "lat": 52.52,
-   "lon": 13.3978,
-   "n": 1,
-   "v": "QpSbuWAMOTk"
-  },
-  {
    "name": "Nicosia",
    "country": "Cyprus",
    "lat": 35.1747,
    "lon": 33.3639,
    "n": 2,
    "v": "x61l-6nw2lY"
-  },
-  {
-   "name": "Spandau Citadel",
-   "country": "Germany",
-   "lat": 52.541,
-   "lon": 13.2127,
-   "n": 1,
-   "v": "Bp-8SguuXUQ"
-  },
-  {
-   "name": "One World Trade Center",
-   "country": "United States",
-   "lat": 40.713,
-   "lon": -74.0132,
-   "n": 1,
-   "v": "_VDAK9_GMw0"
-  },
-  {
-   "name": "Brooklyn Heights Promenade",
-   "country": "United States",
-   "lat": 40.6993,
-   "lon": -73.9965,
-   "n": 1,
-   "v": "fF250dwc7Eo"
-  },
-  {
-   "name": "Little Island",
-   "country": "United States",
-   "lat": 40.742,
-   "lon": -74.0106,
-   "n": 1,
-   "v": "hgU27qO8WVA"
-  },
-  {
-   "name": "The High Line",
-   "country": "United States",
-   "lat": 40.7477,
-   "lon": -74.0049,
-   "n": 1,
-   "v": "VVm52DcFx3w"
   },
   {
    "name": "Alexandria",
@@ -1146,30 +818,6 @@ window.WW = {
    "v": "st37pqWoW8U"
   },
   {
-   "name": "Ginza",
-   "country": "Japan",
-   "lat": 35.6728,
-   "lon": 139.7631,
-   "n": 1,
-   "v": "TP3LTqUhBVM"
-  },
-  {
-   "name": "Asakusa",
-   "country": "Japan",
-   "lat": 35.7136,
-   "lon": 139.7924,
-   "n": 1,
-   "v": "xILQxUKG_dw"
-  },
-  {
-   "name": "Olympiapark München",
-   "country": "Germany",
-   "lat": 48.1687,
-   "lon": 11.5504,
-   "n": 1,
-   "v": "pKwDdar3gLk"
-  },
-  {
    "name": "Newcastle upon Tyne",
    "country": "England | UK",
    "lat": 54.9738,
@@ -1178,44 +826,12 @@ window.WW = {
    "v": "WPAxK2bLvGQ"
   },
   {
-   "name": "Gleisdreieck - Skatepark",
-   "country": "Germany",
-   "lat": 52.4975,
-   "lon": 13.3745,
-   "n": 1,
-   "v": "pRlG51Tjfv8"
-  },
-  {
    "name": "Edinburgh",
    "country": "Scotland | UK",
    "lat": 55.9533,
    "lon": -3.1884,
    "n": 5,
    "v": "eN5tqSXalB8"
-  },
-  {
-   "name": "Potsdamer Platz",
-   "country": "Germany",
-   "lat": 52.5094,
-   "lon": 13.3766,
-   "n": 1,
-   "v": "OsSxiuEUzAg"
-  },
-  {
-   "name": "Alexanderplatz",
-   "country": "Germany",
-   "lat": 52.5216,
-   "lon": 13.4113,
-   "n": 1,
-   "v": "RDZCrH-K5-s"
-  },
-  {
-   "name": "Prairie du Triangle",
-   "country": "France",
-   "lat": 48.8915,
-   "lon": 2.3921,
-   "n": 1,
-   "v": "MouhfjmvMG4"
   },
   {
    "name": "Cabo da Roca",
@@ -1258,22 +874,6 @@ window.WW = {
    "v": "gBpzkbt3Bg0"
   },
   {
-   "name": "Kottbusser Tor",
-   "country": "Germany",
-   "lat": 52.4989,
-   "lon": 13.4178,
-   "n": 1,
-   "v": "kAgnvh_HwxI"
-  },
-  {
-   "name": "Berlin Cathedral",
-   "country": "Germany",
-   "lat": 52.5191,
-   "lon": 13.4011,
-   "n": 1,
-   "v": "s_8Hc80HtWY"
-  },
-  {
    "name": "Oslo",
    "country": "Norway",
    "lat": 59.91,
@@ -1298,60 +898,12 @@ window.WW = {
    "v": "e-3-rK9p-l4"
   },
   {
-   "name": "Hollywood Boulevard",
-   "country": "United States",
-   "lat": 34.1016,
-   "lon": -118.3464,
-   "n": 1,
-   "v": "5vC6fiYfltU"
-  },
-  {
-   "name": "Washington Park",
-   "country": "United States",
-   "lat": 45.5155,
-   "lon": -122.7057,
-   "n": 1,
-   "v": "UFAl_ZWllAM"
-  },
-  {
-   "name": "Presidio of San Francisco",
-   "country": "United States",
-   "lat": 37.7988,
-   "lon": -122.4646,
-   "n": 1,
-   "v": "cjFdeWv_Vuo"
-  },
-  {
-   "name": "Golden Gate Park",
-   "country": "United States",
-   "lat": 37.7694,
-   "lon": -122.4822,
-   "n": 1,
-   "v": "4LAOITyb4xY"
-  },
-  {
-   "name": "Union Square",
-   "country": "United States",
-   "lat": 37.7875,
-   "lon": -122.4072,
-   "n": 1,
-   "v": "BV_56n9P1kI"
-  },
-  {
-   "name": "The Green Arcade",
-   "country": "United States",
-   "lat": 37.7733,
-   "lon": -122.4235,
-   "n": 1,
-   "v": "pvWxuPhao68"
-  },
-  {
    "name": "Portland",
    "country": "United States",
    "lat": 45.5202,
    "lon": -122.6742,
-   "n": 1,
-   "v": "BLqtaKLkDlw"
+   "n": 2,
+   "v": "UFAl_ZWllAM"
   }
  ],
  "playlists": {

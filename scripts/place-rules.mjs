@@ -126,4 +126,35 @@ export const PLACE_FIXES = {
   'Sankt Jakob': ['Sankt Jakob', 'Switzerland', 47.539, 7.62],
   'Metropolitan City of Florence': ['Florence', 'Italy', 43.7698, 11.2556],
   'Province of Rimini': ['Rimini', 'Italy', 44.0594, 12.5684],
+  'Florida': ['Florida', 'United States', 27.7568, -81.464],
 };
+
+// Places the map counts for another city than OpenStreetMap gives, keyed by the name YouTube shows; null keeps the
+// place itself (a spot outside any city)
+export const CITY_FIXES = {
+  'The Getty Villa': 'Malibu',
+  'Cahir Castle': 'Cahir',
+  'Cabo da Roca': null,
+  'Florida': null,
+  'District of Columbia': 'Washington',
+  'Sankt Jakob': 'Basel',
+  'St. Jakob-Park': 'Basel',
+};
+
+// City names as the map shows them, where OpenStreetMap's official name is longer or in another language
+export const CITY_NAMES = {
+  'Dessau-Roßlau': 'Dessau', 'Cottbus - Chóśebuz': 'Cottbus', 'City of Edinburgh': 'Edinburgh', 'City of Zagreb': 'Zagreb',
+  'Gazimağusa': 'Famagusta', 'Krakow': 'Kraków', 'Reykjavik': 'Reykjavík', 'Fez': 'Fes', 'Zurich': 'Zürich', '6th of October': '6th of October City',
+};
+
+// Cities OpenStreetMap splits into cities of their own: Tokyo's 23 wards and London's boroughs count as Tokyo and London
+const TOKYO = 'Tokyo', LONDON = 'London';
+export const CITY_PARTS = Object.fromEntries([
+  ...['Chiyoda', 'Chuo', 'Chūō', 'Minato', 'Shinjuku', 'Bunkyo', 'Bunkyō', 'Taito', 'Taitō', 'Sumida', 'Koto', 'Kōtō', 'Shinagawa', 'Meguro', 'Ota', 'Ōta', 'Setagaya',
+    'Shibuya', 'Nakano', 'Suginami', 'Toshima', 'Toshima', 'Kita', 'Arakawa', 'Itabashi', 'Nerima', 'Adachi', 'Katsushika', 'Edogawa'].map((w) => [w, TOKYO]),
+  ...['City of London', 'City of Westminster', 'Westminster', 'Camden', 'Islington', 'Hackney', 'Tower Hamlets', 'Southwark', 'Lambeth', 'Wandsworth',
+    'Hammersmith and Fulham', 'Royal Borough of Kensington and Chelsea', 'Kensington and Chelsea', 'Greenwich', 'Royal Borough of Greenwich', 'Lewisham',
+    'Newham', 'Haringey', 'Brent', 'Ealing', 'Hounslow', 'Richmond upon Thames', 'London Borough of Richmond upon Thames', 'Kingston upon Thames',
+    'Merton', 'Sutton', 'Croydon', 'Bromley', 'Bexley', 'Havering', 'Barking and Dagenham', 'Redbridge', 'Waltham Forest', 'Enfield', 'Barnet',
+    'Harrow', 'Hillingdon'].map((b) => [b, LONDON]),
+]);

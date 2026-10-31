@@ -3010,1003 +3010,1337 @@
    "name": "Kraków",
    "country": "Poland",
    "lat": 50.0619,
-   "lon": 19.9369
+   "lon": 19.9369,
+   "kind": "boundary/administrative/city",
+   "in": "Krakow"
   },
   "ChIJ0xG7n03GwoARsDH_OyyMcrM": {
    "name": "Walt Disney Concert Hall",
    "country": "United States",
    "lat": 34.0554,
-   "lon": -118.2499
+   "lon": -118.2499,
+   "kind": "amenity/theatre/amenity",
+   "in": "Los Angeles"
   },
   "ChIJ2Q61TDRPWBQRBz7DUnopqH8": {
    "name": "Pyramids of Giza",
    "country": "Egypt",
    "lat": 29.9995,
-   "lon": 31.0927
+   "lon": 31.0927,
+   "kind": "highway/trunk/trunk",
+   "in": "Giza"
   },
   "ChIJ2V-Mo_l1nkcRfZixfUq4DAE": {
    "name": "Munich",
    "country": "Germany",
    "lat": 48.1371,
-   "lon": 11.5754
+   "lon": 11.5754,
+   "kind": "boundary/administrative/city",
+   "in": "Munich"
   },
   "ChIJ2ZDYhSJLSQ0RszqVOaykdNA": {
    "name": "Magdalena Peninsula",
    "country": "Spain",
    "lat": 43.4695,
-   "lon": -3.7685
+   "lon": -3.7685,
+   "kind": "natural/cape/cape",
+   "in": "Santander"
   },
   "ChIJ35ov0dCOGGARKvdDH7NPHX0": {
    "name": "Tokyo Skytree",
    "country": "Japan",
    "lat": 35.7101,
-   "lon": 139.8107
+   "lon": 139.8107,
+   "kind": "building/yes/building",
+   "in": "Sumida"
   },
   "ChIJ3T5UiFW8hEcRKMrhXh0MT1I": {
    "name": "Arosa",
    "country": "Switzerland",
    "lat": 46.7797,
-   "lon": 9.6781
+   "lon": 9.6781,
+   "kind": "boundary/administrative/village",
+   "in": null
   },
   "ChIJ4XsPkwlpkEcRq5MI-vkpjZY": {
    "name": "Döttingen",
    "country": "Switzerland",
    "lat": 47.574,
-   "lon": 8.2569
+   "lon": 8.2569,
+   "kind": "boundary/administrative/village",
+   "in": null
   },
   "ChIJ4eIGNFXmAGAR5y9q5G7BW8U": {
    "name": "Osaka",
    "country": "Japan",
    "lat": 34.6938,
-   "lon": 135.5015
+   "lon": 135.5015,
+   "kind": "boundary/administrative/city",
+   "in": "Osaka"
   },
   "ChIJ4zGFAZpYwokRGUGph3Mf37k": {
    "name": "Central Park",
    "country": "United States",
    "lat": 40.7828,
-   "lon": -73.9654
+   "lon": -73.9654,
+   "kind": "leisure/park/park",
+   "in": "New York"
   },
   "ChIJ51cu8IcbXWARiRtXIothAS4": {
    "name": "Tokyo",
    "country": "Japan",
    "lat": 35.6769,
-   "lon": 139.7639
+   "lon": 139.7639,
+   "kind": "boundary/administrative/province",
+   "in": "Chiyoda"
   },
   "ChIJ53I1Yn2AhYAR_Vl1vNygfMg": {
    "name": "San Francisco Museum of Modern Art",
    "country": "United States",
    "lat": 37.7859,
-   "lon": -122.4007
+   "lon": -122.4007,
+   "kind": "tourism/museum/tourism",
+   "in": "San Francisco"
   },
   "ChIJ53USP0nBhkcRjQ50xhPN_zw": {
    "name": "Milan",
    "country": "Italy",
    "lat": 45.4642,
-   "lon": 9.1896
+   "lon": 9.1896,
+   "kind": "boundary/administrative/city",
+   "in": "Milan"
   },
   "ChIJ5S-raZElv0cR8HcqSvxgJwQ": {
    "name": "Cologne",
    "country": "Germany",
    "lat": 50.9384,
-   "lon": 6.96
+   "lon": 6.96,
+   "kind": "boundary/administrative/city",
+   "in": "Cologne"
   },
   "ChIJ5TCOcRaYpBIRCmZHTz37sEQ": {
    "name": "Barcelona",
    "country": "Spain",
    "lat": 41.3826,
-   "lon": 2.1771
+   "lon": 2.1771,
+   "kind": "boundary/administrative/city",
+   "in": "Barcelona"
   },
   "ChIJ5bQPhMdZwokRkTwKhVxhP1g": {
    "name": "The High Line",
    "country": "United States",
    "lat": 40.7477,
-   "lon": -74.0049
+   "lon": -74.0049,
+   "kind": "man_made/bridge/man_made",
+   "in": "New York"
   },
   "ChIJ5c_kAJRQlIARnZxkQGEKPU4": {
    "name": "Clovis",
    "country": "United States",
    "lat": 36.8252,
-   "lon": -119.7029
+   "lon": -119.7029,
+   "kind": "boundary/administrative/town",
+   "in": "Clovis"
   },
   "ChIJ6-LQkwZljEcRObwLezWVtqA": {
    "name": "Geneva",
    "country": "Switzerland",
    "lat": 46.2018,
-   "lon": 6.1466
+   "lon": 6.1466,
+   "kind": "boundary/administrative/city",
+   "in": "Geneva"
   },
   "ChIJ67v8tsoLkkYR3XU-Jmnz2m4": {
    "name": "Helsinki Central Library Oodi",
    "country": "Finland",
    "lat": 60.1739,
-   "lon": 24.938
+   "lon": 24.938,
+   "kind": "amenity/library/amenity",
+   "in": "Helsinki"
   },
   "ChIJ685WIFYViEgRHlHvBbiD5nE": {
    "name": "Glasgow",
    "country": "Scotland | UK",
    "lat": 55.8612,
-   "lon": -4.2502
+   "lon": -4.2502,
+   "kind": "place/city/city",
+   "in": "Glasgow"
   },
   "ChIJ6S1BdssWpkcRszO0oRxT8ao": {
    "name": "Dessau",
    "country": "Germany",
    "lat": 51.831,
-   "lon": 12.2431
+   "lon": 12.2431,
+   "kind": "place/town/town",
+   "in": "Dessau-Roßlau"
   },
   "ChIJ7yy-sZdISQ0RvMFBmfXQEzU": {
    "name": "Playa de San Juan de la Canal",
    "country": "Spain",
    "lat": 43.4725,
-   "lon": -3.8962
+   "lon": -3.8962,
+   "kind": "highway/bus_stop/highway",
+   "in": "Santa Cruz de Bezana"
   },
   "ChIJ8amxfRTRt4kRKKVyRQVIkps": {
    "name": "Olney",
    "country": "United States",
    "lat": 39.147,
-   "lon": -77.0722
+   "lon": -77.0722,
+   "kind": "boundary/statistical/statistical",
+   "in": "Olney"
   },
   "ChIJ8aukkz5NtokRLAHB24Ym9dc": {
    "name": "Alexandria",
    "country": "United States",
    "lat": 38.8051,
-   "lon": -77.047
+   "lon": -77.047,
+   "kind": "boundary/administrative/city",
+   "in": "Alexandria"
   },
   "ChIJ8cM8zdaoAWARPR27azYdlsA": {
    "name": "Kyoto",
    "country": "Japan",
    "lat": 35.0116,
-   "lon": 135.7681
+   "lon": 135.7681,
+   "kind": "boundary/administrative/city",
+   "in": "Kyoto"
   },
   "ChIJ8dXnU9ekwoAROOxLORAMcwE": {
    "name": "Santa Monica Beach",
    "country": "United States",
    "lat": 34.0094,
-   "lon": -118.4973
+   "lon": -118.4973,
+   "kind": "?",
+   "in": "Santa Monica"
   },
   "ChIJ9Xsxy4KGqkARYF6_aRKgAAQ": {
    "name": "Sofia",
    "country": "Bulgaria",
    "lat": 42.6977,
-   "lon": 23.3217
+   "lon": 23.3217,
+   "kind": "boundary/administrative/city",
+   "in": "Sofia"
   },
   "ChIJ9cr6ICcB2YgRvo6_QHW-AnY": {
    "name": "Fort Lauderdale",
    "country": "United States",
    "lat": 26.1223,
-   "lon": -80.1434
+   "lon": -80.1434,
+   "kind": "boundary/administrative/city",
+   "in": "Fort Lauderdale"
   },
   "ChIJ9zUs6wJIqEcRYK5fW0YgIQU": {
    "name": "Köpenick",
    "country": "Germany",
    "lat": 52.4586,
-   "lon": 13.5815
+   "lon": 13.5815,
+   "kind": "railway/station/railway",
+   "in": "Berlin"
   },
   "ChIJA8tw-pZU2YARxPYVsDwL8-0": {
    "name": "Balboa Park",
    "country": "United States",
    "lat": 32.7317,
-   "lon": -117.1465
+   "lon": -117.1465,
+   "kind": "leisure/park/park",
+   "in": "San Diego"
   },
   "ChIJAUK8it1RqEcRwKtfW0YgIQU": {
    "name": "Mitte",
    "country": "Germany",
    "lat": 52.5179,
-   "lon": 13.4041
+   "lon": 13.4041,
+   "kind": "boundary/administrative/suburb",
+   "in": "Berlin"
   },
   "ChIJAVkDPzdOqEcRcDteW0YgIQQ": {
    "name": "Berlin",
    "country": "Germany",
    "lat": 52.5174,
-   "lon": 13.3951
+   "lon": 13.3951,
+   "kind": "boundary/administrative/city",
+   "in": "Berlin"
   },
   "ChIJAyfkaspt5kcRLxixP03Ho7s": {
    "name": "Prairie du Triangle",
    "country": "France",
    "lat": 48.8915,
-   "lon": 2.3921
+   "lon": 2.3921,
+   "kind": "landuse/grass/grass",
+   "in": "Paris"
   },
   "ChIJAzrP-_OV1kgRqbTTIAgihLo": {
    "name": "Secret Lagoon",
    "country": "Iceland",
    "lat": 64.1372,
-   "lon": -20.309
+   "lon": -20.309,
+   "kind": "amenity/public_bath/amenity",
+   "in": null
   },
   "ChIJBw1wGumjwoARsKRsr2WJ-eQ": {
    "name": "The Getty Villa",
    "country": "United States",
    "lat": 34.045,
-   "lon": -118.565
+   "lon": -118.565,
+   "kind": "tourism/museum/tourism",
+   "in": "Los Angeles"
   },
   "ChIJCSF8lBZEwokRhngABHRcdoI": {
    "name": "Brooklyn",
    "country": "United States",
    "lat": 40.6526,
-   "lon": -73.9497
+   "lon": -73.9497,
+   "kind": "boundary/administrative/suburb",
+   "in": "New York"
   },
   "ChIJC_slSiv1pRIRgHKZkXCUAAo": {
    "name": "Andorra la Vella",
    "country": "Andorra",
    "lat": 42.5069,
-   "lon": 1.5212
+   "lon": 1.5212,
+   "kind": "place/town/town",
+   "in": "Andorra la Vella"
   },
   "ChIJD7fiBh9u5kcRYJSMaMOCCwQ": {
    "name": "Paris",
    "country": "France",
    "lat": 48.8535,
-   "lon": 2.3484
+   "lon": 2.3484,
+   "kind": "boundary/administrative/city",
+   "in": "Paris"
   },
   "ChIJDdfvzy1OqEcRNkF0XkqlCXg": {
    "name": "Moritzplatz",
    "country": "Germany",
    "lat": 52.5037,
-   "lon": 13.4107
+   "lon": 13.4107,
+   "kind": "railway/station/railway",
+   "in": "Berlin"
   },
   "ChIJE917kRZGkkcR4PwOszTOCQQ": {
    "name": "Ronchamp",
    "country": "France",
    "lat": 47.7003,
-   "lon": 6.6329
+   "lon": 6.6329,
+   "kind": "boundary/administrative/village",
+   "in": null
   },
   "ChIJE9on3F3HwoAR9AhGJW_fL-I": {
    "name": "Los Angeles",
    "country": "United States",
    "lat": 34.0537,
-   "lon": -118.2428
+   "lon": -118.2428,
+   "kind": "boundary/administrative/city",
+   "in": "Los Angeles"
   },
   "ChIJEcHIDqKw2YgRZU-t3XHylv8": {
    "name": "Miami",
    "country": "United States",
    "lat": 25.7742,
-   "lon": -80.1936
+   "lon": -80.1936,
+   "kind": "boundary/administrative/city",
+   "in": "Miami"
   },
   "ChIJEfEwBTC4kUcRtsK4884jezo": {
    "name": "Sankt Jakob",
    "country": "Switzerland",
    "lat": 47.539,
-   "lon": 7.62
+   "lon": 7.62,
+   "kind": "?",
+   "in": "Münchenstein"
   },
   "ChIJFbxuNW_I3xQRXL-W8cUUcHc": {
    "name": "Maraş",
    "country": "Cyprus",
    "lat": 35.1128,
-   "lon": 33.952
+   "lon": 33.952,
+   "kind": "place/suburb/suburb",
+   "in": "Gazimağusa"
   },
   "ChIJFyUfK0mTkkYRfwiqHf4Uqvs": {
    "name": "Kadriorg",
    "country": "Estonia",
    "lat": 59.4387,
-   "lon": 24.7842
+   "lon": 24.7842,
+   "kind": "railway/tram_stop/railway",
+   "in": "Tallinn"
   },
   "ChIJGQCRws6kwoARq_Uj_7UKF7Q": {
    "name": "Santa Monica",
    "country": "United States",
    "lat": 34.0195,
-   "lon": -118.4912
+   "lon": -118.4912,
+   "kind": "boundary/administrative/city",
+   "in": "Santa Monica"
   },
   "ChIJGaK-SZcLkEcRA9wf5_GNbuY": {
    "name": "Zürich",
    "country": "Switzerland",
    "lat": 47.3744,
-   "lon": 8.541
+   "lon": 8.541,
+   "kind": "boundary/administrative/city",
+   "in": "Zurich"
   },
   "ChIJGfTXCycKlVQRe9loilMSQG4": {
    "name": "Washington Park",
    "country": "United States",
    "lat": 45.5155,
-   "lon": -122.7057
+   "lon": -122.7057,
+   "kind": "boundary/protected_area/protected_area",
+   "in": "Portland"
   },
   "ChIJH0VSWzNOqEcR7P7K4I9F0Z8": {
    "name": "Kottbusser Tor",
    "country": "Germany",
    "lat": 52.4989,
-   "lon": 13.4178
+   "lon": 13.4178,
+   "kind": "highway/secondary/secondary",
+   "in": "Berlin"
   },
   "ChIJH8RDfdFaw4ARSy8dwIvDUd8": {
    "name": "Twin Peaks",
    "country": "United States",
    "lat": 37.7544,
-   "lon": -122.4477
+   "lon": -122.4477,
+   "kind": "?",
+   "in": "San Francisco"
   },
   "ChIJI6Xz6KyvehQRTQea8fhdM28": {
    "name": "Siwa Oasis",
    "country": "Egypt",
    "lat": 29.2035,
-   "lon": 25.5192
+   "lon": 25.5192,
+   "kind": "place/city/city",
+   "in": "Siwa Oasis"
   },
   "ChIJIQBpAG2ahYAR_6128GcTUEo": {
    "name": "San Francisco",
    "country": "United States",
    "lat": 37.7879,
-   "lon": -122.4075
+   "lon": -122.4075,
+   "kind": "boundary/administrative/city",
+   "in": "San Francisco"
   },
   "ChIJISVF1K8snEcRoKqL161IHgQ": {
    "name": "Wörthsee",
    "country": "Germany",
    "lat": 48.0727,
-   "lon": 11.2002
+   "lon": 11.2002,
+   "kind": "boundary/administrative/village",
+   "in": null
   },
   "ChIJIeqReMlRqEcRquFNJTyYoUw": {
    "name": "Potsdamer Platz",
    "country": "Germany",
    "lat": 52.5094,
-   "lon": 13.3766
+   "lon": 13.3766,
+   "kind": "railway/station/railway",
+   "in": "Berlin"
   },
   "ChIJIyaYpQC4h0gRJxfnfHsU8mQ": {
    "name": "Edinburgh",
    "country": "Scotland | UK",
    "lat": 55.9533,
-   "lon": -3.1884
+   "lon": -3.1884,
+   "kind": "boundary/administrative/city",
+   "in": "City of Edinburgh"
   },
   "ChIJJ3SpfQsLlVQRkYXR9ua5Nhw": {
    "name": "Portland",
    "country": "United States",
    "lat": 45.5202,
-   "lon": -122.6742
+   "lon": -122.6742,
+   "kind": "boundary/administrative/city",
+   "in": "Portland"
   },
   "ChIJJS7zGDFQqEcR-BAZNQHUYvU": {
    "name": "Gleisdreieck - Skatepark",
    "country": "Germany",
    "lat": 52.4975,
-   "lon": 13.3745
+   "lon": 13.3745,
+   "kind": "?",
+   "in": "Berlin"
   },
   "ChIJJSr0RV1l5kcRzbW6FfxF1oU": {
    "name": "Fondation Louis Vuitton",
    "country": "France",
    "lat": 48.874,
-   "lon": 2.297
+   "lon": 2.297,
+   "kind": "highway/bus_stop/highway",
+   "in": "Paris"
   },
   "ChIJJbrv0uRRqEcRjPFVxVJ4e5o": {
    "name": "Volkspark am Weinberg",
    "country": "Germany",
    "lat": 52.5324,
-   "lon": 13.4013
+   "lon": 13.4013,
+   "kind": "leisure/park/park",
+   "in": "Berlin"
   },
   "ChIJJwcvvZY5WkgRwJYxl6nHAAo": {
    "name": "Roundstone",
    "country": "Ireland",
    "lat": 53.3963,
-   "lon": -9.9188
+   "lon": -9.9188,
+   "kind": "place/village/town",
+   "in": "Roundstone"
   },
   "ChIJJwkRBeaeVBMRWrleON-_ZZM": {
    "name": "Pristina",
    "country": "Kosovo",
    "lat": 42.6639,
-   "lon": 21.1641
+   "lon": 21.1641,
+   "kind": "boundary/administrative/city",
+   "in": "Pristina"
   },
   "ChIJK1mmj6TDLBMRnUTxF9uE8sE": {
    "name": "Rimini",
    "country": "Italy",
    "lat": 44.0594,
-   "lon": 12.5684
+   "lon": 12.5684,
+   "kind": "boundary/administrative/city",
+   "in": "Rimini"
   },
   "ChIJK9EM68qLGGARacmu4KJj5SA": {
    "name": "Shibuya Scramble Crossing",
    "country": "Japan",
    "lat": 35.6595,
-   "lon": 139.7005
+   "lon": 139.7005,
+   "kind": "junction/yes/junction",
+   "in": "Shibuya"
   },
   "ChIJL-CJmTFZwokRsPcqje_bn7w": {
    "name": "Little Island",
    "country": "United States",
    "lat": 40.742,
-   "lon": -74.0106
+   "lon": -74.0106,
+   "kind": "leisure/park/leisure",
+   "in": "New York"
   },
   "ChIJL6wn6oAOZ0gRoHExl6nHAAo": {
    "name": "Dublin",
    "country": "Ireland",
    "lat": 53.3494,
-   "lon": -6.2606
+   "lon": -6.2606,
+   "kind": "boundary/administrative/city",
+   "in": "Dublin"
   },
   "ChIJLRNM8FyHCw0ReuG0v3HFv3Y": {
    "name": "Tangier",
    "country": "Morocco",
    "lat": 35.7695,
-   "lon": -5.8045
+   "lon": -5.8045,
+   "kind": "boundary/administrative/city",
+   "in": "Tangier"
   },
   "ChIJM1N_BMKOGGARZ0DHgTj9hHw": {
    "name": "Asakusa",
    "country": "Japan",
    "lat": 35.7136,
-   "lon": 139.7924
+   "lon": 139.7924,
+   "kind": "railway/station/railway",
+   "in": "Taito"
   },
   "ChIJM7U-OGN2nkcRS91BCoGkObE": {
    "name": "Olympiapark München",
    "country": "Germany",
    "lat": 48.1687,
-   "lon": 11.5504
+   "lon": 11.5504,
+   "kind": "leisure/park/park",
+   "in": "Munich"
   },
   "ChIJMVd4MymgVA0R99lHx5Y__Ws": {
    "name": "France",
    "country": "France",
    "lat": 46.6034,
-   "lon": 1.8883
+   "lon": 1.8883,
+   "kind": "boundary/administrative/country",
+   "in": null
   },
   "ChIJN0XdbzZGSQ0RUDVj_4T1BAo": {
    "name": "Liencres",
    "country": "Spain",
    "lat": 43.4605,
-   "lon": -3.9276
+   "lon": -3.9276,
+   "kind": "place/village/village",
+   "in": "Piélagos"
   },
   "ChIJNRH_CRw1GQ0RetYqZOvcpvw": {
    "name": "Almada",
    "country": "Portugal",
    "lat": 38.6831,
-   "lon": -9.1576
+   "lon": -9.1576,
+   "kind": "boundary/administrative/city",
+   "in": "Almada"
   },
   "ChIJNb4UJ3a_DA0RD4cANiYlTjg": {
    "name": "Gibraltar",
    "country": "Gibraltar | UK",
    "lat": 36.1408,
-   "lon": -5.3541
+   "lon": -5.3541,
+   "kind": "place/city/city",
+   "in": "Gibraltar"
   },
   "ChIJOVPo1gsttBIRAwwgn08TiN4": {
    "name": "Nîmes",
    "country": "France",
    "lat": 43.8374,
-   "lon": 4.3601
+   "lon": 4.3601,
+   "kind": "boundary/administrative/city",
+   "in": "Nîmes"
   },
   "ChIJO_PkYRozGQ0R0DaQ5L3rAAQ": {
    "name": "Lisbon",
    "country": "Portugal",
    "lat": 38.7078,
-   "lon": -9.1366
+   "lon": -9.1366,
+   "kind": "boundary/administrative/city",
+   "in": "Lisbon"
   },
   "ChIJOcwCyZLWZUcRisL7KJYkRTo": {
    "name": "Zagreb",
    "country": "Croatia",
    "lat": 45.8131,
-   "lon": 15.9773
+   "lon": 15.9773,
+   "kind": "boundary/administrative/city",
+   "in": "City of Zagreb"
   },
   "ChIJOfBn8mFuQUYRmh4j019gkn4": {
    "name": "Oslo",
    "country": "Norway",
    "lat": 59.9133,
-   "lon": 10.739
+   "lon": 10.739,
+   "kind": "boundary/administrative/county",
+   "in": "Oslo"
   },
   "ChIJOwg_06VPwokRYv534QaPC8g": {
    "name": "New York",
    "country": "United States",
    "lat": 40.7127,
-   "lon": -74.006
+   "lon": -74.006,
+   "kind": "boundary/administrative/city",
+   "in": "New York"
   },
   "ChIJP-Bkr5-AhYARFQOyB9vEhH0": {
    "name": "The Green Arcade",
    "country": "United States",
    "lat": 37.7733,
-   "lon": -122.4235
+   "lon": -122.4235,
+   "kind": "?",
+   "in": "San Francisco"
   },
   "ChIJP09CA5-j1kgRPyjiYhocdbQ": {
    "name": "Geysir",
    "country": "Iceland",
    "lat": 64.3089,
-   "lon": -20.3005
+   "lon": -20.3005,
+   "kind": "tourism/chalet/tourism",
+   "in": null
   },
   "ChIJPTZzlpQG3IARYMv1iNBTzGs": {
    "name": "Salk Institute for Biological Studies",
    "country": "United States",
    "lat": 32.8876,
-   "lon": -117.2453
+   "lon": -117.2453,
+   "kind": "amenity/research_institute/amenity",
+   "in": "San Diego"
   },
   "ChIJPXZIogjRrBQRoDgTb_rRcGQ": {
    "name": "Plovdiv",
    "country": "Bulgaria",
    "lat": 42.1419,
-   "lon": 24.7499
+   "lon": 24.7499,
+   "kind": "place/city/city",
+   "in": "Plovdiv"
   },
   "ChIJQ2Dro1Ir0kgRmkXB5TQEim8": {
    "name": "Iceland",
    "country": "Iceland",
    "lat": 64.3273,
-   "lon": -20.1191
+   "lon": -20.1191,
+   "kind": "?",
+   "in": null
   },
   "ChIJRyEhyrlFlUcR75LTAvZg22Q": {
    "name": "Luxembourg",
    "country": "Luxembourg",
    "lat": 49.6113,
-   "lon": 6.1298
+   "lon": 6.1298,
+   "kind": "boundary/administrative/city",
+   "in": "Luxembourg"
   },
   "ChIJS8Y0iyi4kUcRlbBWFo-mk_4": {
    "name": "St. Jakob-Park",
    "country": "Switzerland",
    "lat": 47.5416,
-   "lon": 7.6201
+   "lon": 7.6201,
+   "kind": "leisure/stadium/leisure",
+   "in": "Basel"
   },
   "ChIJS9HC895RqEcR_IovsNVoDng": {
    "name": "Berlin Cathedral",
    "country": "Germany",
    "lat": 52.5191,
-   "lon": 13.4011
+   "lon": 13.4011,
+   "kind": "amenity/place_of_worship/amenity",
+   "in": "Berlin"
   },
   "ChIJSx6SrQ9T2YARed8V_f0hOg0": {
    "name": "San Diego",
    "country": "United States",
    "lat": 32.7157,
-   "lon": -117.1638
+   "lon": -117.1638,
+   "kind": "boundary/administrative/city",
+   "in": "San Diego"
   },
   "ChIJT608vzr5sUARKKacfOMyBqw": {
    "name": "Bucharest",
    "country": "Romania",
    "lat": 44.4361,
-   "lon": 26.1027
+   "lon": 26.1027,
+   "kind": "boundary/administrative/city",
+   "in": "Bucharest"
   },
   "ChIJT8RwZwaPsUcRhkKYaCqr5LI": {
    "name": "Elbphilharmonie Hamburg",
    "country": "Germany",
    "lat": 53.5413,
-   "lon": 9.9842
+   "lon": 9.9842,
+   "kind": "amenity/theatre/amenity",
+   "in": "Hamburg"
   },
   "ChIJTzBpJ8dJkEcRkIpt83DrHDY": {
    "name": "Basel",
    "country": "Switzerland",
    "lat": 47.5581,
-   "lon": 7.5878
+   "lon": 7.5878,
+   "kind": "boundary/administrative/city",
+   "in": "Basel"
   },
   "ChIJU-wXtxXmjYARHFRRyqYrwtI": {
    "name": "Carmel-by-the-Sea",
    "country": "United States",
    "lat": 36.5553,
-   "lon": -121.9233
+   "lon": -121.9233,
+   "kind": "boundary/administrative/village",
+   "in": null
   },
   "ChIJUVddupaUDA0R6RzYnIXKJqY": {
    "name": "Algeciras",
    "country": "Spain",
    "lat": 36.1312,
-   "lon": -5.4474
+   "lon": -5.4474,
+   "kind": "boundary/administrative/city",
+   "in": "Algeciras"
   },
   "ChIJUZ4Xlo3urw0RuK2HT1O2UFk": {
    "name": "Marrakesh",
    "country": "Morocco",
    "lat": 31.6258,
-   "lon": -7.9892
+   "lon": -7.9892,
+   "kind": "boundary/administrative/city",
+   "in": "Marrakesh"
   },
   "ChIJVU1JymcX3hQRbhTEf4A8TDI": {
    "name": "Cyprus",
    "country": "Cyprus",
    "lat": 34.9823,
-   "lon": 33.1451
+   "lon": 33.1451,
+   "kind": "boundary/administrative/country",
+   "in": "Gourri"
   },
   "ChIJVU1JymcX3hQRpcARA5ykXls": {
    "name": "Nicosia",
    "country": "Cyprus",
    "lat": 35.1747,
-   "lon": 33.3639
+   "lon": 33.3639,
+   "kind": "place/city/city",
+   "in": "Lefkoşa"
   },
   "ChIJW-T2Wt7Gt4kRKl2I1CJFUsI": {
    "name": "Washington",
    "country": "United States",
    "lat": 38.8951,
-   "lon": -77.0364
+   "lon": -77.0364,
+   "kind": "place/city/city",
+   "in": "Washington"
   },
   "ChIJW-T2Wt7Gt4kRmKFUAsCO4tY": {
    "name": "District of Columbia",
    "country": "United States",
    "lat": 38.8951,
-   "lon": -77.0364
+   "lon": -77.0364,
+   "kind": "place/city/city",
+   "in": "Washington"
   },
   "ChIJWYKRp2jF3xQRQKqvnhksWJY": {
    "name": "Ayia Napa",
    "country": "Cyprus",
    "lat": 34.9893,
-   "lon": 33.9962
+   "lon": 33.9962,
+   "kind": "boundary/administrative/town",
+   "in": "Ayia Napa"
   },
   "ChIJX0qVWUJ0CEcROq1_4LUv1FA": {
    "name": "Cottbus",
    "country": "Germany",
    "lat": 51.7567,
-   "lon": 14.3357
+   "lon": 14.3357,
+   "kind": "boundary/administrative/city",
+   "in": "Cottbus - Chóśebuz"
   },
   "ChIJY3a9eKD4KhMRYIDk45AsCAM": {
    "name": "Florence",
    "country": "Italy",
    "lat": 43.7698,
-   "lon": 11.2556
+   "lon": 11.2556,
+   "kind": "?",
+   "in": "Florence"
   },
   "ChIJY_dFYHKHhYARMKc772iLvnE": {
    "name": "Golden Gate Park",
    "country": "United States",
    "lat": 37.7694,
-   "lon": -122.4822
+   "lon": -122.4822,
+   "kind": "leisure/park/park",
+   "in": "San Francisco"
   },
   "ChIJYeZuBI9YwokRjMDs_IEyCwo": {
    "name": "Manhattan",
    "country": "United States",
    "lat": 40.758,
-   "lon": -73.9855
+   "lon": -73.9855,
+   "kind": "boundary/administrative/suburb",
+   "in": "New York"
   },
   "ChIJYweA-0JWqEcRgNsxFSKvuAs": {
    "name": "Spandau Citadel",
    "country": "Germany",
    "lat": 52.541,
-   "lon": 13.2127
+   "lon": 13.2127,
+   "kind": "historic/castle/historic",
+   "in": "Berlin"
   },
   "ChIJZ8sJQpqwwoAR2nfkAOI8LbQ": {
    "name": "Playa Vista",
    "country": "United States",
    "lat": 33.976,
-   "lon": -118.4182
+   "lon": -118.4182,
+   "kind": "place/quarter/quarter",
+   "in": "Los Angeles"
   },
   "ChIJ_1stWpWTW0gRgVJJCkQbKwM": {
    "name": "Galway",
    "country": "Ireland",
    "lat": 53.2744,
-   "lon": -9.0491
+   "lon": -9.0491,
+   "kind": "boundary/administrative/city",
+   "in": "Galway"
   },
   "ChIJ_4ZcTWO_fEcRU66YxWGfxv8": {
    "name": "Rovinj",
    "country": "Croatia",
    "lat": 45.0826,
-   "lon": 13.6343
+   "lon": 13.6343,
+   "kind": "boundary/administrative/town",
+   "in": "Rovinj"
   },
   "ChIJ__8MU4CBzhIRIJ6X_aUZCAQ": {
    "name": "Cannes",
    "country": "France",
    "lat": 43.5515,
-   "lon": 7.0134
+   "lon": 7.0134,
+   "kind": "boundary/administrative/town",
+   "in": "Cannes"
   },
   "ChIJa49ICL9YwokRDaotFKkGh2E": {
    "name": "Upper East Side",
    "country": "United States",
    "lat": 40.7755,
-   "lon": -73.955
+   "lon": -73.955,
+   "kind": "place/quarter/quarter",
+   "in": "New York"
   },
   "ChIJa5SIHWybkUcRYDM5mrlfCgQ": {
    "name": "Mulhouse",
    "country": "France",
    "lat": 47.7467,
-   "lon": 7.339
+   "lon": 7.339,
+   "kind": "boundary/administrative/city",
+   "in": "Mulhouse"
   },
   "ChIJbQYTW9IEdkgRWNjgUGyiuwQ": {
    "name": "Chinatown",
    "country": "England | UK",
    "lat": 51.5116,
-   "lon": -0.1305
+   "lon": -0.1305,
+   "kind": "place/suburb/suburb",
+   "in": "City of Westminster"
   },
   "ChIJbygR2x5OqEcRbhbkZsMB_DA": {
    "name": "Alexanderplatz",
    "country": "Germany",
    "lat": 52.5216,
-   "lon": 13.4113
+   "lon": 13.4113,
+   "kind": "railway/station/railway",
+   "in": "Berlin"
   },
   "ChIJce5riq5JSQ0RlrqCFoDcfNI": {
    "name": "Santander",
    "country": "Spain",
    "lat": 43.4619,
-   "lon": -3.81
+   "lon": -3.81,
+   "kind": "boundary/administrative/city",
+   "in": "Santander"
   },
   "ChIJd1dETUiLnw0R7wLY7a6q5hA": {
    "name": "Fes",
    "country": "Morocco",
    "lat": 34.0347,
-   "lon": -5.0162
+   "lon": -5.0162,
+   "kind": "boundary/administrative/city",
+   "in": "Fez"
   },
   "ChIJdd4hrwug2EcRmSrV3Vo6llI": {
    "name": "London",
    "country": "England | UK",
    "lat": 51.5074,
-   "lon": -0.1278
+   "lon": -0.1278,
+   "kind": "boundary/administrative/city",
+   "in": "City of Westminster"
   },
   "ChIJdxs61MA5jkcRmmVXBP5fVcs": {
    "name": "Bern",
    "country": "Switzerland",
    "lat": 46.9485,
-   "lon": 7.4522
+   "lon": 7.4522,
+   "kind": "boundary/administrative/city",
+   "in": "Bern"
   },
   "ChIJe2kT-x-B1kgR8mKSB4tsdWs": {
    "name": "Thingvellir National Park",
    "country": "Iceland",
    "lat": 64.2786,
-   "lon": -21.0819
+   "lon": -21.0819,
+   "kind": "boundary/national_park/national_park",
+   "in": null
   },
   "ChIJe8FmEzBQqEcRth79TMVowwU": {
    "name": "Park am Gleisdreieck",
    "country": "Germany",
    "lat": 52.5016,
-   "lon": 13.3723
+   "lon": 13.3723,
+   "kind": "information/map/information",
+   "in": "Berlin"
   },
   "ChIJeT_m9V_rLBMRECA0gpnzAAA": {
    "name": "San Marino",
    "country": "San Marino",
    "lat": 43.9459,
-   "lon": 12.4583
+   "lon": 12.4583,
+   "kind": "boundary/administrative/country",
+   "in": null
   },
   "ChIJeXNUeSr6j0cRr1KZQNEq8K4": {
    "name": "Lucerne",
    "country": "Switzerland",
    "lat": 47.0521,
-   "lon": 8.3058
+   "lon": 8.3058,
+   "kind": "boundary/administrative/city",
+   "in": "Lucerne"
   },
   "ChIJeZvELtWLGGARZqz5VlVtXGQ": {
    "name": "Azabudai Hills Gallery",
    "country": "Japan",
    "lat": 35.6625,
-   "lon": 139.743
+   "lon": 139.743,
+   "kind": "tourism/gallery/tourism",
+   "in": "Minato"
   },
   "ChIJf7h0CyG_woARlXR6qSqC52k": {
    "name": "Hollywood Boulevard",
    "country": "United States",
    "lat": 34.1016,
-   "lon": -118.3464
+   "lon": -118.3464,
+   "kind": "highway/secondary/secondary",
+   "in": "Los Angeles"
   },
   "ChIJg2DcJhXnAGARCbeAHoZrPeQ": {
    "name": "Dotonbori",
    "country": "Japan",
    "lat": 34.669,
-   "lon": 135.5016
+   "lon": 135.5016,
+   "kind": "place/locality/locality",
+   "in": "Osaka"
   },
   "ChIJh2d7ZFhPqEcRJzes0FRKAeE": {
    "name": "Reethaus",
    "country": "Germany",
    "lat": 52.4907,
-   "lon": 13.4911
+   "lon": 13.4911,
+   "kind": "amenity/events_venue/amenity",
+   "in": "Berlin"
   },
   "ChIJhe8OU0Vt5kcR8FvEsG18qqM": {
    "name": "Montreuil",
    "country": "France",
    "lat": 48.8623,
-   "lon": 2.4412
+   "lon": 2.4412,
+   "kind": "boundary/administrative/city",
+   "in": "Montreuil"
   },
   "ChIJialRZQO6kUcR_Ziwl3tslgE": {
    "name": "Weil am Rhein",
    "country": "Germany",
    "lat": 47.5933,
-   "lon": 7.6116
+   "lon": 7.6116,
+   "kind": "boundary/administrative/town",
+   "in": "Weil am Rhein"
   },
   "ChIJjQ1a2MRYwokRJ_6PC_93-BE": {
    "name": "Roosevelt Island",
    "country": "United States",
    "lat": 40.7613,
-   "lon": -73.9503
+   "lon": -73.9503,
+   "kind": "place/island/island",
+   "in": "New York"
   },
   "ChIJjU0jUEkwGw0RV_waR6OqEFQ": {
    "name": "Lagos",
    "country": "Portugal",
    "lat": 37.1028,
-   "lon": -8.6729
+   "lon": -8.6729,
+   "kind": "boundary/administrative/city",
+   "in": "Lagos"
   },
   "ChIJjUNdI8DaHg0Rr7P8mKjYOpU": {
    "name": "Cabo da Roca",
    "country": "Portugal",
    "lat": 38.7809,
-   "lon": -9.4994
+   "lon": -9.4994,
+   "kind": "place/locality/locality",
+   "in": "Colares"
   },
   "ChIJjZDJB1n8AGARYDCqWnPGqzs": {
    "name": "Ibaraki",
    "country": "Japan",
    "lat": 34.8161,
-   "lon": 135.5686
+   "lon": 135.5686,
+   "kind": "boundary/administrative/city",
+   "in": "Ibaraki"
   },
   "ChIJkQYhlscLkkYRY_fiO4S9Ts0": {
    "name": "Helsinki",
    "country": "Finland",
    "lat": 60.1666,
-   "lon": 24.9435
+   "lon": 24.9435,
+   "kind": "boundary/administrative/city",
+   "in": "Helsinki"
   },
   "ChIJkwX1AjdawokRx9reOccHFr4": {
    "name": "Brooklyn Heights Promenade",
    "country": "United States",
    "lat": 40.6993,
-   "lon": -73.9965
+   "lon": -73.9965,
+   "kind": "highway/footway/road",
+   "in": "New York"
   },
   "ChIJlfCemC71pRIRkn_qeNc-yQc": {
    "name": "Andorra",
    "country": "Andorra",
    "lat": 42.5407,
-   "lon": 1.5732
+   "lon": 1.5732,
+   "kind": "boundary/administrative/country",
+   "in": "Encamp"
   },
   "ChIJmcj9QppiGWAR36TzFsn8oaY": {
    "name": "Mount Fuji",
    "country": "Japan",
    "lat": 35.3628,
-   "lon": 138.7308
+   "lon": 138.7308,
+   "kind": "natural/volcano/volcano",
+   "in": null
   },
   "ChIJmxVaCN-GhYARYH--_Fayr7Q": {
    "name": "Presidio of San Francisco",
    "country": "United States",
    "lat": 37.7988,
-   "lon": -122.4646
+   "lon": -122.4646,
+   "kind": "leisure/park/park",
+   "in": "San Francisco"
   },
   "ChIJn3mr4vz9KUkRzSjDFQqN-Cc": {
    "name": "Keflavík International Airport",
    "country": "Iceland",
    "lat": 63.985,
-   "lon": -22.6267
+   "lon": -22.6267,
+   "kind": "aeroway/aerodrome/aeroway",
+   "in": null
   },
   "ChIJnRnfJuFVWBQReFbaL53PpiQ": {
    "name": "6th of October City",
    "country": "Egypt",
    "lat": 29.9723,
-   "lon": 30.9409
+   "lon": 30.9409,
+   "kind": "place/city/city",
+   "in": "6th of October"
   },
   "ChIJnW3AxmYwWkgRWE8jKMplH7s": {
    "name": "Ballynahinch",
    "country": "Ireland",
    "lat": 53.4637,
-   "lon": -9.8757
+   "lon": -9.8757,
+   "kind": "boundary/administrative/locality",
+   "in": "Conamara Municipal District"
   },
   "ChIJodfzqotTpEARfIulcRyUJ1c": {
    "name": "Varna",
    "country": "Bulgaria",
    "lat": 43.2074,
-   "lon": 27.9167
+   "lon": 27.9167,
+   "kind": "boundary/administrative/city",
+   "in": "Varna"
   },
   "ChIJpX9B9TZm0FQRjl87lWYyzzY": {
    "name": "Redwood National and State Parks",
    "country": "United States",
    "lat": 41.4614,
-   "lon": -124.0481
+   "lon": -124.0481,
+   "kind": "leisure/nature_reserve/nature_reserve",
+   "in": null
   },
   "ChIJp_qQIudSBQ0RWv9KSdTCc40": {
    "name": "Faro",
    "country": "Portugal",
    "lat": 37.0163,
-   "lon": -7.9352
+   "lon": -7.9352,
+   "kind": "boundary/administrative/city",
+   "in": "Faro"
   },
   "ChIJpaKajKUVVBMRICCHYMKI7bI": {
    "name": "Skopje",
    "country": "North Macedonia",
    "lat": 41.9962,
-   "lon": 21.4319
+   "lon": 21.4319,
+   "kind": "boundary/administrative/city",
+   "in": "Skopje"
   },
   "ChIJq7AxKlm2t4kRxP4vssfa3qE": {
    "name": "Rosslyn",
    "country": "United States",
    "lat": 38.896,
-   "lon": -77.0709
+   "lon": -77.0709,
+   "kind": "railway/station/railway",
+   "in": "Arlington"
   },
   "ChIJra6o8IHuBUgRMO0NHlI3DQQ": {
    "name": "Nantes",
    "country": "France",
    "lat": 47.2186,
-   "lon": -1.5541
+   "lon": -1.5541,
+   "kind": "boundary/administrative/city",
+   "in": "Nantes"
   },
   "ChIJrdbSgKZWKhMRAyrH7xd51ZM": {
    "name": "Florence",
    "country": "Italy",
    "lat": 43.7698,
-   "lon": 11.2556
+   "lon": 11.2556,
+   "kind": "boundary/administrative/city",
+   "in": "Florence"
   },
   "ChIJsT7j-Ik1Q0gRUJcxl6nHAAo": {
    "name": "Cahir",
    "country": "Ireland",
    "lat": 52.375,
-   "lon": -7.9242
+   "lon": -7.9242,
+   "kind": "place/town/town",
+   "in": "The Municipal District of Cahir — Cashel"
   },
   "ChIJu0D9046AhYARurZMmbXZQf4": {
    "name": "Union Square",
    "country": "United States",
    "lat": 37.7875,
-   "lon": -122.4072
+   "lon": -122.4072,
+   "kind": "place/neighbourhood/neighbourhood",
+   "in": "San Francisco"
   },
   "ChIJu2-DAeeLGGARUZipC7OFRmA": {
    "name": "Ginza",
    "country": "Japan",
    "lat": 35.6728,
-   "lon": 139.7631
+   "lon": 139.7631,
+   "kind": "railway/stop/railway",
+   "in": "Chuo"
   },
   "ChIJu8GPxZu_Tg0R9Q2OuDvLsNk": {
    "name": "Santoña",
    "country": "Spain",
    "lat": 43.4449,
-   "lon": -3.4554
+   "lon": -3.4554,
+   "kind": "boundary/administrative/town",
+   "in": "Santoña"
   },
   "ChIJuRMYfoNhsUcRoDrWe_I9JgQ": {
    "name": "Hamburg",
    "country": "Germany",
    "lat": 53.5502,
-   "lon": 10.0013
+   "lon": 10.0013,
+   "kind": "boundary/administrative/city",
+   "in": "Hamburg"
   },
   "ChIJuYlLZidOTg0RRaaVHsSsNGU": {
    "name": "Bilbao",
    "country": "Spain",
    "lat": 43.263,
-   "lon": -2.935
+   "lon": -2.935,
+   "kind": "boundary/administrative/city",
+   "in": "Bilbao"
   },
   "ChIJv3lSBAe_woAR5Pq9l2eaevY": {
    "name": "Hollywood",
    "country": "United States",
    "lat": 34.098,
-   "lon": -118.3295
+   "lon": -118.3295,
+   "kind": "place/suburb/suburb",
+   "in": "Los Angeles"
   },
   "ChIJv4q11MLpD0cR9eAFwq5WCbc": {
    "name": "Wrocław",
    "country": "Poland",
    "lat": 51.109,
-   "lon": 17.0327
+   "lon": 17.0327,
+   "kind": "boundary/administrative/city",
+   "in": "Wrocław"
   },
   "ChIJvT-116N6WkcR5H4X8lxkuB0": {
    "name": "Belgrade",
    "country": "Serbia",
    "lat": 44.8153,
-   "lon": 20.4457
+   "lon": 20.4457,
+   "kind": "boundary/administrative/city",
+   "in": "Belgrade"
   },
   "ChIJvUxw7nfchEcRfOtXZBETEL4": {
    "name": "Flims Dorf",
    "country": "Switzerland",
    "lat": 46.8368,
-   "lon": 9.2875
+   "lon": 9.2875,
+   "kind": "information/guidepost/information",
+   "in": null
   },
   "ChIJvxZW35mUkkYRcGL8GG2zAAQ": {
    "name": "Tallinn",
    "country": "Estonia",
    "lat": 59.4372,
-   "lon": 24.7573
+   "lon": 24.7573,
+   "kind": "boundary/administrative/city",
+   "in": "Tallinn"
   },
   "ChIJvypWkWV2wYgR0E7HW9MTLvc": {
    "name": "Florida",
    "country": "United States",
-   "lat": 26.1223,
-   "lon": -80.1434
+   "lat": 27.7568,
+   "lon": -81.464,
+   "kind": "?",
+   "in": "Fort Lauderdale"
   },
   "ChIJw-3c7rl01kgRcWDSMKIskew": {
    "name": "Reykjavík",
    "country": "Iceland",
    "lat": 64.146,
-   "lon": -21.9422
+   "lon": -21.9422,
+   "kind": "boundary/administrative/city",
+   "in": "Reykjavik"
   },
   "ChIJwQyneMU3AWARIiZJubDZ_ko": {
    "name": "Nara",
    "country": "Japan",
    "lat": 34.6845,
-   "lon": 135.8048
+   "lon": 135.8048,
+   "kind": "boundary/administrative/city",
+   "in": "Nara"
   },
   "ChIJwcVQH4drpw0RawcIdO1GyXo": {
    "name": "Rabat",
    "country": "Morocco",
    "lat": 34.0218,
-   "lon": -6.8409
+   "lon": -6.8409,
+   "kind": "boundary/administrative/city",
+   "in": "RABAT"
   },
   "ChIJx8qLPN9RqEcRB2gSnmw5bJM": {
    "name": "Museum Island",
    "country": "Germany",
    "lat": 52.52,
-   "lon": 13.3978
+   "lon": 13.3978,
+   "kind": "tourism/attraction/tourism",
+   "in": "Berlin"
   },
   "ChIJy1nElfLpLBMRkIO6_AubBwM": {
    "name": "Rimini",
    "country": "Italy",
    "lat": 44.0594,
-   "lon": 12.5684
+   "lon": 12.5684,
+   "kind": "?",
+   "in": "Rimini"
   },
   "ChIJy7cGfBlawokR5l2e93hsoEA": {
    "name": "One World Trade Center",
    "country": "United States",
    "lat": 40.713,
-   "lon": -74.0132
+   "lon": -74.0132,
+   "kind": "building/commercial/building",
+   "in": "New York"
   },
   "ChIJy9RVLPiJGGARuRAgHSGL_nk": {
    "name": "Odaiba",
    "country": "Japan",
    "lat": 35.6275,
-   "lon": 139.7715
+   "lon": 139.7715,
+   "kind": "tourism/attraction/tourism",
+   "in": "Minato"
   },
   "ChIJybZFr3Sl1kgRARZBC9tHYyw": {
    "name": "Gullfoss Falls",
    "country": "Iceland",
    "lat": 64.3266,
-   "lon": -20.1217
+   "lon": -20.1217,
+   "kind": "waterway/waterfall/waterfall",
+   "in": null
   },
   "ChIJyyAmmIo1Q0gR84N09SlFDrU": {
    "name": "Cahir Castle",
    "country": "Ireland",
    "lat": 52.3745,
-   "lon": -7.927
+   "lon": -7.927,
+   "kind": "historic/castle/historic",
+   "in": "The Municipal District of Cahir — Cashel"
   },
   "ChIJz8Fw9t9lkUcRZulsYT5-XeM": {
    "name": "Colmar",
    "country": "France",
    "lat": 48.0778,
-   "lon": 7.358
+   "lon": 7.358,
+   "kind": "boundary/administrative/town",
+   "in": "Colmar"
   },
   "ChIJzRRIXQdythIRUAWX_aUZCAQ": {
    "name": "Arles",
    "country": "France",
    "lat": 43.6776,
-   "lon": 4.631
+   "lon": 4.631,
+   "kind": "boundary/administrative/town",
+   "in": "Arles"
   },
   "ChIJzWRvDH6FfUgRkWGncrBS4gs": {
    "name": "Newcastle upon Tyne",
    "country": "England | UK",
    "lat": 54.9738,
-   "lon": -1.6132
+   "lon": -1.6132,
+   "kind": "boundary/administrative/city",
+   "in": "Newcastle upon Tyne"
   }
  }
 }
