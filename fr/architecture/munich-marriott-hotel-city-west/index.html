@@ -590,21 +590,18 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
   66%{opacity:1; transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .4)); animation-timing-function:ease-in}
   100%{opacity:0; transform:translate(calc(var(--x) * 1.5),160px) rotate(var(--r))}
 }
-/* Shuin: the app's splash in the tile, cropped to the globe, then the torii seal where the splash leaves it. As in
-   the app, light mode is on white with a white torii, dark mode on black with a black torii */
+/* Shuin: the app's launch splash in the tile, cropped to the globe, drawn on a canvas (assets/app.js), then the
+   torii seal pressed on as an ink print. The seal is the logo picture itself, above the canvas. As in the app, light
+   mode is on white with a white torii, dark mode on black with a black torii */
 .shuin-logo{position:relative}
-.logo.shuin-logo > img{width:100%; height:100%; transition:opacity .7s ease}
+.logo.shuin-logo > img{position:relative; z-index:1; width:100%; height:100%; transition:opacity .7s ease}
 .logo.shuin-logo > img.dark, html[data-theme="dark"] .logo.shuin-logo > img.light{display:none}
 html[data-theme="dark"] .logo.shuin-logo > img.dark{display:block}
 html[data-theme="dark"] .logo.shuin-logo, html[data-theme="dark"] .dex .logo.shuin-logo{background:#000}
-.shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; transition:opacity .7s ease; pointer-events:none; background:#fff}
+.shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; pointer-events:none; background:#fff}
 html[data-theme="dark"] .shuin-splash{background:#000}
-/* both copies of the splash play; the other theme's stays drawn but unseen, so it keeps in step */
-.logo .shuin-splash img.dark, html[data-theme="dark"] .logo .shuin-splash img.light{opacity:0}
-html[data-theme="dark"] .logo .shuin-splash img.dark{opacity:1}
-.logo .shuin-splash img{position:absolute; width:166.7%; height:178.6%; left:-33.3%; top:-33.3%; max-width:none; object-fit:fill}
+.shuin-splash canvas{position:absolute; inset:0; width:100%; height:100%}
 .shuin-logo.splashing .shuin-splash{opacity:1}
-.shuin-logo.splashing > img{opacity:0}
 @media (prefers-reduced-motion:reduce){ .bc-fall{transform:none} .anim-logo.play .bc-fall,.anim-logo.play .bc-ped,.anim-logo.play .bc-cols,.anim-logo.play .bc-chip{animation:none} .bc-ped{opacity:0} }
 /* Limericks: five lines written one after another, A A B B A; then they stay */
 .logo .lim-logo{width:78%; height:78%}
@@ -1599,6 +1596,7 @@ destined to guide.</script></section>
                     <p>Shuin est une application de voyage complète. Elle enregistre les lieux que vous visitez, la façon dont vous vous déplacez de l'un à l'autre, où vous logez et les dossiers photo de chaque voyage, puis anime vos itinéraires pour que vous puissiez les partager avec vos amis.</p>
                     <p>D'où que vous veniez, Shuin donne à chaque voyageur le même passeport, valable pour toujours.</p>
                     <p>Vous pouvez l’utiliser entièrement hors ligne et tout garder sur votre appareil, ou ajouter des amis et comparer vos voyages aux leurs dans des classements.</p>
+                    <div class="chips"><a class="chip" href="/apps/shuin/privacy/">Voir la politique de confidentialité</a><a class="chip" href="/apps/shuin/terms/">Voir les conditions d’utilisation</a></div>
                   </div>
                   <ul class="feats">
                     <li>Visites, transports et hébergements sur une même carte du monde</li>
@@ -1722,6 +1720,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=4b621db744"></script>
 <script>window.I18N={"lang":"fr","locale":"fr-FR","t":{"Hello.":"Bonjour.","Good morning.":"Bonjour.","Good afternoon.":"Bon après-midi.","Good evening.":"Bonsoir.","Click for the last line":"Cliquez pour le dernier vers","Tap for the last line":"Touchez pour le dernier vers","Open image: {c}":"Ouvrir l'image : {c}","Image to come":"Image à venir","The numbers are refreshed from the channel every day; last update {d}.":"Les chiffres sont actualisés chaque jour depuis la chaîne ; dernière mise à jour : {d}.","World map of {p} places documented in {c} countries":"Carte du monde de {p} lieux documentés dans {c} pays","Not documented yet":"Pas encore documenté","Go to playlist":"Voir la playlist","Watch a video":"Regarder une vidéo","The map could not be loaded. Please reload the page.":"La carte n'a pas pu être chargée. Veuillez recharger la page.","England | UK":"Angleterre | R.-U.","Scotland | UK":"Écosse | R.-U.","Wales | UK":"Pays de Galles | R.-U.","Northern Ireland | UK":"Irlande du Nord | R.-U.","Gibraltar | UK":"Gibraltar | R.-U.","6th of October City":"Ville du 6-Octobre","Alexandria":"Alexandria","Algeciras":"Algésiras","Almada":"Almada","Andorra":"Andorre","Andorra la Vella":"Andorre-la-Vieille","Arles":"Arles","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelone","Basel":"Bâle","Belgrade":"Belgrade","Berlin":"Berlin","Bern":"Berne","Bilbao":"Bilbao","Bucharest":"Bucarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Cologne","Cottbus":"Cottbus","Cyprus":"Chypre","Dessau":"Dessau","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Édimbourg","Famagusta":"Famagouste","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florence","Florida":"Floride","Fort Lauderdale":"Fort Lauderdale","France":"France","Galway":"Galway","Geneva":"Genève","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss Falls":"Chutes de Gullfoss","Hamburg":"Hambourg","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Islande","Keflavík International Airport":"Aéroport international de Keflavík","Kraków":"Cracovie","Kyoto":"Kyoto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lisbonne","London":"Londres","Los Angeles":"Los Angeles","Lucerne":"Lucerne","Luxembourg":"Luxembourg","Malibu":"Malibu","Marrakesh":"Marrakech","Marseille":"Marseille","Miami":"Miami","Milan":"Milan","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Mont Fuji","Mulhouse":"Mulhouse","Munich":"Munich","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nicosie","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Parcs national et d'État de Redwood","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"Saint-Marin","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Siwa Oasis":"Oasis de Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Thingvellir National Park":"Parc national de Þingvellir","Tokyo":"Tokyo","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Wrocław","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zurich"},"plurals":{"place":{"one":"{n} lieu","many":"{n} de lieux","other":"{n} lieux"},"video":{"one":"{n} vidéo","many":"{n} de vidéos","other":"{n} vidéos"}}}</script>
-<script src="/assets/app.js?v=50aed76af1"></script>
+<script src="/assets/app.js?v=1a8fdd7532"></script>
 </body>
 </html>
