@@ -590,21 +590,18 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
   66%{opacity:1; transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .4)); animation-timing-function:ease-in}
   100%{opacity:0; transform:translate(calc(var(--x) * 1.5),160px) rotate(var(--r))}
 }
-/* Shuin: the app's splash in the tile, cropped to the globe, then the torii seal where the splash leaves it. As in
-   the app, light mode is on white with a white torii, dark mode on black with a black torii */
+/* Shuin: the app's launch splash in the tile, cropped to the globe, drawn on a canvas (assets/app.js), then the
+   torii seal pressed on as an ink print. The seal is the logo picture itself, above the canvas. As in the app, light
+   mode is on white with a white torii, dark mode on black with a black torii */
 .shuin-logo{position:relative}
-.logo.shuin-logo > img{width:100%; height:100%; transition:opacity .7s ease}
+.logo.shuin-logo > img{position:relative; z-index:1; width:100%; height:100%; transition:opacity .7s ease}
 .logo.shuin-logo > img.dark, html[data-theme="dark"] .logo.shuin-logo > img.light{display:none}
 html[data-theme="dark"] .logo.shuin-logo > img.dark{display:block}
 html[data-theme="dark"] .logo.shuin-logo, html[data-theme="dark"] .dex .logo.shuin-logo{background:#000}
-.shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; transition:opacity .7s ease; pointer-events:none; background:#fff}
+.shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; pointer-events:none; background:#fff}
 html[data-theme="dark"] .shuin-splash{background:#000}
-/* both copies of the splash play; the other theme's stays drawn but unseen, so it keeps in step */
-.logo .shuin-splash img.dark, html[data-theme="dark"] .logo .shuin-splash img.light{opacity:0}
-html[data-theme="dark"] .logo .shuin-splash img.dark{opacity:1}
-.logo .shuin-splash img{position:absolute; width:166.7%; height:178.6%; left:-33.3%; top:-33.3%; max-width:none; object-fit:fill}
+.shuin-splash canvas{position:absolute; inset:0; width:100%; height:100%}
 .shuin-logo.splashing .shuin-splash{opacity:1}
-.shuin-logo.splashing > img{opacity:0}
 @media (prefers-reduced-motion:reduce){ .bc-fall{transform:none} .anim-logo.play .bc-fall,.anim-logo.play .bc-ped,.anim-logo.play .bc-cols,.anim-logo.play .bc-chip{animation:none} .bc-ped{opacity:0} }
 /* Limericks: five lines written one after another, A A B B A; then they stay */
 .logo .lim-logo{width:78%; height:78%}
@@ -1599,6 +1596,7 @@ destined to guide.</script></section>
                     <p>Shuin is a complete travel app. It records the places you visit, how you travel between them, where you stay and the photo folders of every trip, then animates your journeys so you can share them with friends.</p>
                     <p>Wherever you come from, Shuin gives every traveller the same passport, valid forever.</p>
                     <p>You can use it entirely offline and keep everything on your device, or add friends and compare your travels with theirs in leaderboards.</p>
+                    <div class="chips"><a class="chip" href="/apps/shuin/privacy/">View Privacy Policy</a><a class="chip" href="/apps/shuin/terms/">View Terms of Use</a></div>
                   </div>
                   <ul class="feats">
                     <li>Visits, transport and stays on one world map</li>
@@ -1721,6 +1719,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=4b621db744"></script>
-<script src="/assets/app.js?v=50aed76af1"></script>
+<script src="/assets/app.js?v=1a8fdd7532"></script>
 </body>
 </html>
