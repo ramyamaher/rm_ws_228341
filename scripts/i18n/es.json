@@ -526,7 +526,8 @@
   "View Privacy Policy": "Ver la política de privacidad",
   "Record and Leave": "Escribe y sigue tu camino",
   "Most apps are built to keep you on your phone. I wanted a diary that does the opposite: you write a few lines, add a photo, a place or a voice note, and you leave. Each day holds only three photos, so you keep the moments that matter instead of everything. Your memories are nobody's business, so the diary is always encrypted and stays on your own devices. If you like, an encrypted copy can also be saved in your own iCloud Drive or Google Drive.": "La mayoría de las apps están hechas para tenerte pegado al teléfono. Yo quería un diario que hiciera lo contrario: escribes unas líneas, añades una foto, un lugar o una nota de voz, y te vas. Cada día guarda solo tres fotos, para que conserves los momentos que importan en lugar de todo. Tus recuerdos no son asunto de nadie, así que el diario siempre está cifrado y se queda en tus propios dispositivos. Si quieres, también puedes guardar una copia cifrada en tu propio iCloud Drive o Google Drive.",
-  "It works on iPhone, Android and in the browser, in English, French, German and Spanish.": "Funciona en iPhone, Android y en el navegador, en inglés, francés, alemán y español."
+  "It works on iPhone, Android and in the browser, in English, French, German and Spanish.": "Funciona en iPhone, Android y en el navegador, en inglés, francés, alemán y español.",
+  "There are no accounts and no servers; your data stays on your device and backups are encrypted. It is an educational tool, not financial advice.": "No hay cuentas ni servidores; tus datos se quedan en tu dispositivo y las copias de seguridad están cifradas. Es una herramienta educativa, no asesoramiento financiero."
  },
  "plurals": {
   "place": {
