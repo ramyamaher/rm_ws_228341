@@ -414,6 +414,14 @@ html[data-theme="dark"] .gd-tile .gd-logo{--logo-ink:#f2f2f2; --gir-ink:#232323;
 .logo .gb-logo{width:80%; height:80%}
 .logo .ntr-logo{width:80%; height:80%}
 .logo .mm-logo{width:80%; height:80%}
+.mm-logo{mix-blend-mode:normal}
+/* Munich Marriott Hotel City West: first only the long block, then the four masses rise onto it, one after another */
+.mm-logo .mm-mass{transform-box:fill-box; transform-origin:50% 100%; transform:scaleY(0); opacity:0}
+.mm-logo.play .mm-mass{transform:none; opacity:1; animation:mmRise .6s cubic-bezier(.3,.7,.3,1) both}
+.mm-logo.play .mm-m1{animation-delay:.6s} .mm-logo.play .mm-m2{animation-delay:.85s} .mm-logo.play .mm-m3{animation-delay:1.1s} .mm-logo.play .mm-m4{animation-delay:1.35s}
+.dex-still .mm-logo .mm-mass{transform:none; opacity:1; animation:none}
+@keyframes mmRise{from{transform:scaleY(0); opacity:0} 30%{opacity:1} to{transform:scaleY(1); opacity:1}}
+@media (prefers-reduced-motion:reduce){ .mm-logo .mm-mass, .mm-logo.play .mm-mass{transform:none; opacity:1; animation:none} }
 /* Neues Technisches Rathaus: the tower starts as high as the low block beside it, then stretches up to its full height */
 .ntr-logo .ntr-tower{transform-box:fill-box; transform-origin:50% 100%; transform:scaleY(.35)}   /* waits as high as the block */
 .ntr-logo.play .ntr-tower{transform:none; animation:ntrRise 1.6s cubic-bezier(.45,0,.25,1) .5s both}
@@ -1166,7 +1174,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <span class="logo"><svg class="p-logo m20-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 -14 730 199" role="img" aria-label="Logo du Musée du XXe siècle : le contour de son élévation"><polygon class="m20-body jelly" fill="currentColor" points="0,80 365,0 730,80 730,185 0,185"/></svg></span>
                     <div>
                     <h2>Musée du XXe siècle, berlin modern</h2>
-                    <p class="p-meta">Berlin, Allemagne <i></i> Herzog &amp; de Meuron <i></i> Concours remporté en 2016, en construction</p>
+                    <p class="p-meta">Berlin, Allemagne <i></i> Herzog &amp; de Meuron <i></i> 2019–2021 <i></i> Concours remporté en 2016, en construction</p>
                     </div>
                   </div>
                 <div class="p-body">
@@ -1189,7 +1197,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <span class="logo"><svg class="p-logo zs-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 26 200 56" role="img" aria-label="Logo de la Zweite Stammstrecke : un ICE entrant en gare"><line x1="0" y1="77" x2="200" y2="77" stroke="rgb(190,190,190)" stroke-width="3"/><g class="zs-t1"><path fill="rgb(35,35,35)" d="M-154 71 Q-164 71 -164 61 C-164 47 -134 37 -96 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g><g class="zs-t2"><path fill="rgb(35,35,35)" d="M-154 71 Q-164 71 -164 61 C-164 47 -134 37 -96 37 L128 37 C166 37 196 47 196 61 Q196 71 186 71 Z"/></g></svg></span>
                   <div>
                     <h2>Zweite Stammstrecke München</h2>
-                    <p class="p-meta">Munich, Allemagne <i></i> Atelier 4d Architekten <i></i> Gares de Hauptbahnhof, Marienhof et Ostbahnhof</p>
+                    <p class="p-meta">Munich, Allemagne <i></i> Atelier 4d Architekten <i></i> 2022–2023 <i></i> Gares de Hauptbahnhof, Marienhof et Ostbahnhof</p>
                   </div>
                 </div>
                 <div class="p-body">
@@ -1237,7 +1245,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <span class="logo"><svg class="p-logo ntr-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 4 100 90" role="img" aria-label="Logo du Neues Technisches Rathaus : la tour qui s’élève du long bâtiment bas"><path fill="rgb(35,35,35)" fill-rule="evenodd" d="M6 62 L57 62 L57 90 L6 90 Z M12 68 L15 68 L15 84 L12 84 Z M21 68 L24 68 L24 84 L21 84 Z M30 68 L33 68 L33 84 L30 84 Z M39 68 L42 68 L42 84 L39 84 Z M48 68 L51 68 L51 84 L48 84 Z"/><path class="ntr-tower" fill="rgb(35,35,35)" fill-rule="evenodd" d="M56 10 L90 10 L90 90 L56 90 Z M61 16 L64 16 L64 84 L61 84 Z M69 16 L72 16 L72 84 L69 84 Z M77 16 L80 16 L80 84 L77 84 Z M85 16 L86.5 16 L86.5 84 L85 84 Z"/></svg></span>
                   <div>
                     <h2>Neues Technisches Rathaus</h2>
-                    <p class="p-meta">Mannheim, Allemagne <i></i> ATP architects engineers <i></i> Achevé en 2020</p>
+                    <p class="p-meta">Mannheim, Allemagne <i></i> ATP architects engineers <i></i> 2017–2018 <i></i> Achevé en 2020</p>
                   </div>
                 </div>
                 <div class="p-body">
@@ -1246,7 +1254,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p>Une tour de treize étages s’élève d’un long bâtiment bas, sur l’un des grands axes de circulation de la ville. Derrière des façades vitrées cadrées d’or se trouvent des bureaux, des salles de réunion, un restaurant du personnel et une crèche d’entreprise, dans un bâtiment pensé pour être ouvert aux citoyens qu’il sert. Il répond au standard KfW Efficiency House 55 et économise environ 157 tonnes de CO2 par an. Chez ATP, j’ai travaillé dans l’équipe d’exécution sur les plans d’exécution.</p>
                   </div>
                   <dl class="facts">
-                    <div><dt>Rôle</dt><dd>Architecte dans l’équipe d’exécution, 2017–2018</dd></div>
+                    <div><dt>Rôle</dt><dd>Architecte dans l’équipe d’exécution</dd></div>
                     <div><dt>Périmètre</dt><dd>Plans d’exécution (LPH 5)</dd></div>
                     <div><dt>Maître d'ouvrage</dt><dd>GBG Mannheim</dd></div>
                     <div><dt>Design</dt><dd>schneider + schumacher, Francfort</dd></div>
@@ -1260,10 +1268,10 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide project">
                 <div class="p-head has-logo">
-                  <span class="logo"><svg class="p-logo mm-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 14 100 82" role="img" aria-label="Logo du Munich Marriott Hotel City West : le bâtiment d’angle sur ses poteaux, les ailes qui s’échelonnent derrière"><g class="jelly" fill="rgb(35,35,35)"><path fill-rule="evenodd" d="M6 40 L36 40 L36 24 L60 24 L60 30 L78 30 L78 36 L94 36 L94 88 L36 88 L36 76 L6 76 Z M10.0 46 L12.2 46 L12.2 70 L10.0 70 Z M15.4 46 L17.6 46 L17.6 70 L15.4 70 Z M20.8 46 L23.0 46 L23.0 70 L20.8 70 Z M26.2 46 L28.4 46 L28.4 70 L26.2 70 Z M31.6 46 L33.8 46 L33.8 70 L31.6 70 Z M40.0 30 L42.2 30 L42.2 68 L40.0 68 Z M45.2 30 L47.4 30 L47.4 68 L45.2 68 Z M50.4 30 L52.6 30 L52.6 68 L50.4 68 Z M55.6 30 L57.8 30 L57.8 68 L55.6 68 Z M63.0 36 L65.2 36 L65.2 68 L63.0 68 Z M68.0 36 L70.2 36 L70.2 68 L68.0 68 Z M73.0 36 L75.2 36 L75.2 68 L73.0 68 Z M81.0 42 L83.2 42 L83.2 68 L81.0 68 Z M86.2 42 L88.4 42 L88.4 68 L86.2 68 Z M38 74 L94 74 L94 76 L38 76 Z"/><path d="M7 76 L10 76 L10 90 L7 90 Z M16 76 L19 76 L19 90 L16 90 Z M24 76 L27 76 L27 90 L24 90 Z M32 76 L35 76 L35 90 L32 90 Z"/></g></svg></span>
+                  <span class="logo"><svg class="p-logo mm-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 100 64" role="img" aria-label="Logo du Munich Marriott Hotel City West : quatre volumes posés sur un long socle"><g class="mm-block"><path fill="rgb(120,120,120)" d="M4 64 L78 64 L94 55 L20 55 Z"/><path fill="rgb(75,75,75)" d="M78 64 L94 55 L94 75 L78 84 Z"/><path fill="rgb(35,35,35)" d="M4 64 L78 64 L78 84 L4 84 Z"/></g><g class="mm-mass mm-m1"><path fill="rgb(120,120,120)" d="M7 42 L22 42 L32 36.5 L17 36.5 Z"/><path fill="rgb(75,75,75)" d="M22 42 L32 36.5 L32 56.5 L22 62 Z"/><path fill="rgb(35,35,35)" d="M7 42 L22 42 L22 62 L7 62 Z"/></g><g class="mm-mass mm-m2"><path fill="rgb(120,120,120)" d="M25 36 L40 36 L50 30.5 L35 30.5 Z"/><path fill="rgb(75,75,75)" d="M40 36 L50 30.5 L50 56.5 L40 62 Z"/><path fill="rgb(35,35,35)" d="M25 36 L40 36 L40 62 L25 62 Z"/></g><g class="mm-mass mm-m3"><path fill="rgb(120,120,120)" d="M43 38 L58 38 L68 32.5 L53 32.5 Z"/><path fill="rgb(75,75,75)" d="M58 38 L68 32.5 L68 56.5 L58 62 Z"/><path fill="rgb(35,35,35)" d="M43 38 L58 38 L58 62 L43 62 Z"/></g><g class="mm-mass mm-m4"><path fill="rgb(120,120,120)" d="M61 40 L76 40 L86 34.5 L71 34.5 Z"/><path fill="rgb(75,75,75)" d="M76 40 L86 34.5 L86 56.5 L76 62 Z"/><path fill="rgb(35,35,35)" d="M61 40 L76 40 L76 62 L61 62 Z"/></g></svg></span>
                   <div>
                     <h2>Munich Marriott Hotel City West</h2>
-                    <p class="p-meta">Munich, Allemagne <i></i> ATP architects engineers <i></i> Ouvert en 2023</p>
+                    <p class="p-meta">Munich, Allemagne <i></i> ATP architects engineers <i></i> 2017–2018 <i></i> Ouvert en 2023</p>
                   </div>
                 </div>
                 <div class="p-body">
@@ -1272,7 +1280,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p>L’un des plus grands défis était l’isolation acoustique : l’hôtel se trouve juste à côté des voies de la Deutsche Bahn. De ce côté, les chambres ont des doubles fenêtres à triple vitrage, si bien qu’elles restent calmes au passage des trains. Chez ATP, j’ai travaillé de la conception aux plans d’exécution, en coordination avec Studio Lux, les architectes d’intérieur, et les ingénieurs des installations techniques (CVC et sanitaire, HKLS en allemand).</p>
                   </div>
                   <dl class="facts">
-                    <div><dt>Rôle</dt><dd>Architecte, 2017–2018</dd></div>
+                    <div><dt>Rôle</dt><dd>Architecte</dd></div>
                     <div><dt>Périmètre</dt><dd>De la conception aux plans d’exécution (LPH 3–5)</dd></div>
                     <div><dt>Propriétaire</dt><dd>Fonds gérés par EuroAtlantic Group</dd></div>
                     <div><dt>Exploitant</dt><dd>Marriott International</dd></div>
@@ -1280,7 +1288,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <div><dt>Images</dt><dd>© Marriott International</dd></div>
                   </dl>
                 </div>
-                <div class="thumbs" data-imgs="mm-001|L’hôtel sur la Landsberger Straße, à côté des voies ferrées;mm-002|Au coucher du soleil, avec la terrasse sur le toit (rendu);mm-003|Les façades éclairées au crépuscule"></div>
+                <div class="thumbs" data-imgs="mm-001|L’hôtel sur la Landsberger Straße, à côté des voies ferrées;mm-002|Au coucher du soleil, avec la terrasse sur le toit (rendu);mm-003|Les façades éclairées au crépuscule;mm-004|Une chambre signée Studio Lux;mm-005|Le bureau près de la fenêtre;mm-006|Une suite;mm-007|Le salon M Club sous la verrière"></div>
                 <div class="chips"><a class="chip" href="https://www.marriott.com/en-us/hotels/mucwe-munich-marriott-hotel-city-west/overview/" target="_blank" rel="noopener">L’hôtel sur le site de Marriott</a></div>
               </article>
 
