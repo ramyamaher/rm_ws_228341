@@ -24,7 +24,7 @@ const NAME = { en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', ar
 // Each project's own address: the tab it is in and its position there. Revitesse has no page
 // of its own on purpose: revitesse.com is its page.
 const PROJECTS = [
-  ['architecture', 0, 'berlin-modern'], ['architecture', 1, 'zweite-stammstrecke'], ['architecture', 2, 'wohnpark-gebersdorf'], ['architecture', 3, 'neues-technisches-rathaus'],
+  ['architecture', 0, 'berlin-modern'], ['architecture', 1, 'zweite-stammstrecke'], ['architecture', 2, 'wohnpark-gebersdorf'], ['architecture', 3, 'neues-technisches-rathaus'], ['architecture', 4, 'munich-marriott-hotel-city-west'],
   ['design', 0, 'layers-of-egypt'], ['design', 1, 'extended-threads'], ['design', 2, 'building-8-motion-furniture'], ['design', 3, 'bespoke-spiral-staircase-berlin'],
   ['writing', 0, 'limericks-contest'],
   ['apps', 0, 'shuin'], ['apps', 2, 'bancanca'], ['apps', 3, 'giraffe-diary'], ['apps', 4, 'realstage'],
