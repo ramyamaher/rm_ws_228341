@@ -503,7 +503,26 @@
   "The labyrinth opens into the white room. A long table carries a model of all of Cairo, with one area left undeveloped, and VR headsets beside it. The bright white and the table, reminiscent of an operating theatre in a hospital, as if in a state of limbo, stand for hope for Cairo's future, bringing the city's glorious past back to life.": "Le labyrinthe s'ouvre sur la salle blanche. Une longue table porte une maquette de tout Le Caire, où une zone reste non bâtie, avec des casques de réalité virtuelle à côté. Le blanc lumineux et la table, qui rappellent une salle d'opération d'hôpital, comme dans un état de suspension, disent l'espoir pour l'avenir du Caire et ramènent à la vie le passé glorieux de la ville.",
   "The empty area, built in virtual reality in three stages: the vernacular city with more open space and parks, growth along the main axes with the tallest buildings on them, and a business district of towers. The model above builds it as you move the slider.": "La zone vide, construite en réalité virtuelle en trois étapes : la ville vernaculaire avec plus d'espaces libres et de parcs, la croissance le long des axes principaux avec les bâtiments les plus hauts sur ceux-ci, et un quartier d'affaires de tours. La maquette ci-dessus la construit quand vous déplacez le curseur.",
   "Stage 1[[0]]The vernacular city: low houses are scattered at random and turned every way, as in Cairo's informal districts, and open lots are left free as parks.[[1]][[2]][[3]]Stage 2[[4]]Growth along the axes: the plots follow the main axes and the ring around the park; buildings are tallest on the axes and step down away from them.[[5]][[6]][[7]]Stage 3[[8]]The business district: a grid of plots around round parks, where towers rise in clusters among lower blocks.": "Étape 1[[0]]La ville vernaculaire : des maisons basses sont dispersées au hasard et tournées dans tous les sens, comme dans les quartiers informels du Caire, et des parcelles restent libres pour des parcs.[[1]][[2]][[3]]Étape 2[[4]]La croissance le long des axes : les parcelles suivent les axes principaux et l'anneau autour du parc ; les bâtiments sont les plus hauts sur les axes et s'abaissent en s'en éloignant.[[5]][[6]][[7]]Étape 3[[8]]Le quartier d'affaires : une trame de parcelles autour de parcs ronds, où des tours s'élèvent en groupes parmi des îlots plus bas.",
-  "The entry's buildings, taken from the competition model, with the existing city around them.": "Les bâtiments du projet, tirés du modèle du concours, avec la ville existante autour."
+  "The entry's buildings, taken from the competition model, with the existing city around them.": "Les bâtiments du projet, tirés du modèle du concours, avec la ville existante autour.",
+  "Giraffe Diary": "Giraffe Diary",
+  "Record and leave.": "Écrire, puis passer à autre chose.",
+  "Giraffe Diary is a calm, private diary. Write a few lines, add a photo, a place or a voice note, and put the phone away: the day is saved.": "Giraffe Diary est un journal calme et privé. Écrivez quelques lignes, ajoutez une photo, un lieu ou une note vocale, puis rangez le téléphone : la journée est enregistrée.",
+  "Your diary is always encrypted and stays yours. There are no accounts and no servers; it lives on your device, with an optional copy in your own iCloud Drive or Google Drive.": "Votre journal est toujours chiffré et reste à vous. Pas de compte, pas de serveur : il vit sur votre appareil, avec si vous le souhaitez une copie dans votre propre iCloud Drive ou Google Drive.",
+  "It works on iPhone, Android, Mac and in the browser, in English, French, German and Spanish.": "Il fonctionne sur iPhone, Android, Mac et dans le navigateur, en anglais, français, allemand et espagnol.",
+  "Days by year, month and week, or as a calendar": "Les jours par année, mois et semaine, ou en calendrier",
+  "Entries with times, colours and repeats": "Des entrées avec heures, couleurs et répétitions",
+  "Photos, places, drawings and voice notes": "Photos, lieux, dessins et notes vocales",
+  "Search with tags: Sara, beach, kids": "Recherche par mots-clés : Sara, plage, enfants",
+  "On This Day and upcoming events, also as widgets": "« Ce jour-là » et les événements à venir, aussi en widgets",
+  "Always encrypted, with a PIN and Face ID": "Toujours chiffré, avec un code PIN et Face ID",
+  "Light and dark, on every device": "Clair et sombre, sur chaque appareil",
+  "Giraffe Diary logo: a giraffe reading an open book": "Logo de Giraffe Diary : une girafe qui lit un livre ouvert",
+  "The diary, with sample days": "Le journal, avec des journées d’exemple",
+  "A day with entries, a place and photos": "Une journée avec des entrées, un lieu et des photos",
+  "The calendar": "Le calendrier",
+  "Search with tags": "Recherche par mots-clés",
+  "The start screen": "L’écran de démarrage",
+  "Searching for an entry": "La recherche d’une entrée"
  },
  "plurals": {
   "place": {
