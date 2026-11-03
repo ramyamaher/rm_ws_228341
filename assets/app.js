@@ -149,36 +149,147 @@ const rvBuild = (() => {
   };
 })();
 let ssFrames = null;
-// Shuin's tile plays the app's splash (a 1 MB SVG, fetched once per theme, the first time it is needed),
-// then fades to the torii seal. A fresh blob URL per play restarts the splash from its first frame. As an
-// image the SVG cannot see the page's theme, so the light and the dark copy play together, in step, and the
-// page's theme shows one of them: switching the theme mid-splash changes it at once
-const shuinSplash = {};
+// Shuin's tile plays the app's launch splash (the app's src/lib/splashGlobe.js), cropped to the globe: a dotted gold
+// globe turns at one steady speed, land dots turn red one by one as if visited, one journey's dashed routes draw and
+// fade, then the seal comes down and presses. The seal is the tile's own logo picture, turned as the splash leaves it,
+// so the splash ends on the logo. The dots and the journey (shuin-globe.json, 8 KB, written from the app's own scene)
+// are fetched the first time the tile plays; the colours follow the page's theme, live. It draws only while the tile
+// is on screen: a tile that leaves the screen stops at once and shows the seal
+let shuinGlobe = null;
+const SHUIN_COL = {
+  light: { dot: '#EAB308', stroke: '#CA8A04', city: '#EF4444', ring: '#FFFFFF', route: '#3B82F6' },
+  dark: { dot: '#C8A84B', stroke: '#9C7A34', city: '#EF4444', ring: '#9C7A34', route: '#A0A0B0' },
+};
+// the splash's clock, in seconds (the app's timeline); the tile shows the stage's square around the globe
+const SH = { RATE: 100, LIGHT_AT: 35, FIRST: -74, T_FIRST: .3, T_DROP: 2.58, T_PRESS: 2.88, OUT0: 2.32, OUT1: 2.52, LEG: .25, BOX: 266.06 };
+function shuinScene(G) {
+  const R = Math.PI / 180, D = G.dots, n = D.length / 2, u = new Float64Array(n * 4);
+  for (let i = 0; i < n; i++) { const lo = D[2 * i] / 4 * R, la = D[2 * i + 1] / 4 * R; u.set([Math.sin(lo), Math.cos(lo), Math.sin(la), Math.cos(la)], 4 * i); }
+  const vec = (i) => { const lo = D[2 * i] / 4 * R, la = D[2 * i + 1] / 4 * R; return [Math.cos(la) * Math.cos(lo), Math.cos(la) * Math.sin(lo), Math.sin(la)]; };
+  // each route a great circle in 28 steps, lifted a little off the globe in its middle
+  const legs = G.legs.map(([a, b, t]) => {
+    const A = vec(a), B = vec(b), w = Math.acos(Math.min(1, A[0] * B[0] + A[1] * B[1] + A[2] * B[2])), N = 28;
+    const pts = new Float64Array((N + 1) * 4), lift = new Float32Array(N + 1);
+    for (let i = 0; i <= N; i++) {
+      const f = i / N, s1 = Math.sin((1 - f) * w) / Math.sin(w), s2 = Math.sin(f * w) / Math.sin(w);
+      const x = A[0] * s1 + B[0] * s2, y = A[1] * s1 + B[1] * s2, z = A[2] * s1 + B[2] * s2;
+      const lo = Math.atan2(y, x), la = Math.asin(Math.max(-1, Math.min(1, z)));
+      pts.set([Math.sin(lo), Math.cos(lo), Math.sin(la), Math.cos(la)], i * 4);
+      lift[i] = 1 + .07 * (w / 1.2) * Math.sin(Math.PI * f);
+    }
+    return { pts, lift, N, t, a: 4 * a, b: 4 * b };
+  });
+  return { u, legs, visited: G.visited.map(([i, t]) => ({ i: 4 * i, t })) };
+}
+function shuinDraw(ctx, k, S, t, C) {
+  const clamp = (v) => v < 0 ? 0 : v > 1 ? 1 : v, seg = (a, b) => clamp((t - a) / (b - a)), eo = (p) => 1 - Math.pow(1 - p, 3);
+  const lon0 = (SH.FIRST - SH.LIGHT_AT + SH.RATE * (t - SH.T_FIRST)) * Math.PI / 180, lat0 = 20 * Math.PI / 180;
+  const V = { sl: Math.sin(lon0), cl: Math.cos(lon0), sp: Math.sin(lat0), cp: Math.cos(lat0) };
+  const proj = (a, i, o) => {
+    const sinL = a[i], cosL = a[i + 1], sinP = a[i + 2], cosP = a[i + 3], sd = sinL * V.cl - cosL * V.sl, cd = cosL * V.cl + sinL * V.sl;
+    o[0] = cosP * sd; o[1] = V.cp * sinP - V.sp * cosP * cd; o[2] = V.sp * sinP + V.cp * cosP * cd; return o;
+  };
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  const cx = 195, cy = 360, r = 122, h = SH.BOX / 2;
+  ctx.setTransform(k, 0, 0, k, -(cx - h) * k, -(cy - h) * k);
+  const ga = eo(seg(0, .4)) * (1 - seg(SH.T_PRESS - .14, SH.T_PRESS - .05));
+  if (ga <= 0) return;
+  const o = [0, 0, 0], P = [0, 0, 0], Q = [0, 0, 0];
+  ctx.globalAlpha = ga * .75; ctx.strokeStyle = C.stroke; ctx.lineWidth = 1.8;
+  ctx.beginPath(); ctx.arc(cx, cy, r + 4, 0, Math.PI * 2); ctx.stroke();
+  // the stipple: one gold dot per land point, smaller and fainter toward the rim
+  ctx.fillStyle = C.dot;
+  for (let i = 0; i < S.u.length; i += 4) {
+    proj(S.u, i, o); if (o[2] <= .02) continue;
+    ctx.globalAlpha = ga * (.3 + .7 * o[2]);
+    ctx.beginPath(); ctx.arc(cx + o[0] * r, cy - o[1] * r, .9 + 1.3 * o[2], 0, 6.2832); ctx.fill();
+  }
+  // the journey, dashed as the app's routes; every route has faded before the seal comes down
+  const out = 1 - seg(SH.OUT0, SH.OUT1);
+  if (out > 0) {
+    ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.setLineDash([6, 6]); ctx.strokeStyle = C.route;
+    for (const L of S.legs) {
+      if (t < L.t) continue;
+      proj(S.u, L.a, P); proj(S.u, L.b, Q);
+      const vis = clamp((Math.min(P[2], Q[2]) - .03) / .22); if (vis <= 0) continue;
+      const m = Math.round(L.N * eo(seg(L.t, L.t + SH.LEG)));
+      ctx.globalAlpha = ga * out * vis * .95; ctx.beginPath(); let pen = false;
+      for (let i = 0; i <= m; i++) {
+        proj(L.pts, i * 4, o); if (o[2] <= 0) { pen = false; continue; }
+        const X = cx + o[0] * r * L.lift[i], Y = cy - o[1] * r * L.lift[i];
+        if (pen) ctx.lineTo(X, Y); else { ctx.moveTo(X, Y); pen = true; }
+      }
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+  // visited dots: each turns red once, with a small pop and a soft ring, and stays red
+  for (const v of S.visited) {
+    if (t < v.t) continue;
+    proj(S.u, v.i, o); if (o[2] <= .04) continue;
+    const x = cx + o[0] * r, y = cy - o[1] * r, edge = clamp((o[2] - .04) / .25), p = seg(v.t, v.t + .42);
+    const sc = p < .45 ? eo(p / .45) * 1.45 : 1.45 + (1 - 1.45) * eo((p - .45) / .55);
+    if (p < 1) {
+      ctx.globalAlpha = ga * edge * .7 * (1 - p); ctx.strokeStyle = C.city; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(x, y, 4.5 + 15 * eo(p), 0, 7); ctx.stroke();
+    }
+    ctx.globalAlpha = ga * edge; ctx.fillStyle = C.city; ctx.strokeStyle = C.ring; ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.arc(x, y, 4 * sc * (.75 + .25 * o[2]), 0, 7); ctx.fill(); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+// the seal: fades out as the globe comes in, then comes down from above (larger, turned further, its shadow
+// tightening), a short firm squash and a small jolt, and it stays. s: tile pixels per stage pixel
+function shuinSeal(imgs, t, s) {
+  const clamp = (v) => v < 0 ? 0 : v > 1 ? 1 : v, seg = (a, b) => clamp((t - a) / (b - a));
+  const eo = (p) => 1 - Math.pow(1 - p, 3), ei = (p) => p * p * p, lerp = (a, b, p) => a + (b - a) * p;
+  let sc = 1, rot = 0, op, shd = 0;
+  if (t < SH.T_DROP - .06) op = 1 - eo(seg(0, .4));
+  else if (t < SH.T_PRESS) { const p = seg(SH.T_DROP, SH.T_PRESS), e = ei(p); sc = lerp(1.3, 1, e); rot = lerp(-7, 0, eo(p)); op = clamp((t - SH.T_DROP + .06) / .06); shd = 1 - e; }
+  else { sc = 1 - .028 * Math.sin(seg(SH.T_PRESS, SH.T_PRESS + .07) * Math.PI); op = 1; }
+  const j = seg(SH.T_PRESS, SH.T_PRESS + .12), jy = j > 0 && j < 1 ? Math.sin(j * Math.PI * 2.5) * (1 - j) * 1.6 * s : 0;
+  const tf = `translate(${(jy * .35).toFixed(2)}px, ${jy.toFixed(2)}px) scale(${sc.toFixed(4)}) rotate(${rot.toFixed(2)}deg)`;
+  const f = shd > .01 ? `drop-shadow(0 ${(shd * 24 * s).toFixed(2)}px ${((4 + shd * 14) * s).toFixed(2)}px rgba(0,0,0,${(.3 * shd * op).toFixed(3)}))` : 'none';
+  imgs.forEach((img) => { img.style.transition = 'none'; img.style.opacity = op.toFixed(3); img.style.transform = tf; img.style.filter = f; });
+}
 const PLAYERS = {
   shuin: {
     play(el, still) {
       if (still) return;
-      const box = el.querySelector('.shuin-splash');
       const run = ++el._run || (el._run = 1);
-      const themes = ['light', 'dark'];
-      themes.forEach(t => { shuinSplash[t] = shuinSplash[t] || fetch(`/assets/img/logos/shuin-splash${t === 'dark' ? '-dark' : ''}.svg`).then(r => r.blob()); });
-      Promise.all(themes.map(t => shuinSplash[t])).then(blobs => {
+      shuinGlobe = shuinGlobe || fetch('/assets/img/logos/shuin-globe.json').then((r) => r.json()).then(shuinScene);
+      shuinGlobe.then((S) => {
         if (run !== el._run || el.closest('[aria-hidden="true"]')) return;
-        const imgs = blobs.map((blob, i) => {
-          const img = new Image();
-          img.alt = ''; img.className = themes[i];
-          return img;
+        const box = el.querySelector('.shuin-splash'), size = box.clientWidth;
+        if (!size) return;
+        const cv = box.querySelector('canvas') || box.appendChild(document.createElement('canvas'));
+        const px = Math.round(size * Math.min(devicePixelRatio || 1, 3));
+        if (cv.width !== px) { cv.width = px; cv.height = px; }
+        const ctx = cv.getContext('2d'), imgs = [...el.querySelectorAll(':scope > img')];
+        // it starts once the tile is on screen (a tab or a slide may still be moving in), and ends if it leaves
+        let t0 = 0;
+        const io = new IntersectionObserver((es) => {
+          const on = es[es.length - 1].isIntersecting;
+          if (on && !t0) { t0 = performance.now(); el.classList.add('splashing'); el._raf = requestAnimationFrame(frame); } else if (!on && t0) end();
         });
-        // both start the moment they go into the tile, after both are ready
-        Promise.all(imgs.map((img, i) => new Promise(ok => { img.onload = img.onerror = ok; img.src = URL.createObjectURL(blobs[i]); }))).then(() => {
-          if (run !== el._run) return;
-          box.replaceChildren(...imgs);
-          el.classList.add('splashing');
-          el._t = setTimeout(() => { el.classList.remove('splashing'); imgs.forEach(img => URL.revokeObjectURL(img.src)); }, 8200);
-        });
+        const end = () => {
+          cancelAnimationFrame(el._raf); io.disconnect(); el._end = null;
+          el.classList.remove('splashing');
+          ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
+          imgs.forEach((img) => { img.style.transition = img.style.opacity = img.style.transform = img.style.filter = ''; });
+        };
+        el._end = end;
+        const frame = (now) => {
+          const t = (now - t0) / 1000;
+          if (t >= SH.T_PRESS + .15) return end();
+          shuinDraw(ctx, px / SH.BOX, S, t, SHUIN_COL[document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light']);
+          shuinSeal(imgs, t, size / SH.BOX);
+          el._raf = requestAnimationFrame(frame);
+        };
+        io.observe(el);
       }).catch(() => {});
     },
-    reset(el) { el._run = (el._run || 0) + 1; clearTimeout(el._t); el.classList.remove('splashing'); },
+    reset(el) { el._run = (el._run || 0) + 1; if (el._end) el._end(); },
   },
   // Building 8: a grid of sensor cells over the trails; each wakes at its own moment and flickers the way a motion
   // sensor's readings jump, then settles at the strength of its area, a few spots of strong movement fading into
