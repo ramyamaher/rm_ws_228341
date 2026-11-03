@@ -527,7 +527,27 @@
   "Record and Leave": "دوِّن ثم امضِ",
   "Most apps are built to keep you on your phone. I wanted a diary that does the opposite: you write a few lines, add a photo, a place or a voice note, and you leave. Each day holds only three photos, so you keep the moments that matter instead of everything. Your memories are nobody's business, so the diary is always encrypted and stays on your own devices. If you like, an encrypted copy can also be saved in your own iCloud Drive or Google Drive.": "صُمِّمت معظم التطبيقات لتُبقيك على هاتفك. أردت مذكرات تفعل العكس: تكتب بضعة أسطر، وتضيف صورة أو مكانًا أو ملاحظة صوتية، ثم تمضي. لا يتسع كل يوم إلا لثلاث صور، لتحتفظ باللحظات المهمة بدلًا من كل شيء. ذكرياتك لا تخص أحدًا غيرك، لذلك تبقى المذكرات مشفّرة دائمًا وعلى أجهزتك أنت. وإن أردت، يمكن أيضًا حفظ نسخة مشفّرة في iCloud Drive أو Google Drive الخاص بك.",
   "It works on iPhone, Android and in the browser, in English, French, German and Spanish.": "يعمل على iPhone وAndroid وفي المتصفح، بالإنجليزية والفرنسية والألمانية والإسبانية.",
-  "There are no accounts and no servers; your data stays on your device and backups are encrypted. It is an educational tool, not financial advice.": "لا حسابات ولا خوادم؛ تبقى بياناتك على جهازك والنسخ الاحتياطية مشفّرة. إنه أداة تعليمية، وليس نصيحة مالية."
+  "There are no accounts and no servers; your data stays on your device and backups are encrypted. It is an educational tool, not financial advice.": "لا حسابات ولا خوادم؛ تبقى بياناتك على جهازك والنسخ الاحتياطية مشفّرة. إنه أداة تعليمية، وليس نصيحة مالية.",
+  "Neues Technisches Rathaus": "Neues Technisches Rathaus",
+  "Mannheim, Germany [[0]][[1]] ATP architects engineers [[2]][[3]] Completed in 2020": "مانهايم، ألمانيا [[0]][[1]] ATP architects engineers [[2]][[3]] اكتمل عام 2020",
+  "Mannheim's new technical town hall brings around 700 city employees under one roof in the Glücksteinquartier, beside the main station. Designed by schneider + schumacher and carried out by ATP as the executing architects, it was built by Implenia as general contractor in two and a half years, from May 2017 to December 2020.": "يجمع مبنى البلدية الفني الجديد في مانهايم نحو 700 موظف في البلدية تحت سقف واحد في حي Glücksteinquartier بجوار المحطة الرئيسية. صمّمه مكتب schneider + schumacher ونفّذته ATP بوصفها المكتب المعماري المنفّذ، وبنته Implenia بصفتها المقاول العام في عامين ونصف، من مايو 2017 إلى ديسمبر 2020.",
+  "A thirteen-storey tower rises from a long, low block on one of the city's main traffic arteries. Behind glass façades framed in gold lie offices, meeting halls, a staff restaurant and a company kindergarten, in a building meant to be open to the citizens it serves. It meets the KfW Efficiency House 55 standard and saves about 157 tonnes of CO2 a year. At ATP, I worked in the execution team on the working drawings.": "يرتفع برج من ثلاثة عشر طابقًا من كتلة طويلة منخفضة على أحد المحاور المرورية الرئيسية في المدينة. خلف واجهات زجاجية بإطارات ذهبية تقع مكاتب وقاعات اجتماعات ومطعم للموظفين وحضانة للشركة، في مبنى أُريد له أن يكون مفتوحًا للمواطنين الذين يخدمهم. يستوفي معيار KfW Efficiency House 55 ويوفّر نحو 157 طنًا من ثاني أكسيد الكربون سنويًا. في ATP عملت ضمن فريق التنفيذ على المخططات التنفيذية.",
+  "Architect in the Execution Team, 2017–2018": "معماري في فريق التنفيذ، 2017–2018",
+  "Working drawings (LPH 5)": "المخططات التنفيذية (المرحلة 5)",
+  "GBG Mannheim": "GBG Mannheim",
+  "schneider + schumacher, Frankfurt": "schneider + schumacher، فرانكفورت",
+  "Contractor": "المقاول",
+  "Implenia, turnkey": "Implenia، تسليم مفتاح",
+  "The project on Implenia's website": "المشروع على موقع Implenia",
+  "Neues Technisches Rathaus logo: the tower rising from the long, low block": "شعار Neues Technisches Rathaus: البرج يرتفع من الكتلة الطويلة المنخفضة",
+  "The tower and the low block, framed in gold. Photo © Implenia": "البرج والكتلة المنخفضة بإطارات ذهبية. الصورة © Implenia",
+  "Under construction, beside the main station. Photo © Implenia": "قيد الإنشاء بجوار المحطة الرئيسية. الصورة © Implenia",
+  "The town hall from the Glücksteinallee. Photo © Implenia": "مبنى البلدية من شارع Glücksteinallee. الصورة © Implenia",
+  "The competition model, 2016. © schneider + schumacher": "مجسّم المسابقة، 2016. © schneider + schumacher",
+  "Floor plan with the citizen service around the courtyard. © schneider + schumacher": "مسقط أفقي لخدمة المواطنين حول الفناء الداخلي. © schneider + schumacher",
+  "Site plan, between the railway and the Glücksteinallee. © schneider + schumacher": "مخطط الموقع بين السكك الحديدية وشارع Glücksteinallee. © schneider + schumacher",
+  "Photos © Implenia; model and plans © schneider + schumacher": "الصور © Implenia؛ المجسّم والمخططات © schneider + schumacher",
+  "The competition on german-architects": "المسابقة على german-architects"
  },
  "plurals": {
   "place": {
