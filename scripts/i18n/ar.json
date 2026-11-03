@@ -508,7 +508,6 @@
   "Record and leave.": "دوِّن ثم امضِ.",
   "Giraffe Diary is a calm, private diary. Write a few lines, add a photo, a place or a voice note, and put the phone away: the day is saved.": "Giraffe Diary مذكرات هادئة وخاصة. اكتب بضعة أسطر، وأضف صورة أو مكانًا أو ملاحظة صوتية، ثم ضع الهاتف جانبًا: يُحفظ اليوم.",
   "Your diary is always encrypted and stays yours. There are no accounts and no servers; it lives on your device, with an optional copy in your own iCloud Drive or Google Drive.": "مذكراتك مشفّرة دائمًا وتبقى ملكك. لا حسابات ولا خوادم؛ فهي تعيش على جهازك، مع نسخة اختيارية في iCloud Drive أو Google Drive الخاص بك.",
-  "It works on iPhone, Android, Mac and in the browser, in English, French, German and Spanish.": "يعمل على iPhone وAndroid وMac وفي المتصفح، بالإنجليزية والفرنسية والألمانية والإسبانية.",
   "Days by year, month and week, or as a calendar": "الأيام حسب السنة والشهر والأسبوع، أو كتقويم",
   "Entries with times, colours and repeats": "مُدخلات بأوقات وألوان وتكرار",
   "Photos, places, drawings and voice notes": "صور وأماكن ورسومات وملاحظات صوتية",
@@ -526,7 +525,8 @@
   "The calendar, in category colours": "التقويم بألوان الفئات",
   "View Privacy Policy": "عرض سياسة الخصوصية",
   "Record and Leave": "دوِّن ثم امضِ",
-  "Most apps are built to keep you on your phone. I wanted a diary that does the opposite: you write a few lines, add a photo, a place or a voice note, and you leave. Each day holds only three photos, so you keep the moments that matter instead of everything. Your memories are nobody's business, so the diary is always encrypted and stays on your own devices. If you like, an encrypted copy can also be saved in your own iCloud Drive or Google Drive.": "صُمِّمت معظم التطبيقات لتُبقيك على هاتفك. أردت مذكرات تفعل العكس: تكتب بضعة أسطر، وتضيف صورة أو مكانًا أو ملاحظة صوتية، ثم تمضي. لا يتسع كل يوم إلا لثلاث صور، لتحتفظ باللحظات المهمة بدلًا من كل شيء. ذكرياتك لا تخص أحدًا غيرك، لذلك تبقى المذكرات مشفّرة دائمًا وعلى أجهزتك أنت. وإن أردت، يمكن أيضًا حفظ نسخة مشفّرة في iCloud Drive أو Google Drive الخاص بك."
+  "Most apps are built to keep you on your phone. I wanted a diary that does the opposite: you write a few lines, add a photo, a place or a voice note, and you leave. Each day holds only three photos, so you keep the moments that matter instead of everything. Your memories are nobody's business, so the diary is always encrypted and stays on your own devices. If you like, an encrypted copy can also be saved in your own iCloud Drive or Google Drive.": "صُمِّمت معظم التطبيقات لتُبقيك على هاتفك. أردت مذكرات تفعل العكس: تكتب بضعة أسطر، وتضيف صورة أو مكانًا أو ملاحظة صوتية، ثم تمضي. لا يتسع كل يوم إلا لثلاث صور، لتحتفظ باللحظات المهمة بدلًا من كل شيء. ذكرياتك لا تخص أحدًا غيرك، لذلك تبقى المذكرات مشفّرة دائمًا وعلى أجهزتك أنت. وإن أردت، يمكن أيضًا حفظ نسخة مشفّرة في iCloud Drive أو Google Drive الخاص بك.",
+  "It works on iPhone, Android and in the browser, in English, French, German and Spanish.": "يعمل على iPhone وAndroid وفي المتصفح، بالإنجليزية والفرنسية والألمانية والإسبانية."
  },
  "plurals": {
   "place": {
