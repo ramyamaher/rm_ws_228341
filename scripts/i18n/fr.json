@@ -519,10 +519,12 @@
   "Giraffe Diary logo: a giraffe reading an open book": "Logo de Giraffe Diary : une girafe qui lit un livre ouvert",
   "The diary, with sample days": "Le journal, avec des journées d’exemple",
   "A day with entries, a place and photos": "Une journée avec des entrées, un lieu et des photos",
-  "The calendar": "Le calendrier",
   "Search with tags": "Recherche par mots-clés",
   "The start screen": "L’écran de démarrage",
-  "Searching for an entry": "La recherche d’une entrée"
+  "Searching for an entry": "La recherche d’une entrée",
+  "Categories give entries and days their colours": "Les catégories donnent leurs couleurs aux entrées et aux jours",
+  "The calendar, in category colours": "Le calendrier, aux couleurs des catégories",
+  "View Privacy Policy": "Voir la politique de confidentialité"
  },
  "plurals": {
   "place": {

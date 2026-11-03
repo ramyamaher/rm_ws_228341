@@ -519,10 +519,12 @@
   "Giraffe Diary logo: a giraffe reading an open book": "شعار Giraffe Diary: زرافة تقرأ كتابًا مفتوحًا",
   "The diary, with sample days": "المذكرات، مع أيام تجريبية",
   "A day with entries, a place and photos": "يوم فيه مُدخلات ومكان وصور",
-  "The calendar": "التقويم",
   "Search with tags": "البحث بالوسوم",
   "The start screen": "شاشة البداية",
-  "Searching for an entry": "البحث عن مُدخَل"
+  "Searching for an entry": "البحث عن مُدخَل",
+  "Categories give entries and days their colours": "الفئات تمنح المُدخلات والأيام ألوانها",
+  "The calendar, in category colours": "التقويم بألوان الفئات",
+  "View Privacy Policy": "عرض سياسة الخصوصية"
  },
  "plurals": {
   "place": {

@@ -254,6 +254,14 @@ const PLAYERS = {
     },
   },
 };
+// Giraffe Diary: tap the giraffe and it swings its head, as in the app
+document.addEventListener('click', (e) => {
+  const svg = e.target.closest && e.target.closest('.gd-tile .gd-logo, .gd-tile');
+  const logo = svg && (svg.matches('.gd-logo') ? svg : svg.querySelector('.gd-logo'));
+  if (!logo || reduced) return;
+  logo.classList.remove('play', 'wiggle'); void logo.getBoundingClientRect(); logo.classList.add('wiggle');
+});
+document.addEventListener('animationend', (e) => { if (e.animationName === 'gdHeadWiggle') e.target.closest('.gd-logo')?.classList.remove('wiggle'); });
 // Project logos that play when their project comes into view: the labyrinth opens, the robot
 // fires its laser. Each plays again whenever its project comes back into view.
 function playLogos(root, dir = -1, landing = false) {
