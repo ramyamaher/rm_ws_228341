@@ -526,7 +526,7 @@
   "The calendar, in category colours": "التقويم بألوان الفئات",
   "View Privacy Policy": "عرض سياسة الخصوصية",
   "Record and Leave": "دوِّن ثم امضِ",
-  "Most apps are built to keep you on your phone. I wanted a diary that does the opposite: you write a few lines, add a photo, a place or a voice note, and you leave. Each day holds only three photos, so you keep the moments that matter instead of everything. Your memories are nobody's business, so the diary is always encrypted and stays on your own devices, with no accounts and no servers.": "صُمِّمت معظم التطبيقات لتُبقيك على هاتفك. أردت مذكرات تفعل العكس: تكتب بضعة أسطر، وتضيف صورة أو مكانًا أو ملاحظة صوتية، ثم تمضي. لا يتسع كل يوم إلا لثلاث صور، لتحتفظ باللحظات المهمة بدلًا من كل شيء. ذكرياتك لا تخص أحدًا غيرك، لذلك تبقى المذكرات مشفّرة دائمًا وعلى أجهزتك أنت، بلا حسابات ولا خوادم."
+  "Most apps are built to keep you on your phone. I wanted a diary that does the opposite: you write a few lines, add a photo, a place or a voice note, and you leave. Each day holds only three photos, so you keep the moments that matter instead of everything. Your memories are nobody's business, so the diary is always encrypted and stays on your own devices. If you like, an encrypted copy can also be saved in your own iCloud Drive or Google Drive.": "صُمِّمت معظم التطبيقات لتُبقيك على هاتفك. أردت مذكرات تفعل العكس: تكتب بضعة أسطر، وتضيف صورة أو مكانًا أو ملاحظة صوتية، ثم تمضي. لا يتسع كل يوم إلا لثلاث صور، لتحتفظ باللحظات المهمة بدلًا من كل شيء. ذكرياتك لا تخص أحدًا غيرك، لذلك تبقى المذكرات مشفّرة دائمًا وعلى أجهزتك أنت. وإن أردت، يمكن أيضًا حفظ نسخة مشفّرة في iCloud Drive أو Google Drive الخاص بك."
  },
  "plurals": {
   "place": {
