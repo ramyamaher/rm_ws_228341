@@ -524,7 +524,9 @@
   "Searching for an entry": "Suche nach einem Eintrag",
   "Categories give entries and days their colours": "Kategorien geben Einträgen und Tagen ihre Farben",
   "The calendar, in category colours": "Der Kalender, in den Farben der Kategorien",
-  "View Privacy Policy": "Datenschutzerklärung ansehen"
+  "View Privacy Policy": "Datenschutzerklärung ansehen",
+  "Record and Leave": "Aufschreiben und loslassen",
+  "Most apps are built to keep you on your phone. I wanted a diary that does the opposite: you write a few lines, add a photo, a place or a voice note, and you leave. Each day holds only three photos, so you keep the moments that matter instead of everything. Your memories are nobody's business, so the diary is always encrypted and stays on your own devices, with no accounts and no servers.": "Die meisten Apps sind dafür gebaut, Sie am Handy zu halten. Ich wollte ein Tagebuch, das das Gegenteil tut: Sie schreiben ein paar Zeilen, fügen ein Foto, einen Ort oder eine Sprachnotiz hinzu und gehen wieder. Jeder Tag fasst nur drei Fotos, damit Sie die Momente behalten, die zählen, statt alles. Ihre Erinnerungen gehen niemanden etwas an, deshalb ist das Tagebuch immer verschlüsselt und bleibt auf Ihren eigenen Geräten, ohne Konten und ohne Server."
  },
  "plurals": {
   "place": {
