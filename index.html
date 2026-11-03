@@ -414,6 +414,12 @@ html[data-theme="dark"] .gd-tile .gd-logo{--logo-ink:#f2f2f2; --gir-ink:#232323;
 .logo .m20-logo, .logo .et-logo{width:86%; height:86%}
 .logo .gb-logo{width:80%; height:80%}
 .logo .ntr-logo{width:80%; height:80%}
+/* Neues Technisches Rathaus: the tower starts as high as the low block beside it, then stretches up to its full height */
+.ntr-logo .ntr-tower{transform-box:fill-box; transform-origin:50% 100%; transform:scaleY(.35)}   /* waits as high as the block */
+.ntr-logo.play .ntr-tower{transform:none; animation:ntrRise 1.6s cubic-bezier(.45,0,.25,1) .5s both}
+.dex-still .ntr-logo .ntr-tower{transform:none; animation:none}   /* the strip's copies at rest show the finished logo */
+@keyframes ntrRise{from{transform:scaleY(.35)} to{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){ .ntr-logo .ntr-tower, .ntr-logo.play .ntr-tower{transform:none; animation:none} }
 .p-aside .facts:first-child{margin-top:4px}
 /* in dark mode the project logos are inverted, on a dark tile; invert plus a half turn of hue keeps the laser red */
 html[data-theme="dark"] .p-head.has-logo .logo, html[data-theme="dark"] .a-head .logo, html[data-theme="dark"] .dex .logo{background:var(--soft)}
@@ -1227,7 +1233,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide project">
                 <div class="p-head has-logo">
-                  <span class="logo"><svg class="p-logo ntr-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 4 100 90" role="img" aria-label="Neues Technisches Rathaus logo: the tower rising from the long, low block"><path class="jelly" fill="rgb(35,35,35)" fill-rule="evenodd" d="M6 62 L56 62 L56 10 L90 10 L90 90 L6 90 Z M61 16 L64 16 L64 84 L61 84 Z M69 16 L72 16 L72 84 L69 84 Z M77 16 L80 16 L80 84 L77 84 Z M85 16 L86.5 16 L86.5 84 L85 84 Z M12 68 L15 68 L15 84 L12 84 Z M21 68 L24 68 L24 84 L21 84 Z M30 68 L33 68 L33 84 L30 84 Z M39 68 L42 68 L42 84 L39 84 Z M48 68 L51 68 L51 84 L48 84 Z"/></svg></span>
+                  <span class="logo"><svg class="p-logo ntr-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 4 100 90" role="img" aria-label="Neues Technisches Rathaus logo: the tower rising from the long, low block"><path fill="rgb(35,35,35)" fill-rule="evenodd" d="M6 62 L57 62 L57 90 L6 90 Z M12 68 L15 68 L15 84 L12 84 Z M21 68 L24 68 L24 84 L21 84 Z M30 68 L33 68 L33 84 L30 84 Z M39 68 L42 68 L42 84 L39 84 Z M48 68 L51 68 L51 84 L48 84 Z"/><path class="ntr-tower" fill="rgb(35,35,35)" fill-rule="evenodd" d="M56 10 L90 10 L90 90 L56 90 Z M61 16 L64 16 L64 84 L61 84 Z M69 16 L72 16 L72 84 L69 84 Z M77 16 L80 16 L80 84 L77 84 Z M85 16 L86.5 16 L86.5 84 L85 84 Z"/></svg></span>
                   <div>
                     <h2>Neues Technisches Rathaus</h2>
                     <p class="p-meta">Mannheim, Germany <i></i> ATP architects engineers <i></i> Completed in 2020</p>
