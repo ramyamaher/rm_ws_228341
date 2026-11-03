@@ -503,7 +503,26 @@
   "The labyrinth opens into the white room. A long table carries a model of all of Cairo, with one area left undeveloped, and VR headsets beside it. The bright white and the table, reminiscent of an operating theatre in a hospital, as if in a state of limbo, stand for hope for Cairo's future, bringing the city's glorious past back to life.": "تنفتح المتاهة على الغرفة البيضاء. تحمل طاولة طويلة نموذجًا للقاهرة كلها تُركت فيه منطقة دون تطوير، وبجانبه نظارات الواقع الافتراضي. يرمز البياض الساطع والطاولة، اللذان يذكّران بغرفة عمليات في مستشفى، وكأنهما في حالة برزخ، إلى الأمل في مستقبل القاهرة، ويعيدان إلى الحياة ماضي المدينة المجيد.",
   "The empty area, built in virtual reality in three stages: the vernacular city with more open space and parks, growth along the main axes with the tallest buildings on them, and a business district of towers. The model above builds it as you move the slider.": "المنطقة الفارغة، تُبنى في الواقع الافتراضي على ثلاث مراحل: المدينة الشعبية بمساحات مفتوحة وحدائق أكثر، والنمو على امتداد المحاور الرئيسية حيث أعلى المباني، وحي أعمال من الأبراج. يبنيها النموذج أعلاه كلما حرّكت شريط التمرير.",
   "Stage 1[[0]]The vernacular city: low houses are scattered at random and turned every way, as in Cairo's informal districts, and open lots are left free as parks.[[1]][[2]][[3]]Stage 2[[4]]Growth along the axes: the plots follow the main axes and the ring around the park; buildings are tallest on the axes and step down away from them.[[5]][[6]][[7]]Stage 3[[8]]The business district: a grid of plots around round parks, where towers rise in clusters among lower blocks.": "المرحلة 1[[0]]المدينة الشعبية: بيوت منخفضة متناثرة عشوائيًا ومتجهة في كل اتجاه، كما في أحياء القاهرة غير الرسمية، مع ترك قطع أرض خالية كحدائق.[[1]][[2]][[3]]المرحلة 2[[4]]النمو على امتداد المحاور: تتبع قطع الأراضي المحاور الرئيسية والحلقة حول الحديقة؛ والمباني أعلى ما تكون على المحاور وتنخفض كلما ابتعدت عنها.[[5]][[6]][[7]]المرحلة 3[[8]]حي الأعمال: شبكة من قطع الأراضي حول حدائق دائرية، ترتفع فيها الأبراج في مجموعات بين كتل أقل ارتفاعًا.",
-  "The entry's buildings, taken from the competition model, with the existing city around them.": "مباني المشروع كما في نموذج المسابقة، مع المدينة القائمة من حولها."
+  "The entry's buildings, taken from the competition model, with the existing city around them.": "مباني المشروع كما في نموذج المسابقة، مع المدينة القائمة من حولها.",
+  "Giraffe Diary": "Giraffe Diary",
+  "Record and leave.": "دوِّن ثم امضِ.",
+  "Giraffe Diary is a calm, private diary. Write a few lines, add a photo, a place or a voice note, and put the phone away: the day is saved.": "Giraffe Diary مذكرات هادئة وخاصة. اكتب بضعة أسطر، وأضف صورة أو مكانًا أو ملاحظة صوتية، ثم ضع الهاتف جانبًا: يُحفظ اليوم.",
+  "Your diary is always encrypted and stays yours. There are no accounts and no servers; it lives on your device, with an optional copy in your own iCloud Drive or Google Drive.": "مذكراتك مشفّرة دائمًا وتبقى ملكك. لا حسابات ولا خوادم؛ فهي تعيش على جهازك، مع نسخة اختيارية في iCloud Drive أو Google Drive الخاص بك.",
+  "It works on iPhone, Android, Mac and in the browser, in English, French, German and Spanish.": "يعمل على iPhone وAndroid وMac وفي المتصفح، بالإنجليزية والفرنسية والألمانية والإسبانية.",
+  "Days by year, month and week, or as a calendar": "الأيام حسب السنة والشهر والأسبوع، أو كتقويم",
+  "Entries with times, colours and repeats": "مُدخلات بأوقات وألوان وتكرار",
+  "Photos, places, drawings and voice notes": "صور وأماكن ورسومات وملاحظات صوتية",
+  "Search with tags: Sara, beach, kids": "البحث بالوسوم: سارة، شاطئ، أطفال",
+  "On This Day and upcoming events, also as widgets": "«في مثل هذا اليوم» والمواعيد القادمة، وكذلك كأدوات على الشاشة",
+  "Always encrypted, with a PIN and Face ID": "مشفّر دائمًا، مع رمز PIN وFace ID",
+  "Light and dark, on every device": "فاتح وداكن، على كل جهاز",
+  "Giraffe Diary logo: a giraffe reading an open book": "شعار Giraffe Diary: زرافة تقرأ كتابًا مفتوحًا",
+  "The diary, with sample days": "المذكرات، مع أيام تجريبية",
+  "A day with entries, a place and photos": "يوم فيه مُدخلات ومكان وصور",
+  "The calendar": "التقويم",
+  "Search with tags": "البحث بالوسوم",
+  "The start screen": "شاشة البداية",
+  "Searching for an entry": "البحث عن مُدخَل"
  },
  "plurals": {
   "place": {

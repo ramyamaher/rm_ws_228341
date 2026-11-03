@@ -27,7 +27,7 @@ const PROJECTS = [
   ['architecture', 0, 'berlin-modern'], ['architecture', 1, 'zweite-stammstrecke'], ['architecture', 2, 'wohnpark-gebersdorf'],
   ['design', 0, 'layers-of-egypt'], ['design', 1, 'extended-threads'], ['design', 2, 'building-8-motion-furniture'], ['design', 3, 'bespoke-spiral-staircase-berlin'],
   ['writing', 0, 'limericks-contest'],
-  ['apps', 0, 'shuin'], ['apps', 2, 'bancanca'], ['apps', 3, 'realstage'],
+  ['apps', 0, 'shuin'], ['apps', 2, 'bancanca'], ['apps', 3, 'giraffe-diary'], ['apps', 4, 'realstage'],
 ];
 
 // Strings app.js shows (passed through t() there), and the plural words it counts with.
