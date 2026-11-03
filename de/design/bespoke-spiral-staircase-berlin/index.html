@@ -592,21 +592,18 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
   66%{opacity:1; transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .4)); animation-timing-function:ease-in}
   100%{opacity:0; transform:translate(calc(var(--x) * 1.5),160px) rotate(var(--r))}
 }
-/* Shuin: the app's splash in the tile, cropped to the globe, then the torii seal where the splash leaves it. As in
-   the app, light mode is on white with a white torii, dark mode on black with a black torii */
+/* Shuin: the app's launch splash in the tile, cropped to the globe, drawn on a canvas (assets/app.js), then the
+   torii seal pressed on as an ink print. The seal is the logo picture itself, above the canvas. As in the app, light
+   mode is on white with a white torii, dark mode on black with a black torii */
 .shuin-logo{position:relative}
-.logo.shuin-logo > img{width:100%; height:100%; transition:opacity .7s ease}
+.logo.shuin-logo > img{position:relative; z-index:1; width:100%; height:100%; transition:opacity .7s ease}
 .logo.shuin-logo > img.dark, html[data-theme="dark"] .logo.shuin-logo > img.light{display:none}
 html[data-theme="dark"] .logo.shuin-logo > img.dark{display:block}
 html[data-theme="dark"] .logo.shuin-logo, html[data-theme="dark"] .dex .logo.shuin-logo{background:#000}
-.shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; transition:opacity .7s ease; pointer-events:none; background:#fff}
+.shuin-splash{position:absolute; inset:0; overflow:hidden; opacity:0; pointer-events:none; background:#fff}
 html[data-theme="dark"] .shuin-splash{background:#000}
-/* both copies of the splash play; the other theme's stays drawn but unseen, so it keeps in step */
-.logo .shuin-splash img.dark, html[data-theme="dark"] .logo .shuin-splash img.light{opacity:0}
-html[data-theme="dark"] .logo .shuin-splash img.dark{opacity:1}
-.logo .shuin-splash img{position:absolute; width:166.7%; height:178.6%; left:-33.3%; top:-33.3%; max-width:none; object-fit:fill}
+.shuin-splash canvas{position:absolute; inset:0; width:100%; height:100%}
 .shuin-logo.splashing .shuin-splash{opacity:1}
-.shuin-logo.splashing > img{opacity:0}
 @media (prefers-reduced-motion:reduce){ .bc-fall{transform:none} .anim-logo.play .bc-fall,.anim-logo.play .bc-ped,.anim-logo.play .bc-cols,.anim-logo.play .bc-chip{animation:none} .bc-ped{opacity:0} }
 /* Limericks: five lines written one after another, A A B B A; then they stay */
 .logo .lim-logo{width:78%; height:78%}
@@ -1724,6 +1721,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=4b621db744"></script>
 <script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the last line":"Klicken für die letzte Zeile","Tap for the last line":"Tippen für die letzte Zeile","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich vom Kanal aktualisiert; letzte Aktualisierung {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","6th of October City":"Stadt des 6. Oktober","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra":"Andorra","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Cyprus":"Zypern","Dessau":"Dessau","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Famagusta":"Famagusta","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florenz","Florida":"Florida","Fort Lauderdale":"Fort Lauderdale","France":"Frankreich","Galway":"Galway","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss Falls":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Island","Keflavík International Airport":"Flughafen Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Malibu":"Malibu","Marrakesh":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Fuji","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Siwa Oasis":"Oase Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Thingvellir National Park":"Nationalpark Þingvellir","Tokyo":"Tokio","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zürich"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
-<script src="/assets/app.js?v=50aed76af1"></script>
+<script src="/assets/app.js?v=f6da5fe4e6"></script>
 </body>
 </html>
