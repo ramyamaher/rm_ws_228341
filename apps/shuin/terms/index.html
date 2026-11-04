@@ -70,6 +70,11 @@ footer{text-align:center; color:var(--ink-3); font-size:13px; padding:0 16px 32p
   }
   document.querySelectorAll('.langs button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.l); history.replaceState(null,'','?lang='+b.dataset.l+location.hash)})});
   show(pick());
+  // #delete-account names the English heading; when another language is shown, go to the same
+  // section in that language (its id ends in -de, -fr or -es).
+  var h=decodeURIComponent(location.hash.slice(1)).replace(/-(de|fr|es)$/,''), l=document.documentElement.lang;
+  var el=h&&document.getElementById(l==='en'?h:h+'-'+l);
+  if(el&&el.scrollIntoView) el.scrollIntoView();
 })();
 </script>
 <noscript><style>.lang[data-l="en"]{display:block!important}</style></noscript>
