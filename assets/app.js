@@ -1306,10 +1306,12 @@ const W = window.WW;
 const byCountry = d3.group(W.places, p => p.country);
 $('#sPlaces').textContent = W.places.length;
 $('#sCountries').textContent = byCountry.size;
-$('#sVideos').textContent = W.total;
+// Long videos and shorts are counted apart; data from before that split only has the total.
+$('#sLong').textContent = W.long ?? W.total;
+$('#sShorts').textContent = W.shorts ?? '–';
 if (W.first && W.first.date) {
   const d = new Date(W.first.date + 'T12:00:00Z');
-  $('#sFirst').textContent = d.toLocaleDateString(LOCALE, { month: matchMedia('(max-width:760px)').matches ? 'short' : 'long', year: 'numeric' });
+  $('#sFirstLink').textContent = d.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
   $('#sFirstLink').href = 'https://www.youtube.com/watch?v=' + W.first.id;
 }
 if (W.updated) {
