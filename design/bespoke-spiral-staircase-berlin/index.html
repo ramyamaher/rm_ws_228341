@@ -894,7 +894,11 @@ html.fit-tab body{min-height:0}
 .vb-box.telling.city .vb-texts{overflow:visible}
 .vb-box.telling .vb-nav{margin-top:0}
 /* the Archive alone: everything on one screen, the map taking whatever height is left */
-.panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
+/* the first screen is the channel, its numbers and the map, as large as the card allows; the introduction is under it,
+   one scroll down */
+.panel.fit .card-scroll.archive-fit{display:block; overflow-y:auto}
+.archive-fit > .arc-screen{height:100%; display:flex; flex-direction:column}
+.panel.fit .archive-fit .arc-lead{margin:22px 0 12px}
 .archive-fit .p-head{flex:none}
 .archive-fit .lead{flex:none; margin-bottom:14px}
 .archive-fit .stats{flex:none; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px}
@@ -1643,6 +1647,7 @@ destined to guide.</script></section>
               <div class="nav"><button class="arrow" type="button" aria-label="Previous project" disabled><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" type="button" aria-label="Next project" disabled><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
             </div>
             <div class="card-scroll archive-fit">
+              <div class="arc-screen">
               <div class="p-head has-logo">
                 <span class="logo dex-archive"><img src="/assets/img/logos/wandering-wayfarer.jpg" width="512" height="512" alt="Wandering Wayfarer logo" decoding="async"></span>
                 <div>
@@ -1650,7 +1655,6 @@ destined to guide.</script></section>
                   <p class="p-meta">YouTube channel <i></i> City walks, rides and architecture</p>
                 </div>
               </div>
-              <p class="lead">Places I have documented for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K. The first video went up in <a id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">March 2023</a>.</p>
               <div class="stats">
                 <div class="stat"><b id="sLong">0</b><span>long videos</span></div>
                 <div class="stat"><b id="sShorts">0</b><span>shorts</span></div>
@@ -1667,6 +1671,8 @@ destined to guide.</script></section>
               </div>
               <p class="maphint">Hover over or tap a country to see the places documented there, and tap a red dot for the city. Drag to move; scroll, pinch or use the buttons to zoom.</p>
               <div class="chips"><a class="chip" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Watch on YouTube</a></div>
+              </div>
+              <p class="lead arc-lead">Places I have documented for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K. The first video went up in <a id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">March 2023</a>.</p>
             </div>
           </section>
         </div>
