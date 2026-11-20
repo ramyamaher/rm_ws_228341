@@ -659,6 +659,40 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 .city-build .b8-3d{height:auto; min-height:0; aspect-ratio:2500/1138; overflow:hidden}
 .city-build .b8-3d canvas{position:absolute; left:0; top:0}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
+/* Extended Threads: the simulation, light in light mode and on black in dark mode (drawn so, not inverted) */
+.et-build .b8-3d{height:clamp(320px,56vh,600px); overflow:hidden; cursor:crosshair}
+.et-build .b8-3d canvas{position:absolute; left:0; top:0}
+html[data-theme="dark"] .et-build .b8-3d canvas{filter:none}
+.et-3d:focus{outline:none}
+.et-badge{position:absolute; left:14px; top:12px; z-index:1; font-size:12px; color:var(--ink-3); pointer-events:none; font-variant-numeric:tabular-nums}
+.et-ctl{flex-wrap:wrap; gap:8px 10px}
+.et-btn, .et-seg button{font:inherit; font-size:13px; font-weight:500; color:var(--ink); background:transparent; border:0; padding:7px 14px; cursor:pointer}
+.et-btn{border:1px solid var(--line); border-radius:999px}
+.et-seg{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.et-seg button[aria-pressed="true"]{background:var(--ink); color:var(--btn-bg)}
+.et-buildbtn[aria-pressed="true"]{background:#ff3b30; border-color:#ff3b30; color:#fff}
+.et-status{margin:-4px 18px 8px; font-size:13px; color:var(--ink-3); min-height:1.5em}
+.et-keys{display:none; flex-wrap:wrap; gap:4px 20px; margin:0 18px 12px; font-size:13px; color:var(--ink-3)}
+.et-keys div{display:flex; gap:8px; align-items:baseline}
+.et-keys dt{color:var(--ink); font-weight:500}
+.et-keys dd{margin:0}
+.et-keys kbd{font:600 11px inherit; font-family:inherit; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 5px; color:var(--ink)}
+@media (hover:hover) and (pointer:fine){ .et-keys{display:flex} }
+/* Museum of the 20th Century in 3D: the names over the model, the step's caption under it */
+.ng-build .b8-3d{height:clamp(300px,52vh,560px); overflow:hidden}
+.ng-build .b8-3d canvas{position:absolute; left:0; top:0}
+.ng-3d .lbl{position:absolute; left:0; top:0; z-index:1; pointer-events:none; white-space:nowrap; opacity:0; transition:opacity .3s;
+  font-size:11px; font-weight:500; line-height:1.2; color:#334155; background:rgba(255,255,255,.9); padding:2px 6px; border-radius:6px}
+.ng-3d .lbl.tree{color:#15803d}
+html[data-theme="dark"] .ng-3d .lbl{color:#cbd5e1; background:rgba(22,26,33,.88)}
+html[data-theme="dark"] .ng-3d .lbl.tree{color:#4ade80}
+.ng-hint{position:absolute; left:14px; bottom:10px; z-index:1; font-size:11.5px; color:#64748b; pointer-events:none}
+html[data-theme="dark"] .ng-hint{color:#97a1b1}
+html[dir="rtl"] .ng-hint{left:auto; right:14px}
+.ng-build .b8-play{z-index:2}
+.ng-build output{min-width:7em}
+.ng-cap{margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink); min-height:3em}
+@media (prefers-reduced-motion:reduce){ .ng-3d .lbl{transition:none} }
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
   .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
   .city-step span{grid-area:1/1; visibility:hidden}
@@ -859,6 +893,7 @@ html.fit-tab body{min-height:0}
 .vb-box.telling .vb-nav{margin-top:0}
 /* the Archive alone: everything on one screen, the map taking whatever height is left */
 .panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
+.archive-fit .p-head{flex:none}
 .archive-fit .lead{flex:none; margin-bottom:14px}
 .archive-fit .stats{flex:none; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px}
 .archive-fit .stat{padding:14px 18px; border-radius:20px; text-decoration:none; color:inherit}
@@ -1186,6 +1221,26 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div class="thumbs" data-imgs="ng-001|The main façade;ng-002|The museum on the Kulturforum, beside the Church of St. Matthew;ng-003|The central hall"></div>
                 <div class="chips"><a class="chip" href="https://www.herzogdemeuron.com/projects/469-museum-der-moderne-berlin-modern/" target="_blank" rel="noopener">The project on Herzog &amp; de Meuron's website</a></div>
+                <figure class="b8-build ng-build">
+                  <div class="b8-3d ng-3d" role="img" aria-label="The museum on the Kulturforum in 3D, with its two passages. Drag to turn it, scroll or pinch to zoom.">
+                    <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Play</span><span class="b8-stop">Pause</span></button>
+                    <div class="ng-hint">Zoom in for names</div>
+                  </div>
+                  <div class="b8-ctl"><label for="ngRange">Step</label><input id="ngRange" type="range" min="0" max="4" step="1" value="0"><output for="ngRange">Site</output></div>
+                  <p class="ng-cap" aria-live="polite"></p>
+                  <div hidden>
+                    <ol class="ng-steps"><li>Site</li><li>Museum</li><li>Floors</li><li>East–west</li><li>North–south</li></ol>
+                    <div class="ng-caps">
+                      <p>The last open site of the Kulturforum, between Scharoun's Philharmonie and State Library, Mies van der Rohe's Neue Nationalgalerie and St. Matthäus, with the plane tree on Matthäikirchplatz.</p>
+                      <p>The museum: one long gabled volume, 113 by 71 m, cut open on its north-west side around the plane tree.</p>
+                      <p>Its two floors: the ground floor and the lower exhibition floor, 7 m below. Only the walls of the two passages and the main stair are drawn.</p>
+                      <p>East–west, on the ground floor: from Potsdamer Straße and the State Library straight through the museum to the square in front of the Kulturforum.</p>
+                      <p>North–south: in from the square by the Chamber Music Hall, down the main stair to the lower floor and under Sigismundstraße into the Neue Nationalgalerie.</p>
+                    </div>
+                    <ul class="ng-names"><li data-en="Philharmonie">Philharmonie</li><li data-en="Chamber Music Hall">Chamber Music Hall</li><li data-en="Staatsbibliothek">Staatsbibliothek</li><li data-en="Neue Nationalgalerie">Neue Nationalgalerie</li><li data-en="St. Matthäus">St. Matthäus</li><li data-en="Kulturforum">Kulturforum</li><li data-en="Plane tree">Plane tree</li><li data-en="Museum of the 20th Century">Museum of the 20th Century</li><li data-en="Lower floor, Neue Nationalgalerie">Lower floor, Neue Nationalgalerie</li></ul>
+                  </div>
+                  <p class="b8-note">An abstract model: the museum from the design model of 2019, its neighbours and streets from OpenStreetMap.</p>
+                </figure>
               </article>
 
               <article class="slide project">
@@ -1437,6 +1492,34 @@ destined to guide.</script></section>
                   </div>
                 </div>
                 <div class="thumbs" data-imgs="et-002|A sintered structure on the lunar surface;et-005|Robots at work;et-000|The game on a computer;et-003|Building in virtual reality on a phone;et-004|The stereo view for a VR headset"></div>
+                <figure class="b8-build et-build">
+                  <div class="b8-3d et-3d" tabindex="0" role="img" aria-label="The simulation: a rolling robot fuses loose lunar ground into a solid form with its laser. Drag to turn the view; on a computer, drive with W A S D.">
+                    <div class="et-badge"></div>
+                  </div>
+                  <div class="b8-ctl et-ctl">
+                    <button class="et-btn" id="etDemo" type="button">Play demo</button>
+                    <span class="et-seg" role="group" aria-label="What a click sets"><button type="button" id="etDrive" aria-pressed="false">Drive</button><button type="button" id="etAim" aria-pressed="false">Aim laser</button></span>
+                    <button class="et-btn et-buildbtn" id="etBuild" type="button" aria-pressed="false">Build</button>
+                    <button class="et-btn" id="etClear" type="button">Clear</button>
+                  </div>
+                  <p class="et-status" id="etStatus" aria-live="polite"></p>
+                  <dl class="et-keys">
+                    <div><dt><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></dt><dd>Move rover</dd></div>
+                    <div><dt>Left mouse button</dt><dd>Aim laser</dd></div>
+                    <div><dt><kbd>Space</kbd></dt><dd>Toggle building on and off</dd></div>
+                    <div><dt>Right mouse button</dt><dd>Rotate</dd></div>
+                    <div><dt>Scroll</dt><dd>Zoom</dd></div>
+                  </dl>
+                  <ul class="et-say" hidden>
+                    <li data-k="demo">Demo: the rover builds two curved walls. Press Drive or Aim laser to take over.</li>
+                    <li data-k="drive">Drive: tap the ground to send the rover there.</li>
+                    <li data-k="aim">Aim laser: tap the ground or the top of the built form to build there.</li>
+                    <li data-k="desk-drive">Driving: W A S D or the arrow keys move the rover. Click to aim the laser.</li>
+                    <li data-k="desk-aim">Aim: click the ground or the top of the built form to build there.</li>
+                    <li data-k="building">Building…</li>
+                    <li data-k="fused">{n} particles fused</li>
+                  </ul>
+                </figure>
               </article>
 
               <article class="slide project">
@@ -1553,7 +1636,18 @@ destined to guide.</script></section>
         <div class="wrap">
           <h2 class="sr-title">Archive</h2>
           <section class="glass card">
+            <div class="card-head">
+              <div class="t"><div class="num">1/1</div></div>
+              <div class="nav"><button class="arrow" type="button" aria-label="Previous project" disabled><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" type="button" aria-label="Next project" disabled><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            </div>
             <div class="card-scroll archive-fit">
+              <div class="p-head has-logo">
+                <span class="logo dex-archive"><img src="/assets/img/logos/wandering-wayfarer.jpg" width="512" height="512" alt="Wandering Wayfarer logo" decoding="async"></span>
+                <div>
+                  <h2>Wandering Wayfarer</h2>
+                  <p class="p-meta">YouTube channel <i></i> City walks, rides and architecture</p>
+                </div>
+              </div>
               <p class="lead">Places I have documented for <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>, my YouTube channel documenting places around the world: city walks, bus and tram rides, and architecture, mostly in 4K. The first video went up in <a id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">March 2023</a>.</p>
               <div class="stats">
                 <div class="stat"><b id="sLong">0</b><span>long videos</span></div>
@@ -1718,7 +1812,7 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=062c7d512c"></script>
-<script src="/assets/app.js?v=cb08201cf0"></script>
+<script src="/assets/data/places.js?v=6d6f12a776"></script>
+<script src="/assets/app.js?v=5d2e5af350"></script>
 </body>
 </html>

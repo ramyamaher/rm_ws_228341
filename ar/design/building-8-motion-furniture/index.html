@@ -661,6 +661,40 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 .city-build .b8-3d{height:auto; min-height:0; aspect-ratio:2500/1138; overflow:hidden}
 .city-build .b8-3d canvas{position:absolute; left:0; top:0}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
+/* Extended Threads: the simulation, light in light mode and on black in dark mode (drawn so, not inverted) */
+.et-build .b8-3d{height:clamp(320px,56vh,600px); overflow:hidden; cursor:crosshair}
+.et-build .b8-3d canvas{position:absolute; left:0; top:0}
+html[data-theme="dark"] .et-build .b8-3d canvas{filter:none}
+.et-3d:focus{outline:none}
+.et-badge{position:absolute; left:14px; top:12px; z-index:1; font-size:12px; color:var(--ink-3); pointer-events:none; font-variant-numeric:tabular-nums}
+.et-ctl{flex-wrap:wrap; gap:8px 10px}
+.et-btn, .et-seg button{font:inherit; font-size:13px; font-weight:500; color:var(--ink); background:transparent; border:0; padding:7px 14px; cursor:pointer}
+.et-btn{border:1px solid var(--line); border-radius:999px}
+.et-seg{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.et-seg button[aria-pressed="true"]{background:var(--ink); color:var(--btn-bg)}
+.et-buildbtn[aria-pressed="true"]{background:#ff3b30; border-color:#ff3b30; color:#fff}
+.et-status{margin:-4px 18px 8px; font-size:13px; color:var(--ink-3); min-height:1.5em}
+.et-keys{display:none; flex-wrap:wrap; gap:4px 20px; margin:0 18px 12px; font-size:13px; color:var(--ink-3)}
+.et-keys div{display:flex; gap:8px; align-items:baseline}
+.et-keys dt{color:var(--ink); font-weight:500}
+.et-keys dd{margin:0}
+.et-keys kbd{font:600 11px inherit; font-family:inherit; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 5px; color:var(--ink)}
+@media (hover:hover) and (pointer:fine){ .et-keys{display:flex} }
+/* Museum of the 20th Century in 3D: the names over the model, the step's caption under it */
+.ng-build .b8-3d{height:clamp(300px,52vh,560px); overflow:hidden}
+.ng-build .b8-3d canvas{position:absolute; left:0; top:0}
+.ng-3d .lbl{position:absolute; left:0; top:0; z-index:1; pointer-events:none; white-space:nowrap; opacity:0; transition:opacity .3s;
+  font-size:11px; font-weight:500; line-height:1.2; color:#334155; background:rgba(255,255,255,.9); padding:2px 6px; border-radius:6px}
+.ng-3d .lbl.tree{color:#15803d}
+html[data-theme="dark"] .ng-3d .lbl{color:#cbd5e1; background:rgba(22,26,33,.88)}
+html[data-theme="dark"] .ng-3d .lbl.tree{color:#4ade80}
+.ng-hint{position:absolute; left:14px; bottom:10px; z-index:1; font-size:11.5px; color:#64748b; pointer-events:none}
+html[data-theme="dark"] .ng-hint{color:#97a1b1}
+html[dir="rtl"] .ng-hint{left:auto; right:14px}
+.ng-build .b8-play{z-index:2}
+.ng-build output{min-width:7em}
+.ng-cap{margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink); min-height:3em}
+@media (prefers-reduced-motion:reduce){ .ng-3d .lbl{transition:none} }
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
   .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
   .city-step span{grid-area:1/1; visibility:hidden}
@@ -861,6 +895,7 @@ html.fit-tab body{min-height:0}
 .vb-box.telling .vb-nav{margin-top:0}
 /* the Archive alone: everything on one screen, the map taking whatever height is left */
 .panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
+.archive-fit .p-head{flex:none}
 .archive-fit .lead{flex:none; margin-bottom:14px}
 .archive-fit .stats{flex:none; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px}
 .archive-fit .stat{padding:14px 18px; border-radius:20px; text-decoration:none; color:inherit}
@@ -1188,6 +1223,26 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div class="thumbs" data-imgs="ng-001|الواجهة الرئيسية;ng-002|المتحف في منتدى الثقافة، بجوار كنيسة القديس متّى;ng-003|القاعة المركزية"></div>
                 <div class="chips"><a class="chip" href="https://www.herzogdemeuron.com/projects/469-museum-der-moderne-berlin-modern/" target="_blank" rel="noopener">المشروع على موقع Herzog &amp; de Meuron</a></div>
+                <figure class="b8-build ng-build">
+                  <div class="b8-3d ng-3d" role="img" aria-label="المتحف في الكولتورفوروم ثلاثي الأبعاد، مع ممرّيه. اسحب لتدويره، ومرّر أو اقرص للتكبير.">
+                    <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">تشغيل</span><span class="b8-stop">إيقاف مؤقت</span></button>
+                    <div class="ng-hint">قرّب لرؤية الأسماء</div>
+                  </div>
+                  <div class="b8-ctl"><label for="ngRange">الخطوة</label><input id="ngRange" type="range" min="0" max="4" step="1" value="0"><output for="ngRange">الموقع</output></div>
+                  <p class="ng-cap" aria-live="polite"></p>
+                  <div hidden>
+                    <ol class="ng-steps"><li>الموقع</li><li>المتحف</li><li>الطوابق</li><li>شرق–غرب</li><li>شمال–جنوب</li></ol>
+                    <div class="ng-caps">
+                      <p>آخر قطعة أرض خالية في الكولتورفوروم، بين فيلهارمونية شارون ومكتبة الدولة، والمتحف الوطني الجديد لميس فان دير روه، وكنيسة القديس متّى، مع شجرة الدلب في ساحة ماتيكيرشبلاتس.</p>
+                      <p>المتحف: كتلة واحدة طويلة تحت سقف جملوني، 113 في 71 م، مقطوعة من جهتها الشمالية الغربية حول شجرة الدلب.</p>
+                      <p>طابقاه: الطابق الأرضي وطابق المعارض السفلي على عمق 7 م. لا تُرسم إلا جدران الممرّين والدرج الرئيسي.</p>
+                      <p>شرق–غرب، في الطابق الأرضي: من شارع بوتسدامر ومكتبة الدولة مباشرةً عبر المتحف إلى الساحة أمام الكولتورفوروم.</p>
+                      <p>شمال–جنوب: من الساحة بجوار قاعة موسيقى الحجرة إلى الداخل، ثم نزولًا بالدرج الرئيسي إلى الطابق السفلي، ومن تحت شارع زيغيسموند إلى المتحف الوطني الجديد.</p>
+                    </div>
+                    <ul class="ng-names"><li data-en="Philharmonie">الفيلهارمونية</li><li data-en="Chamber Music Hall">قاعة موسيقى الحجرة</li><li data-en="Staatsbibliothek">مكتبة الدولة</li><li data-en="Neue Nationalgalerie">المتحف الوطني الجديد</li><li data-en="St. Matthäus">كنيسة القديس متّى</li><li data-en="Kulturforum">الكولتورفوروم</li><li data-en="Plane tree">شجرة الدلب</li><li data-en="Museum of the 20th Century">متحف القرن العشرين</li><li data-en="Lower floor, Neue Nationalgalerie">الطابق السفلي، المتحف الوطني الجديد</li></ul>
+                  </div>
+                  <p class="b8-note">نموذج مجرّد: المتحف من نموذج التصميم لعام 2019، والمباني المجاورة والشوارع من OpenStreetMap.</p>
+                </figure>
               </article>
 
               <article class="slide project">
@@ -1439,6 +1494,34 @@ destined to guide.</script></section>
                   </div>
                 </div>
                 <div class="thumbs" data-imgs="et-002|منشأ ملبَّد على سطح القمر;et-005|روبوتات أثناء العمل;et-000|اللعبة على الحاسوب;et-003|البناء في الواقع الافتراضي على الهاتف;et-004|العرض المجسّم لنظارة الواقع الافتراضي"></div>
+                <figure class="b8-build et-build">
+                  <div class="b8-3d et-3d" tabindex="0" role="img" aria-label="المحاكاة: روبوت متدحرج يصهر تربة القمر السائبة إلى شكل صلب بليزره. اسحب لتدوير المنظر؛ وعلى الحاسوب قُد باستخدام W A S D.">
+                    <div class="et-badge"></div>
+                  </div>
+                  <div class="b8-ctl et-ctl">
+                    <button class="et-btn" id="etDemo" type="button">تشغيل العرض</button>
+                    <span class="et-seg" role="group" aria-label="ما تحدّده النقرة"><button type="button" id="etDrive" aria-pressed="false">القيادة</button><button type="button" id="etAim" aria-pressed="false">توجيه الليزر</button></span>
+                    <button class="et-btn et-buildbtn" id="etBuild" type="button" aria-pressed="false">البناء</button>
+                    <button class="et-btn" id="etClear" type="button">مسح</button>
+                  </div>
+                  <p class="et-status" id="etStatus" aria-live="polite"></p>
+                  <dl class="et-keys">
+                    <div><dt><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></dt><dd>تحريك الروبوت</dd></div>
+                    <div><dt>زر الفأرة الأيسر</dt><dd>توجيه الليزر</dd></div>
+                    <div><dt><kbd>المسافة</kbd></dt><dd>تشغيل البناء وإيقافه</dd></div>
+                    <div><dt>زر الفأرة الأيمن</dt><dd>التدوير</dd></div>
+                    <div><dt>التمرير</dt><dd>التكبير</dd></div>
+                  </dl>
+                  <ul class="et-say" hidden>
+                    <li data-k="demo">عرض: يبني الروبوت جدارين منحنيين. اضغط القيادة أو توجيه الليزر لتتولى التحكم.</li>
+                    <li data-k="drive">القيادة: المس الأرض لترسل الروبوت إليها.</li>
+                    <li data-k="aim">توجيه الليزر: المس الأرض أو أعلى الشكل المبني لتبني هناك.</li>
+                    <li data-k="desk-drive">القيادة: تحرّك W A S D أو مفاتيح الأسهم الروبوت. انقر لتوجيه الليزر.</li>
+                    <li data-k="desk-aim">التوجيه: انقر على الأرض أو أعلى الشكل المبني لتبني هناك.</li>
+                    <li data-k="building">جارٍ البناء…</li>
+                    <li data-k="fused">{n} جسيمًا مصهورًا</li>
+                  </ul>
+                </figure>
               </article>
 
               <article class="slide project">
@@ -1555,7 +1638,18 @@ destined to guide.</script></section>
         <div class="wrap">
           <h2 class="sr-title">أرشيف</h2>
           <section class="glass card">
+            <div class="card-head">
+              <div class="t"><div class="num">1/1</div></div>
+              <div class="nav"><button class="arrow" type="button" aria-label="المشروع السابق" disabled><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" type="button" aria-label="المشروع التالي" disabled><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            </div>
             <div class="card-scroll archive-fit">
+              <div class="p-head has-logo">
+                <span class="logo dex-archive"><img src="/assets/img/logos/wandering-wayfarer.jpg" width="512" height="512" alt="شعار Wandering Wayfarer" decoding="async"></span>
+                <div>
+                  <h2>Wandering Wayfarer</h2>
+                  <p class="p-meta">قناة على YouTube <i></i> جولات في المدن ورحلات وعمارة</p>
+                </div>
+              </div>
               <p class="lead">أماكن وثّقتها لقناة <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a>، قناتي على YouTube التي توثّق أماكن حول العالم: جولات مشي في المدن، ورحلات بالحافلة والترام، وعمارة، ومعظمها بدقة 4K. نُشر أول فيديو في <a id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">مارس 2023</a>.</p>
               <div class="stats">
                 <div class="stat"><b id="sLong">0</b><span>فيديو طويل</span></div>
@@ -1720,8 +1814,8 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=062c7d512c"></script>
-<script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","6th of October City":"مدينة السادس من أكتوبر","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra":"أندورا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arlington":"أرلينغتون","Arosa":"أروزا","Ayia Napa":"آيا نابا","Ballynahinch":"بالينهينش","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cannes":"كان","Carmel-by-the-Sea":"كارمل باي ذا سي","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Cyprus":"قبرص","Dessau":"ديساو","Dublin":"دبلن","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Famagusta":"فاماغوستا","Faro":"فارو","Fes":"فاس","Flims Dorf":"فليمس دورف","Florence":"فلورنسا","Florida":"فلوريدا","Fort Lauderdale":"فورت لودرديل","France":"فرنسا","Galway":"غالواي","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss Falls":"شلالات غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Ibaraki":"إيباراكي","Iceland":"آيسلندا","Keflavík International Airport":"مطار كفلافيك الدولي","Kraków":"كراكوف","Kyoto":"كيوتو","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Malibu":"ماليبو","Marrakesh":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle upon Tyne":"نيوكاسل أبون تاين","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National and State Parks":"متنزهات ريدوود الوطنية","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Roundstone":"راوندستون","Rovinj":"روفين","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Cruz de Bezana":"سانتا كروث دي بيثانا","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Secret Lagoon":"البحيرة السرية","Siwa Oasis":"واحة سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","Thingvellir National Park":"منتزه ثينغفيلير الوطني","Tokyo":"طوكيو","Varna":"فارنا","Washington":"واشنطن","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zürich":"زيورخ"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
-<script src="/assets/app.js?v=cb08201cf0"></script>
+<script src="/assets/data/places.js?v=6d6f12a776"></script>
+<script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"طاب نهارك.","Good evening.":"مساء الخير.","Click for the last line":"انقر لإظهار السطر الأخير","Tap for the last line":"المس لإظهار السطر الأخير","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم: {p} من الأماكن الموثّقة في {c} من الدول","Not documented yet":"لم يُوثَّق بعد","Go to playlist":"انتقل إلى قائمة التشغيل","Watch a video":"شاهد فيديو","The map could not be loaded. Please reload the page.":"تعذّر تحميل الخريطة. يُرجى إعادة تحميل الصفحة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","6th of October City":"مدينة السادس من أكتوبر","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra":"أندورا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arlington":"أرلينغتون","Arosa":"أروزا","Ayia Napa":"آيا نابا","Ballynahinch":"بالينهينش","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cannes":"كان","Carmel-by-the-Sea":"كارمل باي ذا سي","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Cyprus":"قبرص","Dessau":"ديساو","Dublin":"دبلن","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Famagusta":"فاماغوستا","Faro":"فارو","Fes":"فاس","Flims Dorf":"فليمس دورف","Florence":"فلورنسا","Florida":"فلوريدا","Fort Lauderdale":"فورت لودرديل","France":"فرنسا","Galway":"غالواي","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss Falls":"شلالات غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Ibaraki":"إيباراكي","Iceland":"آيسلندا","Keflavík International Airport":"مطار كفلافيك الدولي","Kraków":"كراكوف","Kyoto":"كيوتو","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Marrakesh":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle upon Tyne":"نيوكاسل أبون تاين","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National and State Parks":"متنزهات ريدوود الوطنية","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Roundstone":"راوندستون","Rovinj":"روفين","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Cruz de Bezana":"سانتا كروث دي بيثانا","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Secret Lagoon":"البحيرة السرية","Siwa Oasis":"واحة سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","The Getty Villa":"فيلا غيتي","Thingvellir National Park":"منتزه ثينغفيلير الوطني","Tokyo":"طوكيو","Varna":"فارنا","Washington":"واشنطن","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فورتزيه","Zagreb":"زغرب","Zürich":"زيورخ"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
+<script src="/assets/app.js?v=5d2e5af350"></script>
 </body>
 </html>

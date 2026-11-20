@@ -832,7 +832,7 @@ addEventListener('wheel', (e) => {
 // staircase: white faces, grey lines, colour only for the board being placed. The doors, the metal stair, the
 // gallery, the bridge and the ramp's railings are added after the render. three.js and the model (60 kB) load
 // only when it first comes into view; the slider places one board per step
-$$('.b8-build:not(.city-build)').forEach(fig => {
+$$('.b8-build:not(.city-build):not(.ng-build):not(.et-build)').forEach(fig => {
   const box = $('.b8-3d', fig), range = $('input', fig), out = $('output', fig);
   let started = false;
   const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
@@ -987,6 +987,747 @@ $$('.b8-build:not(.city-build)').forEach(fig => {
     range.addEventListener('input', (e) => { if (e.isTrusted) held = false; set(+range.value); });   // the slider's own demonstration keeps the first boards coloured
     new ResizeObserver(size).observe(box);
     paint(); size();
+  }
+});
+
+// Museum of the 20th Century in 3D: the Kulturforum as white massing (the museum from the HdM model 469_NG20, its
+// neighbours and streets from OpenStreetMap), the floors and walls of its two public passages, the boulevard stair from
+// the model (assets/data/ng20-stairs.json), and the two ways through it, drawn as a glow like the way through Layers
+// of Egypt. three.js and the stair (80 kB) load only when the model first comes into view; the slider and Play step
+// through the site, the museum, its floors and the two ways
+$$('.ng-build').forEach(fig => {
+  let started = false;
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
+  io.observe($('.ng-3d', fig));
+  async function start() {
+    const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/+esm');
+    const { OrbitControls } = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js/+esm');
+
+    const box = $('.ng-3d', fig), range = $('input', fig), out = $('output', fig), cap = $('.ng-cap', fig), playBtn = $('.b8-play', fig), hint = $('.ng-hint', fig);
+    const CAPS = $$('.ng-caps p', fig).map(p => p.textContent.trim()), STEPS = $$('.ng-steps li', fig).map(li => li.textContent.trim());
+    const NAMES = Object.fromEntries($$('.ng-names li', fig).map(li => [li.dataset.en, li.textContent.trim()])), N = (en) => NAMES[en] || en;
+
+    /* ---------- renderer, camera ---------- */
+    const ren = new THREE.WebGLRenderer({ antialias: true });
+    ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.prepend(ren.domElement);
+    ren.domElement.style.touchAction = 'none';   // a drag that starts on the model turns it; outside it, the page scrolls
+    wheelOnly(box);
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(40, 1.6, 2, 5000);
+    const P = (x, y, z) => [x, z, -y];                       // plan x (east), y (north), height z → three's axes
+    cam.position.set(...P(-70, -125, 150));
+    const ctl = new OrbitControls(cam, ren.domElement);
+    ctl.target.set(...P(66, 62, 0)); ctl.minDistance = 25; ctl.maxDistance = 1300; ctl.maxPolarAngle = Math.PI * .495; ctl.update();
+
+    /* ---------- materials, coloured from the page's tokens so the model follows light and dark ---------- */
+    const face = (o = {}) => new THREE.MeshBasicMaterial({ color: '#fff', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1, ...o });
+    const M = {
+      face: face(), edge: new THREE.LineBasicMaterial({ color: '#94a3b8' }),
+      shell: face({ transparent: true }), shellEdge: new THREE.LineBasicMaterial({ color: '#64748b', transparent: true }),
+      int: face({ transparent: true, opacity: 0 }), intEdge: new THREE.LineBasicMaterial({ color: '#64748b', transparent: true, opacity: 0 }),
+      slab: face({ transparent: true, opacity: 0, depthWrite: false }),
+      ghost: new THREE.LineDashedMaterial({ color: '#94a3b8', dashSize: 1.6, gapSize: 1.2 }),
+      ground: new THREE.MeshBasicMaterial({ color: '#eef1f5', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 2 }),
+      lid: new THREE.MeshBasicMaterial({ color: '#eef1f5', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 2 }),
+      street: new THREE.MeshBasicMaterial({ color: '#dfe4eb', side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
+    };
+    function theme() {
+      // the site draws the model in its light colours; in dark mode the page inverts the canvas, as it does for Building 8
+      const v = (n) => ({ '--stage': '#ffffff', '--face': '#ffffff', '--edge': '#94a3b8', '--edge-strong': '#64748b', '--ground': '#eef1f5', '--street': '#dfe4eb' })[n];
+      ren.setClearColor(v('--stage'), 1);
+      for (const k of ['face', 'shell', 'int', 'slab']) M[k].color.set(v('--face'));
+      M.edge.color.set(v('--edge')); M.ghost.color.set(v('--edge'));
+      M.shellEdge.color.set(v('--edge-strong')); M.intEdge.color.set(v('--edge-strong'));
+      M.ground.color.set(v('--ground')); M.lid.color.set(v('--ground')); M.street.color.set(v('--street'));
+      kick();
+    }
+
+    const groups = { context: new THREE.Group(), shell: new THREE.Group(), inside: new THREE.Group(), under: new THREE.Group() };
+    Object.values(groups).forEach(g => scene.add(g));
+    function finish(g, into, mf = M.face, me = M.edge, ang = 25) {
+      into.add(new THREE.Mesh(g, mf));
+      into.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, ang), me));
+    }
+    function ghost(g, into) { const l = new THREE.LineSegments(new THREE.EdgesGeometry(g, 25), M.ghost); l.computeLineDistances(); into.add(l); }
+    const toThree = (g, f) => { const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const [x, y, z] = f(p.getX(i), p.getY(i), p.getZ(i)); p.setXYZ(i, ...P(x, y, z)); } p.needsUpdate = true; return g; };
+    const V2 = ([x, y]) => new THREE.Vector2(x, y);
+
+    // a polygon in plan (with holes: polygons or circles {c:[x,y], r}), extruded from z0 to z1
+    function shapeOf(poly, holes = []) {
+      const s = new THREE.Shape(poly.map(V2));
+      for (const h of holes) { const p = new THREE.Path(); if (h.r) p.absarc(h.c[0], h.c[1], h.r, 0, Math.PI * 2, true); else p.setFromPoints(h.map(V2)); s.holes.push(p); }
+      return s;
+    }
+    function prism(poly, z0, z1, holes = []) {
+      const g = new THREE.ExtrudeGeometry(shapeOf(poly, holes), { depth: z1 - z0, bevelEnabled: false, curveSegments: 28 });
+      return toThree(g, (x, y, z) => [x, y, z0 + z]);
+    }
+    // free triangles, each [[x,y,z],[x,y,z],[x,y,z]] in plan coordinates
+    function tris(list) {
+      const a = []; for (const t of list) for (const v of t) a.push(...P(...v));
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(a, 3)); return g;
+    }
+    const triangulate = (poly) => THREE.ShapeUtils.triangulateShape(poly.map(V2), []);
+    function surfaceSolid(poly, zf, z0 = 0) {
+      const t = [];
+      for (const [i, j, k] of triangulate(poly)) t.push([[...poly[i], zf(...poly[i])], [...poly[j], zf(...poly[j])], [...poly[k], zf(...poly[k])]]);
+      for (let i = 0; i < poly.length; i++) { const a = poly[i], b = poly[(i + 1) % poly.length]; t.push([[...a, z0], [...b, z0], [...b, zf(...b)]], [[...a, z0], [...b, zf(...b)], [...a, zf(...a)]]); }
+      return tris(t);
+    }
+    function tent(poly, z0, zEdge, apex) {
+      const t = [];
+      for (let i = 0; i < poly.length; i++) {
+        const a = poly[i], b = poly[(i + 1) % poly.length];
+        t.push([[...a, z0], [...b, z0], [...b, zEdge]], [[...a, z0], [...b, zEdge], [...a, zEdge]], [[...a, zEdge], [...b, zEdge], apex]);
+      }
+      return tris(t);
+    }
+    // the six faces of a box given as four plan corners and two heights, as triangles
+    function boxTris(q, z0, z1, t) {
+      const lo = q.map(p => [...p, z0]), hi = q.map(p => [...p, z1]);
+      t.push([lo[0], lo[1], lo[2]], [lo[0], lo[2], lo[3]], [hi[0], hi[1], hi[2]], [hi[0], hi[2], hi[3]]);
+      for (let i = 0; i < 4; i++) { const j = (i + 1) % 4; t.push([lo[i], lo[j], hi[j]], [lo[i], hi[j], hi[i]]); }
+    }
+
+    /* ---------- the museum, in its own axes: u across (west → east, 0–71.3), w along (south → north, 0–113) ---------- */
+    const S = [0.9484, -0.31707], L = [0.31676, 0.94851];
+    const W = (u, w) => [12.55 + S[0] * u + L[0] * w, 21.7 + S[1] * u + L[1] * w];   // HdM model axes → site plan (OSM metres)
+    const WU = (poly) => poly.map(([u, w]) => W(u, w));
+    const rectUV = (u0, w0, u1, w1) => WU([[u0, w0], [u1, w0], [u1, w1], [u0, w1]]);
+    const RIDGE = 35.65, EAVE = 10.3, TOP = 18.3;
+    const zRoof = (u) => EAVE + (TOP - EAVE) * (1 - Math.abs(u - RIDGE) / RIDGE);
+    // walls and roof follow the outline with its notch round the plane tree (469_NG20 DA OKF); the roof runs on unbroken
+    const WALLS = [[0, 0], [71.3, 0], [71.3, 113], [0, 113], [0, 100.4], [16.1, 100.3], [21.2, 85], [16.1, 69.7], [0, 69.7]];
+    function clipU(poly, keepLeft) {
+      const inside = ([u]) => keepLeft ? u <= RIDGE : u >= RIDGE, o = [];
+      for (let i = 0; i < poly.length; i++) {
+        const a = poly[i], b = poly[(i + 1) % poly.length];
+        if (inside(a)) o.push(a);
+        if (inside(a) !== inside(b)) { const f = (RIDGE - a[0]) / (b[0] - a[0]); o.push([RIDGE, a[1] + (b[1] - a[1]) * f]); }
+      }
+      return o;
+    }
+    {
+      const t = [], up = (u, w) => [...W(u, w), zRoof(u)];
+      for (const half of [clipU(WALLS, true), clipU(WALLS, false)]) for (const [i, j, k] of triangulate(half)) t.push([up(...half[i]), up(...half[j]), up(...half[k])]);
+      for (let i = 0; i < WALLS.length; i++) {
+        const a = WALLS[i], b = WALLS[(i + 1) % WALLS.length], pts = [a];
+        if ((a[0] - RIDGE) * (b[0] - RIDGE) < 0) { const f = (RIDGE - a[0]) / (b[0] - a[0]); pts.push([RIDGE, a[1] + (b[1] - a[1]) * f]); }
+        pts.push(b);
+        for (let k = 1; k < pts.length; k++) { const p = pts[k - 1], q = pts[k]; t.push([[...W(...p), 0], [...W(...q), 0], up(...q)], [[...W(...p), 0], up(...q), up(...p)]); }
+      }
+      finish(tris(t), groups.shell, M.shell, M.shellEdge, 20);
+    }
+
+    const EG = .35, MEZ = 3.9, OG1 = 7.35, UG1 = -6.65;
+    const UG = [[-2.9, -7.2], [71.3, -7.2], [71.2, 112], [0, 112], [0, 102.6], [17.8, 102.5], [23.7, 84.9], [17.9, 67.2], [0, 67.3], [0, .5], [-2.8, .5]];
+    const TUNNEL = [[31.6, -7.2], [39.6, -7.2], [39.6, -40], [31.6, -40]];
+
+    // the main stair, taken straight from the HdM model (469_NG20, 000-26.ifc), in site metres × 100: "Treppe Boulevard",
+    // the full width of the north–south axis, down from the ground floor to the lower floor and on to the Neue Nationalgalerie
+    const STAIRS = await fetch('/assets/data/ng20-stairs.json').then(r => r.json());
+    for (const k of ['boulevard']) {
+      const { v, i } = STAIRS[k], pos = new Float32Array(v.length);
+      for (let n = 0; n < v.length; n += 3) { const [x, y, z] = P(v[n] / 100, v[n + 1] / 100, v[n + 2] / 100); pos[n] = x; pos[n + 1] = y; pos[n + 2] = z; }
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(i);
+      finish(g, groups.inside, M.int, M.intEdge, 30);
+    }
+
+    // the floor slabs, 40 cm, with their openings: the stair voids, the multi-purpose hall, the entrance hall, the helix stairs
+    const slab = (outline, holes, z) => finish(prism(outline, z - .4, z, holes), groups.inside, M.int, M.intEdge, 30);
+    const hUV = (u0, w0, u1, w1) => rectUV(u0, w0, u1, w1);
+    const circ = ([u, w], r) => ({ c: W(u, w), r });
+    slab(WU(UG), [], UG1);
+    slab(WU(WALLS), [hUV(27.5, 58.2, 43.7, 89.2), hUV(27.5, 34.7, 43.7, 45.5), hUV(27.6, 4.3, 43.7, 13.7)], EG);
+    slab(WU(TUNNEL), [], UG1);
+
+    // walls of the axes only: the north–south spine (16.2 m) and the east–west axis (12 m), open where they cross
+    const wallU = (u, w0, w1, z0, z1, t = .4) => finish(prism(rectUV(u - t / 2, w0, u + t / 2, w1), z0, z1), groups.inside, M.int, M.intEdge);
+    const wallW = (w, u0, u1, z0, z1, t = .4) => finish(prism(rectUV(u0, w - t / 2, u1, w + t / 2), z0, z1), groups.inside, M.int, M.intEdge);
+    for (const u of [27.5, 43.7]) wallU(u, 58, 104.7, EG, OG1 - .4);
+    // the east–west axis's south wall steps round the opening just south of the crossing: __|-|__
+    for (const u of [27.5, 43.7]) wallU(u, 34.7, 45.9, EG, OG1 - .4);
+    wallW(34.7, 27.3, 43.9, EG, OG1 - .4);
+    // and the opening at the south end, walled all round
+    for (const u of [27.6, 43.7]) wallU(u, 4.3, 13.7, EG, OG1 - .4);
+    for (const w of [4.3, 13.7]) wallW(w, 27.4, 43.9, EG, OG1 - .4);   // south of the crossing the ground floor over the path is gallery, open to the galleries beside it
+    for (const w of [45.9, 58]) { wallW(w, 0, 27.5, EG, OG1 - .4); wallW(w, 43.7, 71.3, EG, OG1 - .4); }
+    for (const u of [27.5, 43.7]) { wallU(u, -7.2, 45.9, UG1, -.4); wallU(u, 58, 110.5, UG1, -.4); }
+    for (const u of [31.6, 39.6]) wallU(u, -40, -7.2, UG1, -2.4);
+
+    /* ---------- the neighbours (OpenStreetMap, metres east / north of 52.5075 N, 13.3675 E) ---------- */
+    const C = groups.context;
+    let NNG_LOW;
+    { // Neue Nationalgalerie: the raised terrace, the glass hall under the 64.8 m roof on eight columns, the lower floor in the podium
+      const c = [5.75, -58.25], e1 = [0.947, -0.321], e2 = [0.321, 0.947], T = 3.4;
+      const N = (u, v) => [c[0] + e1[0] * u + e2[0] * v, c[1] + e1[1] * u + e2[1] * v];
+      const rect = (u0, u1, v0, v1) => [N(u0, v0), N(u1, v0), N(u1, v1), N(u0, v1)];
+      finish(prism(rect(-54, 54, -55, 51), 0, T), C);
+      finish(prism(rect(-25.2, 25.2, -25.2, 25.2), T, T + 8.4), C);
+      finish(prism(rect(-32.4, 32.4, -32.4, 32.4), T + 8.4, T + 10.2), C);
+      for (const s of [-1, 1]) for (const k of [-16.2, 16.2]) for (const [u, v] of [[k, s * 31.6], [s * 31.6, k]]) finish(prism(rect(u - .35, u + .35, v - .35, v + .35), T, T + 8.4), C);
+      ghost(prism(rect(-50, 50, -52, 48), UG1, 0), groups.under);
+      NNG_LOW = N(14, 30);
+    }
+    { // St. Matthäus: three gabled bays, the tower with its spire, three apses
+      const d = [0.267, 0.963], nv = [0.963, -0.267], X = (a, n) => [a * d[0] + n * nv[0], a * d[1] + n * nv[1]];
+      const bay = (n0, n1, a0, a1, eave, ridge) => {
+        const g = new THREE.ExtrudeGeometry(new THREE.Shape([[n0, 0], [n1, 0], [n1, eave], [(n0 + n1) / 2, ridge], [n0, eave]].map(V2)), { depth: a1 - a0, bevelEnabled: false, curveSegments: 1 });
+        finish(toThree(g, (n, z, a) => [...X(a0 + a, n), z]), C);
+      };
+      for (const [n0, n1] of [[-27, -19.67], [-19.67, -12.33], [-12.33, -5]]) bay(n0, n1, 31, 57, 11, 14);
+      bay(-19, -11, 57, 64.5, 27, 27);
+      bay(-16.6, -13.4, 59.2, 62.3, 35, 35);
+      const ap = X(60.75, -15);
+      finish(tris([[-16.6, 59.2], [-13.4, 59.2], [-13.4, 62.3], [-16.6, 62.3]].map((p, i, A) => { const q = A[(i + 1) % 4]; return [[...X(p[1], p[0]), 35], [...X(q[1], q[0]), 35], [...ap, 45]]; })), C);
+      for (const n of [-23.3, -16, -8.7]) {
+        const g = new THREE.CylinderGeometry(3.2, 3.2, 9, 18, 1, false, Math.PI / 2, Math.PI);
+        finish(toThree(g, (x, y, z) => [...X(31 + z, n + x), y + 4.5]), C, M.face, M.edge, 30);
+      }
+    }
+    // Philharmonie: the foyers, and the hall under its tent; the Chamber Music Hall beside it
+    finish(prism([[104, 247], [128, 245], [136, 244], [182, 231], [189, 253], [198, 298], [191, 306], [165, 317], [151, 324], [137, 318], [114, 297], [105, 264]], 0, 7), C);
+    finish(tent([[128, 259], [169, 248], [189, 253], [192, 266], [190, 283], [166, 290], [148, 302], [141, 293], [133, 277], [127, 268]], 7, 22, [161, 273, 34]), C, M.face, M.edge, 4);
+    finish(tent([[55, 192], [66, 178], [106, 166], [133, 176], [134, 190], [142, 209], [128, 219], [134, 237], [128, 245], [104, 247], [88, 244], [80, 239], [71, 210], [62, 201]], 0, 12, [103, 213, 22]), C, M.face, M.edge, 4);
+    // Staatsbibliothek: the stack tower and the stepped reading halls (storeys × 3.4 m)
+    for (const [lv, poly] of [
+      [12, [[229, -70], [247, -74], [264, -39], [266, 18], [255, 22], [249, 18], [243, 4], [235, -19]]],
+      [10, [[235, -19], [222, -54], [218, -71], [213, -96], [222, -99], [233, -103], [239, -105], [242, -97], [264, -39], [247, -74], [229, -70]]],
+      [6, [[192, 9], [206, 6], [228, -2], [234, 9], [243, 4], [235, -19], [222, -54], [218, -71], [206, -67], [207, -62], [191, -55], [172, -48]]],
+      [5, [[206, 6], [228, 44], [248, 32], [242, 22], [248, 18], [243, 4], [234, 9], [228, -2]]],
+      [5, [[191, -55], [187, -99], [186, -118], [216, -122], [222, -99], [213, -96], [218, -71], [206, -67], [207, -62]]],
+      [2, [[273, 65], [274, 2], [279, -2], [252, -98], [242, -97], [264, -39], [266, 18], [265, 65]]],
+      [4, [[265, 19], [265, 69], [253, 69], [238, 38], [248, 32], [255, 22]]],
+      [3, [[265, 65], [265, 69], [253, 69], [238, 38], [234, 40], [258, 81], [260, 88], [273, 88], [273, 65]]],
+      [2, [[165, -58], [148, -55], [151, -44], [171, -32], [188, 15], [195, 15], [213, 28], [223, 43], [228, 44], [206, 6], [192, 9], [172, -48], [191, -55], [190, -67], [177, -66], [178, -58]]],
+      [1, [[135, -100], [138, -68], [144, -61], [148, -55], [165, -58], [164, -66], [177, -68], [174, -98], [187, -99], [186, -118], [153, -115], [155, -97]]],
+      [4, [[249, -99], [239, -105], [236, -118], [216, -122], [248, -130], [255, -104]]],
+      [2, [[135, -100], [148, -101], [148, -97], [155, -97], [153, -115], [152, -125], [133, -123]]],
+      [3, [[123, -53], [146, -61], [151, -44], [152, -30], [128, -30]]],
+    ]) finish(prism(poly, 0, lv * 3.4), C);
+    // Kulturforum: Kupferstichkabinett, the foyer and its round tower, the Gemäldegalerie, the Kunstgewerbemuseum, the sloping Piazzetta
+    finish(prism([[-87, 82], [-67, 71], [-39, 65], [-27, 94], [-32, 123], [-77, 138]], 0, 13), C);
+    finish(prism([[-127, 107], [-85, 106], [-82, 125], [-89, 129], [-103, 145], [-94, 177], [-81, 195], [-71, 212], [-83, 219], [-104, 210], [-118, 213], [-126, 182], [-121, 151], [-126, 131]], 0, 13), C);
+    { const g = new THREE.CylinderGeometry(8, 8, 21, 32); finish(toThree(g, (x, y, z) => [-125 + x, 115 - z, y + 10.5]), C, M.face, M.edge, 30); }
+    finish(prism([[-245, 94], [-149, 68], [-144, 78], [-135, 92], [-130, 109], [-126, 131], [-123, 143], [-197, 158], [-226, 166]], 0, 16), C);
+    finish(prism([[-53, 230], [-29, 221], [4, 206], [9, 219], [18, 242], [26, 251], [34, 271], [14, 278], [-24, 285], [-33, 288], [-45, 255]], 0, 15), C);
+    const rampZ = (x, y) => Math.max(0, Math.min(6, 6 * ((x + 23) * -0.942 + (y - 123) * 0.335) / 42.8));
+    finish(surfaceSolid([[-23, 123], [4, 199], [2, 207], [-9, 211], [-36, 214], [-62, 141], [-28, 131]], rampZ), C);
+    { // the plane tree the museum is carved round
+      const at = [49, 104];
+      finish(prism([[at[0] - .7, at[1] - .7], [at[0] + .7, at[1] - .7], [at[0] + .7, at[1] + .7], [at[0] - .7, at[1] + .7]], 0, 7.5), C);
+      const g = new THREE.IcosahedronGeometry(9, 1); g.scale(1, .66, 1);
+      finish(toThree(g, (x, y, z) => [at[0] + x, at[1] - z, 13.5 + y]), C, M.face, M.edge, 8);
+    }
+
+    /* ---------- the ground, open over the museum's lower floor once the floors are shown, and the streets ---------- */
+    const HOLES = [WU(UG), WU(TUNNEL)];
+    let LID;
+    {
+      const g = new THREE.ShapeGeometry(shapeOf([[-520, -470], [660, -470], [660, 560], [-520, 560]], HOLES));
+      const m = new THREE.Mesh(toThree(g, (x, y) => [x, y, 0]), M.ground); m.renderOrder = 1; scene.add(m);
+      LID = new THREE.Mesh(toThree(new THREE.ShapeGeometry(HOLES.map(h => new THREE.Shape(h.map(V2)))), (x, y) => [x, y, 0]), M.lid); LID.renderOrder = 1; scene.add(LID);
+    }
+    // street centrelines from OpenStreetMap: highway type, lanes, points
+    const STREETS = `p3|58,-189 61,-182
+    p3|112,-33 114,-22
+    p4|58,-136 54,-146
+    u|6,13 7,17 8,22 9,28
+    u|-262,79 -254,77 -182,57 -139,45 -127,41
+    u|-12,77 21,66
+    s|170,112 150,122
+    p3|61,-182 71,-152 72,-150
+    p3|72,-150 76,-139
+    p2|51,-155 46,-166 44,-172 42,-178
+    p2|42,-178 39,-189
+    l|150,122 143,126 141,127 122,137 110,143
+    p3|170,112 172,114 178,118 179,120 216,149
+    p2|138,106 135,101 133,96 130,89 129,85 105,16 100,3 97,-7 94,-16
+    p3|-16,-325 -10,-317 -9,-315 8,-288 19,-271 29,-254
+    s2|95,-196 105,-197 113,-200 126,-205 145,-213 160,-222 175,-231 218,-260 221,-263
+    p3|46,-219 52,-203 54,-198
+    s3|76,-139 58,-136
+    s3|58,-189 64,-189 67,-189 70,-189 74,-189 76,-190 78,-190 84,-192 89,-194 95,-196
+    s4|39,-189 49,-189 58,-189
+    p2|56,-181 58,-189
+    p3|54,-198 56,-195 58,-189
+    s3|302,-260 290,-253 268,-238 251,-227 232,-216 216,-206 181,-185 170,-179
+    p4|92,-27 90,-35 89,-39 86,-50 63,-121 62,-124 61,-127 58,-136
+    p4|229,183 222,179 217,177 214,175 211,173 205,168
+    s3|135,-160 119,-154
+    s4|119,-154 88,-143 84,-142 82,-141 76,-139
+    p5|237,162 241,164 263,167 268,167 273,168
+    s3|170,-179 148,-167 135,-160
+    p4|173,141 163,134 163,133 158,130 150,122
+    s2|-226,-157 -240,-160 -268,-170 -284,-174 -297,-176 -315,-178 -319,-178 -324,-178 -333,-178
+    u|92,-27 112,-33
+    u2|66,317 53,277 37,229 32,213
+    p2|51,-155 52,-162 53,-168 55,-175 56,-181
+    p3|150,122 146,118 143,114
+    p4|184,151 173,141
+    p4|205,168 184,151
+    p5|273,168 279,169 298,172
+    l|106,145 98,149 79,159 74,161 62,168 23,188
+    l|23,188 19,174 14,161 12,155
+    u|-32,25 -34,19 -35,15
+    u|114,-22 94,-16
+    u|-196,71 -251,87 -252,87 -259,89
+    u2|32,213 26,195
+    l|12,155 64,138 133,117 135,116 143,114
+    l|110,143 106,145
+    u|11,149 10,147 5,133
+    l|26,195 23,188
+    u|5,133 -5,100 -12,77 -21,52 -25,38 -30,29 -32,25
+    p3|162,104 166,108 170,112
+    p3|76,-139 78,-131 79,-129 88,-103 105,-53
+    p2|12,-251 5,-265 -1,-275 -8,-287 -14,-297 -21,-307 -22,-309 -27,-317 -32,-325
+    u|-32,25 -39,27 -57,33 -96,44
+    p4|54,-146 51,-155
+    s2|38,-132 22,-131 13,-131 1,-132
+    s2|1,-132 -13,-132 -103,-139 -129,-141 -153,-143 -176,-146 -196,-150 -217,-154 -226,-157
+    l|12,155 11,149
+    p3|216,149 228,159 232,161 237,162
+    p3|105,-53 109,-42 112,-33
+    p3|114,-22 117,-14 126,12 139,49 148,74 149,78 151,85 154,91 156,95 159,99 162,104
+    p2|94,-16 92,-27
+    s4|-3,-187 1,-188 5,-188 8,-188 23,-189 28,-189 31,-189 39,-189
+    p2|39,-189 37,-196 36,-199 33,-207 27,-221 19,-237 16,-244 15,-246 12,-251
+    u|-127,41 -60,23
+    s2|58,-136 50,-134 47,-134 38,-132
+    u|94,-16 88,-14 84,-13 3,3
+    u|-60,23 -42,18 -35,15 3,3
+    u|6,13 -32,25
+    p2|143,114 139,108 138,106
+    p3|29,-254 34,-245 42,-229 46,-219
+    u|-179,66 -196,71
+    u|-133,54 -179,66
+    u|-96,44 -133,54
+    r|-189,31 -198,1 -200,-9 -207,-32 -209,-40 -219,-72 -221,-79 -229,-106 -243,-152 -242,-156 -240,-160
+    r|-179,66 -182,57 -183,52 -189,31
+    s3|-277,-224 -257,-217 -227,-205 -210,-199 -191,-195 -179,-194 -160,-191 -129,-188 -106,-186 -94,-185 -70,-185 -56,-184 -38,-185 -17,-185 -3,-187
+    u2|-264,71 -262,77 -262,79 -259,89 -257,95 -244,143 -230,195 -226,210 -219,238 -212,263 -211,267 -212,277
+    u2|-333,-178 -331,-171 -328,-159 -308,-85 -304,-70 -289,-18 -278,22 -264,71
+    s2|-212,277 -202,280 -198,281 -146,295 -103,307 -67,317 -42,324 65,354 88,362 131,373 146,377 165,382 200,391 229,399 243,402 254,405
+    s4|306,417 294,414 290,414 276,411 266,408 254,405
+    p4|272,257 275,240 280,210 281,205 282,198 283,192 288,181 298,172
+    p4|243,402 245,395 246,387 250,374 254,357 257,335 261,316 264,300 267,285 272,257
+    p4|347,200 314,196 304,195 298,194 295,194 283,192 275,191 269,191 266,190 259,189 244,187 237,185 229,183
+    r|305,135 311,136 384,119
+    r|324,32 320,43 316,65 312,85 307,115 304,128 305,135 304,143 301,154 300,165 298,172
+    l|351,-14 354,3 354,13 351,19 345,24 336,27 327,29 324,32
+    w|351,19 359,26 396,53 461,102 492,125 521,147 557,174
+    w|29,182 19,154 132,119 137,126 105,143 29,182`;
+    {
+      const WIDTH = { p: 3.4, s: 3.2, u: 3.6, r: 3.6, l: 3.4, w: 3.2 }, DEF = { p: 14, s: 11, u: 8, r: 7, l: 7, w: 6 };
+      const t = [], disc = (c, r) => { for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2, b = (i + 1) / 12 * Math.PI * 2; t.push([[...c, .04], [c[0] + r * Math.cos(a), c[1] + r * Math.sin(a), .04], [c[0] + r * Math.cos(b), c[1] + r * Math.sin(b), .04]]); } };
+      for (const line of STREETS.split('\n')) {
+        const [kind, pts] = line.trim().split('|'), ty = kind[0], lanes = +kind.slice(1);
+        const wd = lanes ? lanes * WIDTH[ty] + 2 : DEF[ty], h = wd / 2;
+        const p = pts.trim().split(' ').map(s => s.split(',').map(Number));
+        for (let i = 1; i < p.length; i++) {
+          const a = p[i - 1], b = p[i], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1, nx = -dy / l * h, ny = dx / l * h;
+          const q = [[a[0] + nx, a[1] + ny, .04], [b[0] + nx, b[1] + ny, .04], [b[0] - nx, b[1] - ny, .04], [a[0] - nx, a[1] - ny, .04]];
+          t.push([q[0], q[1], q[2]], [q[0], q[2], q[3]]);
+        }
+        for (const c of p) disc(c, h);
+      }
+      const m = new THREE.Mesh(tris(t), M.street); m.renderOrder = 0; scene.add(m);
+    }
+
+    /* ---------- the two axes, as in Layers of Egypt: a soft glow as wide as the axis runs along the way with a tail that
+       fades behind it. The first run lights the way from its start to its end; after that the way stays faintly lit and
+       the glow runs along it again and again. Floors and walls hide it where they are in front of it ---------- */
+    const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches, SPEED = 26, BAND = 80, BASE = .5;
+    function route(pts, color, width) {
+      // resample the polyline every metre; each sample gets its distance along the way
+      const pl = pts.map(([x, y, z]) => new THREE.Vector3(x, y, z)), samples = [];
+      for (let i = 1; i < pl.length; i++) { const a = pl[i - 1], b = pl[i], n = Math.max(1, Math.ceil(a.distanceTo(b))); for (let k = (i > 1 ? 1 : 0); k <= n; k++) samples.push(a.clone().lerp(b, k / n)); }
+      const pos = [], sv = [], vv = [], idx = []; let s = 0;
+      samples.forEach((p, i) => {
+        if (i) s += p.distanceTo(samples[i - 1]);
+        const q = samples[Math.min(i + 1, samples.length - 1)], r = samples[Math.max(i - 1, 0)], dx = q.x - r.x, dy = q.y - r.y, l = Math.hypot(dx, dy) || 1, nx = -dy / l * width / 2, ny = dx / l * width / 2;
+        pos.push(...P(p.x + nx, p.y + ny, p.z), ...P(p.x - nx, p.y - ny, p.z)); sv.push(s, s); vv.push(1, -1);
+        if (i) { const a = (i - 1) * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+      });
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('s', new THREE.Float32BufferAttribute(sv, 1)); g.setAttribute('v', new THREE.Float32BufferAttribute(vv, 1)); g.setIndex(idx);
+      const mat = new THREE.ShaderMaterial({
+        transparent: true, depthTest: true, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+        uniforms: { color: { value: new THREE.Color(color) }, head: { value: -1 }, reached: { value: 0 }, cyc: { value: 1 }, fade: { value: 100 }, first: { value: 1 }, band: { value: BAND }, base: { value: BASE }, show: { value: 0 } },
+        vertexShader: 'attribute float s; attribute float v; varying float vs; varying float vv; void main(){ vs = s; vv = v; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+        fragmentShader: `uniform vec3 color; uniform float head, reached, band, base, show, cyc, fade, first; varying float vs; varying float vv;
+          void main(){
+            float glow = (vs <= head && vs >= head - band) ? pow((vs - (head - band)) / band, 1.6) : 0.0;
+            // what the glow has passed keeps a colour that fades the longer ago it passed, until the glow comes again
+            float d = head - vs;
+            if (d < 0.0) d = first > .5 ? -1.0 : d + cyc;
+            float trail = (d >= 0.0 && vs <= reached) ? base * exp(-d / fade) : 0.0;
+            float across = pow(1.0 - abs(vv), .55);           // soft edges, like the blurred band on the Egypt plan
+            float a = max(glow * .85, trail) * across * show;
+            if (a < .004) discard;
+            gl_FragColor = vec4(color, a);
+          }`,
+      });
+      const m = new THREE.Mesh(g, mat); m.renderOrder = 10; scene.add(m);
+      return { mat, len: s, t0: 0, m };
+    }
+    function drawRoute(r, show, t) {
+      const u = r.mat.uniforms; u.show.value = show; r.m.visible = show > .01;
+      if (!r.m.visible) return;
+      if (REDUCE) { u.head.value = r.len; u.reached.value = r.len; u.first.value = 1; u.fade.value = 1e6; u.base.value = .55; return; }
+      const cycle = (r.len + BAND) / SPEED + .6, el = t - r.t0, h = (el % cycle) * SPEED;
+      u.head.value = h; u.cyc.value = cycle * SPEED; u.fade.value = r.len * .45; u.first.value = el < cycle ? 1 : 0;
+      u.reached.value = el < cycle ? Math.min(h, r.len) : r.len;   // first run: nothing ahead of the glow; after it, the faded wake of the run before
+    }
+    const F = .15;
+    // both ways run straight along their axis, from the street outside on one side to the square on the other
+    const EW = route([[...W(150, 51.9), F], [...W(71.3, 51.9), EG + F], [...W(0, 51.9), EG + F], [...W(-30, 51.9), F]], '#f97316', 10);
+    const NS = route([[...W(35.6, 140), F], [...W(35.6, 113), EG + F], [...W(35.6, 89.2), EG + F], [...W(35.6, 70.8), UG1 + F], [...W(35.6, -40), UG1 + F]], '#2563eb', 14);
+
+    /* ---------- labels: names appear once you come close to the museum ---------- */
+    const labels = [], CENTRE = new THREE.Vector3(...P(...W(35.6, 56), 0));
+    function label(text, x, y, z, minStep, cls = '', maxStep = 9) {
+      const el = document.createElement('div'); el.className = 'lbl ' + cls; el.textContent = text; box.append(el);
+      labels.push({ el, v: new THREE.Vector3(...P(x, y, z)), minStep, maxStep, near: cls.includes('zone') ? 210 : 300 });
+    }
+    label(N('Philharmonie'), 161, 273, 38, 0);
+    label(N('Chamber Music Hall'), 103, 213, 25, 0);
+    label(N('Staatsbibliothek'), 252, -40, 45, 0);
+    label(N('Neue Nationalgalerie'), 5.75, -58.25, 17, 0);
+    label(N('St. Matthäus'), -11, 50, 48, 0);
+    label(N('Kulturforum'), -105, 160, 24, 0);
+    label(N('Plane tree'), 49, 104, 23, 0, 'tree');
+    label(N('Museum of the 20th Century'), ...W(35.6, 56), 24, 1, '', 1);
+    label(N('Lower floor, Neue Nationalgalerie'), ...NNG_LOW, -3.5, 4, 'zone');
+    const tmp = new THREE.Vector3();
+    const namesOn = true;
+    function placeLabels() {
+      const r = box.getBoundingClientRect(), dist = cam.position.distanceTo(CENTRE);
+      let any = false;
+      for (const l of labels) {
+        tmp.copy(l.v).project(cam);
+        const on = namesOn && step >= l.minStep && step <= l.maxStep && dist < l.near && tmp.z < 1 && Math.abs(tmp.x) < 1.05 && Math.abs(tmp.y) < 1.05;
+        l.el.style.opacity = on ? 1 : 0; any ||= on;
+        if (on) l.el.style.transform = `translate(${(tmp.x + 1) / 2 * r.width}px, ${(1 - tmp.y) / 2 * r.height}px) translate(-50%, -100%)`;
+      }
+      hint.hidden = any || !namesOn;
+    }
+
+    /* ---------- steps: each value eases toward its target, and the model draws only while something moves ---------- */
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cur = { rise: 0, open: 0, ew: 0, ns: 0 }, aim = { ...cur };
+    let step = 0, raf = 0;
+    function apply() {
+      groups.shell.scale.y = Math.max(.001, cur.rise); groups.shell.visible = cur.rise > .002;
+      M.shell.opacity = 1 - .93 * cur.open; M.shellEdge.opacity = 1 - .7 * cur.open; M.shell.depthWrite = cur.open < .5;
+      M.int.opacity = cur.open; M.intEdge.opacity = cur.open; M.int.depthWrite = cur.open > .5; M.slab.opacity = .6 * cur.open;
+      LID.visible = cur.open < .5;
+      groups.inside.visible = cur.open > .01;
+      const now = performance.now() / 1000;
+      if (cur.ew > 0 && !EW.t0) EW.t0 = now; if (cur.ew === 0) EW.t0 = 0;
+      if (cur.ns > 0 && !NS.t0) NS.t0 = now; if (cur.ns === 0) NS.t0 = 0;
+      drawRoute(EW, cur.ew, now); drawRoute(NS, cur.ns, now);
+    }
+    function tick() {
+      let moving = false;
+      for (const k in cur) {
+        const speed = k === 'ew' || k === 'ns' ? .05 : .035;
+        if (reduce) cur[k] = aim[k];
+        else if (Math.abs(aim[k] - cur[k]) > .001) { cur[k] += Math.sign(aim[k] - cur[k]) * Math.min(Math.abs(aim[k] - cur[k]), speed); moving = true; }
+        else cur[k] = aim[k];
+      }
+      apply(); ren.render(scene, cam); placeLabels();
+      raf = moving || cur.ew > 0 || cur.ns > 0 ? requestAnimationFrame(tick) : 0;   // the glows keep running
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+    function set(s) {
+      step = s; range.value = s; out.value = out.textContent = STEPS[s] || s + ' / 4'; cap.textContent = CAPS[s] || '';
+      aim.rise = s >= 1 ? 1 : 0; aim.open = s >= 2 ? 1 : 0; aim.ew = s >= 3 ? 1 : 0; aim.ns = s >= 4 ? 1 : 0; kick();
+    }
+    range.addEventListener('input', () => { stop(); set(+range.value); });
+    let timer = 0;
+    function stop() { clearTimeout(timer); timer = 0; playBtn.setAttribute('aria-pressed', 'false'); }
+    function play() {
+      playBtn.setAttribute('aria-pressed', 'true');
+      let s = step >= 4 ? 0 : step + 1;
+      const next = () => { set(s); if (s < 4) { s++; timer = setTimeout(next, s === 4 ? 15000 : 3400); } else timer = setTimeout(stop, 18000); };
+      next();
+    }
+    playBtn.addEventListener('click', (e) => { e.stopPropagation(); timer ? stop() : play(); });
+    function size() {
+      const r = box.getBoundingClientRect(); if (!r.width) return;
+      ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.fov = 40 * Math.pow(Math.max(1, 1.4 / cam.aspect), .7); cam.updateProjectionMatrix(); kick();
+    }
+    ctl.addEventListener('change', kick);
+    new ResizeObserver(size).observe(box);
+    theme(); set(0); size();
+  }
+});
+
+// Extended Threads: the Processing simulation RoverInActionIsosurfaces (2016), rebuilt with three.js: the 200 × 200 ground of
+// loose points, the rolling robot (assets/data/et-rover.bin, 300 kB), its sintering laser and spray, and the isosurface
+// that turns the fused particles into a solid. A demo runs until Drive or Aim laser is pressed; on a computer W A S D drive,
+// a click aims, the space bar builds, the right button turns the view. It loads when it first comes into view and runs
+// only while it is on screen
+$$('.et-build').forEach(fig => {
+  let started = false;
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && !started) { started = true; io.disconnect(); start(); } }, { rootMargin: '200px' });
+  io.observe($('.et-3d', fig));
+  async function start() {
+    const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/+esm');
+    const { OrbitControls } = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js/+esm');
+    const { MarchingCubes } = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/objects/MarchingCubes.js/+esm');
+
+    const box = $('.et-3d', fig), badge = $('.et-badge', fig);
+    const WORDS = Object.fromEntries($$('.et-say li', fig).map(li => [li.dataset.k, li.textContent.trim()]));
+    const ren = new THREE.WebGLRenderer({ antialias: true });
+    ren.setPixelRatio(Math.min(2, devicePixelRatio)); box.prepend(ren.domElement);
+    ren.domElement.style.touchAction = 'none'; wheelOnly(box);
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(40, 1.6, 5, 20000);
+    // the sketch's world: ground x and y from 0 to 1000 (200 points, 5 apart), z up. In three: x, height, plan y
+    const P = (x, y, z) => [x - 500, z, y - 500];
+    cam.position.set(...P(-250, 1350, 900));
+    const ctl = new OrbitControls(cam, ren.domElement);
+    ctl.target.set(...P(520, 470, 40)); ctl.maxPolarAngle = Math.PI * .48; ctl.minDistance = 150; ctl.maxDistance = 3500; ctl.update();
+    scene.add(new THREE.HemisphereLight('#ffffff', '#30343a', 1.6));
+    const sun = new THREE.DirectionalLight('#ffffff', 1.6); sun.position.set(...P(-400, -300, 900)); scene.add(sun);
+
+    /* ---------- the ground: 200 × 200 loose points ---------- */
+    const R = 200, GAP = 5, N = R * R;
+    const home = new Float32Array(N * 2), gp = new Float32Array(N * 3);
+    function layGround() { for (let i = 0; i < R; i++) for (let j = 0; j < R; j++) { const k = i * R + j; home[k * 2] = i * GAP; home[k * 2 + 1] = j * GAP; gp.set(P(i * GAP, j * GAP, 0), k * 3); } }
+    layGround();
+    const gGeo = new THREE.BufferGeometry(); gGeo.setAttribute('position', new THREE.BufferAttribute(gp, 3));
+    const groundMat = new THREE.PointsMaterial({ color: '#ffffff', size: 1.6, sizeAttenuation: false, transparent: true, opacity: .62 });
+    scene.add(new THREE.Points(gGeo, groundMat));
+
+    /* ---------- particles: the builders at the laser (red) and the spray from the rover, which lands on the laser and is gone ---------- */
+    const MAXB = 24000, MAXS = 900, FLY = 48, G = .22, AWAY = -1e5;
+    const bp = new Float32Array(MAXB * 3), sp = new Float32Array(MAXS * 3).fill(AWAY), sv = new Float32Array(MAXS * 3), sAge = new Int32Array(MAXS).fill(FLY);
+    let nB = 0, sHead = 0;
+    const bGeo = new THREE.BufferGeometry(); bGeo.setAttribute('position', new THREE.BufferAttribute(bp, 3)); bGeo.setDrawRange(0, 0);
+    const sGeo = new THREE.BufferGeometry(); sGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+    scene.add(new THREE.Points(bGeo, new THREE.PointsMaterial({ color: '#ff2a1f', size: 2.6, sizeAttenuation: false })));
+    const sPts = new THREE.Points(sGeo, new THREE.PointsMaterial({ color: '#fa6464', size: 2.2, sizeAttenuation: false })); sPts.frustumCulled = false; scene.add(sPts);
+
+    /* ---------- the isosurface: every builder adds a round brush to a volume; marching cubes draws where it passes 0.5 ---------- */
+    const RES = 88, HV = 250;                     // cells per side; the volume is the ground's 1000 × 1000 and 250 high
+    const solidMat = new THREE.MeshLambertMaterial({ color: '#f4f4f2' });
+    const iso = new MarchingCubes(RES, solidMat, false, false, 90000);
+    iso.isolation = .5; iso.scale.set(500, HV / 2, 500); iso.position.set(0, HV / 2, 0); scene.add(iso);
+    iso.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1.8); iso.frustumCulled = false;   // the volume's own cube, so picking never works from a stale bound
+    const F = iso.field, S2 = RES * RES;
+    function splat(x, y, z) {
+      // the brush is as round in metres as in cells allow: the volume's cells are 11 wide but only 3 high
+      const cx = x / 1000 * RES, cy = z / HV * RES, cz = y / 1000 * RES, r = 2.2, rz = 4.2;
+      for (let k = Math.max(1, Math.floor(cz - r)); k <= Math.min(RES - 2, Math.ceil(cz + r)); k++)
+        for (let j = Math.max(1, Math.floor(cy - rz)); j <= Math.min(RES - 2, Math.ceil(cy + rz)); j++)
+          for (let i = Math.max(1, Math.floor(cx - r)); i <= Math.min(RES - 2, Math.ceil(cx + r)); i++) {
+            const d2 = ((i - cx) ** 2 + (k - cz) ** 2) / (r * r) + (j - cy) ** 2 / (rz * rz);
+            if (d2 < 1) F[k * S2 + j * RES + i] += .34 * (1 - d2) ** 2;
+          }
+    }
+    let isoDirty = false, isoClock = 0;
+
+    /* ---------- the rover: the rolling robot from Unit1.obj, ten times its model size ---------- */
+    const roverMat = new THREE.MeshStandardMaterial({ color: '#9aa0a8', metalness: .35, roughness: .55 });
+    const rover = new THREE.Group(); scene.add(rover);
+    const roll = new THREE.Group(); rover.add(roll);
+    {
+      const buf = await fetch('/assets/data/et-rover.bin').then(r => r.arrayBuffer()), h = new Uint32Array(buf, 0, 2);
+      const q = new Int16Array(buf, 8, h[0] * 3), idx = new Uint16Array(buf, 8 + h[0] * 6, h[1]);
+      const pos = new Float32Array(q.length); for (let i = 0; i < q.length; i++) pos[i] = q[i] / 3000 * 10;
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(new THREE.BufferAttribute(idx, 1)); g.computeVertexNormals();
+      roll.add(new THREE.Mesh(g, roverMat));
+    }
+    const loc = new THREE.Vector3(200, 220, 0), vel = new THREE.Vector3(), dest = new THREE.Vector3(200, 220, 0);
+    const laser = new THREE.Vector3(560, 520, 0);
+    const beamGeo = new THREE.BufferGeometry(); beamGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
+    const beam = new THREE.Line(beamGeo, new THREE.LineBasicMaterial({ color: '#ff3b30' })); scene.add(beam);
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(4, 12, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30' })); scene.add(dot);
+    const ringMat = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: .5, side: THREE.DoubleSide });
+    const ring = new THREE.Mesh(new THREE.RingGeometry(14, 17, 40).rotateX(-Math.PI / 2), ringMat); scene.add(ring);
+    // colours from the page's tokens, so the field follows light and dark
+    function theme() {
+      const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const v = (n) => (dark ? { '--stage': '#000000', '--ground-pt': '#ffffff', '--solid': '#f4f4f2', '--rover': '#9aa0a8', '--ring': '#ffffff' }
+                             : { '--stage': '#ffffff', '--ground-pt': '#334155', '--solid': '#e6e8ec', '--rover': '#8a929c', '--ring': '#0f172a' })[n];
+      ren.setClearColor(v('--stage'), 1); groundMat.color.set(v('--ground-pt')); groundMat.opacity = dark ? .62 : .5;
+      solidMat.color.set(v('--solid')); roverMat.color.set(v('--rover')); ringMat.color.set(v('--ring'));
+    }
+    theme();
+    new MutationObserver(theme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    /* ---------- where the laser may point: the ground, or the top of what is already built, never the air ---------- */
+    const ray = new THREE.Raycaster(), down = new THREE.Vector3(0, -1, 0), hitP = new THREE.Vector3();
+    function topAt(x, y) {                       // the highest surface under a point: the built form if there is one, else the ground
+      if (!nB) return 0;
+      ray.set(new THREE.Vector3(...P(x, y, 600)), down);
+      const h = ray.intersectObject(iso, false)[0];
+      return h ? Math.max(0, h.point.y) : 0;
+    }
+
+    /* ---------- the sketch's rules, once a frame ---------- */
+    let build = false, frame = 0, lastAim = 0;
+    const RANGE = 100, POWER = .02;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    function step() {
+      frame++;
+      // the rover heads for its destination: it speeds up with the distance, at most 3 a frame, and rolls while it moves
+      // on a computer the keys drive it straight, relative to the view
+      const kd = keyDir();
+      if (kd) { loc.x = Math.max(0, Math.min(1000, loc.x + kd[0] * 3)); loc.y = Math.max(0, Math.min(1000, loc.y + kd[1] * 3)); dest.copy(loc); vel.set(kd[0] * 3, kd[1] * 3, 0); roll.rotateOnWorldAxis(new THREE.Vector3(kd[1], 0, -kd[0]).normalize(), 3 / 95); }
+      const dif = dest.clone().sub(loc), dist = dif.length();
+      if (kd) {}
+      else if (dist > 2) { vel.add(dif.normalize().multiplyScalar(dist / 100)); vel.clampLength(0, 3); loc.add(vel); const ax = new THREE.Vector3(vel.y, 0, -vel.x).normalize(); if (ax.lengthSq()) roll.rotateOnWorldAxis(new THREE.Vector3(ax.x, 0, ax.z), vel.length() / 95); }
+      else vel.set(0, 0, 0);
+      rover.position.set(...P(loc.x, loc.y, 95));
+      // left alone for five seconds, the rover stops building
+      if (build && !demo && performance.now() - lastAim > 5000) setBuild(false);
+      if (build) {
+        // the laser rests on whatever is under it, so the form grows upwards from where it was started
+        if (frame % 8 === 0) laser.z = topAt(laser.x, laser.y);
+        // the ground within reach of the laser is pushed away from it: the loose material gathers round the fused point
+        for (let k = 0; k < N; k++) {
+          const x = gp[k * 3] + 500, y = gp[k * 3 + 2] + 500, z = gp[k * 3 + 1];
+          const dx = laser.x - x, dy = laser.y - y, dz = laser.z - z;
+          if (dx * dx + dy * dy + dz * dz < RANGE * RANGE) { gp[k * 3] -= dx * POWER; gp[k * 3 + 2] -= dy * POWER; }
+        }
+        gGeo.attributes.position.needsUpdate = true;
+        // a builder particle at the laser, fused into the volume
+        for (let n = 0; n < 2 && nB < MAXB; n++) {
+          const x = laser.x + rnd(-20, 20), y = laser.y + rnd(-20, 20), z = Math.max(0, laser.z + rnd(-6, 3));   // a little into what is below, so new material fuses with it
+          bp.set(P(x, y, z), nB * 3); nB++; splat(x, y, z); isoDirty = true;
+        }
+        bGeo.setDrawRange(0, nB); bGeo.attributes.position.needsUpdate = true;
+        // spray: from the top of the rover in an arc that comes down on the laser point
+        for (let n = 0; n < 3; n++) {
+          const k = sHead; sHead = (sHead + 1) % MAXS;
+          const o = [loc.x + rnd(-25, 25), loc.y + rnd(-25, 25), 160 + rnd(0, 15)], t = [laser.x + rnd(-14, 14), laser.y + rnd(-14, 14), laser.z], T = FLY + rnd(-8, 8);
+          sp.set(P(...o), k * 3); sv.set([(t[0] - o[0]) / T, (t[1] - o[1]) / T, (t[2] - o[2]) / T + .5 * G * T], k * 3); sAge[k] = Math.round(FLY - T);
+        }
+      }
+      for (let k = 0; k < MAXS; k++) {
+        if (sAge[k] >= FLY) { sp[k * 3 + 1] = AWAY; continue; }   // landed: absorbed into the form, gone
+        sAge[k]++; sv[k * 3 + 2] -= G;
+        sp[k * 3] += sv[k * 3]; sp[k * 3 + 2] += sv[k * 3 + 1]; sp[k * 3 + 1] += sv[k * 3 + 2];
+      }
+      sGeo.attributes.position.needsUpdate = true;
+      // the laser beam from the rover to its point
+      const b = beamGeo.attributes.position.array; b.set(P(loc.x, loc.y, 90), 0); b.set(P(laser.x, laser.y, laser.z), 3); beamGeo.attributes.position.needsUpdate = true;
+      beam.visible = build; dot.position.set(...P(laser.x, laser.y, laser.z)); dot.visible = build || mode === 'aim';
+      ring.position.set(...P(dest.x, dest.y, .5)); ring.visible = dist > 6;
+      // the surface is recomputed every few frames while it grows
+      if (isoDirty && ++isoClock % 6 === 0) { iso.update(); isoDirty = false; }
+      badge.textContent = (WORDS.fused || '{n} particles fused').replace('{n}', nB.toLocaleString(document.documentElement.lang || 'en'));
+    }
+
+    /* ---------- the demo: drive in, build a curved wall that rises, move on and build a second one ---------- */
+    const DEMO = [
+      { f: 0, dest: [400, 360], laser: [560, 520, 0], build: false },
+      { f: 140, build: true, arc: { c: [560, 600], r: 110, a0: -2.4, a1: -.7 } },
+      { f: 1000, build: false, dest: [700, 360] },
+      { f: 1180, build: true, arc: { c: [760, 560], r: 70, a0: -3.0, a1: 0 } },
+      { f: 1900, build: false, dest: [420, 260] },
+    ];
+    let demo = true, dFrame = 0, arc = null, arcT = 0;
+    function demoStep() {
+      dFrame++;
+      for (const k of DEMO) if (k.f === dFrame) {
+        if (k.dest) dest.set(k.dest[0], k.dest[1], 0);
+        if (k.laser) laser.set(...k.laser);
+        if ('build' in k) setBuild(k.build);
+        arc = k.arc || null; arcT = 0;
+      }
+      if (arc && build) {
+        arcT += .012;
+        const a = arc.a0 + (arc.a1 - arc.a0) * (.5 - .5 * Math.cos(arcT));       // the laser sweeps back and forth along the arc
+        laser.x = arc.c[0] + arc.r * Math.cos(a); laser.y = arc.c[1] + arc.r * Math.sin(a);
+      }
+      if (dFrame > 2200) { clearAll(); dFrame = 0; }   // the demo starts over until someone takes over
+    }
+
+    /* ---------- controls: the demo runs until Drive or Aim laser is pressed; then the field clears and the user is in charge ---------- */
+    const demoBtn = document.getElementById('etDemo'), buildBtn = document.getElementById('etBuild'), status = document.getElementById('etStatus');
+    const modeDrive = document.getElementById('etDrive'), modeAim = document.getElementById('etAim');
+    let mode = 'demo';
+    const SAY = { demo: WORDS.demo, drive: WORDS.drive, aim: WORDS.aim };
+    function say() { status.textContent = SAY[mode] + (build && mode === 'aim' ? ' ' + WORDS.building : ''); }
+    function setBuild(on) { build = on; buildBtn.setAttribute('aria-pressed', on); if (on) lastAim = performance.now(); say(); }
+    function setMode(m) {
+      if (demo && m !== 'demo') { demo = false; clearAll(); dest.copy(loc); }
+      mode = m; modeDrive.setAttribute('aria-pressed', m === 'drive'); modeAim.setAttribute('aria-pressed', m === 'aim');
+      if (m === 'drive') setBuild(false);
+      say();
+    }
+    function clearAll() {
+      layGround(); gGeo.attributes.position.needsUpdate = true; nB = 0; bGeo.setDrawRange(0, 0); sAge.fill(FLY);
+      F.fill(0); iso.update(); setBuild(false); laser.z = 0; arc = null;
+    }
+    demoBtn.addEventListener('click', () => { clearAll(); demo = true; dFrame = 0; setMode('demo'); });
+    modeDrive.addEventListener('click', () => setMode('drive'));
+    modeAim.addEventListener('click', () => setMode('aim'));
+    buildBtn.addEventListener('click', () => { if (demo) setMode('aim'); setBuild(!build); });
+    document.getElementById('etClear').addEventListener('click', () => { if (demo) setMode('drive'); clearAll(); });
+    // a click (not a drag): in Drive the rover's destination; in Aim the point on the ground or the built form, and building starts
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    let press = null;
+    ren.domElement.addEventListener('pointerdown', (e) => { press = e.button === 0 ? [e.clientX, e.clientY] : null; box.focus({ preventScroll: true }); });
+    ren.domElement.addEventListener('pointerup', (e) => {
+      if (!press || Math.hypot(e.clientX - press[0], e.clientY - press[1]) > 5) return;
+      if (DESK && mode !== 'aim') setMode('aim');   // on a computer a click always aims
+      if (mode === 'demo') return;
+      const r = ren.domElement.getBoundingClientRect();
+      ray.setFromCamera(new THREE.Vector2((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1), cam);
+      const onForm = nB ? ray.intersectObject(iso, false)[0] : null;
+      let x, y, z = 0;
+      if (onForm) { x = onForm.point.x + 500; y = onForm.point.z + 500; z = Math.max(0, onForm.point.y); }
+      else if (ray.ray.intersectPlane(plane, hitP)) { x = hitP.x + 500; y = hitP.z + 500; }
+      else return;
+      x = Math.max(0, Math.min(1000, x)); y = Math.max(0, Math.min(1000, y));
+      if (mode === 'drive') dest.set(x, y, 0);
+      else { laser.set(x, y, z); setBuild(true); }
+    });
+
+    /* ---------- on a computer: W A S D or the arrows drive, a left click aims, the space bar builds, the right button turns the view ---------- */
+    const DESK = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const held = new Set(), KEYS = { KeyW: 'f', ArrowUp: 'f', KeyS: 'b', ArrowDown: 'b', KeyA: 'l', ArrowLeft: 'l', KeyD: 'r', ArrowRight: 'r' };
+    let hover = false;
+    box.addEventListener('pointerenter', () => { hover = true; }); box.addEventListener('pointerleave', () => { hover = false; });
+    const live = () => hover || document.activeElement === box;
+    function keyDir() {
+      if (!held.size) return null;
+      const f = new THREE.Vector3(); cam.getWorldDirection(f); const l = Math.hypot(f.x, f.z) || 1, fx = f.x / l, fy = f.z / l;   // the view's forward, in plan
+      let x = 0, y = 0;
+      if (held.has('f')) { x += fx; y += fy; } if (held.has('b')) { x -= fx; y -= fy; }
+      if (held.has('r')) { x -= fy; y += fx; } if (held.has('l')) { x += fy; y -= fx; }
+      const m = Math.hypot(x, y); return m ? [x / m, y / m] : null;
+    }
+    addEventListener('keydown', (e) => {
+      if (!live() || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (KEYS[e.code]) { e.preventDefault(); held.add(KEYS[e.code]); if (mode !== 'drive') setMode('drive'); }
+      else if (e.code === 'Space') { e.preventDefault(); if (e.repeat) return; if (demo) setMode('aim'); setBuild(!build); }
+    });
+    addEventListener('keyup', (e) => { if (KEYS[e.code]) held.delete(KEYS[e.code]); });
+    addEventListener('blur', () => held.clear());
+    if (DESK) {
+      ctl.mouseButtons = { LEFT: null, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
+      ren.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
+      SAY.drive = WORDS['desk-drive']; SAY.aim = WORDS['desk-aim'];
+    }
+
+    /* ---------- loop ---------- */
+    function size() { const r = box.getBoundingClientRect(); if (!r.width) return; ren.setSize(r.width, r.height); cam.aspect = r.width / r.height; cam.updateProjectionMatrix(); }
+    new ResizeObserver(size).observe(box); size();
+    say();
+    // it runs only while it is on screen
+    let running = false;
+    function loop() {
+      if (!running) return;
+      if (demo) demoStep();
+      step();
+      ren.render(scene, cam);
+      requestAnimationFrame(loop);
+    }
+    new IntersectionObserver(es => { const on = es.some(e => e.isIntersecting); if (on && !running) { running = true; requestAnimationFrame(loop); } else if (!on) { running = false; held.clear(); } }).observe(box);
   }
 });
 

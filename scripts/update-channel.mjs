@@ -50,7 +50,7 @@ function lastToken(o) {
 const text = (t) => (t?.runs ? t.runs.map((r) => r.text).join('') : t?.simpleText || t?.content || '');
 
 /* Every upload, videos and shorts alike, lives in the channel's "uploads" playlist (UU...).
-   YouTube keeps the shorts alone in a second list of the same channel (UUSH...). */
+   YouTube may also keep the shorts alone in a second list of the same channel (UUSH...); for this channel it is empty. */
 async function uploads(list = 'UU') {
   const out = new Map();
   const take = (o) => {
@@ -71,6 +71,34 @@ async function uploads(list = 'UU') {
     tok = next;
   }
   return [...out].map(([id, t]) => ({ id, t }));
+}
+
+/* The channel's Shorts tab, as YouTube shows it: its params are read from the channel page (the known value if not),
+   then every page of it, each short as a reelWatchEndpoint (newer pages) or a reelItemRenderer (older ones). */
+async function shortsTab() {
+  const out = new Set();
+  const take = (o) => {
+    if (!o || typeof o !== 'object') return;
+    if (o.reelWatchEndpoint?.videoId) out.add(o.reelWatchEndpoint.videoId);
+    if (o.reelItemRenderer?.videoId) out.add(o.reelItemRenderer.videoId);
+    for (const k in o) take(o[k]);
+  };
+  let params = 'EgZzaG9ydHPyBgUKA5oBAA%3D%3D';
+  try {
+    const home = await browse({ browseId: CHANNEL });
+    const tab = (home.contents?.twoColumnBrowseResultsRenderer?.tabs || []).map((t) => t.tabRenderer).find((t) => t && /^shorts$/i.test(t.title || ''));
+    if (tab?.endpoint?.browseEndpoint?.params) params = tab.endpoint.browseEndpoint.params;
+  } catch (_) { /* keep the known params */ }
+  let r = await browse({ browseId: CHANNEL, params });
+  take(r);
+  for (let tok = lastToken(r), n = 0; tok && n < 80; n++) {
+    r = await browse({ continuation: tok });
+    const before = out.size; take(r);
+    const next = lastToken(r);
+    if (next === tok || out.size === before) break;
+    tok = next;
+  }
+  return [...out];
 }
 
 async function playlists() {
@@ -178,11 +206,12 @@ const videos = await uploads();
 const previous = Number(((await readFile(OUT, 'utf8').catch(() => '')).match(/"?total"?: (\d+)/) || [])[1] || 0);
 if (videos.length < 100 || videos.length < previous * 0.9) throw new Error(`Only ${videos.length} uploads came back (last run: ${previous}); keeping the old data.`);
 
-// Shorts are the uploads in the shorts list; everything else counts as a long video.
-// If that list does not come back, the last known count is kept rather than showing 0.
+// Shorts are the videos on the channel's Shorts tab; everything else counts as a long video. Only if the tab gives
+// nothing is the channel's shorts list (UUSH…) asked, and if that is empty too, the last known count is kept, not 0.
 const uploadIds = new Set(videos.map((v) => v.id));
 const prevShorts = Number(((await readFile(OUT, 'utf8').catch(() => '')).match(/"shorts": (\d+)/) || [])[1] || 0);
-let shorts = (await uploads('UUSH').catch(() => [])).filter((v) => uploadIds.has(v.id)).length;
+let shorts = (await shortsTab().catch(() => [])).filter((id) => uploadIds.has(id)).length;
+if (!shorts) shorts = (await uploads('UUSH').catch(() => [])).filter((v) => uploadIds.has(v.id)).length;
 if (!shorts && prevShorts) shorts = prevShorts;
 const long = videos.length - shorts;
 

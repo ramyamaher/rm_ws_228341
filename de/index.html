@@ -661,6 +661,40 @@ html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#l
 .city-build .b8-3d{height:auto; min-height:0; aspect-ratio:2500/1138; overflow:hidden}
 .city-build .b8-3d canvas{position:absolute; left:0; top:0}
 .b8-ctl{display:flex; align-items:center; gap:14px; padding:12px 18px 16px}
+/* Extended Threads: the simulation, light in light mode and on black in dark mode (drawn so, not inverted) */
+.et-build .b8-3d{height:clamp(320px,56vh,600px); overflow:hidden; cursor:crosshair}
+.et-build .b8-3d canvas{position:absolute; left:0; top:0}
+html[data-theme="dark"] .et-build .b8-3d canvas{filter:none}
+.et-3d:focus{outline:none}
+.et-badge{position:absolute; left:14px; top:12px; z-index:1; font-size:12px; color:var(--ink-3); pointer-events:none; font-variant-numeric:tabular-nums}
+.et-ctl{flex-wrap:wrap; gap:8px 10px}
+.et-btn, .et-seg button{font:inherit; font-size:13px; font-weight:500; color:var(--ink); background:transparent; border:0; padding:7px 14px; cursor:pointer}
+.et-btn{border:1px solid var(--line); border-radius:999px}
+.et-seg{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.et-seg button[aria-pressed="true"]{background:var(--ink); color:var(--btn-bg)}
+.et-buildbtn[aria-pressed="true"]{background:#ff3b30; border-color:#ff3b30; color:#fff}
+.et-status{margin:-4px 18px 8px; font-size:13px; color:var(--ink-3); min-height:1.5em}
+.et-keys{display:none; flex-wrap:wrap; gap:4px 20px; margin:0 18px 12px; font-size:13px; color:var(--ink-3)}
+.et-keys div{display:flex; gap:8px; align-items:baseline}
+.et-keys dt{color:var(--ink); font-weight:500}
+.et-keys dd{margin:0}
+.et-keys kbd{font:600 11px inherit; font-family:inherit; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 5px; color:var(--ink)}
+@media (hover:hover) and (pointer:fine){ .et-keys{display:flex} }
+/* Museum of the 20th Century in 3D: the names over the model, the step's caption under it */
+.ng-build .b8-3d{height:clamp(300px,52vh,560px); overflow:hidden}
+.ng-build .b8-3d canvas{position:absolute; left:0; top:0}
+.ng-3d .lbl{position:absolute; left:0; top:0; z-index:1; pointer-events:none; white-space:nowrap; opacity:0; transition:opacity .3s;
+  font-size:11px; font-weight:500; line-height:1.2; color:#334155; background:rgba(255,255,255,.9); padding:2px 6px; border-radius:6px}
+.ng-3d .lbl.tree{color:#15803d}
+html[data-theme="dark"] .ng-3d .lbl{color:#cbd5e1; background:rgba(22,26,33,.88)}
+html[data-theme="dark"] .ng-3d .lbl.tree{color:#4ade80}
+.ng-hint{position:absolute; left:14px; bottom:10px; z-index:1; font-size:11.5px; color:#64748b; pointer-events:none}
+html[data-theme="dark"] .ng-hint{color:#97a1b1}
+html[dir="rtl"] .ng-hint{left:auto; right:14px}
+.ng-build .b8-play{z-index:2}
+.ng-build output{min-width:7em}
+.ng-cap{margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink); min-height:3em}
+@media (prefers-reduced-motion:reduce){ .ng-3d .lbl{transition:none} }
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
   .city-step{display:grid; margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink)}
   .city-step span{grid-area:1/1; visibility:hidden}
@@ -861,6 +895,7 @@ html.fit-tab body{min-height:0}
 .vb-box.telling .vb-nav{margin-top:0}
 /* the Archive alone: everything on one screen, the map taking whatever height is left */
 .panel.fit .card-scroll.archive-fit{display:flex; flex-direction:column; overflow:hidden}
+.archive-fit .p-head{flex:none}
 .archive-fit .lead{flex:none; margin-bottom:14px}
 .archive-fit .stats{flex:none; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px}
 .archive-fit .stat{padding:14px 18px; border-radius:20px; text-decoration:none; color:inherit}
@@ -1187,6 +1222,26 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div class="thumbs" data-imgs="ng-001|Die Hauptfassade;ng-002|Das Museum am Kulturforum, neben der St.-Matthäus-Kirche;ng-003|Die zentrale Halle"></div>
                 <div class="chips"><a class="chip" href="https://www.herzogdemeuron.com/projects/469-museum-der-moderne-berlin-modern/" target="_blank" rel="noopener">Das Projekt auf der Website von Herzog &amp; de Meuron</a></div>
+                <figure class="b8-build ng-build">
+                  <div class="b8-3d ng-3d" role="img" aria-label="Das Museum am Kulturforum in 3D, mit seinen beiden Passagen. Zum Drehen ziehen, zum Zoomen scrollen oder mit zwei Fingern ziehen.">
+                    <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Abspielen</span><span class="b8-stop">Pause</span></button>
+                    <div class="ng-hint">Für Namen hineinzoomen</div>
+                  </div>
+                  <div class="b8-ctl"><label for="ngRange">Schritt</label><input id="ngRange" type="range" min="0" max="4" step="1" value="0"><output for="ngRange">Ort</output></div>
+                  <p class="ng-cap" aria-live="polite"></p>
+                  <div hidden>
+                    <ol class="ng-steps"><li>Ort</li><li>Museum</li><li>Geschosse</li><li>Ost–West</li><li>Nord–Süd</li></ol>
+                    <div class="ng-caps">
+                      <p>Das letzte freie Grundstück des Kulturforums, zwischen Scharouns Philharmonie und Staatsbibliothek, Mies van der Rohes Neuer Nationalgalerie und St. Matthäus, mit der Platane am Matthäikirchplatz.</p>
+                      <p>Das Museum: ein einziger langer Baukörper unter einem Satteldach, 113 mal 71 m, an seiner Nordwestseite um die Platane herum eingeschnitten.</p>
+                      <p>Seine zwei Geschosse: das Erdgeschoss und das untere Ausstellungsgeschoss, 7 m tiefer. Gezeichnet sind nur die Wände der beiden Passagen und die Haupttreppe.</p>
+                      <p>Ost–West, im Erdgeschoss: von der Potsdamer Straße und der Staatsbibliothek geradewegs durch das Museum zum Platz vor dem Kulturforum.</p>
+                      <p>Nord–Süd: vom Platz am Kammermusiksaal hinein, die Haupttreppe hinunter ins Untergeschoss und unter der Sigismundstraße hindurch in die Neue Nationalgalerie.</p>
+                    </div>
+                    <ul class="ng-names"><li data-en="Philharmonie">Philharmonie</li><li data-en="Chamber Music Hall">Kammermusiksaal</li><li data-en="Staatsbibliothek">Staatsbibliothek</li><li data-en="Neue Nationalgalerie">Neue Nationalgalerie</li><li data-en="St. Matthäus">St. Matthäus</li><li data-en="Kulturforum">Kulturforum</li><li data-en="Plane tree">Platane</li><li data-en="Museum of the 20th Century">Museum des 20. Jahrhunderts</li><li data-en="Lower floor, Neue Nationalgalerie">Untergeschoss, Neue Nationalgalerie</li></ul>
+                  </div>
+                  <p class="b8-note">Ein abstraktes Modell: das Museum aus dem Entwurfsmodell von 2019, die Nachbarbauten und Straßen aus OpenStreetMap.</p>
+                </figure>
               </article>
 
               <article class="slide project">
@@ -1438,6 +1493,34 @@ destined to guide.</script></section>
                   </div>
                 </div>
                 <div class="thumbs" data-imgs="et-002|Eine gesinterte Struktur auf der Mondoberfläche;et-005|Roboter bei der Arbeit;et-000|Das Spiel auf einem Computer;et-003|Bauen in virtueller Realität auf einem Smartphone;et-004|Die Stereoansicht für eine VR-Brille"></div>
+                <figure class="b8-build et-build">
+                  <div class="b8-3d et-3d" tabindex="0" role="img" aria-label="Die Simulation: Ein rollender Roboter verschmilzt losen Mondboden mit seinem Laser zu einer festen Form. Ziehen, um die Ansicht zu drehen; am Computer mit W A S D fahren.">
+                    <div class="et-badge"></div>
+                  </div>
+                  <div class="b8-ctl et-ctl">
+                    <button class="et-btn" id="etDemo" type="button">Demo abspielen</button>
+                    <span class="et-seg" role="group" aria-label="Was ein Klick festlegt"><button type="button" id="etDrive" aria-pressed="false">Fahren</button><button type="button" id="etAim" aria-pressed="false">Laser zielen</button></span>
+                    <button class="et-btn et-buildbtn" id="etBuild" type="button" aria-pressed="false">Bauen</button>
+                    <button class="et-btn" id="etClear" type="button">Leeren</button>
+                  </div>
+                  <p class="et-status" id="etStatus" aria-live="polite"></p>
+                  <dl class="et-keys">
+                    <div><dt><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></dt><dd>Rover bewegen</dd></div>
+                    <div><dt>Linke Maustaste</dt><dd>Laser zielen</dd></div>
+                    <div><dt><kbd>Leertaste</kbd></dt><dd>Bauen ein- und ausschalten</dd></div>
+                    <div><dt>Rechte Maustaste</dt><dd>Drehen</dd></div>
+                    <div><dt>Scrollen</dt><dd>Zoomen</dd></div>
+                  </dl>
+                  <ul class="et-say" hidden>
+                    <li data-k="demo">Demo: Der Rover baut zwei gekrümmte Wände. Drücken Sie Fahren oder Laser zielen, um zu übernehmen.</li>
+                    <li data-k="drive">Fahren: Tippen Sie auf den Boden, um den Rover dorthin zu schicken.</li>
+                    <li data-k="aim">Laser zielen: Tippen Sie auf den Boden oder oben auf die gebaute Form, um dort zu bauen.</li>
+                    <li data-k="desk-drive">Fahren: W A S D oder die Pfeiltasten bewegen den Rover. Klicken Sie, um den Laser zu zielen.</li>
+                    <li data-k="desk-aim">Zielen: Klicken Sie auf den Boden oder oben auf die gebaute Form, um dort zu bauen.</li>
+                    <li data-k="building">Baut…</li>
+                    <li data-k="fused">{n} Partikel verschmolzen</li>
+                  </ul>
+                </figure>
               </article>
 
               <article class="slide project">
@@ -1554,7 +1637,18 @@ destined to guide.</script></section>
         <div class="wrap">
           <h2 class="sr-title">Archiv</h2>
           <section class="glass card">
+            <div class="card-head">
+              <div class="t"><div class="num">1/1</div></div>
+              <div class="nav"><button class="arrow" type="button" aria-label="Vorheriges Projekt" disabled><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button class="arrow" type="button" aria-label="Nächstes Projekt" disabled><svg class="i" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            </div>
             <div class="card-scroll archive-fit">
+              <div class="p-head has-logo">
+                <span class="logo dex-archive"><img src="/assets/img/logos/wandering-wayfarer.jpg" width="512" height="512" alt="Logo von Wandering Wayfarer" decoding="async"></span>
+                <div>
+                  <h2>Wandering Wayfarer</h2>
+                  <p class="p-meta">YouTube-Kanal <i></i> Stadtspaziergänge, Fahrten und Architektur</p>
+                </div>
+              </div>
               <p class="lead">Orte, die ich für <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a> dokumentiert habe, meinen YouTube-Kanal, der Orte auf der ganzen Welt festhält: Stadtspaziergänge, Bus- und Straßenbahnfahrten und Architektur, meist in 4K. Das erste Video erschien im <a id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">März 2023</a>.</p>
               <div class="stats">
                 <div class="stat"><b id="sLong">0</b><span>lange Videos</span></div>
@@ -1719,8 +1813,8 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=062c7d512c"></script>
-<script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the last line":"Klicken für die letzte Zeile","Tap for the last line":"Tippen für die letzte Zeile","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich vom Kanal aktualisiert; letzte Aktualisierung {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","6th of October City":"Stadt des 6. Oktober","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra":"Andorra","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Cyprus":"Zypern","Dessau":"Dessau","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Famagusta":"Famagusta","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florenz","Florida":"Florida","Fort Lauderdale":"Fort Lauderdale","France":"Frankreich","Galway":"Galway","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss Falls":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Island","Keflavík International Airport":"Flughafen Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Malibu":"Malibu","Marrakesh":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Fuji","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Siwa Oasis":"Oase Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Thingvellir National Park":"Nationalpark Þingvellir","Tokyo":"Tokio","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zürich"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
-<script src="/assets/app.js?v=cb08201cf0"></script>
+<script src="/assets/data/places.js?v=6d6f12a776"></script>
+<script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the last line":"Klicken für die letzte Zeile","Tap for the last line":"Tippen für die letzte Zeile","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich vom Kanal aktualisiert; letzte Aktualisierung {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","6th of October City":"Stadt des 6. Oktober","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra":"Andorra","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Cyprus":"Zypern","Dessau":"Dessau","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Famagusta":"Famagusta","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florenz","Florida":"Florida","Fort Lauderdale":"Fort Lauderdale","France":"Frankreich","Galway":"Galway","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss Falls":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Island","Keflavík International Airport":"Flughafen Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Marrakesh":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Fuji","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Siwa Oasis":"Oase Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","The Getty Villa":"Getty Villa","Thingvellir National Park":"Nationalpark Þingvellir","Tokyo":"Tokio","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zürich"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
+<script src="/assets/app.js?v=5d2e5af350"></script>
 </body>
 </html>
