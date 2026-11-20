@@ -896,8 +896,8 @@ html.fit-tab body{min-height:0}
 /* the first screen is the channel, its numbers and the map, as large as the card allows; the introduction is under it,
    one scroll down */
 .panel.fit .card-scroll.archive-fit{display:block; overflow-y:auto}
-.archive-fit > .arc-screen{height:100%; display:flex; flex-direction:column}
-.panel.fit .archive-fit .arc-lead{margin:22px 0 12px}
+.archive-fit > .arc-screen{height:calc(100% - 3.4em); display:flex; flex-direction:column}   /* short of the card, so the introduction's first line shows and says there is more */
+.archive-fit .arc-lead, .panel.fit .archive-fit .arc-lead{margin:14px 0 12px}
 .archive-fit .p-head{flex:none}
 .archive-fit .lead{flex:none; margin-bottom:14px}
 .archive-fit .stats{flex:none; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px}
@@ -1012,6 +1012,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   .stats{grid-template-columns:1fr 1fr 1fr; gap:8px}
   .archive-fit .lead{font-size:14.5px; margin-bottom:10px}
   .archive-fit .stats{gap:6px; margin-bottom:10px}
+  .panel .archive-fit .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .archive-fit .stat{padding:10px 8px; border-radius:14px}
   .archive-fit .stat b{font-size:19px}
   .archive-fit .stat span{font-size:11px; margin-top:4px}
