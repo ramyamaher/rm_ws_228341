@@ -2111,8 +2111,6 @@ function initMap() {
     if (ukParts && ukParts.features) {
       feats = feats.filter(f => f.properties.name !== 'United Kingdom').concat(ukParts.features);
     }
-    const land ={ type: 'FeatureCollection', features: feats.filter(f => f.properties.name !== 'Antarctica') };
-    feats = land.features;
 
     $('.loading', host).remove();
     const svg = d3.select(host).insert('svg', '.tip').attr('role', 'img')
@@ -2135,8 +2133,8 @@ function initMap() {
       if (!w || !h || (w === size[0] && h === size[1])) return;
       size = [w, h];
       svg.attr('viewBox', `0 0 ${w} ${h}`);
-      // Fit to the latitudes people live in; the far south is empty ocean and ice.
-      const frame = { type: 'MultiPoint', coordinates: [[-168, 76], [0, 80], [178, 76], [-168, -46], [0, -46], [178, -46]] };
+      // Fit from the Arctic down past Cape Horn, so all of South America and the edge of Antarctica show
+      const frame = { type: 'MultiPoint', coordinates: [[-168, 76], [0, 80], [178, 76], [-168, -68], [0, -68], [178, -68]] };
       const proj = d3.geoNaturalEarth1().fitExtent([[6, 6], [w - 6, h - 6]], frame);
       const path = d3.geoPath(proj);
       gC.selectAll('path').data(feats, d => d.properties.name).join('path')

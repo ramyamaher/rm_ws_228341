@@ -236,6 +236,7 @@ main{padding-top:var(--hdr)}
 h1{margin:0 0 16px; font-size:clamp(26px,3.2vw,36px); line-height:1.1; letter-spacing:-.03em; font-weight:700}
 .lead{margin:-8px 0 28px; max-width:720px; color:var(--ink-2); font-size:clamp(16px,1.6vw,17.5px); line-height:1.6}
 .lead a{font-weight:600; color:var(--ink); text-underline-offset:3px}
+.lead.arc-lead{margin:16px 0 12px}   /* the Archive's introduction sits under the map on every screen, never tucked under it */
 
 .glass{position:relative; border-radius:28px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); transition:background-color .3s}
 .card{padding:clamp(20px,3vw,34px); margin-bottom:26px}
@@ -897,7 +898,7 @@ html.fit-tab body{min-height:0}
 /* the first screen is the channel, its numbers and the map, as large as the card allows; the introduction is under it,
    one scroll down */
 .panel.fit .card-scroll.archive-fit{display:block; overflow-y:auto}
-.archive-fit > .arc-screen{height:calc(100% - 24px); display:flex; flex-direction:column}   /* short of the card by half a line, so the top of the introduction shows and says there is more */
+.archive-fit > .arc-screen{height:calc(100% - 24px); min-height:min-content; display:flex; flex-direction:column}   /* short of the card by half a line, so the top of the introduction shows and says there is more */
 .archive-fit .arc-lead, .panel.fit .archive-fit .arc-lead{margin:10px 0 12px}
 .archive-fit .p-head{flex:none}
 .archive-fit .lead{flex:none; margin-bottom:14px}
@@ -1014,6 +1015,9 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   .archive-fit .lead{font-size:14.5px; margin-bottom:10px}
   .archive-fit .stats{gap:6px; margin-bottom:10px}
   .panel .archive-fit .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  /* on a phone the card simply scrolls: the map keeps the world's proportions and the introduction follows it */
+  .archive-fit > .arc-screen{height:auto}
+  .archive-fit .map{flex:none; aspect-ratio:1.6/1}
   .archive-fit .stat{padding:10px 8px; border-radius:14px}
   .archive-fit .stat b{font-size:19px}
   .archive-fit .stat span{font-size:11px; margin-top:4px}
@@ -1822,6 +1826,6 @@ destined to guide.</script></section>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="/assets/data/places.js?v=6d6f12a776"></script>
 <script>window.I18N={"lang":"es","locale":"es-ES","t":{"Hello.":"Hola.","Good morning.":"Buenos días.","Good afternoon.":"Buenas tardes.","Good evening.":"Buenas noches.","Click for the last line":"Haga clic para el último verso","Tap for the last line":"Toque para el último verso","Open image: {c}":"Abrir imagen: {c}","Image to come":"Imagen próximamente","The numbers are refreshed from the channel every day; last update {d}.":"Las cifras se actualizan desde el canal cada día; última actualización: {d}.","World map of {p} places documented in {c} countries":"Mapa del mundo con {p} lugares documentados en {c} países","Not documented yet":"Aún sin documentar","Go to playlist":"Ir a la lista de reproducción","Watch a video":"Ver un vídeo","The map could not be loaded. Please reload the page.":"No se ha podido cargar el mapa. Vuelva a cargar la página.","England | UK":"Inglaterra | R. U.","Scotland | UK":"Escocia | R. U.","Wales | UK":"Gales | R. U.","Northern Ireland | UK":"Irlanda del Norte | R. U.","Gibraltar | UK":"Gibraltar | R. U.","6th of October City":"Ciudad 6 de Octubre","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra":"Andorra","Andorra la Vella":"Andorra la Vieja","Arles":"Arlés","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelona","Basel":"Basilea","Belgrade":"Belgrado","Berlin":"Berlín","Bern":"Berna","Bilbao":"Bilbao","Bucharest":"Bucarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Colonia","Cottbus":"Cottbus","Cyprus":"Chipre","Dessau":"Dessau","Dublin":"Dublín","Döttingen":"Döttingen","Edinburgh":"Edimburgo","Famagusta":"Famagusta","Faro":"Faro","Fes":"Fez","Flims Dorf":"Flims Dorf","Florence":"Florencia","Florida":"Florida","Fort Lauderdale":"Fort Lauderdale","France":"Francia","Galway":"Galway","Geneva":"Ginebra","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Guiza","Glasgow":"Glasgow","Gullfoss Falls":"Cascada Gullfoss","Hamburg":"Hamburgo","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Islandia","Keflavík International Airport":"Aeropuerto Internacional de Keflavík","Kraków":"Cracovia","Kyoto":"Kioto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lisboa","London":"Londres","Los Angeles":"Los Ángeles","Lucerne":"Lucerna","Luxembourg":"Luxemburgo","Marrakesh":"Marrakech","Marseille":"Marsella","Miami":"Miami","Milan":"Milán","Monaco":"Mónaco","Montreuil":"Montreuil","Mount Fuji":"Monte Fuji","Mulhouse":"Mulhouse","Munich":"Múnich","Nantes":"Nantes","Nara":"Nara","New York":"Nueva York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nicosia","Nîmes":"Nimes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"París","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Parques Nacional y Estatales Redwood","Reykjavík":"Reikiavik","Rimini":"Rímini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Mónica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Laguna Secreta","Siwa Oasis":"Oasis de Siwa","Skopje":"Skopie","Sofia":"Sofía","Tallinn":"Tallin","Tangier":"Tánger","The Getty Villa":"Villa Getty","Thingvellir National Park":"Parque nacional de Þingvellir","Tokyo":"Tokio","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Wrocław","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zúrich"},"plurals":{"place":{"one":"{n} lugar","many":"{n} lugares","other":"{n} lugares"},"video":{"one":"{n} vídeo","many":"{n} vídeos","other":"{n} vídeos"}}}</script>
-<script src="/assets/app.js?v=a6ae14aee8"></script>
+<script src="/assets/app.js?v=33af058e9c"></script>
 </body>
 </html>
