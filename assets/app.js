@@ -1505,8 +1505,9 @@ $$('.et-build').forEach(fig => {
     let nB = 0, sHead = 0;
     const bGeo = new THREE.BufferGeometry(); bGeo.setAttribute('position', new THREE.BufferAttribute(bp, 3)); bGeo.setDrawRange(0, 0);
     const sGeo = new THREE.BufferGeometry(); sGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
-    scene.add(new THREE.Points(bGeo, new THREE.PointsMaterial({ color: '#ff2a1f', size: 2.6, sizeAttenuation: false })));
-    const sPts = new THREE.Points(sGeo, new THREE.PointsMaterial({ color: '#fa6464', size: 2.2, sizeAttenuation: false })); sPts.frustumCulled = false; scene.add(sPts);
+    const grainMat = new THREE.PointsMaterial({ color: '#64748b', size: 2.4, sizeAttenuation: false });   // loose material in grey: only the laser is red
+scene.add(new THREE.Points(bGeo, grainMat));
+    const sPts = new THREE.Points(sGeo, grainMat); sPts.frustumCulled = false; scene.add(sPts);
 
     /* ---------- the isosurface: every builder adds a round brush to a volume; marching cubes draws where it passes 0.5 ---------- */
     const RES = 88, HV = 250;                     // cells per side; the volume is the ground's 1000 × 1000 and 250 high
@@ -1548,10 +1549,10 @@ $$('.et-build').forEach(fig => {
     // colours from the page's tokens, so the field follows light and dark
     function theme() {
       const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const v = (n) => (dark ? { '--stage': '#000000', '--ground-pt': '#ffffff', '--solid': '#f4f4f2', '--rover': '#9aa0a8', '--ring': '#ffffff' }
-                             : { '--stage': '#ffffff', '--ground-pt': '#334155', '--solid': '#e6e8ec', '--rover': '#8a929c', '--ring': '#0f172a' })[n];
+      const v = (n) => (dark ? { '--stage': '#000000', '--ground-pt': '#ffffff', '--solid': '#f4f4f2', '--rover': '#9aa0a8', '--ring': '#ffffff', '--grain': '#cbd5e1' }
+                             : { '--stage': '#ffffff', '--ground-pt': '#334155', '--solid': '#e6e8ec', '--rover': '#8a929c', '--ring': '#0f172a', '--grain': '#64748b' })[n];
       ren.setClearColor(v('--stage'), 1); groundMat.color.set(v('--ground-pt')); groundMat.opacity = dark ? .62 : .5;
-      solidMat.color.set(v('--solid')); roverMat.color.set(v('--rover')); ringMat.color.set(v('--ring'));
+      solidMat.color.set(v('--solid')); roverMat.color.set(v('--rover')); ringMat.color.set(v('--ring')); grainMat.color.set(v('--grain'));
     }
     theme();
     new MutationObserver(theme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -1597,7 +1598,7 @@ $$('.et-build').forEach(fig => {
           const x = laser.x + rnd(-20, 20), y = laser.y + rnd(-20, 20), z = Math.max(0, laser.z + rnd(-6, 3));   // a little into what is below, so new material fuses with it
           bp.set(P(x, y, z), nB * 3); nB++; splat(x, y, z); isoDirty = true;
         }
-        bGeo.setDrawRange(0, nB); bGeo.attributes.position.needsUpdate = true;
+        bGeo.setDrawRange(Math.max(0, nB - 16), Math.min(nB, 16));   // only the newest grains show: once fused into the surface they are gone bGeo.attributes.position.needsUpdate = true;
         // spray: from the top of the rover in an arc that comes down on the laser point
         for (let n = 0; n < 3; n++) {
           const k = sHead; sHead = (sHead + 1) % MAXS;
@@ -1605,7 +1606,8 @@ $$('.et-build').forEach(fig => {
           sp.set(P(...o), k * 3); sv.set([(t[0] - o[0]) / T, (t[1] - o[1]) / T, (t[2] - o[2]) / T + .5 * G * T], k * 3); sAge[k] = Math.round(FLY - T);
         }
       }
-      for (let k = 0; k < MAXS; k++) {
+      if (!build) bGeo.setDrawRange(0, 0);
+  for (let k = 0; k < MAXS; k++) {
         if (sAge[k] >= FLY) { sp[k * 3 + 1] = AWAY; continue; }   // landed: absorbed into the form, gone
         sAge[k]++; sv[k * 3 + 2] -= G;
         sp[k * 3] += sv[k * 3]; sp[k * 3 + 2] += sv[k * 3 + 1]; sp[k * 3 + 1] += sv[k * 3 + 2];
