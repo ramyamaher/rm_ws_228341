@@ -41,16 +41,10 @@ async function youtube(endpoint, body) {
   }
 }
 
-// When YouTube refuses us, the site keeps the data it has and the day's run ends quietly with a warning, since the
-// next day's run catches up. Only when the data has gone a week without a refresh does the run fail, so a real
-// breakage (YouTube changing its format) still sends an email.
+// When YouTube still refuses after the retries, the run stops before writing anything, so the site keeps the data it
+// has, and fails, so GitHub sends an email.
 async function keepOldData(why) {
-  // the last good run: the newest day a video was checked on (every good run checks some)
-  const updated = ((await readFile(CACHE, 'utf8').catch(() => '')).match(/"checked": "\d{4}-\d{2}-\d{2}"/g) || []).map((m) => m.slice(12, 22)).sort().pop();
-  const days = updated ? (Date.now() - Date.parse(updated)) / 864e5 : Infinity;
-  if (days > 7) throw new Error(`${why} The data was last refreshed ${updated || 'never'}.`);
-  console.log(`::warning::${why} Keeping the data of ${updated}; tomorrow's run tries again.`);
-  process.exit(0);
+  throw new Error(`${why} The site keeps its current data.`);
 }
 const browse = (body) => youtube('browse', body);
 // The "load more" token. On the playlists page it sits in a continuationItemRenderer and a
