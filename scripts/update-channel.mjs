@@ -21,14 +21,36 @@ const CACHE = new URL('./channel-cache.json', import.meta.url);
 const CONTEXT = { client: { clientName: 'WEB', clientVersion: '2.20261002.01.00', hl: 'en', gl: 'CH' } };
 const RECHECK = 40;   // older videos asked about again each day
 
+// YouTube sometimes turns away GitHub's servers for a while (a 429, a 403 or a dropped connection), so each question
+// is asked up to four times, waiting 3, 10 and 30 seconds in between, before it counts as refused.
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function youtube(endpoint, body) {
-  const r = await fetch(`https://www.youtube.com/youtubei/v1/${endpoint}?prettyPrint=false`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', cookie: 'SOCS=CAI', 'user-agent': 'Mozilla/5.0' },
-    body: JSON.stringify({ context: CONTEXT, ...body }),
-  });
-  if (!r.ok) throw new Error(`YouTube answered ${r.status}`);
-  return r.json();
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const r = await fetch(`https://www.youtube.com/youtubei/v1/${endpoint}?prettyPrint=false`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', cookie: 'SOCS=CAI', 'user-agent': 'Mozilla/5.0' },
+        body: JSON.stringify({ context: CONTEXT, ...body }),
+      });
+      if (!r.ok) throw new Error(`YouTube answered ${r.status}`);
+      return await r.json();
+    } catch (e) {
+      if (attempt >= 3) throw e;
+      await sleep([3000, 10000, 30000][attempt]);
+    }
+  }
+}
+
+// When YouTube refuses us, the site keeps the data it has and the day's run ends quietly with a warning, since the
+// next day's run catches up. Only when the data has gone a week without a refresh does the run fail, so a real
+// breakage (YouTube changing its format) still sends an email.
+async function keepOldData(why) {
+  // the last good run: the newest day a video was checked on (every good run checks some)
+  const updated = ((await readFile(CACHE, 'utf8').catch(() => '')).match(/"checked": "\d{4}-\d{2}-\d{2}"/g) || []).map((m) => m.slice(12, 22)).sort().pop();
+  const days = updated ? (Date.now() - Date.parse(updated)) / 864e5 : Infinity;
+  if (days > 7) throw new Error(`${why} The data was last refreshed ${updated || 'never'}.`);
+  console.log(`::warning::${why} Keeping the data of ${updated}; tomorrow's run tries again.`);
+  process.exit(0);
 }
 const browse = (body) => youtube('browse', body);
 // The "load more" token. On the playlists page it sits in a continuationItemRenderer and a
@@ -201,10 +223,10 @@ function hintOf(titles) {
   return { country, state, city, near: r && [r.lat, r.lon] };
 }
 
-const videos = await uploads();
+const videos = await uploads().catch((e) => keepOldData(`Could not read the uploads (${e.message}).`));
 // A sudden drop means YouTube changed its format or refused us, not that videos vanished.
 const previous = Number(((await readFile(OUT, 'utf8').catch(() => '')).match(/"?total"?: (\d+)/) || [])[1] || 0);
-if (videos.length < 100 || videos.length < previous * 0.9) throw new Error(`Only ${videos.length} uploads came back (last run: ${previous}); keeping the old data.`);
+if (videos.length < 100 || videos.length < previous * 0.9) await keepOldData(`Only ${videos.length} uploads came back (last run: ${previous}).`);
 
 // Shorts are the videos on the channel's Shorts tab; everything else counts as a long video. Only if the tab gives
 // nothing is the channel's shorts list (UUSH…) asked, and if that is empty too, the last known count is kept, not 0.
@@ -232,7 +254,7 @@ for (let i = 0; i < ask.length; i += 6) {
     } catch (_) { failed++; }
   }));
 }
-if (ask.length && failed > ask.length / 2) throw new Error(`YouTube refused ${failed} of ${ask.length} video pages; keeping the old data.`);
+if (ask.length && failed > ask.length / 2) await keepOldData(`YouTube refused ${failed} of ${ask.length} video pages.`);
 
 // Find each place not yet known, in the country most of its videos' titles name
 const titled = new Map();
@@ -330,7 +352,7 @@ for (const v of videos) {
 const all = [...places.values()];
 const countries = new Set(all.map((p) => p.country));
 const lists = {};
-for (const p of await playlists()) {
+for (const p of await playlists().catch((e) => keepOldData(`Could not read the playlists (${e.message}).`))) {
   const clean = p.t.replace(/[^\p{L}\p{N} .|]/gu, '').trim();
   const name = PLAYLIST_ALIASES[clean] || clean;
   if (countries.has(name) && !lists[name]) lists[name] = p.id;
