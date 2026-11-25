@@ -18,7 +18,12 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - run: node scripts/update-channel.mjs
+      # YouTube sometimes turns GitHub's servers away for longer than the script's own retries last, so a refused
+      # update is tried again after 10 and then 30 minutes before the run fails and GitHub sends an email.
+      - run: |
+          node scripts/update-channel.mjs \
+            || { echo "::warning::YouTube refused; trying again in 10 minutes."; sleep 600; node scripts/update-channel.mjs; } \
+            || { echo "::warning::YouTube refused again; trying again in 30 minutes."; sleep 1800; node scripts/update-channel.mjs; }
       - name: Commit if the data changed
         run: |
           if git diff --quiet -- assets/data/places.js scripts/channel-cache.json; then
