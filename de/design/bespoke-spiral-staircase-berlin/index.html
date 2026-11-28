@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Maßgefertigte Wendeltreppe in Berlin | Ramy Maher</title>
+<link rel="preload" href="/assets/fonts/familjen-grotesk-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="description" content="Eine Außenwendeltreppe für ein Café in Berlin, mit einem Podest nach drei Stufen.">
 <meta name="author" content="Ramy Maher">
 <meta name="google-site-verification" content="yuDKJdIt_1y7rSpfkxcoU1A5VrnDaJl2mhG5ETP7dv0">
@@ -26,7 +27,7 @@
 <meta property="og:image" content="https://ramymaher.com/assets/img/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Ramy Maher, Architekt: Computational Design und BIM, mit Bildern seiner Projekte">
+<meta property="og:image:alt" content="Ramy Maher, Architekt von Gebäuden, Werkzeugen, Orten und Worten, mit Bildern seiner Arbeit">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
@@ -84,6 +85,17 @@
 }
 </script>
 <style>
+/* the digits: Familjen Grotesk writes its 1 with a foot, so the numbers come from the system's own sans-serif
+   (Segoe UI, Helvetica Neue or Arial), whose 1 has none; only the ten digits are taken from it */
+@font-face{font-family:'RM Digits'; font-weight:400; src:local('Segoe UI'), local('HelveticaNeue'), local('Helvetica Neue'), local('Arial'), local('ArialMT'); unicode-range:U+0030-0039}
+@font-face{font-family:'RM Digits'; font-weight:600; src:local('Segoe UI Semibold'), local('SegoeUI-Semibold'), local('HelveticaNeue-Medium'), local('Helvetica Neue Medium'), local('Arial Bold'), local('Arial-BoldMT'); unicode-range:U+0030-0039}
+@font-face{font-family:'RM Digits'; font-weight:700; src:local('Segoe UI Bold'), local('SegoeUI-Bold'), local('HelveticaNeue-Bold'), local('Helvetica Neue Bold'), local('Arial Bold'), local('Arial-BoldMT'); unicode-range:U+0030-0039}
+/* the typeface: Familjen Grotesk (SIL Open Font License, assets/fonts/OFL.txt), served from this site */
+@font-face{font-family:'Familjen Grotesk'; font-style:italic; font-weight:400 700; font-display:swap; src:url(/assets/fonts/familjen-grotesk-latin-ext-italic.woff2) format('woff2'); unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Familjen Grotesk'; font-style:italic; font-weight:400 700; font-display:swap; src:url(/assets/fonts/familjen-grotesk-latin-italic.woff2) format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Familjen Grotesk'; font-style:normal; font-weight:400 700; font-display:swap; src:url(/assets/fonts/familjen-grotesk-latin-ext-normal.woff2) format('woff2'); unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Familjen Grotesk'; font-style:normal; font-weight:400 700; font-display:swap; src:url(/assets/fonts/familjen-grotesk-latin-normal.woff2) format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
 /* Light is the default. Dark comes from the OS unless the visitor picks one with the header
    button (saved in localStorage); colours for dark follow the CongressInsider app. */
 :root{
@@ -123,13 +135,15 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover{background-color:rgba(25
 @supports not selector(::-webkit-scrollbar){ *{scrollbar-width:thin; scrollbar-color:rgba(150,150,150,.5) transparent} }
 body{
   margin:0; min-height:100vh; min-height:100dvh; color:var(--ink); background:var(--bg);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif;
+  font-family:"RM Digits","Familjen Grotesk",-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; overflow-x:hidden; font-variant-numeric:tabular-nums;
   transition:background-color .3s, color .3s;
 }
 a{color:inherit}
 button{font-family:inherit}
-svg.i{width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+/* the About icon: a portrait traced from the photo, in the icons' own colour (ink on the light theme, white on the dark) */
+svg.i .face{fill:currentColor; stroke:none}
+svg.i{width:22px; height:22px; flex:none; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
 
 /* ---------- header: opaque, name and contact on top, the category bar below ---------- */
 header{
@@ -153,7 +167,7 @@ header{
   border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--ink); transition:all .2s;
 }
 .theme:hover{background:var(--btn-hover); transform:translateY(-1px)}
-.theme > svg{width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round}
+.theme > svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
 .theme .sun{display:none}
 html[data-theme="dark"] .theme .sun{display:block}
 html[data-theme="dark"] .theme .moon{display:none}
@@ -171,13 +185,15 @@ html[data-theme="dark"] .theme .moon{display:none}
 .tab svg{display:none}
 .tab:hover{color:var(--ink)}
 .tab.on{color:var(--ink); background:var(--pill); box-shadow:0 2px 8px rgba(0,0,0,.15); font-weight:750}
-.tab .lbl{display:inline-block; overflow:hidden; max-width:140px; transition:max-width .4s var(--ease), opacity .3s}
+/* the bar keeps one width whichever category is open: each word keeps room for its bold self (--bw, measured in
+   app.js), and on a phone the open pill is as wide as the widest word (--lw) */
+.tab .lbl{display:inline-block; overflow:hidden; max-width:140px; min-width:var(--bw,0); text-align:center; transition:max-width .4s var(--ease), opacity .3s}
 
 /* the language button: a round flag, as in Bancanca; the menu is a column of round flags */
 .theme.lang{padding:6px; overflow:hidden}
 .flag{display:block; width:100%; height:100%; border-radius:50%; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
 .flag svg{display:block; width:100%; height:100%}
-/* the flags sit above the menu's notch, with room for the chosen one's ring */
+/* the flags in a column, with room for the chosen one's ring */
 .pop.langs{width:auto; padding:8px; display:flex; flex-direction:column; gap:8px; border-radius:28px}
 .pop.langs a{position:relative; z-index:1; display:block; width:40px; height:40px; padding:6px; border-radius:50%; border:1px solid var(--line); background:var(--btn-bg)}
 .pop.langs a.sel{outline:2px solid var(--ink); outline-offset:1px; border-color:transparent}
@@ -197,21 +213,15 @@ html[dir="rtl"] .limericks{direction:ltr; text-align:left}
 /* contact popover */
 .pop{
   position:fixed; z-index:60; top:calc(env(safe-area-inset-top) + 58px); right:clamp(16px,3vw,32px);
-  width:min(320px, calc(100vw - 32px)); padding:10px; border-radius:24px; background:var(--card);
+  width:min(320px, calc(100vw - 32px)); padding:10px; border-radius:10px; background:var(--card);
   border:1px solid var(--line); box-shadow:0 18px 44px -12px rgba(0,0,0,.3);
   opacity:0; transform:translateY(-8px) scale(.96); transform-origin:var(--ox, 90%) top; pointer-events:none; transition:opacity .2s, transform .22s var(--ease);
 }
-/* a small notch pointing up at the button the menu belongs to (placed by app.js) */
-.pop::before{
-  content:""; position:absolute; top:-7px; left:calc(var(--ox, 90%) - 7px); width:12px; height:12px;
-  background:var(--card); border-left:1px solid var(--line); border-top:1px solid var(--line);
-  transform:rotate(45deg); border-radius:3px 0 0 0;
-}
 .pop.open{opacity:1; transform:none; pointer-events:auto}
-.pop a{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:16px; text-decoration:none; font-size:14.5px; font-weight:600}
+.pop a{display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:6px; text-decoration:none; font-size:14.5px; font-weight:600}
 .pop a:hover{background:var(--soft)}
 .pop a small{display:block; font-weight:500; color:var(--ink-3); font-size:12.5px; margin-top:2px}
-.pop .ico{width:36px; height:36px; border-radius:12px; display:grid; place-items:center; border:1px solid var(--line); flex:none}
+.pop .ico{width:36px; height:36px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--line); flex:none}
 
 /* privacy and cookies */
 .pop.note{width:min(380px, calc(100vw - 32px)); padding:18px 20px}
@@ -232,13 +242,14 @@ main{padding-top:var(--hdr)}
 .track{display:flex; align-items:flex-start; transition:transform .6s var(--ease); will-change:transform}
 .panel{flex:0 0 100%; min-width:0}
 .panel[aria-hidden="true"]{visibility:hidden; transition:visibility 0s .6s}
-.wrap{max-width:1160px; margin:0 auto; padding:clamp(14px,2vw,22px) clamp(16px,3vw,32px) 64px}
+.wrap{max-width:1160px; margin:0 auto; padding:clamp(14px,2vw,22px) clamp(16px,3vw,32px) 22px}
 h1{margin:0 0 16px; font-size:clamp(26px,3.2vw,36px); line-height:1.1; letter-spacing:-.03em; font-weight:700}
 .lead{margin:-8px 0 28px; max-width:720px; color:var(--ink-2); font-size:clamp(16px,1.6vw,17.5px); line-height:1.6}
 .lead a{font-weight:600; color:var(--ink); text-underline-offset:3px}
 .lead.arc-lead{margin:16px 0 12px}   /* the Archive's introduction sits under the map on every screen, never tucked under it */
 
-.glass{position:relative; border-radius:28px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); transition:background-color .3s}
+/* corners: sharp like a drawing frame (10 px cards, 8 px boxes and buttons, 6 px pictures); the category bar stays a pill */
+.glass{position:relative; border-radius:10px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow); transition:background-color .3s}
 .card{padding:clamp(20px,3vw,34px); margin-bottom:26px}
 .card-head{display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-bottom:18px}
 .card-head .t{display:flex; gap:16px; align-items:center}
@@ -248,7 +259,7 @@ h2{margin:0; font-size:clamp(19px,2.2vw,23px); letter-spacing:-.02em; font-weigh
 .prose p{margin:0 0 14px; color:var(--ink-2); font-size:16.5px; line-height:1.72}
 .prose p.first{color:var(--ink); font-size:clamp(17px,1.8vw,19px); line-height:1.6}
 .prose h2{margin:40px 0 12px}
-.empty{padding:56px 24px; text-align:center; color:var(--ink-3); font-size:15px; background:var(--soft); border-radius:24px}
+.empty{padding:56px 24px; text-align:center; color:var(--ink-3); font-size:15px; background:var(--soft); border-radius:8px}
 
 /* links that lead somewhere: plain text with an arrow, underlined on hover */
 .chip{
@@ -257,8 +268,10 @@ h2{margin:0; font-size:clamp(19px,2.2vw,23px); letter-spacing:-.02em; font-weigh
   padding:6px 0; transition:text-decoration-color .2s;
 }
 .chip::after{content:"\2192"; transition:transform .2s}
-a.chip:hover{text-decoration-color:currentColor}
-a.chip:hover::after{transform:translateX(3px)}
+a.chip:hover, button.chip:hover{text-decoration-color:currentColor}
+a.chip:hover::after, button.chip:hover::after{transform:translateX(3px)}
+button.chip{appearance:none; border:0; background:none; cursor:pointer; font-family:inherit}
+.chips:has(> button.chip){display:flex; flex-wrap:wrap; column-gap:22px}
 html[dir="rtl"] .chip::after{content:"\2190"}
 html[dir="rtl"] a.chip:hover::after{transform:translateX(-3px)}
 .chips{display:flex; flex-wrap:wrap; gap:6px 26px}
@@ -290,7 +303,9 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .appear{opacity:0; transform:translateY(12px); transition:opacity .9s var(--ease), transform .9s var(--ease)}
 .appear.in{opacity:1; transform:none}
 .award{display:flex; gap:18px; align-items:flex-start}
-.medal{flex:none; width:52px; height:52px; border-radius:50%; display:grid; place-items:center; color:#a16207; background:linear-gradient(135deg,#fde68a,#fbbf24); box-shadow:0 6px 18px -6px rgba(217,119,6,.55)}
+/* a prize is its place, a number in gold or silver, without a box round it; a mention is HM, in grey */
+.medal{flex:none; display:grid; place-items:center; min-width:2.2em; color:#b8860b; font-size:22px; font-weight:700; letter-spacing:-.02em; line-height:1}
+html[data-theme="dark"] .medal{color:#e6b422}
 .medal svg{width:24px; height:24px}
 .award .k{font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); font-weight:650; margin-bottom:6px}
 .award p{margin:0; font-size:clamp(18px,2.2vw,23px); line-height:1.4; letter-spacing:-.01em; font-weight:600}
@@ -307,7 +322,7 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .tw{cursor:default}
 .tw.waiting{cursor:pointer}
 .tw .reveal{position:absolute; left:0; bottom:0; appearance:none; border:0; background:none; padding:0; cursor:pointer;
-  font:600 12.5px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); opacity:0; pointer-events:none; transition:opacity .4s}
+  font:600 12.5px/1.4 "RM Digits","Familjen Grotesk",-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); opacity:0; pointer-events:none; transition:opacity .4s}
 .tw.waiting .reveal{opacity:1; pointer-events:auto; animation:breathe 2.6s ease-in-out .6s infinite}
 .tw.waiting .caret{display:none}
 @keyframes blink{50%{opacity:0}}
@@ -315,10 +330,10 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 
 /* ---------- archive ---------- */
 .stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:26px}
-.stat{padding:20px 22px; border-radius:24px; background:var(--soft)}
+.stat{padding:20px 22px; border-radius:8px; background:var(--soft)}
 .stat b{display:block; font-size:clamp(30px,4.4vw,48px); letter-spacing:-.04em; line-height:1}
 .stat span{display:block; margin-top:8px; color:var(--ink-2); font-size:14px}
-.map{position:relative; width:100%; aspect-ratio:2.1/1; touch-action:none; cursor:grab; border-radius:18px; overflow:hidden; background:var(--card)}
+.map{position:relative; width:100%; aspect-ratio:2.1/1; touch-action:none; cursor:grab; border-radius:6px; overflow:hidden; background:var(--card)}
 .map:active{cursor:grabbing}
 .map svg{display:block; width:100%; height:100%}
 .map .loading{position:absolute; inset:0; display:grid; place-items:center; color:var(--ink-3); font-size:14px}
@@ -330,7 +345,7 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .map.focus .country.hi.doc{fill:var(--gold-hi)}
 .tip{
   position:absolute; z-index:5; pointer-events:none; opacity:0; transition:opacity .15s; max-width:min(300px, calc(100% - 16px));
-  padding:11px 14px; border-radius:16px; font-size:13px; line-height:1.5; color:var(--ink);
+  padding:11px 14px; border-radius:6px; font-size:13px; line-height:1.5; color:var(--ink);
   background:var(--card); border:1px solid var(--line); box-shadow:0 14px 34px rgba(0,0,0,.22);
 }
 .tip.show{opacity:1}
@@ -355,7 +370,7 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .gallery figure{margin:0; min-width:0}
 .gallery.stack{flex-direction:column; gap:18px}
 .gallery.stack figure{width:100%}
-.gallery img{display:block; width:100%; height:auto; border-radius:18px; border:1px solid var(--line); box-shadow:0 12px 30px -14px rgba(0,0,0,.3); background:#fff; -webkit-user-drag:none}
+.gallery img{display:block; width:100%; height:auto; border-radius:6px; border:1px solid var(--line); box-shadow:0 12px 30px -14px rgba(0,0,0,.3); background:#fff; -webkit-user-drag:none}
 .gallery figcaption{margin-top:8px; color:var(--ink-3); font-size:12.5px; line-height:1.4}
 
 /* ---------- projects (architecture, design) ---------- */
@@ -384,7 +399,7 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .dex-flow[hidden], .dex-info[hidden], .dex-results[hidden], .dex-hint[hidden]{display:none}
 .prose .dex-hint, .dex-hint{margin:-6px 0 14px; text-align:center; font-size:13px; line-height:1.4; color:var(--ink-3)}
 .dex-item{position:absolute; left:50%; top:50%; padding:0; border:0; background:none; cursor:pointer; -webkit-tap-highlight-color:transparent}
-.dex-item .logo{pointer-events:none; width:var(--sz, 64px); height:var(--sz, 64px); border-radius:calc(var(--sz, 64px) * .28)}
+.dex-item .logo{pointer-events:none; width:var(--sz, 64px); height:var(--sz, 64px); border-radius:50%}
 /* a resting copy shows its logo finished; chosen, it plays from the start */
 .dex-still.play, .dex-still .play, .dex-still .play *, .dex-still.play *{animation-delay:-60s !important}
 .logo.dex-archive img{width:80%; height:80%; border-radius:50%; object-fit:cover}
@@ -396,14 +411,14 @@ html:not([data-theme="dark"]) .dots i{background:rgba(35,35,35,.16)}
 .dex-info .vb-pill{margin:4px 0 12px}
 .dex-info, .dex-results{animation:vbOpen .35s ease-out}
 .dex-results{display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap:12px; margin-top:18px}
-.dex-hit{display:flex; gap:14px; align-items:flex-start; padding:14px; border-radius:20px; border:1px solid var(--line); background:var(--card); text-align:start; cursor:pointer; color:inherit; font:inherit; transition:transform .2s}
+.dex-hit{display:flex; gap:14px; align-items:flex-start; padding:14px; border-radius:8px; border:1px solid var(--line); background:var(--card); text-align:start; cursor:pointer; color:inherit; font:inherit; transition:transform .2s}
 .dex-hit:hover{transform:translateY(-2px)}
-.dex-hit .logo{width:54px; height:54px; border-radius:15px}
+.dex-hit .logo{width:54px; height:54px; border-radius:50%}
 .dex-hit b{display:block; font-size:15px; margin:2px 0 4px}
 .dex-hit span{display:block; font-size:13.5px; line-height:1.5; color:var(--ink-2, var(--ink)); margin-top:4px}
 .dex-hit mark, .dex-info mark{background:color-mix(in srgb, #22c3a0 30%, transparent); color:inherit; border-radius:4px; padding:0 2px}
 .dex-none{grid-column:1 / -1; text-align:center; color:var(--ink-3); padding:18px 0}
-.gd-tile .gd-logo{width:80%; height:80%; --logo-ink:#232323; --page:#fff}
+.gd-tile .gd-logo{width:66%; height:66%; --logo-ink:#232323; --page:#fff}
 html[data-theme="dark"] .gd-tile .gd-logo{--logo-ink:#f2f2f2; --gir-ink:#232323; --page:#2a2a2e}
 /* Giraffe Diary: the giraffe swings its head left and right, as when you tap it in the app (when the app comes into view, and on a tap) */
 .gd-logo .gir-head{transform-box:view-box; transform-origin:32px 26px}
@@ -412,11 +427,13 @@ html[data-theme="dark"] .gd-tile .gd-logo{--logo-ink:#f2f2f2; --gir-ink:#232323;
 .dex-still .gd-logo.play .gir-head{animation:none}
 @keyframes gdHeadWiggle{0%{transform:none} 18%{transform:rotate(16deg)} 38%{transform:rotate(-14deg)} 56%{transform:rotate(9deg)} 74%{transform:rotate(-5deg)} 88%{transform:rotate(2deg)} 100%{transform:none}}
 @media (prefers-reduced-motion:reduce){.gd-logo .gir-head{animation:none!important}}
-.logo .p-logo{width:74%; height:74%; mix-blend-mode:normal; color:rgb(35,35,35); overflow:visible}
-.logo .m20-logo, .logo .et-logo{width:86%; height:86%}
-.logo .gb-logo{width:80%; height:80%}
-.logo .ntr-logo{width:80%; height:80%}
-.logo .mm-logo{width:80%; height:80%}
+/* in a round tile, every logo is sized from its proportions so that its corners stay inside the circle */
+.logo .p-logo{width:68%; height:68%; mix-blend-mode:normal; color:rgb(35,35,35); overflow:visible}
+.logo .m20-logo{width:86%; height:86%}
+.logo .et-logo{width:74%; height:74%}
+.logo .gb-logo{width:72%; height:72%}
+.logo .ntr-logo{width:68%; height:68%}
+.logo .mm-logo{width:82%; height:82%}
 /* Munich Marriott Hotel City West: first only the long block, then the four masses rise onto it, one after another */
 .mm-logo .mm-mass{transform-box:fill-box; transform-origin:50% 100%; transform:scaleY(0); opacity:0}
 .mm-logo.play .mm-mass{transform:none; opacity:1; animation:mmRise .6s cubic-bezier(.3,.7,.3,1) both}
@@ -451,7 +468,7 @@ html[data-theme="dark"] .p-meta b{color:var(--gold-hi)}
 /* image tiles: the first one is large; every tile grows a little on hover and opens on click */
 .thumbs{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:clamp(90px,11vw,150px); gap:12px; margin-top:22px}
 .thumb{
-  position:relative; appearance:none; border:0; padding:0; cursor:zoom-in; border-radius:16px; overflow:hidden;
+  position:relative; appearance:none; border:0; padding:0; cursor:zoom-in; border-radius:6px; overflow:hidden;
   background:var(--soft); box-shadow:0 0 0 1px var(--line);
   transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; z-index:0;
 }
@@ -459,6 +476,8 @@ html[data-theme="dark"] .p-meta b{color:var(--gold-hi)}
 .thumb img{display:block; width:100%; height:100%; object-fit:cover; transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .thumb:hover, .thumb:focus-visible{transform:scale(1.045); z-index:2; box-shadow:0 18px 40px -12px rgba(0,0,0,.35), 0 0 0 1px var(--line); outline:none}
 .thumb:hover img{transform:scale(1.06)}
+/* an app's screenshot is a whole phone screen: it grows with its outline, never past it, so its edges stay in view */
+.thumbs.phones .thumb:hover img{transform:none}
 .thumb .slot{position:absolute; inset:0; display:grid; place-items:center; color:var(--ink-3); font-size:13px}
 
 /* the viewer */
@@ -498,10 +517,12 @@ html.lb-lock body{overflow:hidden}
   .thumbs.wide .thumb{flex:0 0 72%; height:180px; scroll-snap-align:start}
   .thumbs.wide .thumb:nth-child(n+6){flex-basis:72%}
   /* a little room inside the strip, so the screenshots' outlines are not cut at its edges */
-  .thumbs.phones{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding:2px 2px 6px; margin-left:-2px; margin-right:-2px; scroll-padding-left:2px; -webkit-overflow-scrolling:touch; scrollbar-width:none}
+  .thumbs.phones{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:10px; padding:16px 8px; margin:-14px -8px -10px; scroll-padding-left:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none}
   .thumbs.phones::-webkit-scrollbar{display:none}
   .thumbs.phones .thumb{flex:0 0 46%; scroll-snap-align:start}
   .thumb:hover{transform:none}
+  /* with a mouse, a screenshot still grows a little, as one piece with its outline (the strip leaves it room) */
+  @media (hover:hover){ .thumbs.phones .thumb:hover{transform:scale(1.03)} }
   .lb-prev, .lb-next{display:none}
 }
 
@@ -510,11 +531,12 @@ html.lb-lock body{overflow:hidden}
 .prize-line p{margin:0; font-size:15.5px; line-height:1.5; color:var(--ink)}
 .prize-line b{color:var(--gold-2); font-weight:650}
 html[data-theme="dark"] .prize-line b{color:var(--gold-hi)}
-.medal.sm{width:38px; height:38px; border-radius:50%}
+.medal.sm{font-size:20px}
 /* second prize in silver; an honorable mention in a paler silver */
-.prize-line.silver .medal{color:#5b6573; background:linear-gradient(135deg,#f3f5f8,#c4cbd4); box-shadow:0 6px 18px -6px rgba(90,100,115,.5)}
+.prize-line.silver .medal{color:#8a939e}
+html[data-theme="dark"] .prize-line.silver .medal{color:#c0c7cf}
 .prize-line.silver b{color:#6b7684}
-.prize-line.faded .medal{color:#8a94a1; background:linear-gradient(135deg,#f8f9fb,#dde2e8); box-shadow:0 6px 16px -8px rgba(120,130,145,.4)}
+.prize-line.faded .medal{color:#8a94a1; font-size:16px}
 .prize-line.faded b{color:#8d97a3}
 html[data-theme="dark"] .prize-line.silver b{color:#c3cad3}
 html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
@@ -559,7 +581,7 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
 .anim-logo.play .et-beam path:first-child{animation:etHum .9s ease-in-out 3.7s 2}
 @keyframes etHum{50%{opacity:.75}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .et-sphere,.anim-logo.play .et-flash,.anim-logo.play .et-beam path{animation:none} .et-reveal{stroke-dashoffset:0} .et-beam{opacity:1} }
-/* the buildings brake: they run on in the direction they arrived from, leaning, then settle back */
+/* Wohnpark Gebersdorf brakes: it runs on in the direction it arrived from, leaning, then settles back */
 .jelly{transform-box:fill-box; transform-origin:50% 100%}
 .anim-logo.play .jelly{animation:m20Brake 1.6s cubic-bezier(.3,.7,.4,1) .4s both}
 @keyframes m20Brake{
@@ -570,10 +592,22 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
   100%{transform:none}
 }
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .jelly{animation:none} }
+/* the Museum of the 20th Century: its two passages are drawn first, inside the bounds of its silhouette, the one from
+   bottom to top, the other from left to right, each meeting the other at its middle; then the building forms around
+   their crossing */
+.m20-h{transform-box:fill-box; transform-origin:0 50%}
+.m20-v{transform-box:fill-box; transform-origin:50% 100%}
+.anim-logo.play .m20-v{animation:m20V .5s cubic-bezier(.5,0,.3,1) .3s both}
+.anim-logo.play .m20-h{animation:m20H .6s cubic-bezier(.5,0,.3,1) .8s both}
+.anim-logo.play .m20-body{animation:m20Form .9s cubic-bezier(.65,0,.25,1) 1.5s both}
+@keyframes m20H{from{transform:scaleX(0)}}
+@keyframes m20V{from{transform:scaleY(0)}}
+@keyframes m20Form{from{clip-path:inset(40.3% 47.5% 40.3% 47.5%)} to{clip-path:inset(0)}}
+@media (prefers-reduced-motion:reduce){ .anim-logo.play .m20-h, .anim-logo.play .m20-v, .anim-logo.play .m20-body{animation:none} }
 /* RealStage: the fields start stretched across the opening and slide back, like a visor opening */
-.logo .plug-logo{width:74%; height:74%}
+.logo .plug-logo{width:70%; height:70%}
 /* Bancanca, small: the banana falls on the bank, breaks its roof, bounces; a few chips fly */
-.logo .bc-logo{width:80%; height:80%}
+.logo .bc-logo{width:72%; height:72%}
 .bc-fall{transform-box:view-box; transform-origin:216px 140px; transform:translateY(-380px) rotate(-14deg)}
 .bc-cols{transform-box:view-box}
 .bc-chip{opacity:0; transform-box:fill-box; transform-origin:center}
@@ -597,7 +631,7 @@ html[data-theme="dark"] .prize-line.faded b{color:#a3acb7}
    torii seal pressed on as an ink print. The seal is the logo picture itself, above the canvas. As in the app, light
    mode is on white with a white torii, dark mode on black with a black torii */
 .shuin-logo{position:relative}
-.logo.shuin-logo > img{position:relative; z-index:1; width:100%; height:100%; transition:opacity .7s ease}
+.logo.shuin-logo > img{position:relative; z-index:1; width:100%; height:100%;   /* the round seal fills the tile, a thin ring of the tile around it */ transition:opacity .7s ease}
 .logo.shuin-logo > img.dark, html[data-theme="dark"] .logo.shuin-logo > img.light{display:none}
 html[data-theme="dark"] .logo.shuin-logo > img.dark{display:block}
 html[data-theme="dark"] .logo.shuin-logo, html[data-theme="dark"] .dex .logo.shuin-logo{background:#000}
@@ -607,7 +641,7 @@ html[data-theme="dark"] .shuin-splash{background:#000}
 .shuin-logo.splashing .shuin-splash{opacity:1}
 @media (prefers-reduced-motion:reduce){ .bc-fall{transform:none} .anim-logo.play .bc-fall,.anim-logo.play .bc-ped,.anim-logo.play .bc-cols,.anim-logo.play .bc-chip{animation:none} .bc-ped{opacity:0} }
 /* Limericks: five lines written one after another, A A B B A; then they stay */
-.logo .lim-logo{width:78%; height:78%}
+.logo .lim-logo{width:72%; height:72%}
 .lim-line{fill:none; stroke-width:13; stroke-linecap:round; stroke-dasharray:1 1; stroke-dashoffset:1; opacity:0}
 .lim-a{stroke:rgb(110,110,110)}
 .lim-b{stroke:rgb(190,190,190)}
@@ -616,7 +650,7 @@ html[data-theme="dark"] .shuin-splash{background:#000}
 @media (prefers-reduced-motion:reduce){ .lim-line{stroke-dashoffset:0; opacity:1} .anim-logo.play .lim-line{animation:none} }
 /* Zweite Stammstrecke: a long ICE, nosed at both ends, passes right through; the next one brakes
    to a stop with its front at 75% of the width */
-.logo .zs-logo{width:88%; height:88%}
+.logo .zs-logo{width:86%; height:86%}
 .zs-t1{transform:translateX(-410px)}
 .zs-t2{transform:translateX(-46px)}
 /* the train stands where the logo ends, departs, and the next one pulls in to the same place */
@@ -626,15 +660,15 @@ html[data-theme="dark"] .shuin-splash{background:#000}
 @keyframes zsArrive{from{transform:translateX(-410px)} to{transform:translateX(-46px)}}
 @media (prefers-reduced-motion:reduce){ .anim-logo.play .zs-t1,.anim-logo.play .zs-t2{animation:none} }
 /* Building 8 logo: the trails as the motion sensor sees them, cell by cell (the cells are made by the script) */
-.logo .b8-logo{width:74%; height:74%}
+.logo .b8-logo{width:64%; height:64%}
 /* Building 8: the render full width; the button plays the motion in its place */
 .b8-row{display:grid; grid-template-columns:3fr 2fr; gap:14px; margin-top:22px}
 .b8-stage, .b8-flip{cursor:zoom-in}
-.b8-stage{position:relative; margin:0; border-radius:18px; overflow:hidden; aspect-ratio:2/1; background:var(--soft)}
+.b8-stage{position:relative; margin:0; border-radius:6px; overflow:hidden; aspect-ratio:2/1; background:var(--soft)}
 .b8-stage img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
 .b8-stage img[hidden]{display:none}
 /* the flipbook: a quarter of a second for each screen, then a pause on the last, over and over */
-.b8-flip{position:relative; margin:0; border-radius:18px; overflow:hidden; aspect-ratio:4/3; background:#120000}
+.b8-flip{position:relative; margin:0; border-radius:6px; overflow:hidden; aspect-ratio:4/3; background:#120000}
 .b8-flip img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; animation:b8Flip 2.2s steps(1) infinite}
 .b8-flip img:nth-child(1){animation-name:b8F1} .b8-flip img:nth-child(2){animation-name:b8F2}
 .b8-flip img:nth-child(3){animation-name:b8F3} .b8-flip img:nth-child(4){animation-name:b8F4}
@@ -644,14 +678,14 @@ html[data-theme="dark"] .shuin-splash{background:#000}
 @keyframes b8F4{0%{opacity:0} 34.1%,100%{opacity:1}}
 @media (max-width:760px){ .b8-row{grid-template-columns:1fr} }
 @media (prefers-reduced-motion:reduce){ .b8-flip img{animation:none} .b8-flip img:nth-child(4){opacity:1} }
-.b8-play{position:absolute; right:14px; top:14px; appearance:none; border:0; cursor:pointer; height:38px; padding:0 18px; border-radius:19px;
+.b8-play{position:absolute; right:14px; top:14px; appearance:none; border:0; cursor:pointer; height:38px; padding:0 18px; border-radius:8px;
   background:rgba(255,255,255,.92); color:rgb(35,35,35); font:650 14px/1 inherit; box-shadow:0 6px 18px -8px rgba(0,0,0,.45); backdrop-filter:blur(6px)}
 .b8-play:hover{background:#fff}
 .b8-play .b8-stop, .b8-play[aria-pressed="true"] .b8-go{display:none}
 .b8-play[aria-pressed="true"] .b8-stop{display:inline}
 html[dir="rtl"] .b8-play{right:auto; left:14px}
 /* Building 8 in 3D: a slider places the boards, layer by layer */
-.b8-build{margin:14px 0 0; border-radius:18px; overflow:hidden; background:#fff; border:1px solid var(--line)}   /* a border, not an inset shadow: the canvas would paint over a shadow */
+.b8-build{margin:14px 0 0; border-radius:6px; overflow:hidden; background:#fff; border:1px solid var(--line)}   /* a border, not an inset shadow: the canvas would paint over a shadow */
 html[data-theme="dark"] .b8-build{background:var(--soft)}
 html[data-theme="dark"] .b8-3d canvas{filter:invert(1) hue-rotate(180deg) url(#liftSoft)}   /* its white turns the figure's own colour, not black */
 .dark-lifts{position:absolute; width:0; height:0; overflow:hidden}
@@ -670,8 +704,8 @@ html[data-theme="dark"] .et-build .b8-3d canvas{filter:none}
 .et-badge{position:absolute; left:14px; top:12px; z-index:1; font-size:12px; color:var(--ink-3); pointer-events:none; font-variant-numeric:tabular-nums}
 .et-ctl{flex-wrap:wrap; gap:8px 10px}
 .et-btn, .et-seg button{font:inherit; font-size:13px; font-weight:500; color:var(--ink); background:transparent; border:0; padding:7px 14px; cursor:pointer}
-.et-btn{border:1px solid var(--line); border-radius:999px}
-.et-seg{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.et-btn{border:1px solid var(--line); border-radius:8px}
+.et-seg{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
 .et-seg button[aria-pressed="true"]{background:var(--ink); color:var(--btn-bg)}
 .et-buildbtn[aria-pressed="true"]{background:#ff3b30; border-color:#ff3b30; color:#fff}
 .et-status{margin:-4px 18px 8px; font-size:13px; color:var(--ink-3); min-height:1.5em}
@@ -693,7 +727,9 @@ html[data-theme="dark"] .ng-3d .lbl.tree{color:#4ade80}
 html[data-theme="dark"] .ng-hint{color:#97a1b1}
 html[dir="rtl"] .ng-hint{left:auto; right:14px}
 .ng-build .b8-play{z-index:2}
-.ng-build output{min-width:7em}
+/* the museum's steps: the name of the step, then its number of five, which keeps its place at the end of the row */
+.ng-build .ng-name{font-size:13px; color:var(--ink-2); white-space:nowrap; min-width:7.5em}
+.ng-build output{min-width:3.4em}
 .ng-cap{margin:-6px 18px 12px; font-size:13.5px; line-height:1.5; color:var(--ink); min-height:3em}
 @media (prefers-reduced-motion:reduce){ .ng-3d .lbl{transition:none} }
 .b8-note{margin:-6px 18px 14px; font-size:12.5px; color:var(--ink-3)}
@@ -720,10 +756,10 @@ html[dir="rtl"] .ng-hint{left:auto; right:14px}
 .vb-cut path{fill:none; stroke:currentColor; stroke-width:5}
 .vb-cut path.vb-tip{fill:currentColor; stroke:none; opacity:1}
 .vb-zones{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0; transition:opacity .45s}
-.vb-box{margin-top:22px; padding:18px; border:1px solid var(--line); border-radius:18px}
+.vb-box{margin-top:22px; padding:18px; border:1px solid var(--line); border-radius:8px}
 .vb-duo{margin-top:0}
 .vb-duo .vb-plan{margin-top:0}
-.vb-media{position:relative; border-radius:12px; overflow:hidden; aspect-ratio:16/10; background:#0a0a0c}
+.vb-media{position:relative; border-radius:6px; overflow:hidden; aspect-ratio:16/10; background:#0a0a0c}
 .vb-pic{display:block; width:100%; height:100%; padding:0; border:0; background:none; cursor:zoom-in}
 .vb-pic img{display:block; width:100%; height:100%; object-fit:cover; animation:vbIn .45s ease-out}
 @keyframes vbIn{from{opacity:0}}
@@ -746,10 +782,30 @@ html[dir="rtl"] .ng-hint{left:auto; right:14px}
 .vb-plan[data-step="1"] .vb-dot[data-zone="1"], .vb-plan[data-step="2"] .vb-dot[data-zone="2"], .vb-plan[data-step="3"] .vb-dot[data-zone="3"]{opacity:1; pointer-events:auto}
 .vb-story{display:flex; flex-direction:column; align-items:center; margin-top:14px}
 .vb-texts{margin:0}
-.vb-pill{appearance:none; cursor:pointer; white-space:nowrap; border-radius:999px; padding:9px 18px; font:inherit; font-size:14px; font-weight:600; line-height:1.2;
+.vb-pill{appearance:none; cursor:pointer; white-space:nowrap; border-radius:8px; padding:9px 18px; font:inherit; font-size:14px; font-weight:600; line-height:1.2;
   background:var(--btn-bg); color:var(--ink); border:1px solid var(--btn-border); box-shadow:0 4px 12px rgba(0,0,0,.1); transition:transform .2s cubic-bezier(.3,1.6,.5,1), opacity .2s}
 .vb-pill:hover{transform:scale(1.04)}
 .vb-pill:disabled{opacity:.35; cursor:default; transform:none}
+/* a project with something to try (a model, a story, a simulation) says so with a round button beside the arrows of its
+   card: it takes you down to it, and a rainbow runs round its edge (and the hand nudges and makes a peace sign)
+   whenever the project comes into view, until you have been there */
+@property --rba{syntax:'<angle>'; inherits:false; initial-value:0deg}
+.try{position:relative; appearance:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; margin-inline-end:8px;
+  border-radius:50%; border:1px solid var(--btn-border); background:var(--btn-bg); color:var(--ink); font:inherit; font-size:13.5px; font-weight:650;
+  line-height:1.2; box-shadow:var(--shadow); transition:transform .2s cubic-bezier(.3,1.6,.5,1), opacity .3s}
+.try[hidden]{display:none}
+.try:hover{transform:scale(1.04)}
+.try svg{width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
+.try.rainbow::after{
+  content:""; position:absolute; inset:-3px; border-radius:inherit; padding:2.5px; pointer-events:none;
+  background:conic-gradient(from var(--rba), #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ef4444);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation:rbTurn 1s linear 2, rbFade .5s 2s forwards}
+@keyframes rbTurn{to{--rba:360deg}}
+.try.wave svg{animation:tryNudge 1s ease-in-out 2}
+@keyframes tryNudge{50%{transform:translateY(-2px) rotate(-8deg)}}
+@media (prefers-reduced-motion:reduce){ .try.rainbow::after, .try.wave svg{animation:none} .try.rainbow::after{opacity:0} }
 .vb-grow{overflow:hidden; transition:height .55s cubic-bezier(.2,.8,.2,1)}
 .vb-poem{white-space:pre-line; height:7.6em; overflow-y:auto; margin-top:10px; padding:8px 12px; border-left:2px solid var(--line);
   font-style:italic; font-size:14px; line-height:1.55; color:var(--ink-2, var(--ink)); border-left-color:transparent; transition:border-color .5s}
@@ -761,7 +817,7 @@ html[dir="rtl"] .ng-hint{left:auto; right:14px}
 .vb-big{position:relative; width:var(--vbw, 100%); max-width:100%; margin:0 auto}
 .vb-big .city-build, .vb-rimg{margin:14px 0 0}
 .vb-big .city-build[hidden], .vb-duo[hidden], .vb-rimg[hidden]{display:none}
-.vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:12px}
+.vb-rimg{display:block; width:100%; aspect-ratio:1800/841; object-fit:cover; border-radius:6px}
 .vb-media{margin-top:14px}
 .vb-stage{position:relative}   /* the city, or the render, with the button on it */
 .vb-render{position:absolute; right:12px; top:26px; z-index:3}
@@ -800,16 +856,16 @@ html[dir="rtl"] .vb-render{right:auto; left:12px}
   .b8-ctl input{order:3; flex:1 1 100%; height:8px}
 }
 /* the spiral staircase: its logo is the model from the side, the outer wall opening; its picture opens the interactive model */
-.logo .ss-logo{width:76%; height:76%}
+.logo .ss-logo{width:66%; height:66%}
 /* Revitesse: a sheet of paper folding into the logo, in its own colours in both themes */
-.logo .rv-logo{width:78%; height:78%}
+.logo .rv-logo{width:72%; height:72%}
 .ss-logo path{fill:none; stroke-linecap:round; stroke-linejoin:round}
 .ss-fixed, .ss-wall{stroke:currentColor; stroke-width:1.3}
 .ss-edge{stroke-width:2.4}
 .ss-slabs{stroke:currentColor; stroke-width:6}
 .ss-live{position:relative; margin-top:22px}
 .ss-hook{margin:0 0 12px; font-size:17px; font-weight:650; letter-spacing:-.01em}
-.ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:18px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
+.ss-live iframe{display:block; width:100%; height:760px; border:0; border-radius:6px; background:#fff; box-shadow:inset 0 0 0 1px var(--line)}
 html[data-theme="dark"] .ss-live iframe{filter:invert(1) hue-rotate(180deg) url(#liftCard); box-shadow:none}
 /* the labyrinth starts closed, as a frame with every gap bridged, and opens */
 .lab-close{stroke-dasharray:1 1; stroke-dashoffset:0}
@@ -839,7 +895,7 @@ html[data-theme="dark"] .prize b{color:var(--gold-hi)}
 
 /* apps: the logo beside the name, the text in two columns, the images below */
 .a-head{display:flex; gap:16px; align-items:center; margin-bottom:18px}
-.logo{width:64px; height:64px; border-radius:18px; flex:none; display:grid; place-items:center; overflow:hidden; background:#fff; box-shadow:0 0 0 1px var(--line), 0 8px 18px -10px rgba(0,0,0,.3)}
+.logo{width:64px; height:64px; border-radius:50%; flex:none; display:grid; place-items:center; overflow:hidden; background:#fff; box-shadow:0 0 0 1px var(--line), 0 8px 18px -10px rgba(0,0,0,.3)}
 .logo img{width:74%; height:74%; object-fit:contain}
 /* the Shuin icon carries its own white margin, so it gets more of the box to look the same size as the others */
 .logo img.roomy{width:86%; height:86%}
@@ -903,7 +959,7 @@ html.fit-tab body{min-height:0}
 .archive-fit .p-head{flex:none}
 .archive-fit .lead{flex:none; margin-bottom:14px}
 .archive-fit .stats{flex:none; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px}
-.archive-fit .stat{padding:14px 18px; border-radius:20px; text-decoration:none; color:inherit}
+.archive-fit .stat{padding:14px 18px; border-radius:8px; text-decoration:none; color:inherit}
 .archive-fit .stat b{font-size:clamp(22px,3vw,34px)}
 .archive-fit a.stat:hover{background:var(--btn-hover)}
 .archive-fit .map{flex:1; min-height:140px; aspect-ratio:auto}
@@ -1008,9 +1064,9 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   .theme{width:36px; height:36px}
   .tab{width:42px; height:42px; padding:0; gap:0}
   .tab svg{display:block}
-  .tab .lbl{max-width:0; opacity:0}
+  .tab .lbl{max-width:0; min-width:0; width:var(--lw,auto); opacity:0}
   .tab.on{width:auto; padding:0 16px; gap:8px}
-  .tab.on .lbl{max-width:140px; opacity:1}
+  .tab.on .lbl{max-width:var(--lw,140px); opacity:1}
   .stats{grid-template-columns:1fr 1fr 1fr; gap:8px}
   .archive-fit .lead{font-size:14.5px; margin-bottom:10px}
   .archive-fit .stats{gap:6px; margin-bottom:10px}
@@ -1018,11 +1074,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   /* on a phone the card simply scrolls: the map keeps the world's proportions and the introduction follows it */
   .archive-fit > .arc-screen{height:auto}
   .archive-fit .map{flex:none; aspect-ratio:1.6/1}
-  .archive-fit .stat{padding:10px 8px; border-radius:14px}
+  .archive-fit .stat{padding:10px 8px; border-radius:6px}
   .archive-fit .stat b{font-size:19px}
   .archive-fit .stat span{font-size:11px; margin-top:4px}
   .archive-fit .maphint{font-size:12px}
-  .stat{padding:14px 12px; border-radius:18px}
+  .stat{padding:14px 12px; border-radius:8px}
   .stat span{font-size:12px}
   .map{aspect-ratio:1.8/1}
   .zoom{right:8px; bottom:8px; gap:6px}
@@ -1034,12 +1090,111 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
   .card-head .nav{margin-left:auto}
   html[dir="rtl"] .card-head .nav{margin-left:0; margin-right:auto}
   .a-body{grid-template-columns:1fr; gap:4px}
-  .logo{width:54px; height:54px; border-radius:16px}
+  .logo{width:54px; height:54px; border-radius:50%}
   .award{gap:14px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important; transition:none!important}
 }
+
+/* ---------- the category bar: one pill moves from tab to tab ----------
+   The open tab's pill is a separate shape under the tabs; it moves to the new tab and takes its width, while the tabs
+   themselves change at once (on a phone the open tab shows its word), so nothing shrinks and grows on the way */
+.tabs{position:relative}
+.tab{position:relative; z-index:1}
+.tabs .tab.on{background:transparent; box-shadow:none}
+.tab-ind{position:absolute; left:0; top:0; border-radius:999px; background:var(--pill); box-shadow:0 2px 8px rgba(0,0,0,.15); pointer-events:none;
+  transition:transform .45s var(--ease), width .45s var(--ease)}
+.tab-ind.still{transition:none}
+@media (max-width:760px){ .tabs .tab{transition:color .3s} .tabs .tab .lbl{transition:opacity .3s .15s} }
+
+/* ---------- Writing: the card comes in, then turns to paper, crumpled a little differently on every visit ---------- */
+#writing .glass.card{isolation:isolate}
+#writing .glass.card::before{content:""; position:absolute; inset:0; border-radius:inherit; z-index:-1; pointer-events:none;
+  background:var(--paper, none) center / cover; opacity:0}
+#writing.paper .glass.card{background-color:#f0efeb}
+#writing.paper .glass.card::before{opacity:1}
+html[data-theme="dark"] #writing.paper .glass.card{background-color:#2a2b2e}
+html[data-theme="dark"] #writing.paper .glass.card::before{opacity:.85}
+#writing.enter .glass.card > :not(.ink){animation:arcIn .6s var(--ease) .45s both}
+/* on the paper, the buttons let it show through */
+#writing .arrow, #writing .try{background:transparent; box-shadow:none}
+
+/* ---------- Archive: no card; the whole screen. The title comes, then the map is drawn from the bottom up ---------- */
+#archive .wrap{max-width:none}
+#archive .glass.card{background:transparent; border-color:transparent; box-shadow:none}
+#archive.enter .p-head{animation:arcIn .6s var(--ease) .55s both}
+#archive.enter .stats{animation:arcIn .6s var(--ease) .8s both}
+#archive.enter:not(.ready) .map{clip-path:inset(100% 0 0 0)}
+#archive.enter.ready .map{animation:mapUp 2.6s cubic-bezier(.45,0,.25,1) 1s both}
+#archive.enter .maphint, #archive.enter .chips, #archive.enter .arc-lead{opacity:0}
+#archive.enter.drawn .maphint, #archive.enter.drawn .chips, #archive.enter.drawn .arc-lead{opacity:1; animation:arcIn .6s var(--ease) both}
+@keyframes arcIn{from{opacity:0; transform:translateY(10px)}}
+@keyframes mapUp{from{clip-path:inset(100% 0 0 0)} to{clip-path:inset(0)}}
+/* the numbers, centred, two to a line: the left ones read label then number, the right ones number then label
+     long videos  227    31  countries
+          shorts  293   114  places        */
+#archive .stats{display:grid; grid-template-columns:repeat(4, max-content); justify-content:center; align-items:baseline; column-gap:14px; row-gap:2px; margin-bottom:14px}
+#archive .stat{display:contents}
+#archive .stat b{font-size:clamp(20px, 2.4vw, 28px); letter-spacing:-.02em}
+#archive .stat span{margin:0; font-size:15px; color:var(--ink-2)}
+#archive .stat:nth-child(1) span{grid-area:1 / 1; text-align:end} #archive .stat:nth-child(1) b{grid-area:1 / 2; text-align:end; padding-right:clamp(14px, 3vw, 34px)}
+#archive .stat:nth-child(2) span{grid-area:2 / 1; text-align:end} #archive .stat:nth-child(2) b{grid-area:2 / 2; text-align:end; padding-right:clamp(14px, 3vw, 34px)}
+#archive .stat:nth-child(3) b{grid-area:1 / 3; padding-left:clamp(14px, 3vw, 34px)} #archive .stat:nth-child(3) span{grid-area:1 / 4}
+#archive .stat:nth-child(4) b{grid-area:2 / 3; padding-left:clamp(14px, 3vw, 34px)} #archive .stat:nth-child(4) span{grid-area:2 / 4}
+@media (prefers-reduced-motion:reduce){ #archive.enter *{animation:none!important} .tab-ind{transition:none} }
+
+/* ---------- the pointer: on a computer with a mouse, a soft round dot instead of the arrow, as on an iPad ----------
+   It grows a little over what can be clicked and shrinks when pressed; in text fields the usual text cursor comes back */
+.dot-cursor{position:fixed; left:0; top:0; width:18px; height:18px; margin:-9px 0 0 -9px; border-radius:50%; pointer-events:none; z-index:1000;
+  background:rgba(40,40,48,.55); box-shadow:0 0 0 1.5px rgba(255,255,255,.7); opacity:0;
+  transform:translate(var(--x, -100px), var(--y, -100px)) scale(var(--s, 1));
+  transition:width .18s var(--ease), height .18s var(--ease), margin .18s var(--ease), opacity .2s, --s .12s ease}
+@property --s{syntax:'<number>'; inherits:false; initial-value:1}
+html.has-dot, html.has-dot *{cursor:none!important}
+html.has-dot input, html.has-dot textarea, html.has-dot [contenteditable]{cursor:text!important}
+html.has-dot .dot-cursor{opacity:1}
+html[data-theme="dark"] .dot-cursor{background:rgba(240,240,246,.6); box-shadow:0 0 0 1.5px rgba(0,0,0,.6)}
+.dot-cursor.over{width:34px; height:34px; margin:-17px 0 0 -17px; background:rgba(40,40,48,.32)}
+html[data-theme="dark"] .dot-cursor.over{background:rgba(240,240,246,.34)}
+.dot-cursor.down{--s:.78}
+.dot-cursor.text, .dot-cursor.gone{opacity:0!important}
+
+/* ---------- the buttons light up faintly now and then, to say they can be pressed: their face and edge brighten a
+   little every four seconds. The arrows always; the Interactive button until it has been used ---------- */
+:root{--litTo:#eceef2; --litEdge:rgba(0,0,0,.24)}
+html[data-theme="dark"]{--litTo:#2b2e3a; --litEdge:rgba(255,255,255,.22)}
+.card-head .arrow:not(:disabled), .try:not(.used){animation:btnLit 4s ease-in-out infinite}
+@keyframes btnLit{0%,60%,100%{} 78%{background-color:var(--litTo); border-color:var(--litEdge)}}
+#writing .card-head .arrow:not(:disabled), #writing .try:not(.used){animation-name:btnLitClear}
+@keyframes btnLitClear{0%,60%,100%{} 78%{background-color:color-mix(in srgb, var(--litTo) 55%, transparent); border-color:var(--litEdge)}}
+@media (prefers-reduced-motion:reduce){ .card-head .arrow, .try{animation:none!important} }
+
+/* ---------- the app screenshots, each in a phone: a thin dark rim the same width all round (a border on the screenshot
+   itself), round corners like an iPhone without the island, no shadow ---------- */
+.thumbs.phones .thumb{border-radius:12% / 5.5%; padding:0; background:none; box-shadow:none; overflow:visible}
+.thumbs.phones .thumb img{box-sizing:border-box; width:100%; height:auto; border:2.5px solid #1b1c20; border-radius:12% / 5.5%}
+.thumbs.phones .thumb:hover, .thumbs.phones .thumb:focus-visible{box-shadow:none}
+html[data-theme="dark"] .thumbs.phones .thumb img{border-color:#3a3c43}
+
+/* Building 8: the faint path the mouse leaves while the project is open (drawn by app.js) */
+.sense-trail{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:999}
+
+/* Writing: an ink stain where the mouse rests on the paper; it spreads slowly and fades when the mouse goes */
+.ink{position:absolute; z-index:-1; pointer-events:none; color:rgba(22,32,78,.55); rotate:var(--rot); scale:.25; opacity:0;
+  animation:inkSpread 3.2s cubic-bezier(.2,.7,.25,1) forwards}
+.ink svg{width:100%; height:100%; fill:currentColor; display:block}
+html[data-theme="dark"] .ink{color:rgba(228,230,238,.3)}
+@keyframes inkSpread{0%{scale:.25; opacity:0} 15%{opacity:1} 100%{scale:1; opacity:1}}
+.ink.gone{animation-play-state:paused}
+
+/* the Museum of the 20th Century: the brick bond behind its text (drawn by app.js) */
+.slide.has-bricks{position:relative; isolation:isolate}
+/* the museum's text sits on a veil of the card colour, so it reads clearly over the bricks; the veil reaches a little
+   past the text (a spread shadow) without moving it */
+.slide.has-bricks :is(.p-head > div, .prose, .facts){--veil:color-mix(in srgb, var(--card) 45%, transparent);
+  background:var(--veil); box-shadow:0 0 0 7px var(--veil); border-radius:3px}
+.bricks{position:absolute; left:0; top:0; z-index:-1; pointer-events:none}
 </style>
 <script>
 /* Before first paint, so a dark page never flashes white: a saved choice wins, otherwise the OS. */
@@ -1074,29 +1229,29 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
     <div class="hright">
       <button class="contact" id="contactBtn" aria-expanded="false" aria-controls="contactPop">Kontakt</button>
       <button class="theme" id="themeBtn" aria-label="Zwischen hellem und dunklem Modus wechseln" title="Hell oder dunkel">
-        <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="moon" viewBox="0 0 24 24"><path d="M12.8 4.2A8.2 8.2 0 1 0 19.8 15.6A6.6 6.6 0 0 1 12.8 4.2Z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M18.80 12.00L21.60 12.00M16.81 16.81L18.79 18.79M12.00 18.80L12.00 21.60M7.19 16.81L5.21 18.79M5.20 12.00L2.40 12.00M7.19 7.19L5.21 5.21M12.00 5.20L12.00 2.40M16.81 7.19L18.79 5.21"/></svg>
       </button>
       <button class="theme" id="cookieBtn" aria-label="Datenschutz und Cookies" title="Datenschutz und Cookies" aria-expanded="false" aria-controls="privacyPop">
-        <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 3 3 0 0 1-3.2-3 3 3 0 0 1-2.8-2.8A3 3 0 0 1 12 3z"/><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="15.8" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11.6" r=".7" fill="currentColor" stroke="none"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20.6 12.4A8.6 8.6 0 1 1 11.6 3.4A3.1 3.1 0 0 0 15.2 7.2A3.1 3.1 0 0 0 20.6 12.4Z"/><circle cx="8.6" cy="10.4" r="1" fill="currentColor" stroke="none"/><circle cx="13.2" cy="15.6" r="1" fill="currentColor" stroke="none"/><circle cx="8.8" cy="15.4" r=".8" fill="currentColor" stroke="none"/><circle cx="12.6" cy="11" r=".7" fill="currentColor" stroke="none"/></svg>
       </button>
       <button class="theme lang" id="langBtn" aria-label="Sprache: Deutsch" title="Deutsch" aria-expanded="false" aria-controls="langPop"><span class="flag"><svg viewBox="0 0 30 30"><rect width="30" height="10" fill="#000"/><rect y="10" width="30" height="10" fill="#DD0000"/><rect y="20" width="30" height="10" fill="#FFCE00"/></svg></span></button>
     </div>
   </div>
   <nav class="tabs" role="tablist" aria-label="Kategorien">
-    <button class="tab" role="tab" data-tab="about" aria-label="Über mich"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="lbl">Über mich</span></button>
-    <button class="tab" role="tab" data-tab="architecture" aria-label="Architektur"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9.5 21v-6h5v6M9 10.5h.01M15 10.5h.01"/></svg><span class="lbl">Architektur</span></button>
-    <button class="tab" role="tab" data-tab="design" aria-label="Design"><svg class="i" viewBox="0 0 24 24"><circle cx="7.5" cy="7.5" r="4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><path d="M12 13.5l4.8 7H7.2z"/></svg><span class="lbl">Design</span></button>
-    <button class="tab" role="tab" data-tab="writing" aria-label="Texte"><svg class="i" viewBox="0 0 24 24"><path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8L2 22M17.5 15H9"/></svg><span class="lbl">Texte</span></button>
-    <button class="tab" role="tab" data-tab="archive" aria-label="Archiv"><svg class="i" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="5" rx="1.5"/><path d="M4.5 9v9.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V9M10 13h4"/></svg><span class="lbl">Archiv</span></button>
-    <button class="tab" role="tab" data-tab="apps" aria-label="Apps"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg><span class="lbl">Apps</span></button>
+    <button class="tab" role="tab" data-tab="about" aria-label="Über mich"><svg class="i" viewBox="0 0 24 24"><path class="face" fill-rule="evenodd" d="M0.00 20.19L0.00 16.37L0.15 16.37C0.27 16.37 0.31 16.35 0.35 16.25C0.39 16.17 0.45 16.13 0.55 16.11C0.70 16.09 0.70 16.09 0.50 16.00C0.40 15.95 0.24 15.89 0.15 15.88C0.04 15.86 0.00 15.83 0.00 15.77C0.00 15.69 0.03 15.69 0.32 15.69L0.63 15.69L1.22 14.60L1.80 13.52L1.71 12.34L1.63 11.17L2.00 9.86C2.50 8.07 3.09 6.11 3.60 4.54C4.01 3.30 4.06 3.17 4.64 2.01L5.24 0.79L6.29 0.39L7.35 -0.00L8.22 -0.00C9.08 -0.00 9.09 0.00 9.04 0.09C8.98 0.21 8.88 0.24 8.76 0.17C8.65 0.11 8.44 0.18 8.44 0.27C8.44 0.29 8.46 0.30 8.47 0.29C8.54 0.25 8.71 0.34 8.68 0.41C8.62 0.58 8.82 0.70 8.98 0.58C9.10 0.49 9.25 0.50 9.28 0.60C9.33 0.76 9.39 0.69 9.39 0.46C9.39 0.29 9.41 0.21 9.49 0.11C9.59 -0.01 9.59 -0.01 10.08 0.01C10.59 0.02 10.64 0.04 10.75 0.24C10.78 0.30 10.77 0.34 10.71 0.42C10.61 0.55 10.56 0.54 10.37 0.35C10.11 0.08 9.90 0.19 10.14 0.47C10.25 0.60 10.25 0.60 10.14 0.73C10.06 0.81 10.03 0.88 10.05 0.93C10.10 1.06 9.99 1.28 9.84 1.36C9.77 1.39 9.64 1.49 9.55 1.58L9.39 1.73L9.19 1.55C8.90 1.28 8.75 1.42 8.98 1.75C9.12 1.97 9.12 2.04 8.95 2.08C8.87 2.09 8.71 2.14 8.58 2.18C8.39 2.23 8.34 2.24 8.19 2.19C8.03 2.13 8.02 2.14 7.92 2.25C7.81 2.37 7.67 2.41 7.14 2.47C6.99 2.48 6.86 2.51 6.83 2.53C6.79 2.56 6.17 2.61 5.61 2.63C5.51 2.64 5.35 2.67 5.27 2.71C5.19 2.75 5.07 2.79 5.01 2.80C4.85 2.84 4.76 2.94 4.76 3.07C4.76 3.20 4.70 3.32 4.53 3.51C4.43 3.63 4.41 3.68 4.44 3.79C4.46 3.91 4.53 4.58 4.55 4.99C4.56 5.09 4.59 5.21 4.62 5.26C4.66 5.33 4.67 5.42 4.65 5.53C4.63 5.66 4.64 5.71 4.71 5.79C4.80 5.88 4.80 5.88 4.97 5.77C5.07 5.71 5.17 5.60 5.19 5.54C5.28 5.31 5.52 5.12 6.02 4.88C6.24 4.76 6.26 4.75 6.19 4.70C6.12 4.64 6.13 4.62 6.32 4.39C6.44 4.26 6.59 4.12 6.66 4.09C6.72 4.05 6.87 3.93 6.99 3.81C7.15 3.64 7.21 3.60 7.27 3.62C7.32 3.64 7.39 3.65 7.45 3.65C7.58 3.64 8.16 3.77 8.20 3.82C8.27 3.88 8.37 3.86 8.50 3.75C8.66 3.62 8.63 3.53 8.41 3.50C8.10 3.45 8.06 3.38 8.19 3.15C8.28 2.96 8.31 2.94 8.56 2.86C8.84 2.78 9.34 2.34 9.39 2.13C9.41 2.05 9.44 2.04 9.58 2.04C9.88 2.05 10.22 2.11 10.33 2.17C10.43 2.23 10.47 2.22 10.87 2.04L11.31 1.83L11.29 1.56C11.27 1.31 11.26 1.27 11.14 1.17C10.89 0.96 10.83 0.84 10.87 0.58L10.89 0.35L11.09 0.44C11.20 0.48 11.35 0.57 11.43 0.62C11.50 0.68 11.59 0.73 11.61 0.73C11.63 0.73 11.68 0.77 11.70 0.83C11.80 1.01 12.51 1.80 12.59 1.80C12.61 1.80 12.68 1.87 12.73 1.95C12.83 2.12 13.01 2.23 13.17 2.23C13.35 2.23 13.67 2.36 13.75 2.47C13.82 2.55 13.87 2.57 14.00 2.56C14.12 2.56 14.22 2.59 14.30 2.64C14.37 2.69 14.54 2.79 14.68 2.85C14.88 2.94 15.04 3.08 15.39 3.44C15.78 3.84 15.87 3.91 16.01 3.94C16.17 3.96 16.18 3.98 16.20 4.14C16.23 4.33 16.57 4.86 16.82 5.09C16.90 5.17 16.97 5.26 16.97 5.28C16.97 5.31 17.02 5.39 17.08 5.47C17.14 5.55 17.19 5.63 17.19 5.65C17.19 5.70 17.36 5.85 17.45 5.88C17.50 5.90 17.51 5.95 17.50 6.10C17.48 6.26 17.49 6.30 17.61 6.44C17.74 6.59 17.74 6.60 17.72 6.87C17.69 7.10 17.70 7.17 17.79 7.33C17.85 7.45 17.91 7.68 17.94 7.93C17.97 8.15 18.03 8.55 18.08 8.81C18.12 9.07 18.18 9.49 18.19 9.75C18.21 10.01 18.26 10.45 18.30 10.73C18.40 11.33 18.40 11.51 18.32 11.66C18.28 11.72 18.26 11.89 18.26 12.09C18.26 12.38 18.24 12.43 18.13 12.57C18.03 12.70 18.00 12.79 17.98 13.06C17.95 13.38 17.95 13.38 18.10 13.53C18.29 13.69 18.29 13.78 18.15 14.00C18.09 14.08 18.04 14.18 18.04 14.20C18.04 14.23 17.98 14.32 17.90 14.40C17.66 14.63 17.62 14.76 17.76 14.94C17.90 15.11 17.87 15.30 17.67 15.50C17.59 15.58 17.57 15.63 17.59 15.72C17.60 15.79 17.59 15.88 17.55 15.94C17.52 16.00 17.47 16.09 17.45 16.14C17.42 16.20 17.36 16.26 17.32 16.28C17.27 16.31 17.20 16.40 17.17 16.47C17.12 16.59 17.07 16.63 16.94 16.66C16.78 16.70 16.78 16.70 16.79 16.86C16.81 17.12 16.61 17.24 16.29 17.16C16.16 17.14 16.15 17.13 16.18 16.98C16.19 16.89 16.24 16.77 16.27 16.70C16.36 16.53 16.33 16.48 16.20 16.60C16.10 16.69 16.09 16.69 15.95 16.62C15.76 16.52 15.71 16.52 15.60 16.63C15.47 16.76 15.49 16.94 15.65 17.07C15.80 17.21 15.82 17.21 15.95 17.10C16.08 17.00 16.11 16.99 16.11 17.08C16.11 17.11 16.09 17.14 16.07 17.14C16.04 17.14 15.94 17.32 15.84 17.54C15.74 17.76 15.59 18.04 15.51 18.17C15.44 18.30 15.25 18.68 15.10 19.01C14.61 20.06 14.33 20.49 13.73 21.13C13.44 21.43 13.20 21.71 13.20 21.74C13.20 21.77 13.24 21.87 13.29 21.97C13.41 22.20 13.37 22.33 13.12 22.46C12.89 22.57 12.90 22.66 13.14 22.83C13.41 23.03 13.46 23.15 13.34 23.37C13.23 23.58 13.22 23.64 13.31 23.84L13.37 24.00L12.96 24.00C12.56 24.00 12.56 24.00 12.58 23.89C12.60 23.84 12.59 23.73 12.56 23.65C12.52 23.53 12.53 23.51 12.66 23.38C12.73 23.31 12.83 23.23 12.88 23.20C12.96 23.15 12.96 23.14 12.88 23.10C12.71 22.99 12.47 22.74 12.47 22.67C12.47 22.53 12.39 22.58 12.01 22.94C11.45 23.47 11.14 23.66 10.64 23.78C10.47 23.82 10.41 23.86 10.41 23.92C10.41 24.00 10.29 24.00 5.21 24.00L0.00 24.00L0.00 20.19ZM8.96 22.33C9.04 22.28 9.18 22.21 9.28 22.16C9.63 22.00 9.65 21.80 9.34 21.57C9.11 21.41 8.51 21.22 8.12 21.19C7.94 21.17 7.80 21.13 7.66 21.04C7.52 20.95 7.42 20.92 7.35 20.94C7.18 20.98 7.20 20.48 7.37 20.29C7.44 20.21 7.50 20.08 7.52 19.97C7.55 19.77 7.80 19.50 8.14 19.28C8.40 19.11 8.71 19.11 8.88 19.27C9.00 19.38 9.00 19.38 9.73 19.38C10.54 19.38 10.56 19.37 10.57 19.12C10.58 18.71 10.65 18.47 10.81 18.31L10.96 18.16L11.13 18.32C11.37 18.53 11.45 18.52 11.64 18.25C11.75 18.10 11.87 18.00 12.05 17.91C12.36 17.75 12.38 17.75 12.56 17.94C12.86 18.25 13.04 18.00 12.89 17.49C12.80 17.20 12.80 16.12 12.88 15.93C12.97 15.72 12.96 15.39 12.86 14.89C12.65 13.86 12.49 13.67 12.12 13.99C12.02 14.08 11.92 14.14 11.90 14.14C11.88 14.14 11.75 14.22 11.62 14.32C11.41 14.46 11.30 14.50 10.88 14.59C10.61 14.65 10.31 14.72 10.20 14.76C9.60 14.98 9.32 14.90 9.56 14.58C9.67 14.43 9.61 14.27 9.40 14.14C9.12 13.97 9.08 13.89 9.11 13.63C9.16 13.17 8.87 12.86 8.39 12.86C8.18 12.86 8.06 12.80 8.12 12.73C8.20 12.66 8.59 12.60 8.83 12.63C9.19 12.67 9.74 12.53 9.72 12.41C9.71 12.35 9.63 12.28 9.48 12.21C8.99 11.96 8.95 11.90 9.22 11.83C9.54 11.74 10.60 11.97 10.78 12.18C10.89 12.29 11.12 12.41 11.48 12.53C11.90 12.67 12.75 12.67 12.94 12.53C13.16 12.36 13.24 12.41 13.24 12.71C13.24 12.90 13.32 12.90 13.45 12.71C13.58 12.51 13.63 12.53 13.74 12.82C13.84 13.08 13.95 13.13 14.08 12.99C14.17 12.88 14.27 12.88 14.38 12.96C14.57 13.11 14.84 12.99 14.99 12.69C15.10 12.49 15.32 12.38 15.69 12.36C16.14 12.32 16.16 12.31 16.16 11.97C16.16 11.62 16.18 11.65 15.69 11.32C15.39 11.12 15.25 11.05 15.14 11.05C14.98 11.05 14.83 10.94 14.82 10.81C14.79 10.33 14.98 9.79 15.20 9.75C15.27 9.74 15.45 9.70 15.60 9.66C16.11 9.55 16.30 9.61 16.62 10.04C16.79 10.26 16.95 10.76 16.93 10.95C16.90 11.12 16.92 11.51 16.97 11.79C17.11 12.69 17.16 12.75 17.37 12.17C17.59 11.54 17.70 10.76 17.62 10.37C17.59 10.25 17.55 9.96 17.53 9.74C17.47 9.18 17.34 8.91 17.06 8.76C16.93 8.70 16.23 8.67 16.08 8.72C16.02 8.74 15.93 8.74 15.88 8.73C15.77 8.70 15.14 8.21 15.07 8.11C15.05 8.08 14.95 7.96 14.85 7.84C14.74 7.72 14.66 7.61 14.66 7.58C14.66 7.56 14.59 7.45 14.52 7.33C14.44 7.22 14.34 7.06 14.29 6.98C14.05 6.56 13.96 6.43 13.77 6.24C13.46 5.92 12.98 5.58 12.72 5.49C12.64 5.46 12.53 5.38 12.47 5.31C12.37 5.17 12.25 5.16 11.97 5.28C11.76 5.36 11.74 5.31 11.78 4.93C11.81 4.70 11.81 4.59 11.78 4.55C11.72 4.49 11.43 4.33 11.36 4.33C11.28 4.33 11.31 4.45 11.40 4.48C11.44 4.49 11.49 4.53 11.50 4.57C11.57 4.74 11.15 4.92 10.95 4.82C10.80 4.74 10.65 4.78 10.27 5.01C10.04 5.14 9.98 5.16 9.76 5.15C9.24 5.13 9.10 5.13 8.88 5.20C8.61 5.28 8.05 5.66 7.89 5.86C7.83 5.94 7.61 6.18 7.41 6.38C7.04 6.77 6.90 7.04 6.90 7.39C6.90 7.44 6.86 7.54 6.81 7.60C6.70 7.74 6.71 7.78 6.84 7.94C6.93 8.05 6.94 8.11 6.94 8.36C6.94 8.57 6.97 8.70 7.02 8.79C7.09 8.91 7.09 8.93 7.02 9.20C6.90 9.65 6.79 9.86 6.68 9.86C6.44 9.86 6.33 9.98 5.83 10.74C5.58 11.12 5.44 11.33 5.18 11.69C4.98 11.98 4.84 11.89 4.84 11.46C4.84 11.30 4.82 11.25 4.67 11.11C4.58 11.02 4.44 10.89 4.36 10.82C3.97 10.44 3.87 10.17 3.99 9.76C4.04 9.62 4.03 9.57 3.97 9.45C3.89 9.30 3.54 9.00 3.45 9.00C3.27 9.00 2.66 9.60 2.66 9.77C2.66 9.82 2.61 9.96 2.55 10.09C2.46 10.29 2.43 10.44 2.40 10.88C2.38 11.18 2.34 11.53 2.32 11.66C2.16 12.55 2.24 13.27 2.58 13.99C2.74 14.34 2.74 14.35 2.42 14.99C2.17 15.49 2.11 15.57 1.90 15.73C1.77 15.83 1.57 15.99 1.45 16.10C1.24 16.28 1.24 16.29 1.11 16.22C1.04 16.18 0.96 16.16 0.93 16.17C0.90 16.18 0.93 16.21 0.99 16.23C1.05 16.26 1.13 16.34 1.16 16.41C1.19 16.49 1.30 16.60 1.44 16.70C1.98 17.05 2.15 17.31 2.47 18.23C2.68 18.82 2.85 19.23 2.92 19.27C2.94 19.28 3.00 19.26 3.04 19.23C3.08 19.18 3.18 19.17 3.31 19.17C3.51 19.19 3.52 19.18 3.58 19.04C3.63 18.92 3.66 18.90 3.72 18.92C3.96 19.02 4.07 19.00 4.10 18.86C4.11 18.79 4.14 18.73 4.15 18.73C4.21 18.73 4.45 19.01 4.82 19.52C5.29 20.16 5.85 20.80 6.44 21.36C7.34 22.24 7.41 22.28 8.12 22.36C8.68 22.43 8.80 22.42 8.96 22.33ZM10.00 20.63C10.11 20.57 10.16 20.44 10.08 20.44C10.06 20.44 9.99 20.36 9.92 20.25C9.74 19.97 9.45 19.84 8.90 19.79C8.38 19.74 8.26 19.80 8.24 20.09C8.22 20.25 8.23 20.27 8.41 20.35C8.51 20.40 8.64 20.44 8.69 20.44C8.75 20.44 8.87 20.48 8.97 20.54C9.37 20.74 9.72 20.77 10.00 20.63ZM17.03 14.07C17.16 13.75 17.07 13.02 16.91 13.00C16.43 12.94 16.34 12.94 16.19 13.00C16.10 13.04 16.03 13.10 16.03 13.14C16.03 13.20 16.31 13.52 16.60 13.79C16.67 13.86 16.78 13.96 16.84 14.02C16.97 14.16 17.00 14.17 17.03 14.07ZM6.61 6.54C6.77 6.47 6.77 6.47 6.74 6.25C6.72 6.05 6.74 6.00 6.83 5.87C6.89 5.79 6.94 5.70 6.94 5.68C6.94 5.65 7.00 5.60 7.07 5.57C7.21 5.51 7.34 5.37 7.30 5.31C7.29 5.29 7.21 5.27 7.12 5.27C6.95 5.27 6.90 5.32 6.90 5.49C6.90 5.53 6.86 5.58 6.81 5.59C6.77 5.61 6.70 5.67 6.66 5.72C6.63 5.77 6.54 5.83 6.47 5.84C6.31 5.88 6.27 5.98 6.36 6.08C6.41 6.13 6.42 6.20 6.41 6.27C6.40 6.34 6.38 6.43 6.36 6.49C6.34 6.62 6.39 6.63 6.61 6.54ZM7.13 4.50C7.21 4.48 7.32 4.45 7.38 4.44C7.58 4.40 7.53 4.29 7.32 4.29C7.03 4.30 6.78 4.40 6.83 4.49C6.87 4.55 6.96 4.56 7.13 4.50ZM6.14 2.30C6.23 2.24 6.43 1.97 6.43 1.92C6.43 1.90 6.39 1.89 6.35 1.89C6.11 1.89 5.76 2.36 5.99 2.36C6.03 2.36 6.10 2.33 6.14 2.30Z"/></svg><span class="lbl">Über mich</span></button>
+    <button class="tab" role="tab" data-tab="architecture" aria-label="Architektur"><svg class="i" viewBox="0 0 24 24"><polygon points="2.00,11.66 12.00,9.47 22.00,11.66 22.00,14.53 2.00,14.53"/></svg><span class="lbl">Architektur</span></button>
+    <button class="tab" role="tab" data-tab="design" aria-label="Design"><svg class="i" viewBox="0 0 24 24"><circle cx="7.4" cy="7.4" r="4"/><rect x="13.4" y="3.4" width="7.2" height="7.2"/><path d="M12 13L18.4 21H5.6Z"/></svg><span class="lbl">Design</span></button>
+    <button class="tab" role="tab" data-tab="writing" aria-label="Texte"><svg class="i" viewBox="0 0 24 24"><g transform="translate(24 0) scale(-1 1)"><path d="M6.4 14.2L15.5 5.1A2.4 2.4 0 0 1 18.9 8.5L9.8 17.6"/><path d="M6.4 14.2L4.3 19.7L9.8 17.6"/><path d="M8.2 12.4L11.6 15.8"/><path d="M17.2 6.8L19.6 4.4"/><path d="M17.6 3.8L15.9 2.4L11.4 6.9"/></g></svg><span class="lbl">Texte</span></button>
+    <button class="tab" role="tab" data-tab="archive" aria-label="Archiv"><svg class="i" viewBox="0 0 24 24"><g transform="rotate(14 12 12)"><rect x="3.4" y="9.2" width="11.6" height="7.4" rx="1.4"/><path d="M15 11.1L20.8 8.6V17.2L15 14.7"/><path d="M6.6 9.2V7.6H11.8V9.2"/><path d="M3.4 11.6H1.9V14.2H3.4"/><circle cx="7.6" cy="12.9" r="1.3"/><path d="M10.6 12.9H12.8" stroke-width="1.2"/></g></svg><span class="lbl">Archiv</span></button>
+    <button class="tab" role="tab" data-tab="apps" aria-label="Apps"><svg class="i" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.6"/><path d="M10.6 5.4H13.4M10.6 18.6H13.4"/></svg><span class="lbl">Apps</span></button>
   </nav>
 </header>
 
 <div class="pop note" id="privacyPop" role="dialog" aria-label="Datenschutz und Cookies">
   <section>
     <h4><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 3 3 0 0 1-3.2-3 3 3 0 0 1-2.8-2.8A3 3 0 0 1 12 3z"/><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="15.8" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11.6" r=".7" fill="currentColor" stroke="none"/></svg></span>Cookies</h4>
-    <p>Cookies sind lecker, aber voller Zucker, also genießen Sie sie mit Vorsicht. Diese Website serviert keine.</p>
+    <p>Cookies sind lecker, aber voller Zucker, also genießen Sie sie in Maßen. Diese Website serviert keine.</p>
     <a class="chip" href="https://www.youtube.com/shorts/THi6shUHTpU" target="_blank" rel="noopener">Cookie Policy auf YouTube ansehen</a>
   </section>
   <section>
@@ -1136,11 +1291,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
           <h2 class="sr-title">Über mich</h2>
           <figure class="me"><img src="/assets/img/ramy-maher.jpg" width="400" height="400" alt="Ramy Maher" decoding="async"></figure>
           <div class="prose">
-            <p class="first">Ich bin Architekt. Ich habe in mehreren Ländern gearbeitet, an Projekten jeder Größenordnung, vom größten Museum Deutschlands bis zu einem Schachspiel. Ich habe in drei Ländern gelebt und spreche fünf Sprachen, und jeder Ort hat Spuren darin hinterlassen, wie ich eine Straße, einen Plan oder einen Satz lese. Wer zwei Perspektiven sieht, öffnet den Horizont für die Existenz weiterer.</p>
-            <p>Das meiste, was ich mache, innerhalb der Architektur oder außerhalb, begann als eine Frage, die mich nicht losließ. Manche dieser Fragen kamen aus Technologie und Programmierung, manche aus den Finanzen und viele aus Kulturen und Reisen.</p>
+            <p class="first">Ich bin Architekt. Ich habe in mehreren Ländern gearbeitet, an Projekten jeder Größenordnung, vom größten Museum Deutschlands bis zu einem Schachspiel. Ich habe in mehr als einer Kultur gelebt und denke in mehr als einer Sprache, und jede hat Spuren darin hinterlassen, wie ich eine Straße, einen Plan oder einen Satz lese. Wer zwei Perspektiven kennt, dem öffnet sich der Blick dafür, dass es noch mehr gibt.</p>
+            <p>Das meiste, was ich mache, innerhalb der Architektur oder außerhalb, begann als eine Frage, die mich nicht losließ. Manche dieser Fragen kamen aus der Baubranche, manche aus Technologie und Programmierung, manche aus der Finanzwelt und viele aus Kulturen und Reisen.</p>
 
             <h2>Berufserfahrung</h2>
-            <p>Meine Laufbahn umfasst mehr als zehn Jahre in Architektur, Computational Design, BIM und Digitalisierung in der AEC-Branche, vor allem zwischen Ägypten, Deutschland und der Schweiz. Ich bin LEED Accredited Professional. Ich habe Kurse in Python, HTML, CSS und JavaScript besucht und Projekte mit Processing, C# und C++ umgesetzt.</p>
+            <p>Meine Laufbahn umfasst mehr als zehn Jahre in Architektur, Computational Design, BIM und Digitalisierung in der Baubranche, vor allem zwischen Ägypten, Deutschland und der Schweiz. Ich bin LEED Accredited Professional. Ich habe Kurse in Python, HTML, CSS und JavaScript besucht und Projekte mit Processing, C# und C++ umgesetzt.</p>
             <div class="chips"><a class="chip" href="https://www.linkedin.com/in/ramyamaher/" target="_blank" rel="noopener">Mein vollständiges Profil auf LinkedIn</a></div>
 
             <!-- every project of every tab: search them, or browse their logos -->
@@ -1156,44 +1311,44 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <p data-w="archive">Das Archiv</p>
                 <p data-w="archive-meta">Wandering Wayfarer: Orte, die ich dokumentiert habe</p>
                 <div data-for="design-0">
-                <h4>Schichten Ägyptens</h4>
-                <p>In Ägypten aufgewachsen, habe ich immer davon geträumt, das Land zu vertreten, aber mit absoluter Ehrlichkeit. Dieses Projekt war eine hoffnungsvolle Vision: Ägypten schüttelt den Staub seiner wankenden Gegenwart ab und schreitet auf eine helle Zukunft zu, ähnlich einem Operationssaal im Spital: ein weisser Raum, wie ein Schwebezustand, in dem die Besucher an der neuen Architektur Ägyptens mitwirken können. Der Beitrag erhielt vom Kulturministerium den zweiten Platz, und so bleibt er ein Brief, der geschrieben, aber nie abgeschickt wurde.</p>
+                <h4>Layers of Egypt</h4>
+                <p>In Ägypten aufgewachsen, habe ich immer davon geträumt, das Land zu vertreten, aber mit absoluter Ehrlichkeit. Dieses Projekt war eine hoffnungsvolle Vision: Ägypten schüttelt den Staub seiner brüchigen Gegenwart ab und schreitet auf eine helle Zukunft zu. Ihr Raum glich einem Operationssaal: weiß, eine Art Zwischenwelt, in der die Besucher an der neuen Architektur Ägyptens mitwirken können. Der Beitrag erhielt vom Kulturministerium den zweiten Preis, und so bleibt er ein Brief, der geschrieben, aber nie abgeschickt wurde.</p>
                 </div>
                 <div data-for="design-1">
-                <h4>Robotische philosophische Untersuchung der Architektur</h4>
-                <p>In dieser Masterarbeit habe ich die Architektur bis auf ihre nackten Silben zerlegt, um zu verstehen, was ich mit diesem Beruf verbinden will. Weil Architektur seit jeher eine Dienstleistung war, die sich nur die Reichen leisten, wurde das Abschlussprojekt ein Werkzeug, mit dem Menschen aus der Ferne und auf ihre eigene, ortsübliche Weise bauen können. Dabei kamen Bewegungssensoren, VR und Sintern zum Einsatz.</p>
+                <h4>Philosophische Untersuchung der Architektur mit Robotern</h4>
+                <p>In dieser Masterarbeit habe ich die Architektur bis auf ihre nackten Silben zerlegt, um zu verstehen, was ich mit diesem Beruf verbinden will. Weil Architektur seit jeher eine Dienstleistung war, die sich nur die Reichen leisten konnten, wurde das Abschlussprojekt ein Werkzeug, mit dem Menschen aus der Ferne und nach örtlicher Tradition bauen können. Dabei kamen Bewegungssensoren, VR und Sintern zum Einsatz.</p>
                 </div>
                 <div data-for="design-2">
                 <h4>Möbel, von Schritten gezeichnet</h4>
-                <p>Ich habe beobachtet, wie sich Menschen durch ein Schulgebäude bewegen, jeden Weg und jedes Innehalten. Dann liess ich ihre Schritte entscheiden, wo die Möbel stehen und welche Form sie annehmen sollten. Aus diesen Spuren wuchsen eine Bar und Sitzplätze für einen Studierendenanlass.</p>
+                <p>Ich habe beobachtet, wie sich Menschen durch ein Hochschulgebäude bewegen, jeden Weg und jedes Innehalten. Dann ließ ich ihre Schritte entscheiden, wo die Möbel stehen und welche Form sie annehmen sollten. Aus diesen Spuren wuchsen eine Bar und Sitzplätze für eine Studentenfeier.</p>
                 </div>
                 <div data-for="design-3">
                 <h4>Eine Treppe mit Aussicht</h4>
-                <p>Haben Sie sich je gefragt, wozu Trigonometrie gut ist? Diese Aussentreppe für ein Café stand vor einer Wahl. Die eine Möglichkeit war eine schlichte Wand auf fester Höhe, ganz ohne Aussicht. Die andere war eine Gleichung. Wir wählten die Gleichung. Die Wand öffnet sich genau dort, wo Ihre Augen es brauchen, und von der Strasse aus merkt niemand, dass sich ihre Höhe verändert.</p>
+                <p>Haben Sie sich je gefragt, wozu Trigonometrie gut ist? Diese Außentreppe für ein Café stand vor einer Wahl. Die eine Möglichkeit war eine schlichte Wand auf fester Höhe, ganz ohne Aussicht. Die andere war eine Gleichung. Wir wählten die Gleichung. Die Wand öffnet sich genau dort, wo Ihre Augen es brauchen, und von der Straße aus merkt niemand, dass sich ihre Höhe verändert.</p>
                 </div>
                 <div data-for="apps-0">
                 <h4>Persönliche Weltstempel</h4>
-                <p>Ich reise leidenschaftlich gern. Nach über 50 Ländern wollte ich schon immer eine umfassende Reise-App, in der ich meine Unterkunftsbuchungen, Flüge, die Kosten meiner Reisen und die Menschen sehe, mit denen ich am häufigsten reise. Diese App ist eine verspielte Art, Reisen sichtbar zu machen und viele Kennzahlen zu sehen: zurückgelegte Distanzen, Anzahl Länder, CO2-Emissionen, Routen, Mietwagenfirmen und vieles mehr.</p>
+                <p>Ich reise leidenschaftlich gern. Ich war in über 50 Ländern und wollte schon immer eine umfassende Reise-App, in der ich meine Unterkunftsbuchungen, Flüge, die Kosten meiner Reisen und die Menschen sehe, mit denen ich am häufigsten reise. Diese App ist eine unterhaltsame Art, Reisen sichtbar zu machen und viele Kennzahlen zu sehen: zurückgelegte Distanzen, Anzahl der Länder, CO2-Emissionen, Routen, Mietwagenfirmen und vieles mehr.</p>
                 </div>
                 <div data-for="apps-2">
                 <h4>Offline-Banking und Investieren</h4>
-                <p>Als ich 30 wurde, merkte ich, dass die meisten Menschen, die ich kenne, Geld als sehr unangenehmes Thema empfinden und fast nie darüber sprechen. Mathematik ist für niemanden leicht, nicht einmal für Mathegenies. Diese App, die NUR AUF DEM GERÄT läuft, hilft dabei, verschiedene Konten in verschiedenen Währungen im Blick zu behalten, und erklärt grundlegende Begriffe aus Wirtschaft und Investieren. Die App empfiehlt nichts Konkretes und speichert Dateien nur lokal auf dem Gerät.</p>
+                <p>Als ich 30 wurde, merkte ich, dass die meisten Menschen, die ich kenne, Geld als sehr unangenehmes Thema empfinden und fast nie darüber sprechen. Mathematik ist für niemanden leicht, nicht einmal für Mathegenies. Diese App, die NUR AUF DEM GERÄT läuft, hilft dabei, verschiedene Konten in verschiedenen Währungen im Blick zu behalten, und erklärt grundlegende Begriffe aus Wirtschaft und Geldanlage. Die App empfiehlt nichts Konkretes und speichert Dateien nur lokal auf dem Gerät.</p>
                 </div>
                 <div data-for="apps-3">
-                <h4>Aufschreiben und loslassen</h4>
-                <p>Die meisten Apps sind dafür gebaut, Sie am Handy zu halten. Ich wollte ein Tagebuch, das das Gegenteil tut: Sie schreiben ein paar Zeilen, fügen ein Foto, einen Ort oder eine Sprachnotiz hinzu und gehen wieder. Jeder Tag fasst nur drei Fotos, damit Sie die Momente behalten, die zählen, statt alles. Ihre Erinnerungen gehen niemanden etwas an, deshalb ist das Tagebuch immer verschlüsselt und bleibt auf Ihren eigenen Geräten. Wenn Sie möchten, kann zusätzlich eine verschlüsselte Kopie in Ihrem eigenen iCloud Drive oder Google Drive gespeichert werden.</p>
+                <h4>Aufschreiben und weglegen</h4>
+                <p>Die meisten Apps sind dafür gebaut, Sie am Smartphone zu halten. Ich wollte ein Tagebuch, das das Gegenteil tut: Sie schreiben auf, was zählte, und gehen wieder. Jeder Tag fasst nur drei Fotos, damit Sie die Momente behalten, die zählen, statt alles. Ihre Erinnerungen gehen niemanden etwas an, deshalb ist das Tagebuch immer verschlüsselt und bleibt auf Ihren eigenen Geräten. Wenn Sie möchten, kann zusätzlich eine verschlüsselte Kopie in Ihrem eigenen iCloud Drive oder Google Drive gespeichert werden.</p>
                 </div>
                 <div data-for="apps-4">
                 <h4>Anpassbare Immobilien</h4>
-                <p>Mit dem Aufkommen von VR im Jahr 2016 habe ich Plug mitgegründet, um Immobilienagenturen bei der Vermarktung ihrer Projekte zu helfen, in Echtzeit verbunden mit dem, was verkauft oder reserviert war. Ihre Kunden konnten durch das Projekt gehen und Möbel, Farben, Wandfarben, Tapeten oder sogar ganze Gebäudetypen auf ihrem Grundstück ändern.</p>
+                <p>Mit dem Aufkommen von VR im Jahr 2016 habe ich Plug mitgegründet, um Immobilienunternehmen bei der Vermarktung ihrer Projekte zu helfen, in Echtzeit verknüpft mit dem aktuellen Verkaufs- und Reservierungsstand. Ihre Kunden konnten durch das Projekt gehen und Möbel, Anstriche, Tapeten oder sogar ganze Gebäudetypen auf ihrem Grundstück ändern.</p>
                 </div>
                 <div data-for="Revitesse">
                 <p>Software für Architektur und Ingenieurwesen ist darauf ausgelegt, 90 bis 95 Prozent des Marktes zu bedienen. In den verbleibenden 5 bis 10 Prozent wird die Arbeit hochspezifisch, und genau dort geht die meiste Zeit verloren.</p>
                 <p>In verschiedenen Büros bin ich immer wieder auf dieselben Probleme gestoßen. Revitesse entstand aus dem Wunsch, sie ein für alle Mal zu lösen und anderen Fachleuten zu helfen, weniger Zeit mit repetitiven Aufgaben in Revit zu verbringen. Was als C#-Paket begann, wurde schließlich eine Open-Source-Bibliothek für pyRevit.</p>
                 </div>
                 <div data-for="archive">
-                <p>Ich habe es begonnen, nachdem ich lange Zeit fern von meinem Heimatland gewesen war. Mir wurde klar, dass ich ein Weltbürger geworden war: ein Nomade in der Zeit ebenso wie im Raum, der zu jedem Ort nur in einem bestimmten Moment gehörte. Nostalgie ist für mich bedingt, denn sie bezieht sich auf eine Momentaufnahme eines Ortes und einer Zeit, nicht auf einen Ort oder eine Zeit im Allgemeinen.</p>
-                <p>Als James Joyce <em>Ulysses</em> schrieb, soll er seine Tante angerufen und sie gebeten haben, ein Haus in Dublin aufzusuchen und zu prüfen, ob ein übergewichtiger Mann plausibel über dessen Geländer klettern könnte. Sollte die Stadt je bis auf die Grundmauern niederbrennen, wollte er, dass man sie anhand des Romans wieder aufbauen kann. Die starke Vorstellungskraft eines der besten Bücher, die je auf Englisch geschrieben wurden, zusammen mit seiner Genauigkeit bei der Beschreibung eines Details, das belanglos erscheinen mag, aus Aufrichtigkeit gegenüber dem Leser, hat mein Archiv inspiriert.</p>
+                <p>Ich habe es begonnen, nachdem ich lange fern meiner Heimat gelebt hatte. Mir wurde klar, dass ich ein Weltbürger geworden war: ein Nomade in der Zeit ebenso wie im Raum, der zu jedem Ort nur in einem bestimmten Moment gehörte. Nostalgie ist für mich an eine Bedingung geknüpft: Sie gilt einer Momentaufnahme eines Ortes und einer Zeit, nicht einem Ort oder einer Zeit im Allgemeinen.</p>
+                <p>Als James Joyce <em>Ulysses</em> schrieb, soll er seine Tante angerufen und sie gebeten haben, ein Haus in Dublin aufzusuchen und zu prüfen, ob ein übergewichtiger Mann überhaupt über das Gitter vor dem Haus klettern könnte. Sollte die Stadt je bis auf die Grundmauern niederbrennen, wollte er, dass man sie anhand des Romans wieder aufbauen kann. Die eindringliche Vorstellungskraft eines der besten Bücher, die je auf Englisch geschrieben wurden, und seine Genauigkeit selbst bei scheinbar belanglosen Details, aus Aufrichtigkeit gegenüber dem Leser: Das hat mein Archiv inspiriert.</p>
                 </div>
               </div>
             </div>
@@ -1213,7 +1368,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 
               <article class="slide project">
                 <div class="p-head has-logo">
-                    <span class="logo"><svg class="p-logo m20-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 -14 730 199" role="img" aria-label="Logo des Museums des 20. Jahrhunderts: der Umriss seiner Ansicht"><polygon class="m20-body jelly" fill="currentColor" points="0,80 365,0 730,80 730,185 0,185"/></svg></span>
+                    <span class="logo"><svg class="p-logo m20-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 -14 730 199" role="img" aria-label="Logo des Museums des 20. Jahrhunderts: der Umriss seiner Ansicht"><defs><clipPath id="m20Clip"><polygon points="0,80 365,0 730,80 730,185 0,185"/></clipPath></defs><g clip-path="url(#m20Clip)" fill="currentColor"><rect class="m20-h" x="0" y="74.5" width="730" height="36"/><rect class="m20-v" x="347" y="0" width="36" height="185"/><polygon class="m20-body" points="0,80 365,0 730,80 730,185 0,185"/></g></svg></span>
                     <div>
                     <h2>Museum des 20. Jahrhunderts, berlin modern</h2>
                     <p class="p-meta">Berlin, Deutschland <i></i> Herzog &amp; de Meuron <i></i> 2019–2021 <i></i> Wettbewerb 2016 gewonnen, im Bau</p>
@@ -1235,12 +1390,12 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <figure class="b8-build ng-build">
                   <div class="b8-3d ng-3d" role="img" aria-label="Das Museum am Kulturforum in 3D, mit seinen beiden Passagen. Zum Drehen ziehen, zum Zoomen scrollen oder mit zwei Fingern ziehen.">
                     <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Abspielen</span><span class="b8-stop">Pause</span></button>
-                    <div class="ng-hint">Für Namen hineinzoomen</div>
+                    <div class="ng-hint">Heranzoomen, um Namen zu sehen</div>
                   </div>
-                  <div class="b8-ctl"><label for="ngRange">Schritt</label><input id="ngRange" type="range" min="0" max="4" step="1" value="0"><output for="ngRange">Ort</output></div>
+                  <div class="b8-ctl"><label for="ngRange">Schritt</label><input id="ngRange" type="range" min="0" max="4" step="1" value="0"><span class="ng-name">Grundstück</span><output for="ngRange">1 / 5</output></div>
                   <p class="ng-cap" aria-live="polite"></p>
                   <div hidden>
-                    <ol class="ng-steps"><li>Ort</li><li>Museum</li><li>Geschosse</li><li>Ost–West</li><li>Nord–Süd</li></ol>
+                    <ol class="ng-steps"><li>Grundstück</li><li>Museum</li><li>Geschosse</li><li>Ost–West</li><li>Nord–Süd</li></ol>
                     <div class="ng-caps">
                       <p>Das letzte freie Grundstück des Kulturforums, zwischen Scharouns Philharmonie und Staatsbibliothek, Mies van der Rohes Neuer Nationalgalerie und St. Matthäus, mit der Platane am Matthäikirchplatz.</p>
                       <p>Das Museum: ein einziger langer Baukörper unter einem Satteldach, 113 mal 71 m, an seiner Nordwestseite um die Platane herum eingeschnitten.</p>
@@ -1265,15 +1420,15 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="p-body">
                   <div class="prose">
                     <p>Unter der Stadt des Oktoberfests entsteht ein Infrastrukturriese, während das Leben darüber in vollem Tempo weitergeht. Die Zweite Stammstrecke ist Münchens zweite S-Bahn-Strecke durch die Innenstadt, mit neuen Stationen tief unter Hauptbahnhof, Marienhof und Ostbahnhof. Mit Atelier 4d habe ich an den Innenräumen der unterirdischen Stationen gearbeitet.</p>
-                    <p>All das wird gebaut, während die Züge des Hauptbahnhofs weiterfahren, und genau dieses Tragwerk war die Herausforderung, die mich gereizt hat. Die Station entsteht von oben nach unten. Der Boden wird ausgehoben und eine Deckenplatte betoniert; darunter wird die nächste Ebene ausgehoben und auf temporären Stützen abgefangen, bevor ihre eigene Platte betoniert wird, und so weiter, neun Ebenen tief. Erst dann werden die endgültigen Stützen gegossen und die temporären entfernt.</p>
+                    <p>All das wird gebaut, während die Züge des Hauptbahnhofs weiterfahren, und genau diese Bauweise war die Herausforderung, die mich gereizt hat. Die Station entsteht in Deckelbauweise, von oben nach unten. Der Boden wird ausgehoben und eine Deckenplatte betoniert; darunter wird die nächste Ebene ausgehoben und auf Hilfsstützen abgefangen, bevor ihre eigene Platte betoniert wird, und so weiter, neun Ebenen tief. Erst dann werden die endgültigen Stützen betoniert und die Hilfsstützen entfernt.</p>
                   </div>
                   <dl class="facts">
                     <div><dt>Rolle</dt><dd>Architekt und BIM-Manager</dd></div>
-                    <div><dt>Umfang</dt><dd>Innenräume der unterirdischen Stationen</dd></div>
+                    <div><dt>Leistungsumfang</dt><dd>Innenausbau der unterirdischen Stationen</dd></div>
                     <div><dt>Bilder</dt><dd>© Atelier 4d Architekten</dd></div>
                   </dl>
                 </div>
-                <div class="thumbs wide" data-imgs="zs-001|Hauptbahnhof: der Bahnsteig;zs-002|Hauptbahnhof: Rolltreppen durch die Bahnhofshalle;zs-003|Hauptbahnhof: die Baustelle neben dem Hauptbahnhof;zs-004|Hauptbahnhof: Bewehrung einer Deckenplatte zwischen den temporären Stützen;zs-005|Hauptbahnhof: die Ebenen, eine unter der anderen ausgehoben;zs-006|Ein Fußgängertunnel mit spiralförmigen, beleuchteten Rippen;zs-007|Der Tunnel: Rippen und Verkleidung;zs-008|Marienhof: die Halle unter den goldenen Stützen;zs-009|Marienhof: der Bahnsteig;zs-010|Marienhof: die Baustelle;zs-011|Marienhof: Stahlstützen der Deckelbauweise"></div>
+                <div class="thumbs wide" data-imgs="zs-001|Hauptbahnhof: der Bahnsteig;zs-002|Hauptbahnhof: Rolltreppen durch die Bahnhofshalle;zs-003|Hauptbahnhof: die Baustelle neben dem Hauptbahnhof;zs-004|Hauptbahnhof: Bewehrung einer Deckenplatte zwischen den Hilfsstützen;zs-005|Hauptbahnhof: die Ebenen, eine nach der anderen in die Tiefe ausgehoben;zs-006|Ein Fußgängertunnel mit spiralförmigen, beleuchteten Rippen;zs-007|Der Tunnel: Rippen und Verkleidung;zs-008|Marienhof: die Halle unter den goldenen Stützen;zs-009|Marienhof: der Bahnsteig;zs-010|Marienhof: die Baustelle;zs-011|Marienhof: Stahlstützen der Deckelbauweise"></div>
                 <div class="chips"><a class="chip" href="https://atelier4d-architekten.de/projekte/untergrundbahnhof-hauptbahnhof-muenchen" target="_blank" rel="noopener">Das Projekt auf der Website von Atelier 4d</a></div>
               </article>
 
@@ -1285,16 +1440,16 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Nürnberg, Deutschland <i></i> ATP architects engineers <i></i> Eingeladener Wettbewerb, 2016</p>
                   </div>
                 </div>
-                <div class="prize-line top"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Erster Preis</b> im eingeladenen Wettbewerb, Dezember 2016.</p></div>
+                <div class="prize-line top"><span class="medal sm">1.</span><p><b>Erster Preis</b> im eingeladenen Wettbewerb, Dezember 2016.</p></div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Ein neues Wohnquartier auf dem Gelände eines ehemaligen Umspannwerks zwischen Gebersdorfer Straße und Bibertstraße in Nürnberg. Neben Wohnungen sah die Auslobung eine Kita, Seniorenwohnungen und einen Nahversorger für das Viertel vor.</p>
-                    <p>Der Siegerentwurf reiht Reihenhäuser entlang einer grünen Promenade auf, die das Gelände durchquert, mit Spielwiesen, einem Spielplatz und einem ovalen Kita-Pavillon an ihrem Lauf. Viergeschossige Wohnhäuser liegen an der Gebersdorfer Straße und schirmen das Quartier vom Verkehr ab, während das Seniorenwohnen, der Nahversorger und ein Café einen kleinen Platz fassen. Ein Waldweg folgt dem Westrand, und eine Wildblumenwiese dient zugleich als Regenwasserspeicher.</p>
+                    <p>Ein neues Wohnquartier auf dem Gelände eines ehemaligen Umformerwerks zwischen Gebersdorfer Straße und Bibertstraße in Nürnberg. Neben Wohnungen sah die Auslobung eine Kita, Seniorenwohnungen und einen Nahversorger für das Viertel vor.</p>
+                    <p>Der Siegerentwurf ordnet Reihenhäuser entlang einer grünen Promenade an, die das Gelände durchquert; an ihr entlang liegen Spielwiesen, ein Spielplatz und ein ovaler Kita-Pavillon. Viergeschossige Wohnhäuser liegen an der Gebersdorfer Straße und schirmen das Quartier vom Verkehr ab, während das Seniorenwohnen, der Nahversorger und ein Café einen kleinen Platz fassen. Ein Waldweg folgt dem Westrand, und eine Wildblumenwiese dient zugleich als Regenwasserspeicher.</p>
                   </div>
                   <dl class="facts">
                     <div><dt>Rolle</dt><dd>Architekt im F&amp;E-Team</dd></div>
                     <div><dt>Bauherr</dt><dd>Deutsche Reihenhaus AG</dd></div>
-                    <div><dt>Landschaft</dt><dd>logo verde, Landshut</dd></div>
+                    <div><dt>Landschaftsarchitektur</dt><dd>logo verde, Landshut</dd></div>
                     <div><dt>Wettbewerb</dt><dd>Eingeladen, 7 Beiträge</dd></div>
                   </dl>
                 </div>
@@ -1313,11 +1468,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 <div class="p-body">
                   <div class="prose">
                     <p>Mannheims Neues Technisches Rathaus bringt rund 700 Mitarbeiterinnen und Mitarbeiter der Stadt im Glücksteinquartier, direkt am Hauptbahnhof, unter einem Dach zusammen. Entworfen von schneider + schumacher und von ATP als ausführenden Architekten umgesetzt, wurde es von Implenia als Generalunternehmer in zweieinhalb Jahren gebaut, von Mai 2017 bis Dezember 2020.</p>
-                    <p>Ein dreizehngeschossiger Turm erhebt sich aus einem langen, niedrigen Riegel an einer der Hauptverkehrsachsen der Stadt. Hinter goldgerahmten Glasfassaden liegen Büros, Sitzungssäle, ein Mitarbeiterrestaurant und eine Betriebskita, in einem Haus, das den Bürgerinnen und Bürgern offenstehen soll. Es erfüllt den Standard KfW-Effizienzhaus 55 und spart rund 157 Tonnen CO2 im Jahr. Bei ATP habe ich im Ausführungsteam an der Werkplanung gearbeitet.</p>
+                    <p>Ein dreizehngeschossiger Turm erhebt sich aus einem langen, niedrigen Riegel an einer der Hauptverkehrsachsen der Stadt. Hinter goldgerahmten Glasfassaden liegen Büros, Sitzungssäle, ein Mitarbeiterrestaurant und eine Betriebskita, in einem Haus, das den Bürgerinnen und Bürgern offenstehen soll. Es erfüllt den Standard KfW-Effizienzhaus 55 und spart rund 157 Tonnen CO2 im Jahr. Bei ATP habe ich im Ausführungsteam an der Ausführungsplanung gearbeitet.</p>
                   </div>
                   <dl class="facts">
                     <div><dt>Rolle</dt><dd>Architekt im Ausführungsteam</dd></div>
-                    <div><dt>Umfang</dt><dd>Werkplanung (LPH 5)</dd></div>
+                    <div><dt>Leistungsumfang</dt><dd>Ausführungsplanung</dd></div>
                     <div><dt>Bauherr</dt><dd>GBG Mannheim</dd></div>
                     <div><dt>Design</dt><dd>schneider + schumacher, Frankfurt</dd></div>
                     <div><dt>Generalunternehmer</dt><dd>Implenia, schlüsselfertig</dd></div>
@@ -1338,19 +1493,19 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Ein Konferenzhotel mit 398 Zimmern und Suiten im Münchner Westend, an der Landsberger Straße, wo die Bahn in den Hauptbahnhof einläuft. Über einem verglasten Erdgeschoss auf schlanken Stützen staffeln sich helle Fassaden mit hohen, schmalen Fenstern in mehreren Flügeln. Innen liegen rund 2.400 m² Tagungs- und Veranstaltungsfläche mit einem Ballsaal von etwa 900 m² und eine Dachterrasse mit Blick über die Stadt bis zu den Alpen. Eröffnet wurde es im September 2023, mit Innenräumen von Studio Lux.</p>
-                    <p>Eine der größten Herausforderungen war der Schallschutz: Das Hotel steht direkt an den Gleisen der Deutschen Bahn. Auf dieser Seite haben die Zimmer Kastenfenster mit Dreifachverglasung, damit sie ruhig bleiben, während die Züge vorbeifahren. Bei ATP habe ich vom Entwurf bis zur Werkplanung gearbeitet, in Abstimmung mit Studio Lux als Innenarchitekten und mit den Fachplanern der Haustechnik (TGA, HKLS).</p>
+                    <p>Ein Konferenzhotel mit 398 Zimmern und Suiten im Münchner Westend, an der Landsberger Straße, wo die Gleise auf den Hauptbahnhof zulaufen. Über einem verglasten Erdgeschoss auf schlanken Stützen staffeln sich helle Fassaden mit hohen, schmalen Fenstern in mehreren Flügeln. Innen liegen rund 2.400 m² Tagungs- und Veranstaltungsfläche mit einem Ballsaal von etwa 900 m² und eine Dachterrasse mit Blick über die Stadt bis zu den Alpen. Eröffnet wurde es im September 2023; die Innenarchitektur stammt von Studio Lux.</p>
+                    <p>Eine der größten Herausforderungen war der Schallschutz: Das Hotel steht direkt an den Gleisen der Deutschen Bahn. Auf dieser Seite haben die Zimmer Kastenfenster mit Dreifachverglasung, damit sie ruhig bleiben, während die Züge vorbeifahren. Bei ATP habe ich von der Entwurfs- bis zur Ausführungsplanung mitgearbeitet, in Abstimmung mit Studio Lux als Innenarchitekten und mit den Fachplanern der Haustechnik (TGA, HKLS).</p>
                   </div>
                   <dl class="facts">
                     <div><dt>Rolle</dt><dd>Architekt</dd></div>
-                    <div><dt>Umfang</dt><dd>Entwurf bis Werkplanung (LPH 3–5)</dd></div>
+                    <div><dt>Leistungsumfang</dt><dd>Entwurfs- bis Ausführungsplanung</dd></div>
                     <div><dt>Eigentümer</dt><dd>Fonds der EuroAtlantic Group</dd></div>
                     <div><dt>Betreiber</dt><dd>Marriott International</dd></div>
                     <div><dt>Innenarchitektur</dt><dd>Studio Lux, Berlin</dd></div>
                     <div><dt>Bilder</dt><dd>© Marriott International</dd></div>
                   </dl>
                 </div>
-                <div class="thumbs" data-imgs="mm-001|Das Hotel an der Landsberger Straße, neben den Gleisen;mm-002|Bei Sonnenuntergang, mit der Dachterrasse (Visualisierung);mm-003|Die Fassaden in der Abenddämmerung beleuchtet;mm-004|Ein Gästezimmer von Studio Lux;mm-005|Der Schreibtisch am Fenster;mm-006|Eine Suite;mm-007|Die M Club Lounge unter dem Oberlicht"></div>
+                <div class="thumbs" data-imgs="mm-001|Das Hotel an der Landsberger Straße, neben den Gleisen;mm-002|Bei Sonnenuntergang, mit der Dachterrasse (Visualisierung);mm-003|Die Fassaden in der Abenddämmerung beleuchtet;mm-004|Ein Gästezimmer von Studio Lux;mm-005|Der Schreibtisch am Fenster;mm-006|Eine Suite;mm-007|Die M-Club-Lounge unter dem Oberlicht"></div>
                 <div class="chips"><a class="chip" href="https://www.marriott.com/en-us/hotels/mucwe-munich-marriott-hotel-city-west/overview/" target="_blank" rel="noopener">Das Hotel auf der Website von Marriott</a></div>
               </article>
 
@@ -1392,11 +1547,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                     <p class="p-meta">Ägyptischer Pavillon, La Biennale di Venezia <i></i> 15. Internationale Architekturausstellung, 2016</p>
                     </div>
                   </div>
-                <div class="prize-line silver top"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Zweiter Preis</b>, verliehen vom ägyptischen Kulturministerium.</p></div>
+                <div class="prize-line silver top"><span class="medal sm">2.</span><p><b>Zweiter Preis</b>, verliehen vom ägyptischen Kulturministerium.</p></div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Ein Wettbewerbsbeitrag für Ägyptens Nationalpavillon auf der Architekturbiennale Venedig 2016. Der Pavillon ist ein Gang durch drei Phasen Ägyptens. Die Vergangenheit, in der die Besucher über Ägyptens Architektur und seine Architekten lesen. Die Gegenwart: Ägypten im Jahr 2016, mitten in einer unruhigen Zeit, als Labyrinth aus schwach beleuchteten Räumen und Bildern des Leids, an das sich die Ägypter gewöhnt hatten. Und die Zukunft, Elysium: der helle Raum, zu dem der Gang schließlich führt, wo ein großes physisches Stadtmodell eine leere Stelle auf der Karte hat und die Besucher mit Augmented Reality Ägyptens Zukunft bauen.</p>
-                    <p>Der Entwurf für diese Zukunft entfaltet sich in drei Phasen. Die erste bewahrt die Architektur der bestehenden Stadt, mit mehr Grün und mehr öffentlichem Raum. Die zweite folgt den Hauptachsen der Stadt: Entlang ihnen wachsen die Gebäude in die Höhe, und wo sie niedrig bleiben, schaffen sie Platz für mehr Grünflächen. Die dritte ist ein Geschäftsviertel, das die Chancen der Stadt stärken soll, zu einer Finanzhauptstadt Nordafrikas und des Nahen Ostens zu werden.</p>
+                    <p>Ein Wettbewerbsbeitrag für Ägyptens Nationalpavillon auf der Architekturbiennale Venedig 2016. Der Pavillon ist ein Gang durch drei Phasen Ägyptens. Die Vergangenheit, in der die Besucher über Ägyptens Architektur und seine Architekten lesen. Die Gegenwart: Ägypten im Jahr 2016, mitten in einer unruhigen Zeit, als Labyrinth aus schwach beleuchteten Räumen und Bildern des Leids, an das sich die Ägypter gewöhnt hatten. Und die Zukunft, Elysium: der helle Raum, zu dem der Gang schließlich führt, wo ein großes Stadtmodell eine leere Stelle auf der Karte hat und die Besucher mit Augmented Reality Ägyptens Zukunft bauen.</p>
+                    <p>Der Entwurf für diese Zukunft entfaltet sich in drei Phasen. Die erste bewahrt die Architektur der bestehenden Stadt, mit mehr Grün und mehr öffentlichem Raum. Die zweite folgt den Hauptachsen der Stadt: Entlang dieser Achsen wachsen die Gebäude in die Höhe, und wo sie niedrig bleiben, schaffen sie Platz für mehr Grünflächen. Die dritte ist ein Geschäftsviertel, das die Chancen der Stadt stärken soll, zu einer Finanzhauptstadt Nordafrikas und des Nahen Ostens zu werden.</p>
                   </div>
                   <div class="p-aside">
                     <div class="thumbs solo" data-imgs="vb-001|Layers of Egypt: Between Labyrinth and Elysium, der Titel des Beitrags"></div>
@@ -1422,11 +1577,11 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                 </div>
                   <div class="vb-stage">
                   <figure class="b8-build city-build" hidden>
-                    <div class="b8-3d" role="img" aria-label="Ein 3D-Modell der zukünftigen Stadt in drei Phasen, die entsteht, während man den Schieberegler bewegt"></div>
+                    <div class="b8-3d" role="img" aria-label="Ein 3D-Modell der zukünftigen Stadt, das in drei Phasen entsteht, während Sie den Schieberegler bewegen"></div>
                     <div class="b8-ctl"><label for="cityRange">Kairos Zukunft bauen</label><input id="cityRange" type="range" min="1" max="100" step="1" value="1"><output for="cityRange">1 %</output></div>
                   </figure>
                   <img class="vb-rimg" src="/assets/img/projects/vb-007.jpg" alt="Kairos Zukunft" loading="lazy" decoding="async" hidden>
-                  <button class="vb-pill vb-render" type="button" hidden><span>Rendering zeigen</span><span hidden>Schieberegler zeigen</span></button>
+                  <button class="vb-pill vb-render" type="button" hidden><span>Visualisierung zeigen</span><span hidden>Schieberegler zeigen</span></button>
                   </div>
                 </div>
                 <div class="vb-row">
@@ -1439,8 +1594,8 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
                   <button class="vb-pill vb-go" type="button">Erzählung starten</button>
                   <div class="vb-steps" hidden>
                     <div class="vb-texts" aria-live="polite">
-                      <section data-pics="vb-004"><h4>Die Vergangenheit</h4><p>Die Besucher treten ein und gehen durch den Gang um das Labyrinth und den weissen Raum. Projektionen an seinen Wänden zeigen Ägyptens Architekten der Vergangenheit und die Art, wie Architektur früher betrieben wurde.</p></section>
-                      <section data-pics="vb-003 vb-002"><h4>Die Gegenwart</h4><p>Der Gang führt ins Labyrinth: enge, dunkle Wege voller Bilder von Leid und Aufruhr und von einer Architektur, die ihre Richtung verloren hat. Am Ende, sobald man weisses Licht vor sich sieht, steht neben der Quelle des Lichts dieses Gedicht:</p>
+                      <section data-pics="vb-004"><h4>Die Vergangenheit</h4><p>Die Besucher treten ein und gehen durch den Gang um das Labyrinth und den weißen Raum. Projektionen an seinen Wänden zeigen Ägyptens Architekten der Vergangenheit und die Art, wie Architektur früher ausgeübt wurde.</p></section>
+                      <section data-pics="vb-003 vb-002"><h4>Die Gegenwart</h4><p>Der Gang führt ins Labyrinth: enge, dunkle Wege voller Bilder von Leid und Aufruhr und von einer Architektur, die ihre Richtung verloren hat. Am Ende, sobald die Besucher weißes Licht vor sich sehen, steht neben der Quelle des Lichts dieses Gedicht:</p>
                       <div class="vb-poem" tabindex="0"></div><script type="text/plain" class="vb-poem-src">Species of men from different realms
 An unmistakable bond
 Warped thoughts,
@@ -1453,10 +1608,10 @@ A bright infinitely distant light.
 There comes a place,
 an Elysium,
 destined to guide.</script></section>
-                      <section data-pics="vb-005"><h4>Elysium</h4><p>Das Labyrinth öffnet sich in den weissen Raum. Ein langer Tisch trägt ein Modell von ganz Kairo, in dem ein Gebiet unbebaut bleibt, daneben VR-Brillen. Das helle Weiss und der Tisch, die an einen Operationssaal im Spital erinnern, wie in einem Schwebezustand, stehen für die Hoffnung auf Kairos Zukunft und erwecken die glorreiche Vergangenheit der Stadt wieder zum Leben.</p></section>
-                      <section data-pics="vb-007"><h4>Kairos Zukunft</h4><p class="city-step"><span><b>Stufe 1</b>Die gewachsene Stadt: niedrige Häuser stehen zufällig verstreut und in alle Richtungen gedreht, wie in Kairos informellen Vierteln, und freie Grundstücke bleiben als Parks offen.</span><span><b>Stufe 2</b>Wachstum entlang der Achsen: die Grundstücke folgen den Hauptachsen und dem Ring um den Park; an den Achsen sind die Gebäude am höchsten und werden von ihnen weg niedriger.</span><span><b>Stufe 3</b>Das Geschäftsviertel: ein Raster von Grundstücken um runde Parks, in dem Hochhäuser in Gruppen zwischen niedrigeren Blöcken aufragen.</span></p><p class="city-step city-how"><span>So wächst sie: Über das Gelände wird ein Raster von Grundstücken gelegt; einige bleiben zufällig leer und werden zu Grünflächen zusammengefasst, und jedes andere Grundstück erhält ein niedriges Haus, zufällig skaliert und mit zufälliger Höhe.</span><span>So wächst sie: Punkte werden über die Grundstücke verteilt und zu den Hauptachsen hingezogen; die Höhe eines Gebäudes nimmt mit seinem Abstand zur nächsten Achse entlang einer festgelegten Kurve ab, es wird zu dieser Achse ausgerichtet, und Punkte zu nahe an einer Achse werden entfernt, damit die Achse eine Strasse bleibt.</span><span>So wächst sie: Zufällige Punkte teilen das Viertel in organisch geformte Grundstücke; jedes Grundstück rückt von seinen Rändern ab, und je näher es am Zentrum des Viertels liegt, desto höher steigt sein Turm.</span></p><p class="b8-note">Die Gebäude des Wettbewerbsbeitrags, aus dem Wettbewerbsmodell übernommen, mit der bestehenden Stadt ringsum.</p></section>
+                      <section data-pics="vb-005"><h4>Elysium</h4><p>Das Labyrinth öffnet sich in den weißen Raum. Ein langer Tisch trägt ein Modell von ganz Kairo, in dem ein Gebiet unbebaut bleibt, daneben VR-Brillen. Das helle Weiß und der Tisch, die an einen Operationssaal im Krankenhaus erinnern, wie in einem Schwebezustand, stehen für die Hoffnung auf Kairos Zukunft und erwecken die glorreiche Vergangenheit der Stadt wieder zum Leben.</p></section>
+                      <section data-pics="vb-007"><h4>Kairos Zukunft</h4><p class="city-step"><span><b>Stufe 1</b>Die gewachsene Stadt: niedrige Häuser stehen zufällig verstreut und in alle Richtungen gedreht, wie in Kairos informellen Vierteln, und freie Grundstücke bleiben als Parks offen.</span><span><b>Stufe 2</b>Wachstum entlang der Achsen: die Grundstücke folgen den Hauptachsen und dem Ring um den Park; an den Achsen sind die Gebäude am höchsten und werden von ihnen weg niedriger.</span><span><b>Stufe 3</b>Das Geschäftsviertel: ein Raster von Grundstücken um runde Parks, in dem Hochhäuser in Gruppen zwischen niedrigeren Blöcken aufragen.</span></p><p class="city-step city-how"><span>So wächst sie: Über das Gelände wird ein Raster von Grundstücken gelegt; einige bleiben zufällig leer und werden zu Grünflächen zusammengefasst, und alle übrigen Grundstücke erhalten ein niedriges Haus, zufällig skaliert und mit zufälliger Höhe.</span><span>So wächst sie: Punkte werden über die Grundstücke verteilt und zu den Hauptachsen hingezogen; die Höhe eines Gebäudes nimmt mit seinem Abstand zur nächsten Achse entlang einer festgelegten Kurve ab, es wird zu dieser Achse ausgerichtet, und Punkte zu nahe an einer Achse werden entfernt, damit die Achse eine Straße bleibt.</span><span>So wächst sie: Zufällige Punkte teilen das Viertel in organisch geformte Grundstücke; auf jedem Grundstück rückt der Bau von den Grenzen ab, und je näher das Grundstück am Zentrum des Viertels liegt, desto höher steigt sein Turm.</span></p><p class="b8-note">Die Gebäude des Wettbewerbsbeitrags, aus dem Wettbewerbsmodell übernommen, mit der bestehenden Stadt ringsum.</p></section>
                     </div>
-                    <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">Zurück</button><button class="vb-pill vb-next" type="button">Weiter</button><button class="vb-pill vb-end" type="button">Geschichte schliessen</button></div>
+                    <div class="vb-nav"><span class="vb-n">1/4</span><button class="vb-pill vb-back" type="button">Zurück</button><button class="vb-pill vb-next" type="button">Weiter</button><button class="vb-pill vb-end" type="button">Geschichte schließen</button></div>
                   </div>
                 </div>
                 </div>
@@ -1490,11 +1645,11 @@ destined to guide.</script></section>
                     <p class="p-meta">Dessau, Deutschland <i></i> Masterprojekt <i></i> 2016</p>
                     </div>
                   </div>
-                <div class="prize-line top faded"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Anerkennung</b> für den Robert Oxman Prize an der Dessau International Architecture Graduate School.</p></div>
+                <div class="prize-line top faded"><span class="medal sm">Anerk.</span><p><b>Anerkennung</b> beim Robert Oxman Prize an der Dessau International Architecture Graduate School.</p></div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Extended Threads verbindet eine philosophische Lesart der Architektur mit Technologie. Es zerlegt, was Architektur bedeutet, wer baut, wo und wie, und setzt es als Spiel wieder zusammen. Es ist eine Untersuchung darüber, wo Architektur endet und Design beginnt, die Architektur bis auf das Gerüst freilegt und sie zurück in einzelne Silben zerlegt. Das Ergebnis ist ein Werkzeug, um vernakulär zu bauen, ohne professionell ausgebildete Architekten.</p>
-                    <p>In einem gestengesteuerten Videospiel in virtueller Realität steuern die Spieler mit ihren Händen Roboter aus der Ferne. Die Roboter bauen durch Sintern, indem sie loses Material Schicht für Schicht zu fester Form verschmelzen, quer über eine Mondlandschaft. Das Spiel läuft auf einem Computer und auf einem Smartphone in einer VR-Brille, und viele Spieler können von überall aus gemeinsam bauen.</p>
+                    <p>Extended Threads verbindet eine philosophische Lesart der Architektur mit Technologie. Es zerlegt, was Architektur bedeutet, und die Verhaltensmuster, die sich dabei wiederholen, und setzt alles als Spiel wieder zusammen. Es ist eine Untersuchung darüber, wo Architektur endet und Design beginnt, die Architektur bis auf das Gerüst freilegt und in einzelne Silben zerlegt. Das Ergebnis ist ein Werkzeug, um nach örtlicher Tradition zu bauen, ohne ausgebildete Architekten.</p>
+                    <p>In einem gestengesteuerten Videospiel in Virtual Reality steuern die Spieler mit ihren Händen Roboter aus der Ferne. Die Roboter bauen in einer Mondlandschaft durch Sintern: Sie verschmelzen loses Material Schicht für Schicht zu festen Formen. Das Spiel läuft auf einem Computer und auf einem Smartphone in einer VR-Brille, und viele Spieler können von überall aus gemeinsam bauen.</p>
                   </div>
                   <div class="p-aside">
                     <dl class="facts">
@@ -1502,32 +1657,32 @@ destined to guide.</script></section>
                     </dl>
                   </div>
                 </div>
-                <div class="thumbs" data-imgs="et-002|Eine gesinterte Struktur auf der Mondoberfläche;et-005|Roboter bei der Arbeit;et-000|Das Spiel auf einem Computer;et-003|Bauen in virtueller Realität auf einem Smartphone;et-004|Die Stereoansicht für eine VR-Brille"></div>
+                <div class="thumbs" data-imgs="et-002|Eine gesinterte Struktur auf der Mondoberfläche;et-005|Roboter bei der Arbeit;et-000|Das Spiel auf einem Computer;et-003|Bauen in Virtual Reality auf einem Smartphone;et-004|Die Stereoansicht für eine VR-Brille"></div>
                 <figure class="b8-build et-build">
                   <div class="b8-3d et-3d" tabindex="0" role="img" aria-label="Die Simulation: Ein rollender Roboter verschmilzt losen Mondboden mit seinem Laser zu einer festen Form. Ziehen, um die Ansicht zu drehen; am Computer mit W A S D fahren.">
                     <div class="et-badge"></div>
                   </div>
                   <div class="b8-ctl et-ctl">
                     <button class="et-btn" id="etDemo" type="button">Demo abspielen</button>
-                    <span class="et-seg" role="group" aria-label="Was ein Klick festlegt"><button type="button" id="etDrive" aria-pressed="false">Fahren</button><button type="button" id="etAim" aria-pressed="false">Laser zielen</button></span>
+                    <span class="et-seg" role="group" aria-label="Was ein Klick festlegt"><button type="button" id="etDrive" aria-pressed="false">Fahren</button><button type="button" id="etAim" aria-pressed="false">Laser ausrichten</button></span>
                     <button class="et-btn et-buildbtn" id="etBuild" type="button" aria-pressed="false">Bauen</button>
-                    <button class="et-btn" id="etClear" type="button">Leeren</button>
+                    <button class="et-btn" id="etClear" type="button">Zurücksetzen</button>
                   </div>
                   <p class="et-status" id="etStatus" aria-live="polite"></p>
                   <dl class="et-keys">
                     <div><dt><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></dt><dd>Rover bewegen</dd></div>
-                    <div><dt>Linke Maustaste</dt><dd>Laser zielen</dd></div>
+                    <div><dt>Linke Maustaste</dt><dd>Laser ausrichten</dd></div>
                     <div><dt><kbd>Leertaste</kbd></dt><dd>Bauen ein- und ausschalten</dd></div>
                     <div><dt>Rechte Maustaste</dt><dd>Drehen</dd></div>
                     <div><dt>Scrollen</dt><dd>Zoomen</dd></div>
                   </dl>
                   <ul class="et-say" hidden>
-                    <li data-k="demo">Demo: Der Rover baut zwei gekrümmte Wände. Drücken Sie Fahren oder Laser zielen, um zu übernehmen.</li>
+                    <li data-k="demo">Demo: Der Rover baut zwei gekrümmte Wände. Drücken Sie Fahren oder Laser ausrichten, um zu übernehmen.</li>
                     <li data-k="drive">Fahren: Tippen Sie auf den Boden, um den Rover dorthin zu schicken.</li>
-                    <li data-k="aim">Laser zielen: Tippen Sie auf den Boden oder oben auf die gebaute Form, um dort zu bauen.</li>
-                    <li data-k="desk-drive">Fahren: W A S D oder die Pfeiltasten bewegen den Rover. Klicken Sie, um den Laser zu zielen.</li>
-                    <li data-k="desk-aim">Zielen: Klicken Sie auf den Boden oder oben auf die gebaute Form, um dort zu bauen.</li>
-                    <li data-k="building">Baut…</li>
+                    <li data-k="aim">Laser ausrichten: Tippen Sie auf den Boden oder oben auf die gebaute Form, um dort zu bauen.</li>
+                    <li data-k="desk-drive">Fahren: W A S D oder die Pfeiltasten bewegen den Rover. Klicken Sie, um den Laser auszurichten.</li>
+                    <li data-k="desk-aim">Ausrichten: Klicken Sie auf den Boden oder oben auf die gebaute Form, um dort zu bauen.</li>
+                    <li data-k="building">Wird gebaut…</li>
                     <li data-k="fused">{n} Partikel verschmolzen</li>
                   </ul>
                 </figure>
@@ -1543,19 +1698,19 @@ destined to guide.</script></section>
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Building 8 ist ein Lehrgebäude der Universität, und sein Eingang führt die Menschen in die Haupthalle. Ich habe in Processing einen Bewegungssensor mit einer gewöhnlichen Laptopkamera programmiert: Überschritt die Änderung der RGB-Werte eines Pixels einen Schwellenwert, gemessen als √(x² + y² + z²), wobei x, y und z die Änderungen von Rot, Grün und Blau sind, erkannte der Sensor Bewegung in diesem Pixel. Dann stellte ich die Kamera auf die Brücke, die im Rendering unten zu sehen ist, um die Bewegung aller festzuhalten, die auf dem Weg zur Halle vorbeikamen, und ihre Spuren bauten den Raum für das Möbel auf.</p>
-                    <p>Dann übertrug ich diese Bewegung flach auf den Grundriss des Raumes. In die leeren Flächen, wo niemand ging, entwarf ich ein Möbel aus 2 cm starken, gepressten und verleimten Platten: eine Bar für ein Fest, die genau dort steht, wo sie niemandem im Weg ist.</p>
+                    <p>Building 8 ist ein Lehrgebäude der Universität, und sein Eingang führt die Menschen in die Haupthalle. Ich habe in Processing einen Bewegungssensor mit einer gewöhnlichen Laptopkamera programmiert: Überschritt die Änderung der RGB-Werte eines Pixels einen Schwellenwert, gemessen als √(x² + y² + z²), wobei x, y und z die Änderungen von Rot, Grün und Blau sind, erkannte der Sensor Bewegung in diesem Pixel. Dann stellte ich die Kamera auf die Brücke, die in der Visualisierung unten zu sehen ist, um die Bewegung aller festzuhalten, die auf dem Weg zur Halle vorbeikamen, und aus ihren Spuren entstand der Raum für das Möbel.</p>
+                    <p>Dann projizierte ich diese Bewegung auf den Grundriss des Raumes. Für die leeren Flächen, über die niemand ging, entwarf ich ein Möbel aus 2 cm starken, gepressten und verleimten Platten: eine Bar für ein Fest, die genau dort steht, wo sie niemandem im Weg ist.</p>
                   </div>
                   <dl class="facts">
-                    <div><dt>Methode</dt><dd>Bewegungserfassung, flach auf den Grundriss übertragen</dd></div>
+                    <div><dt>Methode</dt><dd>Bewegungserfassung, auf den Grundriss projiziert</dd></div>
                     <div><dt>Material</dt><dd>Platten, 2 cm stark, gepresst und verleimt</dd></div>
                   </dl>
                 </div>
                 <div class="b8-row">
                 <figure class="b8-stage" tabindex="0">
                   <img class="b8-still" src="/assets/img/projects/b8-render.jpg" alt="Die Bar in der Eingangshalle von Building 8" loading="lazy" decoding="async">
-                  <img class="b8-anim" alt="Die Bewegung in der Eingangshalle und die Bar in den Flächen, wo niemand ging" hidden>
-                  <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Animieren</span><span class="b8-stop">Zum Rendering</span></button>
+                  <img class="b8-anim" alt="Die Bewegung in der Eingangshalle und die Bar auf den Flächen, über die niemand ging" hidden>
+                  <button class="b8-play" type="button" aria-pressed="false"><span class="b8-go">Animieren</span><span class="b8-stop">Visualisierung zeigen</span></button>
                 </figure>
                 <figure class="b8-flip" tabindex="0" role="img" aria-label="Die vier Bilder nacheinander: die Bewegung baut sich auf">
                   <img style="--k:0" src="/assets/img/projects/b8-screen-0501.jpg" alt="Die Bewegung von der Brücke aus gesehen, Bild 501" loading="lazy" decoding="async">
@@ -1565,9 +1720,9 @@ destined to guide.</script></section>
                 </figure>
                 </div>
                 <figure class="b8-build">
-                  <div class="b8-3d" role="img" aria-label="Das 3D-Modell der Bar: Ihre Bretter fallen Schicht für Schicht an ihren Platz, während man den Schieberegler bewegt"></div>
-                  <div class="b8-ctl"><label for="b8Range">Bretter platzieren</label><input id="b8Range" type="range" min="0" max="40" step="1" value="6"><output for="b8Range">6 / 40</output></div>
-                  <p class="b8-note">Das Modell ist vereinfacht: Seine Schichten sind 5 cm dick, die Bar selbst besteht aus 2 cm starken Brettern.</p>
+                  <div class="b8-3d" role="img" aria-label="Das 3D-Modell der Bar: Schicht für Schicht fallen die Platten an ihren Platz, während Sie den Schieberegler bewegen"></div>
+                  <div class="b8-ctl"><label for="b8Range">Platten platzieren</label><input id="b8Range" type="range" min="0" max="40" step="1" value="6"><output for="b8Range">6 / 40</output></div>
+                  <p class="b8-note">Das Modell ist vereinfacht: Seine Schichten sind 5 cm dick, die Bar selbst besteht aus 2 cm starken Platten.</p>
                 </figure>
               </article>
 
@@ -1576,16 +1731,16 @@ destined to guide.</script></section>
                   <span class="logo"><svg class="p-logo ss-logo anim-logo" data-player="ss" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Logo der maßgefertigten Wendeltreppe in Berlin: die Treppe von der Seite, ihre Außenwand öffnet sich"><defs><linearGradient id="ssEdgeGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#22c3a0"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs><path class="ss-fixed" d="M77.9 33.2L77.9 32.3L77.9 31.4L77.9 30.5L77.9 29.6L77.9 28.7L77.9 27.7L77.9 26.8L77.9 25.9L77.9 25.0L77.9 24.1L77.9 23.2L77.9 22.2L77.9 21.3L77.9 20.4L77.9 19.5L77.9 18.6L77.9 17.7L77.9 16.7L77.9 15.8L77.9 14.9M82.2 33.3L82.2 32.4L82.2 31.4L82.2 30.5L82.2 29.6L82.2 28.7L82.2 27.8L82.2 26.9L82.2 25.9L82.2 25.0L82.2 24.1L82.2 23.2L82.2 22.3L82.2 21.4L82.2 20.5L82.2 19.5L82.2 18.6L82.2 17.7L82.2 16.8L82.2 15.9L82.2 15.0M17.8 33.3L17.8 32.4L17.8 31.4L17.8 30.5L17.8 29.6L17.8 28.7L17.8 27.8L17.8 26.9L17.8 25.9L17.8 25.0L17.8 24.1L17.8 23.2L17.8 22.3L17.8 21.4L17.8 20.5L17.8 19.5L17.8 18.6L17.8 17.7L17.8 16.8L17.8 15.9L17.8 15.0M96.0 33.3L50.5 33.4M50.5 33.4L4.0 33.3M4.0 33.3L49.5 33.2M4.0 33.3L4.0 33.3M49.5 33.1L4.0 33.3M49.5 33.2L96.0 33.3M49.5 33.1L49.5 33.2M96.0 33.3L96.0 33.3M96.0 33.3L49.5 33.1M51.4 33.3L51.0 33.2M51.0 33.2L50.6 33.2M50.6 33.2L50.2 33.2M50.2 33.2L49.7 33.2M49.7 33.2L49.3 33.2M49.3 33.2L48.9 33.2M48.9 33.2L48.4 33.2M48.4 33.2L48.0 33.2M48.0 33.2L47.2 33.2M47.2 33.2L45.7 33.2M45.7 33.2L43.5 33.2M43.5 33.2L41.7 33.2M41.7 33.2L39.9 33.2M39.9 33.2L37.3 33.2M37.3 33.2L37.0 33.2M37.0 33.2L36.0 33.2M36.0 33.2L35.1 33.2M35.1 33.2L34.2 33.2M34.2 33.2L33.3 33.2M33.3 33.2L32.5 33.2M32.5 33.2L31.6 33.2M31.6 33.2L30.8 33.2M30.8 33.2L30.0 33.2M30.0 33.2L29.2 33.2M29.2 33.2L28.5 33.2M28.5 33.2L27.8 33.2M27.8 33.2L27.1 33.2M27.1 33.2L26.4 33.2M26.4 33.2L25.8 33.2M25.8 33.2L25.2 33.2M25.2 33.2L24.6 33.2M24.6 33.2L24.1 33.2M24.1 33.2L23.5 33.2M23.5 33.2L23.1 33.2M23.1 33.2L22.6 33.2M22.6 33.2L22.2 33.2M22.2 33.2L21.8 33.2M21.8 33.2L21.5 33.2M21.5 33.2L21.2 33.2M21.2 33.2L20.9 33.3M20.9 33.3L20.7 33.3M20.7 33.3L20.5 33.3M20.5 33.3L20.3 33.3M20.3 33.3L20.2 33.3M20.2 33.3L20.1 33.3M20.1 33.3L20.0 33.3M20.0 33.3L20.0 33.3M20.0 33.3L20.0 33.3M20.0 33.3L20.0 33.3M20.0 33.3L20.0 33.3M20.0 33.3L20.1 33.3M20.1 33.3L20.0 33.3M20.1 33.3L20.3 33.3M20.3 33.3L20.1 33.3M20.3 33.3L20.4 33.3M20.4 33.3L20.3 33.3M20.4 33.3L20.6 33.3M20.6 33.3L20.4 33.3M20.6 33.3L20.8 33.3M20.8 33.3L20.6 33.3M20.8 33.3L21.1 33.3M21.1 33.3L20.8 33.3M21.1 33.3L21.4 33.3M21.4 33.3L21.1 33.3M21.4 33.3L21.8 33.3M21.8 33.3L21.4 33.3M21.8 33.3L22.1 33.3M22.1 33.3L21.8 33.3M22.1 33.3L22.5 33.3M22.5 33.3L22.1 33.3M22.5 33.3L23.0 33.3M23.0 33.3L22.5 33.3M23.0 33.3L23.4 33.3M23.4 33.3L23.0 33.3M23.4 33.3L23.9 33.3M23.9 33.3L23.4 33.3M23.9 33.3L24.5 33.3M24.5 33.3L23.9 33.3M24.5 33.3L25.0 33.3M25.0 33.3L24.5 33.3M25.0 33.3L25.6 33.3M25.6 33.3L25.0 33.3M25.6 33.3L26.3 33.3M26.3 33.3L25.6 33.3M26.3 33.3L26.9 33.3M26.9 33.3L26.3 33.3M26.9 33.3L27.6 33.3M27.6 33.3L26.9 33.3M27.6 33.3L28.3 33.3M28.3 33.3L27.6 33.3M28.3 33.3L29.0 33.3M29.0 33.3L28.3 33.3M29.0 33.3L29.8 33.3M29.8 33.3L29.0 33.3M29.8 33.3L30.6 33.3M30.6 33.3L29.8 33.3M30.6 33.3L31.4 33.3M31.4 33.3L30.6 33.3M31.4 33.3L32.2 33.3M32.2 33.3L31.4 33.3M32.2 33.3L33.1 33.3M33.1 33.3L32.2 33.3M33.1 33.3L34.0 33.3M34.0 33.3L33.1 33.3M34.0 33.3L34.9 33.3M34.9 33.3L34.0 33.3M34.9 33.3L35.8 33.3M35.8 33.3L34.9 33.3M35.8 33.3L36.7 33.3M36.7 33.3L35.8 33.3M36.7 33.3L37.6 33.3M37.6 33.3L36.7 33.3M37.6 33.3L38.6 33.3M38.6 33.3L37.6 33.3M38.6 33.3L39.6 33.3M39.6 33.3L38.6 33.3M39.6 33.3L40.6 33.3M40.6 33.3L39.6 33.3M40.6 33.3L41.6 33.3M41.6 33.3L40.6 33.3M41.6 33.3L42.6 33.3M42.6 33.3L41.6 33.3M42.6 33.3L43.6 33.3M43.6 33.3L42.6 33.3M43.6 33.3L44.6 33.3M44.6 33.3L43.6 33.3M44.6 33.3L45.6 33.3M45.6 33.3L44.6 33.3M45.6 33.3L46.7 33.3M46.7 33.3L45.6 33.3M46.7 33.3L47.7 33.3M47.7 33.3L46.7 33.3M47.7 33.3L48.7 33.3M48.7 33.3L47.7 33.3M48.7 33.3L49.8 33.3M49.8 33.3L48.7 33.3M49.8 33.3L50.8 33.3M50.8 33.3L49.8 33.3M50.8 33.3L51.9 33.3M51.9 33.3L50.8 33.3M51.9 33.3L52.9 33.3M52.9 33.3L51.9 33.3M52.9 33.3L54.0 33.3M54.0 33.3L52.9 33.3M54.0 33.3L55.0 33.3M55.0 33.3L54.0 33.3M55.0 33.3L56.0 33.3M56.0 33.3L55.0 33.3M56.0 33.3L57.0 33.3M57.0 33.3L56.0 33.3M57.0 33.3L58.0 33.3M58.0 33.3L57.0 33.3M58.0 33.3L59.1 33.3M59.1 33.3L58.0 33.3M59.1 33.3L60.0 33.3M60.0 33.3L59.1 33.3M60.0 33.3L61.0 33.3M61.0 33.3L60.0 33.3M61.0 33.3L62.0 33.3M62.0 33.3L61.0 33.3M62.0 33.3L62.9 33.3M62.9 33.3L62.0 33.3M62.9 33.3L63.9 33.3M63.9 33.3L62.9 33.3M63.9 33.3L64.8 33.3M64.8 33.3L63.9 33.3M64.8 33.3L65.7 33.3M65.7 33.3L64.8 33.3M65.7 33.3L66.6 33.3M66.6 33.3L65.7 33.3M66.6 33.3L67.4 33.3M67.4 33.3L66.6 33.3M67.4 33.3L68.3 33.3M68.3 33.3L67.4 33.3M68.3 33.3L69.1 33.3M69.1 33.3L68.3 33.3M69.1 33.3L69.9 33.3M69.9 33.3L69.1 33.3M69.9 33.3L70.7 33.3M70.7 33.3L69.9 33.3M70.7 33.3L71.4 33.3M71.4 33.3L70.7 33.3M71.4 33.3L72.1 33.3M72.1 33.3L71.4 33.3M72.1 33.3L72.8 33.3M72.8 33.3L72.1 33.3M72.8 33.3L73.5 33.3M73.5 33.3L72.8 33.3M73.5 33.3L74.1 33.3M74.1 33.3L73.5 33.3M74.1 33.3L74.7 33.3M74.7 33.3L74.1 33.3M74.7 33.3L75.3 33.3M75.3 33.3L74.7 33.3M75.3 33.3L75.9 33.3M75.9 33.3L75.3 33.3M75.9 33.3L76.4 33.3M76.4 33.3L75.9 33.3M76.4 33.3L76.9 33.3M76.9 33.3L76.4 33.3M76.9 33.3L77.3 33.3M77.3 33.3L76.9 33.3M77.3 33.3L77.7 33.3M77.7 33.3L77.3 33.3M77.7 33.3L78.1 33.3M78.1 33.3L77.7 33.3M78.1 33.3L78.5 33.3M78.5 33.3L78.1 33.3M78.5 33.3L78.8 33.3M78.8 33.3L79.1 33.3M79.1 33.3L79.3 33.3M73.1 15.1L72.1 15.1M72.1 15.1L71.0 15.1M71.0 15.1L69.9 15.1M69.9 15.1L68.7 15.1M68.7 15.1L67.4 15.1M67.4 15.1L66.1 15.1M66.1 15.1L64.8 15.1M64.8 15.1L63.4 15.1M63.4 15.1L62.0 15.1M62.0 15.1L60.6 15.1M60.6 15.1L59.1 15.1M59.1 15.1L57.6 15.1M57.6 15.1L56.1 15.1M56.1 15.1L54.6 15.1M79.7 14.9L80.3 14.9M80.3 14.9L80.8 14.9M80.8 14.9L81.2 14.9M81.2 14.9L81.6 14.9M81.6 14.9L81.9 14.9M81.9 14.9L82.1 15.0M82.1 15.0L82.2 15.0M82.2 15.0L82.2 15.0M17.8 15.0L17.9 15.0M17.9 15.0L18.0 15.0M18.0 15.0L18.2 14.9M18.2 14.9L18.4 14.9M18.4 14.9L18.8 14.9M18.8 14.9L19.3 14.9M19.3 14.9L19.8 14.9M19.8 14.9L20.4 14.9M20.4 14.9L21.1 14.9M21.1 14.9L21.9 14.9M21.9 14.9L22.7 14.9M22.7 14.9L23.7 14.9M23.7 14.9L24.7 14.9M24.7 14.9L25.7 14.9M25.7 14.9L26.9 14.9M26.9 14.9L28.1 14.9M28.1 14.9L29.3 14.9M29.3 14.9L30.6 14.8M30.6 14.8L32.0 14.8M32.0 14.8L33.4 14.8M33.4 14.8L34.9 14.8M34.9 14.8L36.4 14.8M79.7 33.2L80.3 33.2M80.3 33.2L80.8 33.2M80.8 33.2L81.3 33.2M81.3 33.2L81.6 33.2M81.6 33.2L81.9 33.2M81.9 33.2L82.1 33.2M82.1 33.2L82.2 33.2M82.2 33.2L82.2 33.2M17.8 33.2L17.8 33.2M17.8 33.2L17.9 33.2M17.9 33.2L18.1 33.2M18.1 33.2L18.4 33.2M18.4 33.2L18.8 33.2M18.8 33.2L19.2 33.2M19.2 33.2L19.8 33.2M19.8 33.2L20.4 33.2M20.4 33.2L21.1 33.2M21.1 33.2L21.9 33.2M21.9 33.2L22.7 33.2M22.7 33.2L23.6 33.2M23.6 33.2L24.6 33.2M24.6 33.2L25.7 33.2M25.7 33.2L26.8 33.2M26.8 33.2L28.0 33.2M28.0 33.2L29.3 33.2M29.3 33.2L30.6 33.2M30.6 33.2L32.0 33.2M32.0 33.2L33.4 33.2M33.4 33.2L34.8 33.2M34.8 33.2L36.3 33.2M73.5 14.9L73.5 14.9M73.5 33.2L73.5 33.2M73.5 14.9L73.5 14.9M73.5 33.2L73.5 33.2M73.5 14.9L73.5 14.9M73.5 33.2L73.5 33.2M73.5 14.9L73.6 14.9M73.5 33.2L73.6 33.2M73.6 14.9L73.7 14.9M73.6 33.2L73.7 33.2M73.7 14.9L73.8 14.9M73.7 33.2L73.8 33.2M73.8 14.9L74.0 14.9M73.8 33.2L74.0 33.2M74.0 14.9L74.2 14.9M74.0 33.2L74.2 33.2M74.2 14.9L74.4 14.9M74.2 33.2L74.4 33.2M74.6 14.9L74.9 14.9M74.6 33.2L74.9 33.2M74.9 14.9L75.2 14.9M74.9 33.2L75.2 33.2M75.2 14.9L75.4 14.9M75.2 33.2L75.4 33.2M75.4 14.9L75.7 14.9M75.4 33.2L75.7 33.2M75.7 14.9L76.0 14.9M75.7 33.2L76.0 33.2M76.0 14.9L76.4 14.9M76.0 33.2L76.4 33.2M76.4 14.9L76.7 14.9M76.4 33.2L76.7 33.2M76.7 14.9L77.0 14.9M76.7 33.2L77.0 33.2M77.0 14.9L77.3 14.9M77.0 33.2L77.3 33.2M77.3 14.9L77.6 14.9M77.3 33.2L77.6 33.2M77.6 14.9L77.9 14.9M77.6 33.2L77.9 33.2M77.9 14.9L78.2 14.9M77.9 33.2L78.2 33.2M78.2 14.9L78.5 14.9M78.2 33.2L78.5 33.2M78.5 14.9L78.7 14.9M78.5 33.2L78.7 33.2M78.7 14.9L79.0 14.9M78.7 33.2L79.0 33.2M79.0 14.9L79.2 14.9M79.0 33.2L79.2 33.2M79.2 14.9L79.4 14.9M79.2 33.2L79.4 33.2M79.4 14.9L79.5 14.9M79.4 33.2L79.5 33.2M79.5 14.9L79.7 14.9M79.5 33.2L79.7 33.2M36.3 33.2L36.9 33.2M36.9 33.2L37.5 33.2M37.5 33.2L38.0 33.2M38.0 33.2L38.6 33.2M38.6 33.2L39.2 33.2M39.2 33.2L39.8 33.2M39.8 33.2L40.4 33.2M40.4 33.2L41.1 33.2M41.1 33.2L41.7 33.2M41.7 33.2L42.3 33.2M42.3 33.2L43.0 33.2M43.0 33.2L43.6 33.2M43.6 33.2L44.2 33.2M44.2 33.2L44.9 33.2M36.4 14.8L36.9 14.8M36.9 14.8L37.5 14.8M37.5 14.8L38.0 14.8M38.0 14.8L38.6 14.8M38.6 14.8L39.2 14.8M39.2 14.8L39.8 14.8M39.8 14.8L40.4 14.8M40.4 14.8L41.1 14.8M41.1 14.8L41.7 14.8M41.7 14.8L42.3 14.8M42.3 14.8L43.0 14.8M43.0 14.8L43.6 14.8M43.6 14.8L44.3 14.8M44.3 14.8L44.9 14.8M44.9 14.8L45.5 14.8M45.5 14.8L46.1 14.8M46.1 14.8L46.7 14.8M46.7 14.8L47.3 14.9M47.3 14.9L47.9 14.9M47.9 14.9L48.4 14.9M48.4 14.9L48.9 14.9M48.9 14.9L49.3 14.9M49.3 14.9L49.7 14.9M49.7 14.9L50.0 14.9M50.0 14.9L50.3 14.9M50.3 14.9L50.5 14.9M50.5 14.9L50.8 14.9M50.8 14.9L51.0 14.9M51.0 14.9L51.2 14.9M51.2 14.9L51.4 14.9M51.4 14.9L51.6 14.9M51.6 14.9L51.7 14.9M51.7 14.9L51.9 14.9M51.9 14.9L52.0 14.9M52.0 14.9L52.1 14.9M52.1 14.9L52.2 14.9M52.2 14.9L52.3 14.9M52.3 14.9L52.4 14.9M52.4 14.9L52.6 14.9M52.6 14.9L52.6 14.9M52.6 14.9L52.8 14.9M52.8 14.9L52.9 14.9M52.9 14.9L52.9 14.9M52.9 14.9L53.0 14.9M53.0 14.9L53.1 14.9M53.1 14.9L53.2 14.9M53.2 14.9L53.3 14.9M53.3 14.9L53.3 14.9M53.3 14.9L53.4 14.9M53.4 14.9L53.5 14.9M53.5 14.9L53.6 14.9M53.6 14.9L53.6 14.9M53.6 14.9L53.7 14.9M53.7 14.9L53.7 14.9M53.7 14.9L53.8 14.9M53.8 14.9L53.8 14.9M53.8 14.9L53.9 14.9M53.9 14.9L54.0 14.9M54.0 14.9L54.0 14.9M54.0 14.9L54.1 14.9M54.1 14.9L54.1 14.9M54.1 14.9L54.2 14.9M54.2 14.9L54.2 14.9M54.2 14.9L54.3 14.9M54.3 14.9L54.3 14.9M54.3 14.9L54.4 14.9M54.4 14.9L54.4 14.9M54.4 14.9L54.4 14.9M54.4 14.9L54.5 14.9M54.5 14.9L54.6 14.9"/><path class="ss-wall" d="M77.9 85.1L77.2 85.1L76.5 85.1L75.7 85.2L75.1 85.2L74.3 85.2L73.4 85.2L72.8 85.2L72.1 85.2L71.4 85.2L70.7 85.2L69.9 85.2L69.1 85.2L68.3 85.2L67.4 85.2L66.5 85.2L65.6 85.2L64.7 85.2L63.7 85.2L62.7 85.2L61.7 85.0L60.7 84.7L59.7 84.3L58.6 84.0L57.5 83.6L56.4 83.3L55.3 82.9L54.2 82.5L53.1 82.2L52.0 81.8L50.9 81.5L49.8 81.1L48.7 80.7L47.5 80.4L46.4 80.0L45.3 79.7L44.2 79.3L43.1 78.9L42.1 78.6L41.0 78.2L39.9 77.9L38.9 77.5L37.9 77.1L36.9 76.8L35.9 76.4L34.9 76.1L34.0 75.7L33.1 75.3L32.2 75.0L31.4 74.6L30.6 74.3L29.8 73.9L29.0 73.5L28.3 73.2L27.6 72.8L27.0 72.5L26.4 72.1L25.8 71.7L25.3 71.4L24.8 71.0L24.1 70.5L23.5 69.9L23.0 69.4L22.7 68.9L22.4 68.3L22.2 67.6L22.1 67.1M37.9 57.0L38.9 56.7L39.9 56.3L41.0 56.0L42.0 55.6L43.1 55.3L44.2 54.9L45.3 54.5L46.4 54.2L47.5 53.8L48.6 53.5L49.7 53.1L50.8 52.8L51.9 52.4L53.1 52.0L54.2 51.7L55.3 51.3L56.3 51.0L57.4 50.6L58.5 50.3L59.5 49.9L60.6 49.5L61.6 49.2L62.6 48.8L63.6 48.5L64.5 48.1L65.5 47.8L66.4 47.4L67.3 47.0L68.1 46.7L69.0 46.3L69.8 46.0L70.5 45.6L71.3 45.3L72.0 44.9L72.7 44.5L73.3 44.2L73.9 43.8L74.4 43.5L75.0 43.1L75.7 42.6L76.3 42.0L76.8 41.5L77.2 40.9L77.3 33.3L76.7 33.2L75.9 33.2L75.7 33.2M77.9 85.1L77.9 83.9L77.9 82.7L77.9 81.5L77.9 80.2L77.9 79.0L77.9 77.7L77.9 76.5L77.9 75.3L77.9 74.0L77.9 72.8L77.9 71.5L77.9 70.3L77.9 69.1L77.9 67.8L77.9 66.6L77.9 65.3L77.9 64.1L77.9 62.9L77.9 61.6L77.9 60.4M22.1 67.1L22.1 66.1L22.1 65.1L22.1 64.2L22.1 63.2L22.1 62.2L22.1 61.2L22.1 60.3L22.1 59.3L22.1 58.3L22.1 57.3L22.1 56.4L22.1 55.4L22.1 54.4L22.1 53.5L22.1 52.5L22.1 51.5L22.1 50.5L22.1 49.6L22.1 48.6L22.1 47.6"/><path class="ss-edge" stroke="url(#ssEdgeGrad)" d="M77.9 60.4L77.7 59.7L77.2 59.3L76.7 59.0L76.0 58.9L75.3 58.8L74.5 58.8L73.7 58.8L73.1 58.9L72.4 58.9L71.8 59.0L71.0 59.1L70.3 59.2L69.5 59.3L68.7 59.5L67.9 59.6L67.0 59.7L66.1 59.8L65.2 59.9L64.2 60.1L63.2 60.2L62.2 60.2L61.2 60.3L60.2 60.4L59.1 60.4L58.1 60.4L57.0 60.4L55.9 60.4L54.8 60.4L53.7 60.3L52.6 60.2L51.5 60.1L50.3 60.0L49.2 59.9L48.1 59.7L47.0 59.5L45.9 59.3L44.8 59.1L43.7 58.9L42.6 58.6L41.5 58.4L40.5 58.1L39.4 57.8L38.4 57.5L37.4 57.2L36.4 56.9L35.4 56.6L34.5 56.2L33.6 55.9L32.7 55.6L31.8 55.2L31.0 54.9L30.2 54.5L29.4 54.2L28.7 53.8L28.0 53.5L27.3 53.1L26.7 52.8L26.1 52.4L25.5 52.1L25.0 51.7L24.3 51.2L23.7 50.6L23.2 50.1L22.8 49.6L22.5 49.0L22.2 48.3L22.1 47.6L22.2 46.9L22.5 46.2L22.8 45.6L23.2 45.1L23.7 44.5L24.3 44.0L25.1 43.5L25.6 43.1L26.1 42.7L26.7 42.4L27.3 42.0L28.0 41.6L28.7 41.3L29.5 40.9L30.2 40.5L31.0 40.1L31.9 39.7L32.7 39.3L33.6 39.0L34.5 38.6L35.5 38.2L36.4 37.7L37.4 37.3L38.4 36.9L39.4 36.5L40.5 36.0L41.5 35.6L42.6 35.1L43.7 34.6L44.7 34.1L45.3 33.9L45.8 33.6L46.4 33.4L46.9 33.1L47.5 32.9L48.1 32.6L48.6 32.4L49.2 32.1L49.7 31.8L50.3 31.6L50.8 31.3L51.4 31.0L51.9 30.7L52.5 30.5L53.1 30.2L53.6 29.9L54.2 29.6L54.7 29.3L55.3 29.0L55.8 28.8L56.3 28.5L56.9 28.2L57.4 27.9L58.0 27.6L58.5 27.3L59.0 27.0L60.1 26.5L61.1 25.9L62.1 25.3L63.1 24.8L64.1 24.2L65.0 23.7L65.9 23.1L66.8 22.6L67.7 22.1L68.6 21.6L69.4 21.1L70.2 20.6L70.9 20.1L71.6 19.7L72.3 19.2L73.0 18.8L73.6 18.4L74.2 18.0L74.7 17.6L75.2 17.2L75.9 16.7L76.4 16.3L76.9 15.9L77.4 15.6L77.9 15.1L77.9 15.0"/><path class="ss-slabs" d="M4.0 85.2L96.0 85.2M4.0 33.3L96.0 33.3"/></svg></span>
                   <div>
                     <h2>Maßgefertigte Wendeltreppe in Berlin</h2>
-                    <p class="p-meta">Berlin, Deutschland <i></i> Computational Design <i></i> 2020</p>
+                    <p class="p-meta">Berlin, Deutschland <i></i> Computational Design <i></i> 2024</p>
                   </div>
                 </div>
                 <div class="p-body">
                   <div class="prose">
-                    <p>Eine Außenwendeltreppe für ein Café in Berlin, mit einem Podest nach drei Stufen. Am wichtigsten war der Blick beim Hinaufgehen: Die Treppe sollte sich öffnen und beim Steigen mehr von ihrer Umgebung zeigen, statt einen zwischen Wänden einzuschließen.</p>
-                    <p>Die Oberkante ihrer gekrümmten Außenwand ist als Gleichung geschrieben. Parallel zur Treppe bleibt sie geschlossen; ein Sinus öffnet sie, trifft die Brüstung aber mit einem Knick; eine weichere Kurve öffnet sie und fließt in die Brüstung über. Im interaktiven Modell verändert man die Kurve und sieht, wie sich die Wand verändert, in 3D und abgewickelt.</p>
+                    <p>Eine Außenwendeltreppe für ein Café in Berlin, mit einem Podest nach drei Stufen. Am wichtigsten war der Blick beim Hinaufgehen: Die Treppe sollte sich öffnen und beim Steigen mehr von ihrer Umgebung zeigen, statt Sie zwischen Wänden einzuschließen.</p>
+                    <p>Die Oberkante ihrer gekrümmten Außenwand wird durch eine Gleichung beschrieben. Verläuft sie parallel zur Treppe, bleibt die Wand geschlossen; ein Sinus öffnet sie, trifft die Brüstung aber mit einem Knick; eine weichere Kurve öffnet sie und fließt in die Brüstung über. Im interaktiven Modell können Sie die Kurve verändern und sehen, wie sich die Wand verändert, in 3D und abgewickelt.</p>
                   </div>
                   <dl class="facts">
-                    <div><dt>Methode</dt><dd>Die Oberkante der Wand, als Gleichung geschrieben</dd></div>
+                    <div><dt>Methode</dt><dd>Die Oberkante der Wand, durch eine Gleichung beschrieben</dd></div>
                     <div><dt>Geometrie</dt><dd>20 Steigungen, 3,63 m Geschosshöhe, 3,90 m Durchmesser</dd></div>
                   </dl>
                 </div>
@@ -1613,13 +1768,13 @@ destined to guide.</script></section>
 
               <article class="slide project">
                 <div class="p-head has-logo">
-                  <span class="logo"><svg class="p-logo lim-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" role="img" aria-label="Logo der Limericks: fünf Zeilen, gereimt A A B B A"><line class="lim-line lim-a" style="--k:0" x1="14" y1="20" x2="186" y2="20" pathLength="1"/><line class="lim-line lim-a" style="--k:1" x1="14" y1="50" x2="186" y2="50" pathLength="1"/><line class="lim-line lim-b" style="--k:2" x1="14" y1="80" x2="122" y2="80" pathLength="1"/><line class="lim-line lim-b" style="--k:3" x1="14" y1="110" x2="122" y2="110" pathLength="1"/><line class="lim-line lim-a" style="--k:4" x1="14" y1="140" x2="186" y2="140" pathLength="1"/></svg></span>
+                  <span class="logo"><svg class="p-logo lim-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" role="img" aria-label="Logo der Limericks: fünf Zeilen, Reimschema AABBA"><line class="lim-line lim-a" style="--k:0" x1="14" y1="20" x2="186" y2="20" pathLength="1"/><line class="lim-line lim-a" style="--k:1" x1="14" y1="50" x2="186" y2="50" pathLength="1"/><line class="lim-line lim-b" style="--k:2" x1="14" y1="80" x2="122" y2="80" pathLength="1"/><line class="lim-line lim-b" style="--k:3" x1="14" y1="110" x2="122" y2="110" pathLength="1"/><line class="lim-line lim-a" style="--k:4" x1="14" y1="140" x2="186" y2="140" pathLength="1"/></svg></span>
                   <div>
                     <h2>Limerick-Wettbewerb</h2>
                     <p class="p-meta">Erste Internationale Aphoristische Konferenz „Magnum in Parvo“ <i></i> Breslau, Polen <i></i> Oktober 2025</p>
                   </div>
                 </div>
-                <div class="prize-line top appear" id="awardCard"><span class="medal sm"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><p><b>Erstplatzierter</b> des Limerick-Wettbewerbs der Ersten Internationalen Aphoristischen Konferenz „Magnum in Parvo“ im Oktober 2025.</p></div>
+                <div class="prize-line top appear" id="awardCard"><span class="medal sm">1.</span><p><b>Erstplatzierter</b> des Limerick-Wettbewerbs der Ersten Internationalen Aphoristischen Konferenz „Magnum in Parvo“ im Oktober 2025.</p></div>
                 <div class="limericks">
                   <div class="card-head sub">
                     <div class="t"><div class="num" id="poemCount">1/5</div><div><h3>Die fünf Siegerlimericks</h3></div></div>
@@ -1631,7 +1786,7 @@ destined to guide.</script></section>
                 <div class="thumbs row" data-imgs="mp-1|Lesung der Siegerlimericks|1.85;mp-2|Bei der Preisverleihung|1.88;mp-3|Die Medaille der Konferenz|0.826"></div>
                 <div class="prose">
                   <p>Magnum in Parvo, „Größe im Kleinen“, war die Erste Internationale Aphoristische Konferenz, die am 24. und 25. Oktober 2025 am Institut für Germanistik der Universität Breslau stattfand. Organisiert vom Institut gemeinsam mit der Breslauer Sektion der Societas Humboldtiana Polonorum und geleitet vom Schriftsteller Andrzej Majewski, brachte sie Wissenschaftler und Aphoristiker aus zwölf Ländern zusammen.</p>
-                  <p>Neben Vorträgen über den Aphorismus, seine Übersetzung und Geschichte umfasste das Programm Ausstellungen historischer Ausgaben, ein Kammerkonzert und einen Limerick-Wettbewerb, bei dem der Sprachwissenschaftler Jan Miodek die Jury bildete. Ich habe am Limerick-Wettbewerb teilgenommen und den ersten Preis gewonnen.</p>
+                  <p>Neben Vorträgen über den Aphorismus, seine Übersetzung und Geschichte umfasste das Programm Ausstellungen historischer Ausgaben, ein Kammerkonzert und einen Limerick-Wettbewerb mit dem Sprachwissenschaftler Jan Miodek als Juror. Ich habe am Limerick-Wettbewerb teilgenommen und den ersten Preis gewonnen.</p>
                 </div>
                 <div class="chips"><a class="chip" href="https://magnuminparvo.com/en.php" target="_blank" rel="noopener">Die Website der Konferenz</a></div>
 
@@ -1654,7 +1809,7 @@ destined to guide.</script></section>
             <div class="card-scroll archive-fit">
               <div class="arc-screen">
               <div class="p-head has-logo">
-                <span class="logo dex-archive"><img src="/assets/img/logos/wandering-wayfarer.jpg" width="512" height="512" alt="Logo von Wandering Wayfarer" decoding="async"></span>
+                <span class="logo dex-archive"><img src="/assets/img/logos/wandering-wayfarer.png" width="512" height="512" alt="Logo von Wandering Wayfarer" decoding="async"></span>
                 <div>
                   <h2>Wandering Wayfarer</h2>
                   <p class="p-meta">YouTube-Kanal <i></i> Stadtspaziergänge, Fahrten und Architektur</p>
@@ -1675,9 +1830,9 @@ destined to guide.</script></section>
                 </div>
               </div>
               </div>
-              <p class="lead arc-lead">Orte, die ich für <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a> dokumentiert habe, meinen YouTube-Kanal, der Orte auf der ganzen Welt festhält: Stadtspaziergänge, Bus- und Straßenbahnfahrten und Architektur, meist in 4K. Das erste Video erschien im <a id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">März 2023</a>.</p>
-              <p class="maphint">Fahren Sie mit der Maus über ein Land oder tippen Sie darauf, um die dort dokumentierten Orte zu sehen, und tippen Sie auf einen roten Punkt für die Stadt. Ziehen zum Verschieben; scrollen, mit zwei Fingern zoomen oder die Schaltflächen nutzen, um zu zoomen.</p>
-              <div class="chips"><a class="chip" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Auf YouTube ansehen</a></div>
+              <p class="lead arc-lead">Orte, die ich für <a href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Wandering Wayfarer</a> dokumentiert habe, meinen YouTube-Kanal über Orte auf der ganzen Welt: Stadtspaziergänge, Bus- und Straßenbahnfahrten und Architektur, meist in 4K. Das erste Video erschien im <a id="sFirstLink" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">März 2023</a>.</p>
+              <p class="maphint">Fahren Sie mit der Maus über ein Land oder tippen Sie darauf, um die dort dokumentierten Orte zu sehen, und tippen Sie auf einen roten Punkt, um die Stadt zu sehen. Zum Verschieben ziehen; zum Zoomen scrollen, mit zwei Fingern ziehen oder die Schaltflächen nutzen.</p>
+              <div class="chips"><button class="chip" type="button" id="takeMe">Bring mich irgendwohin</button><a class="chip" href="https://www.youtube.com/@WanderingWayfarer" target="_blank" rel="noopener">Auf YouTube ansehen</a></div>
             </div>
           </section>
         </div>
@@ -1700,7 +1855,7 @@ destined to guide.</script></section>
                 </div>
                 <div class="a-body">
                   <div>
-                    <p>Shuin ist eine vollständige Reise-App. Sie hält die Orte fest, die Sie besuchen, wie Sie zwischen ihnen reisen, wo Sie übernachten und die Fotoordner jeder Reise, und animiert dann Ihre Reisen, damit Sie sie mit Freunden teilen können.</p>
+                    <p>Shuin ist eine vollständige Reise-App. Sie begleitet Sie von Ort zu Ort, merkt sich jede Reise und spielt Ihre Reisen dann als Animationen ab, die Sie mit Freunden teilen können.</p>
                     <p>Woher Sie auch kommen, Shuin gibt allen Reisenden denselben Pass, für immer gültig.</p>
                     <p>Sie können sie vollständig offline nutzen und alles auf Ihrem Gerät behalten, oder Freunde hinzufügen und Ihre Reisen in Ranglisten mit ihren vergleichen.</p>
                     <div class="chips"><a class="chip" href="/apps/shuin/privacy/">Datenschutzerklärung ansehen</a><a class="chip" href="/apps/shuin/terms/">Nutzungsbedingungen ansehen</a></div>
@@ -1712,10 +1867,10 @@ destined to guide.</script></section>
                     <li>Reisen als Animation abgespielt, zum Teilen mit Freunden</li>
                     <li>Ranglisten, um Ihre Reisen mit Freunden zu vergleichen</li>
                     <li>Vollständig offline, alles bleibt auf Ihrem Gerät</li>
-                    <li>Statistiken, Ausgaben und das CO2 jeder Etappe</li>
+                    <li>Statistiken, Ausgaben und den CO2-Ausstoß jeder Etappe</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-dark data-imgs="app-shuin-1|Die Karte, mit Beispielreisen;app-shuin-2|Reisen nach Route gruppiert, mit dem CO2 jeder Etappe;app-shuin-3|Der Pass;app-shuin-4|Eine abgespielte Reise"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-shuin-1|Die Karte, mit Beispielreisen;app-shuin-2|Einzelfahrten nach Reise gruppiert, mit dem CO2-Ausstoß jeder Etappe;app-shuin-3|Der Pass;app-shuin-4|Eine Reise als Animation"></div>
               </article>
 
               <article class="slide app" style="--acc:#7d9b6a">
@@ -1725,19 +1880,19 @@ destined to guide.</script></section>
                 </div>
                 <div class="a-body">
                   <div>
-                    <p>Revitesse ist ein Plug-in für Autodesk Revit, das die repetitive Arbeit beim Erstellen von Plänen abnimmt. Es begann als kostenpflichtiges Produkt und ist heute vollständig kostenlos und Open Source, installiert als pyRevit-Erweiterung.</p>
-                    <p>Seine Werkzeuge sitzen in fünf Gruppen im Revit-Menüband: Ansichten, Pläne, Parameter, Revisionswolken und Beschriftungen.</p>
+                    <p>Revitesse ist ein Plug-in für Autodesk Revit, das Ihnen die repetitive Arbeit beim Erstellen von Plänen abnimmt. Es begann als kostenpflichtiges Produkt und ist heute vollständig kostenlos und Open Source und wird als pyRevit-Erweiterung installiert.</p>
+                    <p>Seine Werkzeuge liegen in fünf Gruppen der Revit-Multifunktionsleiste: Ansichten (Views), Pläne (Sheets), Parameter (Parameters), Revisionswolken (Revision Clouds) und Beschriftungen (Annotations).</p>
                   </div>
                   <ul class="feats">
                     <li>Viele Pläne auf einmal erstellen und Ansichten in einem Schritt darauf platzieren</li>
-                    <li>Gemeinsam genutzte Parameter stapelweise erstellen und ihre Werte übertragen oder kombinieren</li>
-                    <li>Elemente oder ihre Beschriftungen nach Kategorie oder Parameter auswählen und filtern</li>
+                    <li>Gemeinsam genutzte Parameter in einem Durchgang erstellen und ihre Werte übertragen oder kombinieren</li>
+                    <li>Elemente oder ihre Bauteilbeschriftungen nach Kategorie oder Parameter auswählen und filtern</li>
                     <li>Alle Türen und Fenster im Projekt auf einmal nummerieren</li>
                     <li>Revisionswolken nummerieren, überschreiben, auflisten und exportieren</li>
                     <li>Text in Beschriftungen suchen, auswählen und ersetzen</li>
                   </ul>
                 </div>
-                <div class="thumbs row" data-imgs="app-revitesse-ribbon|Die Registerkarte Revitesse in Revit, aus dem Tutorial zur Gruppe Pläne|1.778;app-revitesse-sheet|Revisionswolken auf einem Plan, aus dem Tutorial zur Gruppe Beschriftungen|1.778"></div>
+                <div class="thumbs row" data-imgs="app-revitesse-ribbon|Die Registerkarte Revitesse in Revit, aus dem Tutorial zur Gruppe Pläne (Sheets)|1.778;app-revitesse-sheet|Revisionswolken auf einem Plan, aus dem Tutorial zur Gruppe Beschriftungen (Annotations)|1.778"></div>
                 <div class="chips">
                   <a class="chip" href="https://github.com/ramyamaher/Revitesse" target="_blank" rel="noopener">Open Source auf GitHub</a>
                   <a class="chip" href="https://www.youtube.com/@revitesse" target="_blank" rel="noopener">Tutorials auf YouTube</a>
@@ -1747,36 +1902,36 @@ destined to guide.</script></section>
               <article class="slide app" style="--acc:#16a34a">
                 <div class="a-head">
                   <span class="logo"><svg class="p-logo bc-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 446 347" role="img" aria-label="Logo von Bancanca: eine Banane landet auf einer Bank und durchbricht ihr Dach"><defs><mask id="bcMask" maskUnits="userSpaceOnUse" x="-100" y="-500" width="700" height="900"><rect x="-100" y="-500" width="700" height="900" fill="#fff"/><g class="bc-fall"><path fill="#000" d="M137.3,224.2c-7.1-0.4-12.3-1-21-2.4C88.4,217.4,61,206.9,34,190.5c-2.7-1.7-5.3-2.9-6.1-3.1l-1.5-0.2l2.7-4.7c4.8-8.3,4.5-7.9,6.6-7.9c1,0,2.5,0.2,3.4,0.4c3.5,0.8,13,1.9,22.8,2.7c12.8,1,20.4,1.7,31,2.9c34.2,3.9,52.9,3.6,78.8-1.4c37-7.2,74.4-24.9,103-48.7c5.9-4.9,16.4-15.3,22-21.5c2.4-2.8,7.9-9.4,12.2-14.7c12-14.9,16.9-19.6,28-27.1c11.9-8,16.6-13,21.2-22.1c4.2-8.5,6.5-19,6.5-30.7c0-4.2-0.4-3.9,4.9-3.2c2.8,0.4,10.1,2.1,10.5,2.4c0.1,0.1,0,1-0.3,2.1c-0.2,1-0.8,4.4-1.4,7.5c-4.5,25.4-12.5,50.2-23.3,72c-25.5,51.5-72.7,94-127.6,114.7C197.8,221.1,168.3,225.8,137.3,224.2L137.3,224.2z"/><path fill="#000" d="M216.5,259.2c-73.2,11.1-112.4-1.5-115.5-2.5c-13.8-4.4-28.3-12-40.2-20.9c-13.5-10.1-25.5-24-33.7-38.9c-2.8-5-2.9-5.9-1.6-8.6c2-3.9,1.7-3.9,8.2,0c14.6,8.9,26.4,14.8,40.5,20.3c37.5,14.6,76.9,18.1,116,10.2c57-11.6,108.7-45,143.8-93.1C356.4,95.1,371.5,57,377.9,15c0.1-1,0.5-1.7,0.8-1.7c1.4,0,17.5,6.5,18.7,7.6c0.1,0.1-1,1.4-2.3,2.9c-6.4,7.4-11,17.3-13.6,29c-0.7,3.3-0.9,5.2-0.9,11.2c0,6.7,0.1,7.6,1.4,13.9c2.3,11.2,3,16,3.3,23.2c0.4,11.3-1.1,20.6-5.1,32.7c-7.8,23.5-22.2,46.1-41,64.3l-5.6,5.5C333.6,203.7,290,247.9,216.5,259.2z"/><rect x="-100" y="-450" width="700" height="470" fill="#000"/></g></mask></defs><g class="bc-cols"><g fill="#EAB81E"><rect x="84.1" y="307.4" width="270.1" height="14" rx="2"/><polygon points="155.4,293.3 155.4,222.4 120.8,222.4 120.8,293.3 111.1,293.3 111.1,307.4 165.1,307.4 165.1,293.3"/><polygon points="236.5,293.3 236.5,222.4 201.9,222.4 201.9,293.3 192.2,293.3 192.2,307.4 246.2,307.4 246.2,293.3"/><polygon points="317.5,293.3 317.5,215.2 282.9,215.2 282.9,293.3 273.2,293.3 273.2,307.4 327.2,307.4 327.2,293.3"/></g></g><g mask="url(#bcMask)"><path class="bc-ped" fill="#EAB81E" d="M219.2,222.4H102.1c-7.4,0-9.6-10-3-13.1l122.8-58.7c2-0.9,4.2-0.9,6.2,0.1l113.5,58.7c6.4,3.3,4.1,13-3.2,13 H219.2z"/></g><g class="bc-fall"><path fill="#FBD228" d="M137.3,224.2c-7.1-0.4-12.3-1-21-2.4C88.4,217.4,61,206.9,34,190.5c-2.7-1.7-5.3-2.9-6.1-3.1l-1.5-0.2l2.7-4.7c4.8-8.3,4.5-7.9,6.6-7.9c1,0,2.5,0.2,3.4,0.4c3.5,0.8,13,1.9,22.8,2.7c12.8,1,20.4,1.7,31,2.9c34.2,3.9,52.9,3.6,78.8-1.4c37-7.2,74.4-24.9,103-48.7c5.9-4.9,16.4-15.3,22-21.5c2.4-2.8,7.9-9.4,12.2-14.7c12-14.9,16.9-19.6,28-27.1c11.9-8,16.6-13,21.2-22.1c4.2-8.5,6.5-19,6.5-30.7c0-4.2-0.4-3.9,4.9-3.2c2.8,0.4,10.1,2.1,10.5,2.4c0.1,0.1,0,1-0.3,2.1c-0.2,1-0.8,4.4-1.4,7.5c-4.5,25.4-12.5,50.2-23.3,72c-25.5,51.5-72.7,94-127.6,114.7C197.8,221.1,168.3,225.8,137.3,224.2L137.3,224.2z"/><path fill="#EAB81E" d="M216.5,259.2c-73.2,11.1-112.4-1.5-115.5-2.5c-13.8-4.4-28.3-12-40.2-20.9c-13.5-10.1-25.5-24-33.7-38.9c-2.8-5-2.9-5.9-1.6-8.6c2-3.9,1.7-3.9,8.2,0c14.6,8.9,26.4,14.8,40.5,20.3c37.5,14.6,76.9,18.1,116,10.2c57-11.6,108.7-45,143.8-93.1C356.4,95.1,371.5,57,377.9,15c0.1-1,0.5-1.7,0.8-1.7c1.4,0,17.5,6.5,18.7,7.6c0.1,0.1-1,1.4-2.3,2.9c-6.4,7.4-11,17.3-13.6,29c-0.7,3.3-0.9,5.2-0.9,11.2c0,6.7,0.1,7.6,1.4,13.9c2.3,11.2,3,16,3.3,23.2c0.4,11.3-1.1,20.6-5.1,32.7c-7.8,23.5-22.2,46.1-41,64.3l-5.6,5.5C333.6,203.7,290,247.9,216.5,259.2z"/></g><rect class="bc-chip" style="--x:-120px;--y:-95px;--r:-160deg" x="212" y="189" width="22" height="17.6" rx="2" fill="#EAB81E"/><rect class="bc-chip" style="--x:-60px;--y:-130px;--r:200deg" x="214" y="191" width="18" height="14.4" rx="2" fill="#FBD228"/><rect class="bc-chip" style="--x:10px;--y:-150px;--r:-240deg" x="213" y="190" width="20" height="16" rx="2" fill="#D69E12"/><rect class="bc-chip" style="--x:70px;--y:-120px;--r:280deg" x="211" y="188" width="24" height="19.200000000000003" rx="2" fill="#EAB81E"/><rect class="bc-chip" style="--x:130px;--y:-85px;--r:-320deg" x="214" y="191" width="18" height="14.4" rx="2" fill="#C49010"/><rect class="bc-chip" style="--x:-20px;--y:-105px;--r:360deg" x="216" y="193" width="14" height="11.200000000000001" rx="2" fill="#FBD228"/><rect class="bc-chip" style="--x:100px;--y:-140px;--r:-400deg" x="215.5" y="192.5" width="15" height="12" rx="2" fill="#D69E12"/></svg></span>
-                  <div><h3>Bancanca</h3><p class="tag">Wissen, wohin Ihr Geld geht.</p></div>
+                  <div><h3>Bancanca</h3><p class="tag">Wissen, wohin Ihr Geld fließt.</p></div>
                 </div>
                 <div class="a-body">
                   <div>
-                    <p>Bancanca hilft Ihnen, Ihre Ausgaben zu analysieren und zu sehen, wohin Ihr Geld geht.</p>
+                    <p>Bancanca hilft Ihnen, Ihre Ausgaben zu analysieren und zu sehen, wohin Ihr Geld fließt.</p>
                     <p>Außerdem gibt es einen interaktiven Lernbereich, der persönliche Finanzen erklärt: Investieren, Immobilien, ETFs und Aktien, Zinseszins und mehr.</p>
                     <p>Es gibt keine Konten und keine Server; Ihre Daten bleiben auf Ihrem Gerät, und Sicherungen sind verschlüsselt. Es ist ein Lernwerkzeug, keine Finanzberatung.</p>
                     <div class="chips"><a class="chip" href="/apps/bancanca/privacy/">Datenschutzerklärung ansehen</a></div>
                   </div>
                   <ul class="feats">
-                    <li>Ein Kassenbuch für mehrere Personen, Konten und Währungen</li>
+                    <li>Ein Haushaltsbuch für mehrere Personen, Konten und Währungen</li>
                     <li>Import und Abgleich von Kontoauszügen</li>
                     <li>Ausgabenanalyse, Budgets und wiederkehrende Zahlungen</li>
-                    <li>Investment- und Immobilienprognosen, inflationsbereinigt</li>
+                    <li>Prognosen für Geldanlagen und Immobilien, inflationsbereinigt</li>
                     <li>Übersichts- und Steuerberichte</li>
                     <li>PIN-Sperre und Dunkelmodus</li>
                   </ul>
                 </div>
-                <div class="thumbs phones" data-dark data-imgs="app-bancanca-1|Das Kassenbuch, mit Beispieldaten;app-bancanca-2|Wohin das Geld geht: der Cashflow;app-bancanca-3|Eine ETF-Prognose über zwanzig Jahre;app-bancanca-4|Lernen: was die Inflation mit ungenutztem Bargeld macht"></div>
+                <div class="thumbs phones" data-dark data-imgs="app-bancanca-1|Das Haushaltsbuch, mit Beispieldaten;app-bancanca-2|Wohin das Geld fließt: der Cashflow;app-bancanca-3|Eine ETF-Prognose über zwanzig Jahre;app-bancanca-4|Lernen: was die Inflation mit nicht angelegtem Geld macht"></div>
               </article>
 
               <article class="slide app" style="--acc:#f59e0b">
                 <div class="a-head">
-                  <span class="logo gd-tile"><svg class="gd-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Giraffe-Diary-Logo: eine Giraffe, die in einem offenen Buch liest"><defs><linearGradient id="gdLogo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset=".45" stop-color="#fbbf24"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs><g stroke="var(--logo-ink,var(--ink,#232323))" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"><path d="M5 31.5c9.5-3.2 18.5-3.2 27 1V57c-8.5-4-17.5-4-27-1z" fill="var(--page,#fff)"/><path d="M59 31.5c-9.5-3.2-18.5-3.2-27 1V57c8.5-4 17.5-4 27-1z" fill="var(--page,#fff)"/></g><g fill="none" stroke="var(--logo-ink,var(--ink,#232323))" stroke-width="1.9" stroke-linecap="round" opacity=".5"><path d="M9.5 38c3.8-1.1 8-1.1 12 .3M9.5 43.5c3.8-1.1 8-1.1 12 .3M9.5 49c3.8-1.1 7-1.1 9.5.2M54.5 38c-3.8-1.1-8-1.1-12 .3M54.5 43.5c-3.8-1.1-8-1.1-12 .3M54.5 49c-3.8-1.1-7-1.1-9.5.2"/></g><g stroke="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"><path d="M27.2 24 25.4 54.5c2.4.5 4.6 1.3 6.6 2.6 2-1.3 4.2-2.1 6.6-2.6L36.8 24" fill="url(#gdLogo)"/></g><g fill="#b45309" opacity=".85"><path d="M30.2 31.5c1.4-.6 3.2-.4 3.8.6.5 1-.4 2.3-1.9 2.6-1.5.3-2.8-.4-2.9-1.4-.1-.7.3-1.4 1-1.8z"/><path d="M28.6 39.5c1-.5 2.2-.2 2.5.7.3.9-.3 1.9-1.3 2.1-1 .2-1.9-.4-1.9-1.3 0-.6.2-1.2.7-1.5z"/><path d="M33.6 42.6c1.2-.5 2.6-.2 3 .8.3 1-.4 2-1.6 2.3-1.2.2-2.2-.4-2.3-1.3 0-.8.3-1.5.9-1.8z"/><path d="M29.8 49.2c1.2-.4 2.6 0 2.9 1 .3.9-.5 1.9-1.7 2.1-1.2.2-2.2-.5-2.2-1.4 0-.7.4-1.4 1-1.7z"/></g><g class="gir-head"><g stroke="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"><path d="M28.6 9.6 27.4 4.2M35.4 9.6l1.2-5.4" fill="none"/><path d="M25.6 15.4c-3.2-1.4-6.3-.7-7.3 1 2 1.8 4.9 2 7.5.9M38.4 15.4c3.2-1.4 6.3-.7 7.3 1-2 1.8-4.9 2-7.5.9" fill="url(#gdLogo)"/><path d="M32 8.2c-5.4 0-8 4.4-7.4 9.6.4 3.7 2 7.4 3.3 9.4.9 1.4 2.3 2 4.1 2s3.2-.6 4.1-2c1.3-2 2.9-5.7 3.3-9.4.6-5.2-2-9.6-7.4-9.6z" fill="url(#gdLogo)"/></g><circle cx="27.2" cy="3.6" r="1.7" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="36.8" cy="3.6" r="1.7" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="29" cy="16.4" r="1.35" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="35" cy="16.4" r="1.35" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="30.4" cy="25.2" r=".8" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="33.6" cy="25.2" r=".8" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><g fill="#b45309" opacity=".85"><circle cx="32" cy="12.4" r="1.1"/><circle cx="27.2" cy="21" r=".8"/><circle cx="36.8" cy="21" r=".8"/></g></g></svg></span>
-                  <div><h3>Giraffe Diary</h3><p class="tag">Aufschreiben und loslassen.</p></div>
+                  <span class="logo gd-tile"><svg class="gd-logo anim-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Logo von Giraffe Diary: eine Giraffe, die in einem offenen Buch liest"><defs><linearGradient id="gdLogo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset=".45" stop-color="#fbbf24"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs><g stroke="var(--logo-ink,var(--ink,#232323))" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"><path d="M5 31.5c9.5-3.2 18.5-3.2 27 1V57c-8.5-4-17.5-4-27-1z" fill="var(--page,#fff)"/><path d="M59 31.5c-9.5-3.2-18.5-3.2-27 1V57c8.5-4 17.5-4 27-1z" fill="var(--page,#fff)"/></g><g fill="none" stroke="var(--logo-ink,var(--ink,#232323))" stroke-width="1.9" stroke-linecap="round" opacity=".5"><path d="M9.5 38c3.8-1.1 8-1.1 12 .3M9.5 43.5c3.8-1.1 8-1.1 12 .3M9.5 49c3.8-1.1 7-1.1 9.5.2M54.5 38c-3.8-1.1-8-1.1-12 .3M54.5 43.5c-3.8-1.1-8-1.1-12 .3M54.5 49c-3.8-1.1-7-1.1-9.5.2"/></g><g stroke="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"><path d="M27.2 24 25.4 54.5c2.4.5 4.6 1.3 6.6 2.6 2-1.3 4.2-2.1 6.6-2.6L36.8 24" fill="url(#gdLogo)"/></g><g fill="#b45309" opacity=".85"><path d="M30.2 31.5c1.4-.6 3.2-.4 3.8.6.5 1-.4 2.3-1.9 2.6-1.5.3-2.8-.4-2.9-1.4-.1-.7.3-1.4 1-1.8z"/><path d="M28.6 39.5c1-.5 2.2-.2 2.5.7.3.9-.3 1.9-1.3 2.1-1 .2-1.9-.4-1.9-1.3 0-.6.2-1.2.7-1.5z"/><path d="M33.6 42.6c1.2-.5 2.6-.2 3 .8.3 1-.4 2-1.6 2.3-1.2.2-2.2-.4-2.3-1.3 0-.8.3-1.5.9-1.8z"/><path d="M29.8 49.2c1.2-.4 2.6 0 2.9 1 .3.9-.5 1.9-1.7 2.1-1.2.2-2.2-.5-2.2-1.4 0-.7.4-1.4 1-1.7z"/></g><g class="gir-head"><g stroke="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"><path d="M28.6 9.6 27.4 4.2M35.4 9.6l1.2-5.4" fill="none"/><path d="M25.6 15.4c-3.2-1.4-6.3-.7-7.3 1 2 1.8 4.9 2 7.5.9M38.4 15.4c3.2-1.4 6.3-.7 7.3 1-2 1.8-4.9 2-7.5.9" fill="url(#gdLogo)"/><path d="M32 8.2c-5.4 0-8 4.4-7.4 9.6.4 3.7 2 7.4 3.3 9.4.9 1.4 2.3 2 4.1 2s3.2-.6 4.1-2c1.3-2 2.9-5.7 3.3-9.4.6-5.2-2-9.6-7.4-9.6z" fill="url(#gdLogo)"/></g><circle cx="27.2" cy="3.6" r="1.7" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="36.8" cy="3.6" r="1.7" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="29" cy="16.4" r="1.35" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="35" cy="16.4" r="1.35" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="30.4" cy="25.2" r=".8" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><circle cx="33.6" cy="25.2" r=".8" fill="var(--gir-ink,var(--logo-ink,var(--ink,#232323)))"/><g fill="#b45309" opacity=".85"><circle cx="32" cy="12.4" r="1.1"/><circle cx="27.2" cy="21" r=".8"/><circle cx="36.8" cy="21" r=".8"/></g></g></svg></span>
+                  <div><h3>Giraffe Diary</h3><p class="tag">Aufschreiben und weglegen.</p></div>
                 </div>
                 <div class="a-body">
                   <div>
-                    <p>Giraffe Diary ist ein ruhiges, privates Tagebuch. Schreiben Sie ein paar Zeilen, fügen Sie ein Foto, einen Ort oder eine Sprachnotiz hinzu und legen Sie das Telefon weg: Der Tag ist gespeichert.</p>
-                    <p>Ihr Tagebuch ist immer verschlüsselt und bleibt Ihres. Es gibt keine Konten und keine Server; es liegt auf Ihrem Gerät, auf Wunsch mit einer Kopie in Ihrem eigenen iCloud Drive oder Google Drive.</p>
+                    <p>Giraffe Diary ist ein ruhiges, privates Tagebuch. Schreiben Sie auf, was heute zählte, und legen Sie dann das Smartphone weg. Der Tag ist gespeichert.</p>
+                    <p>Ihr Tagebuch ist immer verschlüsselt und gehört nur Ihnen. Es gibt keine Konten und keine Server; es liegt auf Ihrem Gerät, auf Wunsch mit einer Kopie in Ihrem eigenen iCloud Drive oder Google Drive.</p>
                     <p>Es läuft auf dem iPhone, auf Android und im Browser, auf Englisch, Französisch, Deutsch und Spanisch.</p>
                     <div class="chips"><a class="chip" href="/apps/giraffe-diary/privacy/">Datenschutzerklärung ansehen</a></div>
                   </div>
@@ -1796,20 +1951,20 @@ destined to guide.</script></section>
               <article class="slide app" style="--acc:#e8775a">
                 <div class="a-head">
                   <span class="logo"><svg class="p-logo plug-logo anim-logo" data-player="plug" xmlns="http://www.w3.org/2000/svg" viewBox="25 47 160 195" role="img" aria-label="Logo von PLUG Interactive"><g class="plug-ext"><polygon fill="#cba62d" stroke="#cba62d" stroke-width=".6" stroke-linejoin="round" points="29,139 80,128 100,132 30,141"><animate attributeName="points" to="29,139 80,128 54.5,133.5 29,139" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#329e88" stroke="#329e88" stroke-width=".6" stroke-linejoin="round" points="80,128 88,112 100,132"><animate attributeName="points" to="80,128 88,112 84,120" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#32b0e4" stroke="#32b0e4" stroke-width=".6" stroke-linejoin="round" points="88,112 115,100 121,132 100,132"><animate attributeName="points" to="88,112 115,100 115,100 88,112" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#3888ce" stroke="#3888ce" stroke-width=".6" stroke-linejoin="round" points="115,100 160,100 163,132 121,132"><animate attributeName="points" to="115,100 160,100 160,100 115,100" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#313d7c" stroke="#313d7c" stroke-width=".6" stroke-linejoin="round" points="160,100 180,122 181,141 163,132"><animate attributeName="points" to="160,100 180,122 180,122 160,100" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#f57029" stroke="#f57029" stroke-width=".6" stroke-linejoin="round" points="31,143 80,146 92,158 100,132 30,141"><animate attributeName="points" to="31,143 80,146 92,158 80,146 31,143" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#ef343a" stroke="#ef343a" stroke-width=".6" stroke-linejoin="round" points="92,158 100,162 100,132"><animate attributeName="points" to="92,158 100,162 96,160" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#cc3277" stroke="#cc3277" stroke-width=".6" stroke-linejoin="round" points="100,162 120,166 117,132 100,132"><animate attributeName="points" to="100,162 120,166 120,166 100,162" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#a23579" stroke="#a23579" stroke-width=".6" stroke-linejoin="round" points="120,166 162,166 163,132 117,132"><animate attributeName="points" to="120,166 162,166 162,166 120,166" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon><polygon fill="#343373" stroke="#343373" stroke-width=".6" stroke-linejoin="round" points="162,166 181,148 181,141 163,132"><animate attributeName="points" to="162,166 181,148 181,148 162,166" dur="2.6s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .25 1"/></polygon></g><g><polygon fill="#cba62d" stroke="#cba62d" stroke-width=".6" stroke-linejoin="round" points="29,139 31,109 80,128"/><polygon fill="#6fa440" stroke="#6fa440" stroke-width=".6" stroke-linejoin="round" points="31,109 56,68 80,128"/><polygon fill="#329e88" stroke="#329e88" stroke-width=".6" stroke-linejoin="round" points="56,68 100,51 88,112 80,128"/><polygon fill="#32b0e4" stroke="#32b0e4" stroke-width=".6" stroke-linejoin="round" points="100,51 115,100 88,112"/><polygon fill="#3888ce" stroke="#3888ce" stroke-width=".6" stroke-linejoin="round" points="100,51 155,58 160,100 115,100"/><polygon fill="#3161a7" stroke="#3161a7" stroke-width=".6" stroke-linejoin="round" points="155,58 176,84 160,100"/><polygon fill="#313d7c" stroke="#313d7c" stroke-width=".6" stroke-linejoin="round" points="176,84 180,122 160,100"/></g><g><polygon fill="#f57029" stroke="#f57029" stroke-width=".6" stroke-linejoin="round" points="31,143 80,146 92,158 52,192"/><polygon fill="#ef343a" stroke="#ef343a" stroke-width=".6" stroke-linejoin="round" points="52,192 92,158 100,162 100,220"/><polygon fill="#cc3277" stroke="#cc3277" stroke-width=".6" stroke-linejoin="round" points="100,162 120,166 130,238 100,220"/><polygon fill="#a23579" stroke="#a23579" stroke-width=".6" stroke-linejoin="round" points="120,166 162,166 158,228 130,238"/><polygon fill="#343373" stroke="#343373" stroke-width=".6" stroke-linejoin="round" points="162,166 181,148 170,190 158,228"/></g></svg></span>
-                  <div><h3>RealStage</h3><p class="tag">Immobilien in virtueller Realität, von PLUG Interactive.</p></div>
+                  <div><h3>RealStage</h3><p class="tag">Immobilien in Virtual Reality, von PLUG Interactive.</p></div>
                 </div>
                 <div class="a-body">
                   <p>RealStage war eine Virtual-Reality-App für die Immobilienvermarktung, entwickelt bei PLUG Interactive von 2016 bis 2018. Mit ihr konnten Projektentwickler ihre Projekte präsentieren, bevor sie gebaut waren: Käufer konnten durch das Viertel fahren, Wohnungen nach Größe, Preis und Ausrichtung finden, die gewählte Wohnung am Gebäude aufleuchten sehen, ihren Grundriss öffnen und durch die möblierte Wohnung gehen, am Bildschirm oder in einer VR-Brille.</p>
                   <ul class="feats">
-                    <li>Durch ein Projekt fahren und gehen, bevor es gebaut ist</li>
+                    <li>Ein Projekt befahren und begehen, bevor es gebaut ist</li>
                     <li>Wohnungen nach Zimmern, Fläche, Preis und Ausrichtung filtern</li>
                     <li>Die gewählte Wohnung am Gebäude hervorgehoben</li>
                     <li>Grundrisse und Wohnungsdetails</li>
-                    <li>Möblierte Innenräume, in virtueller Realität</li>
+                    <li>Möblierte Innenräume in Virtual Reality</li>
                   </ul>
                 </div>
                 <div class="thumbs" data-imgs="rs-street|Fahrt durch das Viertel;rs-filter|Eine Wohnung finden, am Gebäude hervorgehoben;rs-plans|Grundrisse und Wohnungsdetails;rs-kitchen|In der Wohnung: Küche und Essbereich;rs-living|In der Wohnung: Wohnzimmer"></div>
-                <div class="chips"><a class="chip" href="https://www.youtube.com/watch?v=9KXrOeaFHTE" target="_blank" rel="noopener">Die Demo ansehen</a></div>
+                <div class="chips"><a class="chip" href="https://www.youtube.com/watch?v=9KXrOeaFHTE" target="_blank" rel="noopener">Demo ansehen</a></div>
               </article>
 
             </div></div>
@@ -1820,13 +1975,15 @@ destined to guide.</script></section>
 
     </div>
   </div>
-  <footer>© 2026 Ramy Maher</footer>
+  <!-- a project with something to try: one button, moved into the open card's row of arrows (assets/app.js) -->
+<button class="try" id="try" type="button" aria-label="Interaktiv" title="Interaktiv" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 9.5V4a2 2 0 0 0-4 0v10M14 10a2 2 0 0 1 4 0v1M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L6 15"/><path d="M10 9.5V9a2 2 0 0 1 4 0v1"><animate attributeName="d" dur="1.8s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;.3;.7;1" keySplines=".4 0 .2 1;0 0 1 1;.4 0 .2 1" values="M10 9.5V9a2 2 0 0 1 4 0v1;M10 9.5V3a2 2 0 0 1 4 0v7;M10 9.5V3a2 2 0 0 1 4 0v7;M10 9.5V9a2 2 0 0 1 4 0v1"/></path></svg></button>
+<footer>© 2026 Ramy Maher</footer>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=6d6f12a776"></script>
-<script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the last line":"Klicken für die letzte Zeile","Tap for the last line":"Tippen für die letzte Zeile","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich vom Kanal aktualisiert; letzte Aktualisierung {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","6th of October City":"Stadt des 6. Oktober","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra":"Andorra","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Cyprus":"Zypern","Dessau":"Dessau","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Famagusta":"Famagusta","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florenz","Florida":"Florida","Fort Lauderdale":"Fort Lauderdale","France":"Frankreich","Galway":"Galway","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss Falls":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Island","Keflavík International Airport":"Flughafen Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Marrakesh":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Fuji","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Siwa Oasis":"Oase Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","The Getty Villa":"Getty Villa","Thingvellir National Park":"Nationalpark Þingvellir","Tokyo":"Tokio","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zürich"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
-<script src="/assets/app.js?v=33af058e9c"></script>
+<script src="/assets/data/places.js?v=48477aed2f"></script>
+<script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the last line":"Klicken für die letzte Zeile","Tap for the last line":"Tippen für die letzte Zeile","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich aus dem Kanal übernommen; Stand: {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","Go to playlist":"Zur Playlist","Watch a video":"Ein Video ansehen","The map could not be loaded. Please reload the page.":"Die Karte konnte nicht geladen werden. Bitte laden Sie die Seite neu.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","6th of October City":"Stadt des 6. Oktober","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra":"Andorra","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Cyprus":"Zypern","Dessau":"Dessau","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Famagusta":"Famagusta","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florenz","Florida":"Florida","Fort Lauderdale":"Fort Lauderdale","France":"Frankreich","Galway":"Galway","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss Falls":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Island","Keflavík International Airport":"Flughafen Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Malibu":"Malibu","Marrakesh":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Fuji","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Siwa Oasis":"Oase Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Thingvellir National Park":"Nationalpark Þingvellir","Tokyo":"Tokio","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zürich"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
+<script src="/assets/app.js?v=36b48fd937"></script>
 </body>
 </html>

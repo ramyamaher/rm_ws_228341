@@ -75,8 +75,23 @@ function go(id, { push = true } = {}) {
     t.classList.toggle('on', on);
     t.setAttribute('aria-selected', on);
   });
+  placePill(!changed);
+  // Writing: the card comes in first, then turns to paper, crumpled differently each time
+  const writing = $('#writing');
+  if (writing && id === 'writing') {
+    writing.style.setProperty('--paper', paperImage()); writing.classList.add('paper');
+    writing.classList.remove('enter'); void writing.offsetWidth; writing.classList.add('enter');
+  }
+  // Archive: its title, then its map drawn from the bottom up, every time it is opened
+  const archive = $('#archive');
+  if (archive && id === 'archive') {
+    archive.classList.remove('enter', 'drawn'); void archive.offsetWidth; archive.classList.add('enter');
+    const map = $('.map', archive), done = () => archive.classList.add('drawn');
+    if (reduced) done();
+    else map.addEventListener('animationend', function f(e) { if (e.animationName === 'mapUp') { map.removeEventListener('animationend', f); done(); } });
+  }
   panels[i].querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
-  if (entered) setTimeout(() => flashNext(panels[i]), reduced ? 0 : 450);
+
   if (changed) countView(id);
   fitHeight();
   if (push && location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
@@ -252,9 +267,13 @@ function shuinSeal(imgs, t, s) {
   const f = shd > .01 ? `drop-shadow(0 ${(shd * 24 * s).toFixed(2)}px ${((4 + shd * 14) * s).toFixed(2)}px rgba(0,0,0,${(.3 * shd * op).toFixed(3)}))` : 'none';
   imgs.forEach((img) => { img.style.transition = 'none'; img.style.opacity = op.toFixed(3); img.style.transform = tf; img.style.filter = f; });
 }
+// how long a logo takes to run back to its start in the About strip: a short one at its own speed, a longer one in
+// 1.6 s, a long one at twice its speed
+const backTime = (ms) => Math.max(ms / 2, Math.min(ms, 1600));
 const PLAYERS = {
   shuin: {
-    play(el, still) {
+    // rewind: from the seal back through the splash to its start, then forward (the About strip)
+    play(el, still, rewind = false) {
       if (still) return;
       const run = ++el._run || (el._run = 1);
       shuinGlobe = shuinGlobe || fetch('/assets/img/logos/shuin-globe.json').then((r) => r.json()).then(shuinScene);
@@ -279,9 +298,10 @@ const PLAYERS = {
           imgs.forEach((img) => { img.style.transition = img.style.opacity = img.style.transform = img.style.filter = ''; });
         };
         el._end = end;
+        const T = SH.T_PRESS + .15;
         const frame = (now) => {
-          const t = (now - t0) / 1000;
-          if (t >= SH.T_PRESS + .15) return end();
+          const R = backTime(T * 1000) / 1000, e = (now - t0) / 1000, t = !rewind ? e : e < R ? T - e * T / R : e - R;
+          if ((!rewind || e >= R) && t >= T) return end();
           shuinDraw(ctx, px / SH.BOX, S, t, SHUIN_COL[document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light']);
           shuinSeal(imgs, t, size / SH.BOX);
           el._raf = requestAnimationFrame(frame);
@@ -290,13 +310,13 @@ const PLAYERS = {
       }).catch(() => {});
     },
     reset(el) { el._run = (el._run || 0) + 1; if (el._end) el._end(); },
+    loop(el) { this.reset(el); this.play(el, false, true); },
   },
   // Building 8: a grid of sensor cells over the trails; each wakes at its own moment and flickers the way a motion
   // sensor's readings jump, then settles at the strength of its area, a few spots of strong movement fading into
   // each other
   b8: {
-    play(el, still) {
-      if (still) return;
+    cells(el) {
       const g = el.querySelector('mask g'), N = 30, S = 300 / N;
       if (!g._cells) {
         g._cells = [];
@@ -308,9 +328,14 @@ const PLAYERS = {
           g.append(r); g._cells.push([r, (i + .5) * S, (j + .5) * S]);
         }
       }
+      return g._cells;
+    },
+    play(el, still) {
+      if (still) return;
+      const cells = this.cells(el);
       const spots = Array.from({ length: 4 }, () => ({ x: 30 + Math.random() * 240, y: 30 + Math.random() * 240, s: 55 + Math.random() * 60, w: .6 + Math.random() * .4 }));
       const field = (x, y) => Math.min(1, spots.reduce((v, p) => v + p.w * Math.exp(-((x - p.x) ** 2 + (y - p.y) ** 2) / (2 * p.s * p.s)), 0));
-      g._cells.forEach(([r, x, y]) => {
+      cells.forEach(([r, x, y]) => {
         const end = .22 + .78 * field(x, y), t0 = Math.random() * 900, total = 1500 + Math.random() * 700;
         const a = Math.random() * .9, b = Math.random() * .3, c = .2 + Math.random() * .8;
         r.animate([{ opacity: 0 }, { opacity: 0, offset: t0 / total }, { opacity: a, offset: (t0 + 120) / total }, { opacity: b, offset: (t0 + 260) / total },
@@ -318,7 +343,17 @@ const PLAYERS = {
         { duration: total, easing: 'steps(18, end)', fill: 'both' });
       });
     },
-    reset(el) { (el.querySelector('mask g')._cells || []).forEach(([r]) => r.getAnimations().forEach((x) => x.cancel())); },
+    reset(el) { clearTimeout(el._t); (el.querySelector('mask g')._cells || []).forEach(([r]) => r.getAnimations().forEach((x) => x.cancel())); },
+    // the About strip: the cells flicker out from where they stand, then the sensor reads the trails again
+    loop(el) {
+      clearTimeout(el._t);
+      this.cells(el).forEach(([r]) => {
+        const now = +getComputedStyle(r).opacity;
+        r.getAnimations().forEach((x) => x.cancel());
+        r.animate([{ opacity: now }, { opacity: 0 }], { duration: 400 + Math.random() * 400, delay: Math.random() * 500, easing: 'steps(8, end)', fill: 'both' });
+      });
+      el._t = setTimeout(() => { this.reset(el); this.play(el, false); }, 1000);
+    },
   },
   // the spiral staircase: lines of the model seen from the side; the climbing wall's top edge comes down step by step
   // from parallel to all the way open, as if the Opening slider were pulled, and settles back to about 60 % open
@@ -340,6 +375,23 @@ const PLAYERS = {
       }).catch(() => {});
     },
     reset(el) { el._run = (el._run || 0) + 1; clearTimeout(el._t); },
+    // the About strip: the wall closes from where it rests, step by step, then opens as on the page
+    loop(el) {
+      this.reset(el);
+      const run = el._run;
+      ssFrames = ssFrames || fetch('/assets/img/logos/staircase-frames.json').then((r) => r.json());
+      ssFrames.then((F) => {
+        if (run !== el._run) return;
+        const wall = el.querySelector('.ss-wall'), edge = el.querySelector('.ss-edge');
+        let k = Math.round((F.length - 1) * .55);
+        const back = () => {
+          if (run !== el._run) return;
+          wall.setAttribute('d', F[k].wall); edge.setAttribute('d', F[k].edge);
+          if (k-- > 0) el._t = setTimeout(back, 1100 / (F.length - 1)); else this.play(el, false);
+        };
+        back();
+      }).catch(() => {});
+    },
   },
   // Revitesse: the sheet of paper folds into the logo, drawn frame by frame
   rv: {
@@ -351,17 +403,40 @@ const PLAYERS = {
       draw(0); el._raf = requestAnimationFrame(frame);
     },
     reset(el) { cancelAnimationFrame(el._raf); },
+    // the About strip: the logo unfolds back into the sheet, then folds as on the page
+    loop(el) {
+      const draw = el._draw || (el._draw = rvBuild(el));
+      cancelAnimationFrame(el._raf);
+      const B = backTime(4400), t0 = performance.now(), frame = (now) => { const ms = now - t0; draw(ms < B ? 4400 - ms * 4400 / B : ms - B); if (ms < B + 4400) el._raf = requestAnimationFrame(frame); };
+      el._raf = requestAnimationFrame(frame);
+    },
   },
   // RealStage: SMIL morphs, begun after a pause; removing a frozen morph puts its field back across
   plug: {
     play(el, still) {
-      const run = () => el.querySelectorAll('animate').forEach(a => a.beginElement());
+      const run = () => { el._done = true; el.querySelectorAll('animate').forEach(a => a.beginElement()); };
       if (still) { run(); el.querySelectorAll('animate').forEach(a => a.endElement()); return; }
       el._t = setTimeout(run, 900);
     },
     reset(el) {
       clearTimeout(el._t);
+      el._done = false;
       el.querySelectorAll('animate').forEach(a => a.replaceWith(a.cloneNode()));
+    },
+    // the About strip: once the fields have slid back, each morph runs in reverse before they slide back again
+    loop(el) {
+      clearTimeout(el._t);
+      if (!el._done) { this.reset(el); this.play(el, false); return; }
+      const back = [...el.querySelectorAll('animate')].map((a) => {
+        const b = a.cloneNode();
+        b.setAttribute('from', a.getAttribute('to')); b.setAttribute('to', a.parentNode.getAttribute('points')); b.setAttribute('dur', backTime(2600) + 'ms');
+        a.parentNode.append(b); return b;
+      });
+      back.forEach((b) => b.beginElement());
+      el._t = setTimeout(() => {
+        back.forEach((b) => b.remove()); this.reset(el);
+        el._done = true; el.querySelectorAll('animate').forEach((a) => a.beginElement());
+      }, backTime(2600));
     },
   },
 };
@@ -390,15 +465,118 @@ function playLogos(root, dir = -1, landing = false) {
     svg.classList.add('play');
   });
 }
-// Draw the eye to the next project when a tab holds more than one.
-function flashNext(panel) {
-  const card = panel.querySelector('.wrap > .glass.card');
-  const dots = card && card.querySelector(':scope > .dots');
-  const btn = card && card.querySelector(':scope > .card-head .arrow:last-child');
-  if (!btn || !dots || dots.children.length < 2 || btn.disabled) return;
-  btn.classList.remove('rainbow'); void btn.offsetWidth; btn.classList.add('rainbow');
-}
 tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.tab)));
+// The bar of categories keeps one width whichever is open: each word is measured in bold, as it reads when open, and
+// keeps that room (--bw); on a phone the open pill is as wide as the widest word (--lw)
+function sizeTabs() {
+  const ws = tabs.map((t) => {
+    const l = t.querySelector('.lbl'), c = l.cloneNode(true);
+    c.style.cssText = 'position:absolute; visibility:hidden; max-width:none; min-width:0; width:auto; font-weight:750';
+    t.append(c); const w = Math.ceil(c.getBoundingClientRect().width); c.remove();
+    l.style.setProperty('--bw', w + 'px');
+    return w;
+  });
+  $('.tabs').style.setProperty('--lw', Math.max(...ws) + 'px');
+}
+// the pill under the open tab: it moves to the tab that opens and takes its size
+const pill = document.createElement('span'); pill.className = 'tab-ind still'; pill.setAttribute('aria-hidden', 'true');
+$('.tabs').prepend(pill);
+function placePill(still) {
+  const t = tabs.find((x) => x.classList.contains('on')); if (!t) return;
+  pill.classList.toggle('still', !!still);
+  pill.style.width = t.offsetWidth + 'px'; pill.style.height = t.offsetHeight + 'px';
+  pill.style.transform = `translate(${t.offsetLeft}px, ${t.offsetTop}px)`;
+}
+addEventListener('resize', () => placePill(true));
+// a sheet of paper that was crumpled and smoothed out again: soft wrinkles, a few facets a shade lighter or darker, and a
+// fine grain; other wrinkles on every visit
+function paperImage() {
+  const R = Math.random, f = (v) => v.toFixed(1);
+  let facets = '';
+  for (let k = 0; k < 7; k++) {
+    const pts = Array.from({ length: 4 }, () => `${f(R() * 1100 - 50)},${f(R() * 1100 - 50)}`).join(' ');
+    facets += `<polygon points='${pts}' fill='${R() < .5 ? '#fff' : '#000'}' fill-opacity='${(.008 + R() * .012).toFixed(3)}'/>`;
+  }
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 1000 1000' preserveAspectRatio='none'>`
+    + `<filter id='u' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.004' numOctaves='2' seed='${Math.floor(R() * 1e4)}'/>`
+    + `<feDiffuseLighting lighting-color='#fff' surfaceScale='3.2'><feDistantLight azimuth='225' elevation='46'/></feDiffuseLighting></filter>`
+    + `<filter id='g' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='1' seed='${Math.floor(R() * 1e4)}'/>`
+    + `<feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 -2.2 1.35'/></filter>`
+    + `<rect width='100%' height='100%' filter='url(#u)' opacity='.27'/>${facets}`
+    + `<rect width='100%' height='100%' filter='url(#g)' opacity='.08'/></svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+sizeTabs();
+if (document.fonts) document.fonts.ready.then(() => { sizeTabs(); placePill(true); });
+
+// A project with something to try says so with one round button, beside the arrows of the open card, while such a
+// project is open. It scrolls the card (or on a phone, the page) down to the model, the story, the simulation or the
+// limericks. Each time such a project comes into view the button wears the rainbow and the hand makes a peace sign, and
+// again every six seconds, until the visitor has been down there; each new visit to the project starts it again
+(() => {
+  const btn = $('#try'); if (!btn) return;
+  const all = $$('.slide').map((slide) => ({ slide, target: slide.querySelector('.b8-build, .vb-box, .ss-live, .limericks'), vis: 0, done: false, there: false })).filter((p) => p.target);
+  let cur = null, timer = 0, moved = false;
+  const hand = btn.querySelector('animate');
+  // the visitor's own scrolling (the wheel, a finger, the keys), not the page's
+  for (const ev of ['wheel', 'touchmove']) addEventListener(ev, () => { moved = true; }, { passive: true, capture: true });
+  addEventListener('keydown', (e) => { if (/^(Arrow(Up|Down)|Page(Up|Down)| |Home|End)$/.test(e.key)) moved = true; }, true);
+  // the hand moves (a nudge, and the middle finger rises into a peace sign) while the rainbow goes round
+  let after = 0;
+  const ring = () => {
+    clearTimeout(after); btn.classList.remove('rainbow', 'wave'); void btn.offsetWidth; btn.classList.add('wave');
+    try { hand.beginElement(); } catch (_) {}
+    btn.classList.add('rainbow');   // at the same time as the hand
+  };
+  const cycle = () => { clearTimeout(timer); if (!cur || cur.done || reduced) return; if (entered) ring(); timer = setTimeout(cycle, 6000); };
+  // into the row of arrows of the card the project is in, before the arrows
+  const place = () => {
+    const nav = cur && cur.slide.closest('.glass.card').querySelector(':scope > .card-head .nav');
+    if (nav && btn.parentElement !== nav) nav.prepend(btn);
+  };
+  const update = () => {
+    // the open project: the one of them most of whose width is on screen (a neighbour peeking in beside it does not count)
+    const next = all.reduce((a, p) => (p.vis > .5 && (!a || p.vis > a.vis) ? p : a), null);
+    if (next === cur) return;
+    cur = next; clearTimeout(timer); clearTimeout(after); btn.classList.remove('rainbow', 'wave');
+    if (cur) cur.done = false;   // a new visit: the light, the hand and the rainbow again
+    moved = false;
+    btn.classList.toggle('used', !!(cur && cur.done));   // its faint glow stops once it has been used
+    btn.hidden = !cur;
+    // placed again once a tab or the page has finished moving in
+    if (cur) { place(); timer = setTimeout(cycle, 900); }
+  };
+  // Where each such project stands, measured from the screen itself (an IntersectionObserver misses slides inside the
+  // sliding strips on narrow screens): how much of its width is on screen, and whether its interactive part is in view
+  const measure = () => {
+    for (const p of all) {
+      const hidden = p.slide.closest('[aria-hidden="true"]'), r = p.slide.getBoundingClientRect();
+      const across = r.width ? Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0)) / r.width : 0;
+      p.vis = !hidden && r.bottom > 0 && r.top < innerHeight ? across : 0;
+      const t = p.target.getBoundingClientRect(), up = Math.max(0, Math.min(t.bottom, innerHeight) - Math.max(t.top, 0));
+      p.there = p.vis > .5 && t.height > 0 && up >= Math.min(t.height, innerHeight) * .6;
+      if (p.there && p === cur && !p.done && moved) { p.done = true; clearTimeout(timer); clearTimeout(after); btn.classList.remove('rainbow', 'wave'); btn.classList.add('used'); }
+    }
+    update();
+  };
+  setInterval(measure, 400);
+  addEventListener('scroll', measure, { passive: true, capture: true });
+  addEventListener('click', () => setTimeout(measure, 650), true);
+  btn.addEventListener('click', () => {
+    if (!cur) return;
+    const { slide, target } = cur;
+    cur.done = true; clearTimeout(timer); clearTimeout(after); btn.classList.remove('rainbow', 'wave'); btn.classList.add('used');
+    // the nearest box that scrolls up and down: the card's slide on a computer, the page on a phone
+    let box = slide;
+    while (box && !(/(auto|scroll)/.test(getComputedStyle(box).overflowY) && box.scrollHeight > box.clientHeight)) box = box.parentElement;
+    const behavior = reduced ? 'auto' : 'smooth';
+    if (box && box !== document.body && box !== document.documentElement) {
+      box.scrollTo({ top: box.scrollTop + target.getBoundingClientRect().top - box.getBoundingClientRect().top - 12, behavior });
+    } else {
+      scrollTo({ top: scrollY + target.getBoundingClientRect().top - $('header').offsetHeight - 12, behavior });
+    }
+  });
+})();
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); go(a.dataset.go); }));
 addEventListener('hashchange', () => go(location.hash.slice(1), { push: false }));
 
@@ -445,6 +623,7 @@ function sliderHint(input, stops, { every = 5000, thumb = 24 } = {}) {
 }
 sliderHint($('#cityRange'), [10]);          // 1 % to 10 % and back
 sliderHint($('#b8Range'), [3, 10]);         // 6 to 3 to 10 and back to 6 of 40 layers
+sliderHint($('#ngRange'), [1]);             // the museum: step 1 to 2 and back
 
 /* ================= project images and the viewer ================= */
 // Each .thumbs lists its images as "file|caption;file|caption". Thumbnails load small;
@@ -523,8 +702,8 @@ let entered = false;
 {
   const h = new Date().getHours();
   const hello = t(h >= 5 && h < 12 ? 'Good morning.' : h >= 12 && h < 18 ? 'Good afternoon.' : 'Good evening.');
-  // First "Hello.", which fades away; then the greeting for the visitor's time of day, then
-  // the name, the welcome and the hint. A click at any moment still enters.
+  // One screen: the greeting for the visitor's time of day, word by word, then the name and the welcome under it.
+  // A click at any moment still enters.
   const el = $('#greetHello');
   const words = (t) => t.split(' ').map((w, k) => `<span style="animation-delay:${.15 + k * .22}s">${w}</span>`).join(' ');
   // The greeting appears at its own slow pace; once all of it is there (and the page has loaded), it moves on.
@@ -533,12 +712,7 @@ let entered = false;
     el.classList.remove('out'); el.innerHTML = words(hello); greet.classList.add('p2');
     Promise.all([loaded, new Promise(r => setTimeout(r, reduced ? 0 : 1700))]).then(() => setTimeout(enter, 150));
   };
-  if (reduced) second();
-  else {
-    el.innerHTML = words(t('Hello.'));
-    setTimeout(() => el.classList.add('out'), 1250);
-    setTimeout(second, 1950);
-  }
+  second();
 }
 function enter() {
   if (entered) return;
@@ -557,6 +731,248 @@ try {
   }
 } catch (_) {}
 
+/* ================= the pointer ================= */
+// On a computer with a mouse, a soft round dot follows the pointer, as on an iPad: it grows a little over what can be
+// clicked and shrinks while pressed. In text fields the usual text cursor comes back; on touch screens nothing changes
+if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
+  const dot = document.createElement('div'); dot.className = 'dot-cursor'; dot.setAttribute('aria-hidden', 'true'); document.body.append(dot);
+  let tx = -100, ty = -100, raf = 0;
+  const move = () => { raf = 0; dot.style.setProperty('--x', tx + 'px'); dot.style.setProperty('--y', ty + 'px'); };
+  addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    document.documentElement.classList.add('has-dot'); dot.classList.remove('gone');
+    tx = e.clientX; ty = e.clientY; if (!raf) raf = requestAnimationFrame(move);
+    const el = e.target.closest ? e.target : null;
+    dot.classList.toggle('text', !!(el && el.closest('input, textarea, [contenteditable]')));
+    dot.classList.toggle('over', !!(el && el.closest('a, button, [role="button"], [role="tab"], label, select, .thumb, .dex-item, input[type="range"]')));
+  }, { passive: true });
+  addEventListener('pointerdown', () => dot.classList.add('down'));
+  addEventListener('pointerup', () => dot.classList.remove('down'));
+  document.addEventListener('mouseleave', () => dot.classList.add('gone'));
+}
+
+/* ================= Building 8: the mouse is sensed ================= */
+// While the Building 8 project is open, the mouse is watched the way the project watched the people in the hall: it
+// draws one continuous path, faint and in the project's red, which fades away gradually over about two and a half seconds.
+// Over the animation of the motion and the 3D model of the bar it leaves nothing: those show the motion themselves
+if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
+  const slide = ($('#desTrack .b8-logo') || {}).closest?.('.slide');
+  if (slide) {
+    const cv = document.createElement('canvas'); cv.className = 'sense-trail'; cv.setAttribute('aria-hidden', 'true'); document.body.append(cv);
+    const ctx = cv.getContext('2d'), W = 18, LIFE = 2600, pts = [];   // as wide as the pointer's dot
+    let raf = 0, open = false, checked = 0, brk = false;
+    const size = () => { const k = devicePixelRatio || 1; cv.width = innerWidth * k; cv.height = innerHeight * k; ctx.setTransform(k, 0, 0, k, 0, 0); };
+    size(); addEventListener('resize', size);
+    // the project counts as open when most of it is across the screen and its tab is showing
+    const isOpen = () => {
+      const r = slide.getBoundingClientRect(), across = r.width ? Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0)) / r.width : 0;
+      return !slide.closest('[aria-hidden="true"]') && across > .5 && r.bottom > 0 && r.top < innerHeight;
+    };
+    // The path is one single stroke, with round joins and round ends, so it is the same strength everywhere (a stroke
+    // never doubles where it crosses itself) and has no seams that could flicker. It goes away gradually: its tail
+    // shortens as the oldest of it reaches its age, and once the mouse stops, the whole of it fades out smoothly
+    let last = 0;
+    const draw = (now) => {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      while (pts.length && now - pts[0][2] > LIFE) pts.shift();
+      if (pts.length) {
+        const red = document.documentElement.dataset.theme === 'dark' ? '255,70,60' : '227,18,11';
+        const still = Math.min(1, Math.max(0, (now - last) / LIFE)), k = 1 - still * still * (3 - 2 * still);
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = W;
+        ctx.strokeStyle = `rgba(${red},${(.09 * k).toFixed(3)})`;
+        ctx.beginPath();
+        pts.forEach((p, i) => { if (i === 0 || p[3] || p[2] - pts[i - 1][2] > 300) { ctx.moveTo(p[0], p[1]); ctx.lineTo(p[0] + .01, p[1]); } else ctx.lineTo(p[0], p[1]); });
+        ctx.stroke();
+      }
+      raf = pts.length ? requestAnimationFrame(draw) : 0;
+    };
+    addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const now = performance.now();
+      if (now - checked > 250) { open = isOpen(); checked = now; }
+      if (!open) return;
+      // over the animation of the motion or the 3D model the path stops, and starts afresh beyond it
+      if (e.target.closest && e.target.closest('.b8-stage, .b8-flip, .b8-build')) { brk = true; return; }
+      pts.push([e.clientX, e.clientY, now, brk]); brk = false; last = now;
+      if (!raf) raf = requestAnimationFrame(draw);
+    }, { passive: true });
+  }
+}
+
+/* ================= Writing: ink ================= */
+// A mouse that rests on the paper for three seconds leaves an ink stain under it, each one of its own shape, spreading
+// slowly; when the mouse moves away, the stain fades away over three seconds
+if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
+  const card = $('#writing .glass.card');
+  if (card) {
+    let timer = 0, stain = null, ox = 0, oy = 0;
+    const blob = () => {
+      // a rough round outline: a ring of points at random distances, joined by smooth curves
+      const n = 11, pts = Array.from({ length: n }, (_, i) => { const a = i / n * Math.PI * 2, r = 34 + Math.random() * 14; return [50 + r * Math.cos(a), 50 + r * Math.sin(a)]; });
+      let d = '';
+      for (let i = 0; i < n; i++) {
+        const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % n], mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+        d += (i ? 'Q' : `M${((pts[n - 1][0] + x0) / 2).toFixed(1)} ${((pts[n - 1][1] + y0) / 2).toFixed(1)}Q`) + `${x0.toFixed(1)} ${y0.toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)}`;
+      }
+      // a few drops thrown off round it
+      let drops = '';
+      for (let k = 0, m = 2 + Math.floor(Math.random() * 4); k < m; k++) {
+        const a = Math.random() * Math.PI * 2, r = 46 + Math.random() * 14;
+        drops += `<circle cx="${(50 + r * Math.cos(a)).toFixed(1)}" cy="${(50 + r * Math.sin(a)).toFixed(1)}" r="${(1.2 + Math.random() * 2.6).toFixed(1)}"/>`;
+      }
+      const id = 'ink' + Math.floor(Math.random() * 1e9);
+      return `<svg viewBox="0 0 100 100" aria-hidden="true"><filter id="${id}"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="${Math.floor(Math.random() * 999)}"/>`
+        + `<feDisplacementMap in="SourceGraphic" scale="7"/></filter><g filter="url(#${id})"><path d="${d}Z"/>${drops}</g></svg>`;
+    };
+    const fade = () => {
+      if (!stain) return;
+      const s0 = stain; stain = null;
+      s0.classList.add('gone');
+      s0.animate([{ opacity: getComputedStyle(s0).opacity }, { opacity: 0 }], { duration: 3000, easing: 'ease-in-out', fill: 'forwards' }).finished.then(() => s0.remove(), () => s0.remove());
+    };
+    let rest = false;
+    card.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      // a hand on a mouse is never quite still: within a few pixels of where it stopped, it is resting
+      if (rest && Math.hypot(e.clientX - ox, e.clientY - oy) <= 5) return;
+      fade();
+      clearTimeout(timer);
+      ox = e.clientX; oy = e.clientY; rest = true;
+      timer = setTimeout(() => {
+        if (stain) return;
+        const r = card.getBoundingClientRect(), size = 70 + Math.random() * 60;
+        stain = document.createElement('span'); stain.className = 'ink'; stain.innerHTML = blob();
+        stain.style.cssText = `left:${ox - r.left - size / 2}px; top:${oy - r.top - size / 2}px; width:${size}px; height:${size}px; --rot:${Math.floor(Math.random() * 360)}deg`;
+        card.append(stain);
+      }, 3000);
+    });
+    card.addEventListener('pointerleave', () => { clearTimeout(timer); rest = false; fade(); });
+  }
+}
+
+/* ================= the Museum of the 20th Century: open brickwork ================= */
+// Behind the museum's text lies a faint brick bond in grey, like its façade. Around the mouse the bond is laid again
+// as a perforated wall: each brick narrows in its place, so that open joints appear between the bricks,
+// and as the courses are offset by half a brick, the openings form a chequer. They stay open while the mouse stays.
+// When it moves on, the bricks it has left grow back, and halfway through, the bricks at its new place begin to narrow
+if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
+  const slide = ($('#archTrack .m20-logo') || {}).closest?.('.slide');
+  if (slide) {
+    const cv = document.createElement('canvas'); cv.className = 'bricks'; cv.setAttribute('aria-hidden', 'true');
+    slide.classList.add('has-bricks'); slide.prepend(cv);
+    const ctx = cv.getContext('2d'), BW = 26, BH = 9, GAP = 2.5, STEP = BW + GAP, HALF = STEP / 2, HEAD = HALF + 4;   // narrowed, a brick still rests 4px on each of the two below it
+    const RX = 90, RY = 55, OPEN = 260, CLOSE = 420;
+    const open = new Map();   // brick -> how open it is, 0 to 1
+    let raf = 0, w = 0, h = 0, last = 0, mouse = null;
+    const size = () => {
+      const k = devicePixelRatio || 1; w = slide.clientWidth; h = slide.scrollHeight;
+      cv.style.width = w + 'px'; cv.style.height = h + 'px'; cv.width = w * k; cv.height = h * k; ctx.setTransform(k, 0, 0, k, 0, 0); paint();
+    };
+    const key = (r, c) => r * 1000 + c, rc = (k) => { const r = Math.floor((k + 500) / 1000); return [r, k - r * 1000]; };
+    // how open the wall wants to be at a brick: fully under the mouse, less towards the edge of an oval round it
+    const want = (r, c) => {
+      if (!mouse) return 0;
+      const off = r % 2 ? HALF : 0, cx = c * STEP - off + BW / 2, cy = r * (BH + GAP) + BH / 2;
+      const d = Math.hypot((cx - mouse[0]) / RX, (cy - mouse[1]) / RY);
+      return d >= 1 ? 0 : Math.min(1, 1.35 * (1 - d * d));
+    };
+    const paint = () => {
+      ctx.clearRect(0, 0, w, h);
+      const ink = document.documentElement.dataset.theme === 'dark' ? '232,232,238' : '40,40,46';
+      const face = `rgba(${ink},.045)`;
+      for (let r = 0, y = 0; y < h; r++, y += BH + GAP) {
+        const off = r % 2 ? HALF : 0;
+        for (let c = 0, x = -off; x < w; c++, x += STEP) {
+          const f = open.get(key(r, c)) || 0;
+          if (!f) { ctx.fillStyle = face; ctx.fillRect(x, y, BW, BH); continue; }
+          // the brick narrowed, centred in its place; never so narrow that it would no longer sit on the course below
+          const e = f * f * (3 - 2 * f), fw = BW - (BW - HEAD) * e;
+          ctx.fillStyle = face; ctx.fillRect(x + (BW - fw) / 2, y, fw, BH);
+        }
+      }
+    };
+    // each frame: bricks the mouse has left grow back; once they are half closed, the bricks round the mouse narrow
+    const tick = (now) => {
+      const dt = last ? Math.min(64, now - last) : 16; last = now;
+      let busy = false, leaving = false;
+      if (mouse) {
+        const r0 = Math.max(0, Math.floor((mouse[1] - RY) / (BH + GAP))), r1 = Math.ceil((mouse[1] + RY) / (BH + GAP));
+        for (let r = r0; r <= r1; r++) {
+          const off = r % 2 ? HALF : 0;
+          for (let c = Math.max(0, Math.floor((mouse[0] - RX + off) / STEP) - 1); c <= Math.ceil((mouse[0] + RX + off) / STEP); c++)
+            if (want(r, c) > 0 && !open.has(key(r, c))) open.set(key(r, c), 0);
+        }
+      }
+      for (const [k, v] of open) {
+        const t = want(...rc(k));
+        if (t < v) {
+          const n = Math.max(t, v - dt / CLOSE); busy = true;
+          if (n > .5 && t < .02) leaving = true;
+          if (n <= 0) open.delete(k); else open.set(k, n);
+        }
+      }
+      for (const [k, v] of open) {
+        const t = want(...rc(k));
+        if (t > v) { busy = true; if (!leaving) open.set(k, Math.min(t, v + dt / OPEN)); }
+        else if (t === 0 && v === 0) open.delete(k);
+      }
+      paint();
+      raf = busy ? requestAnimationFrame(tick) : 0;
+      if (!raf) last = 0;
+    };
+    const wake = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    new ResizeObserver(size).observe(slide); [...slide.children].forEach((c) => c !== cv && new ResizeObserver(size).observe(c));
+    slide.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const b = slide.getBoundingClientRect();
+      mouse = [e.clientX - b.left, e.clientY - b.top + slide.scrollTop]; wake();
+    });
+    slide.addEventListener('pointerleave', () => { mouse = null; wake(); });
+    new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+}
+
+/* ================= Wandering Wayfarer: footsteps ================= */
+// While the Archive is open, the mouse walks: it leaves footprints, left and right in turn, pointing the way it goes,
+// which fade over a few seconds. Over the map itself it leaves none
+if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
+  const panel = $('#archive');
+  if (panel) {
+    const cv = document.createElement('canvas'); cv.className = 'sense-trail'; cv.setAttribute('aria-hidden', 'true'); document.body.append(cv);
+    const ctx = cv.getContext('2d'), STRIDE = 30, SIDE = 7, LIFE = 2600, steps = [];
+    let raf = 0, lx = null, ly = null, left = true;
+    const size = () => { const k = devicePixelRatio || 1; cv.width = innerWidth * k; cv.height = innerHeight * k; ctx.setTransform(k, 0, 0, k, 0, 0); };
+    size(); addEventListener('resize', size);
+    // one footprint: a sole and a heel, turned the way of walking
+    const foot = (x, y, a, alpha, ink) => {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(a + Math.PI / 2); ctx.fillStyle = `rgba(${ink},${alpha.toFixed(3)})`;
+      ctx.beginPath(); ctx.ellipse(0, -3.2, 3.4, 5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(0, 5.2, 2.6, 2.8, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    };
+    const draw = (now) => {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      const ink = document.documentElement.dataset.theme === 'dark' ? '235,235,242' : '35,35,40';
+      while (steps.length && now - steps[0][3] > LIFE) steps.shift();
+      for (const [x, y, a, t] of steps) { const k = 1 - (now - t) / LIFE; foot(x, y, a, .22 * k * k, ink); }
+      raf = steps.length ? requestAnimationFrame(draw) : 0;
+    };
+    addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      if (panel.getAttribute('aria-hidden') !== 'false' || (e.target.closest && e.target.closest('.map'))) { lx = null; return; }
+      const x = e.clientX, y = e.clientY;
+      if (lx === null) { lx = x; ly = y; return; }
+      const d = Math.hypot(x - lx, y - ly);
+      if (d < STRIDE) return;
+      // a step, to the left or the right of the way the mouse went
+      const a = Math.atan2(y - ly, x - lx), s = left ? -1 : 1;
+      steps.push([x + Math.cos(a + Math.PI / 2) * SIDE * s, y + Math.sin(a + Math.PI / 2) * SIDE * s, a, performance.now()]);
+      left = !left; lx = x; ly = y;
+      if (!raf) raf = requestAnimationFrame(draw);
+    }, { passive: true });
+  }
+}
+
 /* ================= light and dark ================= */
 // The OS decides until the visitor presses the button; that choice is then remembered.
 const darkOS = matchMedia('(prefers-color-scheme: dark)');
@@ -573,6 +989,13 @@ $('#themeBtn').addEventListener('click', () => {
   try { localStorage.setItem('theme', t); } catch (_) {}
 });
 darkOS.addEventListener('change', e => { if (!['light', 'dark'].includes(savedTheme())) applyTheme(e.matches ? 'dark' : 'light'); });
+// whatever sets the theme (the button, the system, the browser), the screenshots that have a dark copy follow it
+{
+  let was = document.documentElement.dataset.theme;
+  new MutationObserver(() => { const now = document.documentElement.dataset.theme; if (now !== was) { was = now; applyTheme(now); } })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  applyTheme(document.documentElement.dataset.theme || 'light');
+}
 
 /* ================= contact, privacy and cookies: one popover open at a time ================= */
 const pops = [[$('#contactBtn'), $('#contactPop')], [$('#cookieBtn'), $('#privacyPop')], [$('#langBtn'), $('#langPop')]];
@@ -582,7 +1005,7 @@ $$('#langPop a').forEach(a => a.addEventListener('click', () => {
   try { sessionStorage.setItem('langSwitch', '1'); } catch (_) {}
 }));
 // Each menu drops from under its own button: right-aligned to the button where there is room,
-// kept 12px inside the screen otherwise, with the notch pointing at the button's centre.
+// kept 12px inside the screen otherwise, opening from the button's centre.
 function placePop(b, p) {
   const r = b.getBoundingClientRect(), w = p.offsetWidth, vw = document.documentElement.clientWidth;
   let left = Math.min(r.right + 6, vw - 12) - w;
@@ -814,10 +1237,12 @@ const wheelOnly = (() => {
   return (box) => box.addEventListener('wheel', (e) => { if (owner !== box) e.stopPropagation(); }, { capture: true });
 })();
 
+const framed = matchMedia('(min-width: 901px)');   // the width from which the cards fill the screen (as in the CSS)
 // On a computer a project card scrolls inside itself and the page around it does not; a wheel turned on the card's
 // margins, beside a model, or on the page around the card scrolls the card's project too, instead of doing nothing
 addEventListener('wheel', (e) => {
   if (e.ctrlKey || !document.documentElement.classList.contains('fit-tab') || !e.target.closest) return;
+  if (!framed.matches) return;   // narrower, the page itself scrolls
   const panel = e.target.closest('.panel.fit'); if (!panel) return;
   if (e.target.closest('.slide, .card-scroll, .map, .b8-3d, iframe, .pop')) return;   // those scroll, or zoom, on their own
   const card = panel.querySelector('.wrap > .glass.card'); if (!card) return;
@@ -1439,7 +1864,7 @@ $$('.ng-build').forEach(fig => {
     }
     function kick() { if (!raf) raf = requestAnimationFrame(tick); }
     function set(s) {
-      step = s; range.value = s; out.value = out.textContent = STEPS[s] || s + ' / 4'; cap.textContent = CAPS[s] || '';
+      step = s; range.value = s; out.value = `${s + 1} / ${STEPS.length || 5}`; ($('.ng-name', out.parentElement) || {}).textContent = STEPS[s] || ''; out.textContent = out.value; cap.textContent = CAPS[s] || '';
       aim.rise = s >= 1 ? 1 : 0; aim.open = s >= 2 ? 1 : 0; aim.ew = s >= 3 ? 1 : 0; aim.ns = s >= 4 ? 1 : 0; kick();
     }
     range.addEventListener('input', () => { stop(); set(+range.value); });
@@ -1540,7 +1965,46 @@ scene.add(new THREE.Points(bGeo, grainMat));
       roll.add(new THREE.Mesh(g, roverMat));
     }
     const loc = new THREE.Vector3(200, 220, 0), vel = new THREE.Vector3(), dest = new THREE.Vector3(200, 220, 0);
+    // Like a gecko, the rover holds its ground: it never passes through what has been built. What is under its middle it
+    // climbs onto; what only touches its edge pushes it aside, so it rolls off rather than hanging on by one point.
+    // lift is how high its wheel stands on the built form
+    const BALL = 95;
+    let lift = 0;
+    const push = new THREE.Vector3();
+    // the top of the built form in one column of the volume (0 where nothing is built)
+    function columnTop(x, y) {
+      const i = Math.round(x / 1000 * RES), k = Math.round(y / 1000 * RES);
+      if (i < 1 || k < 1 || i > RES - 2 || k > RES - 2) return 0;
+      for (let j = RES - 2; j >= 1; j--) if (F[k * S2 + j * RES + i] >= .5) return (j + .5) / RES * HV;
+      return 0;
+    }
+    // where the ball's centre must be to rest on the form: the form's top under its middle (and close round it) plus the
+    // height of the ball's curve there; the form under its outer edge does not lift it but pushes it away, into push
+    function restLift(x, y) {
+      push.set(0, 0, 0);
+      if (!nB) return 0;
+      const need = (h, r) => h - (BALL - Math.sqrt(BALL * BALL - r * r));   // how high the centre must be for that point
+      let top = columnTop(x, y);
+      for (let a = 0; a < 8; a++) {
+        const c = Math.cos(a * Math.PI / 4), sn = Math.sin(a * Math.PI / 4);
+        const hi = columnTop(x + 30 * c, y + 30 * sn); if (hi > 0) top = Math.max(top, need(hi, 30));
+        const ho = columnTop(x + 72 * c, y + 72 * sn), over = need(ho, 72) - lift;
+        if (ho > 0 && over > 0) { push.x -= c * over; push.y -= sn * over; }
+      }
+      push.multiplyScalar(.02).clampLength(0, 1.6);
+      return Math.max(0, top);
+    }
     const laser = new THREE.Vector3(560, 520, 0);
+    // the six pads of the rolling robot (on its model's axes, 86 out from its centre): the laser leaves from the one that
+    // faces the point it builds at, wherever the rolling has turned it
+    const PADS = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]].map((d) => new THREE.Vector3(...d)), PAD = 86;
+    const toL = new THREE.Vector3(), padW = new THREE.Vector3(), padBest = new THREE.Vector3();
+    function padToward(target) {
+      toL.copy(target).sub(rover.position).normalize();
+      let best = -2;
+      for (const d of PADS) { padW.copy(d).applyQuaternion(roll.quaternion); const k = padW.dot(toL); if (k > best) { best = k; padBest.copy(padW); } }
+      return padBest.multiplyScalar(PAD).add(rover.position);
+    }
     const beamGeo = new THREE.BufferGeometry(); beamGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
     const beam = new THREE.Line(beamGeo, new THREE.LineBasicMaterial({ color: '#ff3b30' })); scene.add(beam);
     const dot = new THREE.Mesh(new THREE.SphereGeometry(4, 12, 8), new THREE.MeshBasicMaterial({ color: '#ff3b30' })); scene.add(dot);
@@ -1574,13 +2038,20 @@ scene.add(new THREE.Points(bGeo, grainMat));
       frame++;
       // the rover heads for its destination: it speeds up with the distance, at most 3 a frame, and rolls while it moves
       // on a computer the keys drive it straight, relative to the view
+      // some momentum: the speed it wants is reached, and lost, over a second or so, so it rolls on a little before it rests
       const kd = keyDir();
-      if (kd) { loc.x = Math.max(0, Math.min(1000, loc.x + kd[0] * 3)); loc.y = Math.max(0, Math.min(1000, loc.y + kd[1] * 3)); dest.copy(loc); vel.set(kd[0] * 3, kd[1] * 3, 0); roll.rotateOnWorldAxis(new THREE.Vector3(kd[1], 0, -kd[0]).normalize(), 3 / 95); }
-      const dif = dest.clone().sub(loc), dist = dif.length();
-      if (kd) {}
-      else if (dist > 2) { vel.add(dif.normalize().multiplyScalar(dist / 100)); vel.clampLength(0, 3); loc.add(vel); const ax = new THREE.Vector3(vel.y, 0, -vel.x).normalize(); if (ax.lengthSq()) roll.rotateOnWorldAxis(new THREE.Vector3(ax.x, 0, ax.z), vel.length() / 95); }
-      else vel.set(0, 0, 0);
-      rover.position.set(...P(loc.x, loc.y, 95));
+      const dif = dest.clone().sub(loc), dist = dif.length(), want = new THREE.Vector3();
+      if (kd) { want.set(kd[0] * 3, kd[1] * 3, 0); dest.copy(loc); }
+      else if (dist > 2) want.copy(dif).normalize().multiplyScalar(Math.min(3, dist / 12));
+      vel.lerp(want, .08); if (vel.lengthSq() < .0004) vel.set(0, 0, 0);
+      loc.x = Math.max(0, Math.min(1000, loc.x + vel.x)); loc.y = Math.max(0, Math.min(1000, loc.y + vel.y));
+      // it climbs onto the built form at its own pace and comes down the same way; it is never inside it
+      const rest = restLift(loc.x, loc.y);
+      vel.add(push);
+      lift = rest > lift ? Math.min(rest, lift + 4) : Math.max(rest, lift - 4);
+      // the wheel turns exactly as far as it rolls
+      if (vel.lengthSq()) roll.rotateOnWorldAxis(new THREE.Vector3(vel.y, 0, -vel.x).normalize(), vel.length() / BALL);
+      rover.position.set(...P(loc.x, loc.y, BALL + lift));
       // left alone for five seconds, the rover stops building
       if (build && !demo && performance.now() - lastAim > 5000) setBuild(false);
       if (build) {
@@ -1602,7 +2073,7 @@ scene.add(new THREE.Points(bGeo, grainMat));
         // spray: from the top of the rover in an arc that comes down on the laser point
         for (let n = 0; n < 3; n++) {
           const k = sHead; sHead = (sHead + 1) % MAXS;
-          const o = [loc.x + rnd(-25, 25), loc.y + rnd(-25, 25), 160 + rnd(0, 15)], t = [laser.x + rnd(-14, 14), laser.y + rnd(-14, 14), laser.z], T = FLY + rnd(-8, 8);
+          const o = [loc.x + rnd(-25, 25), loc.y + rnd(-25, 25), 160 + lift + rnd(0, 15)], t = [laser.x + rnd(-14, 14), laser.y + rnd(-14, 14), laser.z], T = FLY + rnd(-8, 8);
           sp.set(P(...o), k * 3); sv.set([(t[0] - o[0]) / T, (t[1] - o[1]) / T, (t[2] - o[2]) / T + .5 * G * T], k * 3); sAge[k] = Math.round(FLY - T);
         }
       }
@@ -1614,7 +2085,7 @@ scene.add(new THREE.Points(bGeo, grainMat));
       }
       sGeo.attributes.position.needsUpdate = true;
       // the laser beam from the rover to its point
-      const b = beamGeo.attributes.position.array; b.set(P(loc.x, loc.y, 90), 0); b.set(P(laser.x, laser.y, laser.z), 3); beamGeo.attributes.position.needsUpdate = true;
+      const b = beamGeo.attributes.position.array, at = padToward(new THREE.Vector3(...P(laser.x, laser.y, laser.z))); b.set([at.x, at.y, at.z], 0); b.set(P(laser.x, laser.y, laser.z), 3); beamGeo.attributes.position.needsUpdate = true;
       beam.visible = build; dot.position.set(...P(laser.x, laser.y, laser.z)); dot.visible = build || mode === 'aim';
       ring.position.set(...P(dest.x, dest.y, .5)); ring.visible = dist > 6;
       // the surface is recomputed every few frames while it grows
@@ -1662,7 +2133,7 @@ scene.add(new THREE.Points(bGeo, grainMat));
     }
     function clearAll() {
       layGround(); gGeo.attributes.position.needsUpdate = true; nB = 0; bGeo.setDrawRange(0, 0); sAge.fill(FLY);
-      F.fill(0); iso.update(); setBuild(false); laser.z = 0; arc = null;
+      F.fill(0); iso.update(); setBuild(false); laser.z = 0; arc = null; lift = 0;
     }
     demoBtn.addEventListener('click', () => { clearAll(); demo = true; dFrame = 0; setMode('demo'); });
     modeDrive.addEventListener('click', () => setMode('drive'));
@@ -2045,6 +2516,15 @@ CARS.apps = carousel({
 });
 
 /* ================= archive: the map ================= */
+// Take me somewhere: one of the places on the map at random, and its newest video
+{
+  const take = $('#takeMe'), places = ((window.WW || {}).places || []).filter((p) => p.v);
+  if (take && places.length) take.addEventListener('click', () => {
+    const p = places[Math.floor(Math.random() * places.length)];
+    window.open(`https://www.youtube.com/watch?v=${p.v}`, '_blank', 'noopener');
+  });
+  else if (take) take.hidden = true;
+}
 const W = window.WW;
 const byCountry = d3.group(W.places, p => p.country);
 $('#sPlaces').textContent = W.places.length;
@@ -2217,7 +2697,9 @@ function initMap() {
     svg.on('click', clear);
     $('#zIn').addEventListener('click', () => svg.transition().duration(350).call(zoom.scaleBy, 1.8));
     $('#zOut').addEventListener('click', () => svg.transition().duration(350).call(zoom.scaleBy, 1 / 1.8));
-  }).catch(() => { $('.loading', host).textContent = t('The map could not be loaded. Please reload the page.'); });
+    // the map is there: its drawing from the bottom up may begin (see go)
+    $('#archive').classList.add('ready');
+  }).catch(() => { $('.loading', host).textContent = t('The map could not be loaded. Please reload the page.'); $('#archive').classList.add('ready'); });
 }
 
 /* ================= first visits ================= */
@@ -2286,7 +2768,7 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   }
   { // the Archive: the Wandering Wayfarer channel's own logo on a tile, its words from the About page
     const tile = document.createElement('span'); tile.className = 'logo dex-archive';
-    tile.innerHTML = '<img src="/assets/img/logos/wandering-wayfarer.jpg" width="512" height="512" alt="" decoding="async">';
+    tile.innerHTML = '<img src="/assets/img/logos/wandering-wayfarer.png" width="512" height="512" alt="" decoding="async">';
     const note = $('.dex-words [data-for="archive"]', box), own = [...note.querySelectorAll('p')].map((p) => p.textContent.trim());
     const lead = (($('#archive .lead') || {}).textContent || '').trim();
     items.push({ tab: 'archive', k: -1, title: W('archive'), meta: W('archive-meta'), logo: tile, desc: own, texts: [...own, lead] });
@@ -2304,14 +2786,16 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   let touched = false, shown = -1, played = -1;   // once the visitor takes the strip, the words follow the tile in the middle
   const wrap = (d) => ((d % N) + N + N / 2) % N - N / 2;
   // the tiles keep their shape: the further from the middle, the smaller, nothing turned
+  let drawn = 0;
   function place() {
-    const g = GAP(), TILE = flow.clientWidth < 520 ? 56 : 64;
+    const g = GAP(), TILE = flow.clientWidth < 520 ? 56 : 64, MAX = TILE * 1.14;
+    // every tile is laid out once, at the size of the one in the middle, and only scaled down from there: a scale
+    // moves without laying the page out again, so the strip runs smoothly, and shrinking keeps every logo sharp
+    if (drawn !== MAX) { drawn = MAX; tiles.forEach((t) => t.style.setProperty('--sz', MAX.toFixed(1) + 'px')); }
     tiles.forEach((t, i) => {
       const d = wrap(i - pos), a = Math.abs(d);
       const x = d * g * (1 - Math.min(a, 4) * .07), s = 1.14 - Math.min(a, 3.5) * .15;
-      // each tile is drawn at its own size, not scaled as a picture, so every logo stays sharp; the far ones fade
-      t.style.setProperty('--sz', (TILE * s).toFixed(1) + 'px');
-      t.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px)`;
+      t.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(2)}px) scale(${(s / 1.14).toFixed(4)})`;
       t.style.opacity = a > 4.2 ? 0 : (1 - Math.max(0, a - 1.6) * .38).toFixed(2);
       t.style.zIndex = 100 - Math.round(a * 10);
       t.tabIndex = a < .5 ? 0 : -1;
@@ -2366,17 +2850,34 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
     info.innerHTML = `<h3>${esc(it.title)}</h3><button class="vb-pill dex-open" type="button">${esc(W('open'))}</button>${it.meta ? `<p class="meta">${esc(it.meta)}</p>` : ''}${it.desc.map((p) => `<p>${esc(p)}</p>`).join('')}`;
     $('.dex-open', info).addEventListener('click', () => open(it));
   }
-  // once the strip rests, the logo in the middle plays as it does on the project's page
+  // once the strip rests, the logo in the middle plays: from the finished logo it stands as, back to its start and
+  // forward again, so it never jumps
   function play(i) {
     played = i;
-    const logo = tiles[i].querySelector('.logo');
+    const tile = tiles[i], logo = tile.querySelector('.logo');
     logo.classList.remove('dex-still'); unsettle(logo);
     [...(logo.matches('.anim-logo') ? [logo] : []), ...logo.querySelectorAll('.anim-logo')].forEach((svg) => {
       svg.classList.remove('play');
       const player = PLAYERS[svg.dataset.player];
-      if (player) { player.reset(svg); player.play(svg, reduced); return; }
+      if (player) { if (player.loop && !reduced) player.loop(svg); else { player.reset(svg); player.play(svg, reduced); } return; }
       svg.style.setProperty('--dir', -1); void svg.getBoundingClientRect(); svg.classList.add('play');
+      if (!reduced) rewind(svg, tile);
     });
+  }
+  // a logo drawn by CSS: each of its animations is set to its end and runs backwards (see backTime), then forwards
+  // as on the project's page; the tile settles only once the loop is over
+  function rewind(svg, tile) {
+    const anims = svg.getAnimations({ subtree: true }).filter((a) => isFinite(a.effect.getComputedTiming().endTime));
+    if (!anims.length) return;
+    const run = tile._loop = (tile._loop || 0) + 1;
+    tile.dataset.loop = '';
+    const total = Math.max(...anims.map((a) => a.effect.getComputedTiming().endTime)), rate = total / backTime(total);
+    anims.forEach((a) => { a.pause(); a.currentTime = a.effect.getComputedTiming().endTime; a.playbackRate = -rate; a.play(); });
+    Promise.all(anims.map((a) => a.finished)).then(() => {
+      if (run !== tile._loop) return;
+      anims.forEach((a) => { a.playbackRate = 1; a.currentTime = 0; a.play(); });
+      return Promise.all(anims.map((a) => a.finished));
+    }).then(() => { if (run === tile._loop) { delete tile.dataset.loop; settle(tile); } }).catch(() => {});
   }
 
   // search: every project's words; the matches side by side, each with the sentences it was found in
@@ -2421,6 +2922,7 @@ const [startTab, startSlide] = (document.documentElement.dataset.start || '').sp
   // a finished animation can stay a picture drawn at the size it ran at, and turn blurry as its tile grows; once
   // done, its last frame is written onto the element and the animation let go, so the logo is drawn sharp at any size
   function settle(root) {
+    if (root.hasAttribute && root.hasAttribute('data-loop')) return;
     root.getAnimations({ subtree: true }).forEach((a) => {
       if (a.playState !== 'finished' || !a.effect || !a.effect.target) return;
       const el = a.effect.target;
