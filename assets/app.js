@@ -2618,6 +2618,9 @@ CARS.apps = carousel({
     return b;
   });
   card.before(devices);
+  // what each screen holds, in a line at its foot
+  pc.querySelector('.glass-in').append(el('span', 'dev-note', t('1 application, 1 plugin')));
+  ph.querySelector('.glass-in').append(el('span', 'dev-note', t('3 phone applications')));
 
   // One unit for both screens: 1px of the computer's screen when the computer is the chosen one, and 1px of the
   // phone's when the phone is, scaled so that a logo is the same size on both (and smaller on a small screen). The
@@ -2677,6 +2680,9 @@ CARS.apps = carousel({
   const place = () => {
     card.style.top = devices.offsetTop + 'px'; card.style.left = devices.offsetLeft + 'px'; card.style.width = devices.offsetWidth + 'px';
     card.style.height = framed() ? devices.offsetHeight + 'px' : 'auto';
+    // a card that was hidden has no height yet on a narrower screen: give its carousel the app's height now, so the
+    // card grows out of the icon at its full size
+    if (!framed()) { const car = card.querySelector('.car'), sl = track.children[index()]; if (car && sl) car.style.height = sl.offsetHeight + 'px'; }
   };
   const unplace = () => { for (const p of ['top', 'left', 'width', 'height']) card.style[p] = ''; };
   const clipFor = (k) => {
@@ -2688,6 +2694,17 @@ CARS.apps = carousel({
     devices.style.setProperty('--ox', (i.left + i.width / 2 - d.left) + 'px'); devices.style.setProperty('--oy', (i.top + i.height / 2 - d.top) + 'px');
   };
   const parts = () => [...card.children];
+  // One movement, played forwards to close and backwards to open, so the opening is exactly the closing in reverse:
+  // the card shrinks into the logo while its words fade, and the screens settle from a slight zoom on that logo
+  const T = { duration: 320, easing: 'cubic-bezier(.4,0,.2,1)' };
+  const FULL = 'inset(0px 0px 0px 0px round 10px)', ZOOM = [{ transform: 'scale(1.25)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+  const play = (k, dir, done) => {
+    origin(k); const icon = clipFor(k);
+    const a = card.animate([{ clipPath: FULL }, { clipPath: icon }], { ...T, direction: dir, fill: 'both' });
+    const rest = [...parts().map((p) => p.animate([{ opacity: 1 }, { opacity: 0, offset: .4 }, { opacity: 0 }], { duration: T.duration, direction: dir, fill: 'both' })),
+      devices.animate(ZOOM, { ...T, direction: dir, fill: 'both' })];
+    a.onfinish = () => { done(); [a, ...rest].forEach((x) => x.cancel()); busy = false; };
+  };
 
   function open(k, push = true) {
     if (isOpen || busy) return;
@@ -2697,16 +2714,11 @@ CARS.apps = carousel({
     if (push) history.pushState({ devApp: k }, '', location.href);
     if (reduced) { panel.classList.add('app-open'); return; }
     busy = true;
-    origin(k);
     panel.classList.add('app-moving'); place();
-    const from = clipFor(k);
-    devices.classList.add('zoomed');
-    const a = card.animate([{ clipPath: from }, { clipPath: 'inset(0px 0px 0px 0px round 10px)' }], { duration: 520, easing: 'cubic-bezier(.3,.7,.2,1)' });
-    parts().forEach((p) => p.animate([{ opacity: 0 }, { opacity: 0, offset: .35 }, { opacity: 1 }], { duration: 520 }));
-    a.onfinish = () => {
-      panel.classList.remove('app-moving'); panel.classList.add('app-open'); unplace(); busy = false;
+    play(k, 'reverse', () => {
+      panel.classList.remove('app-moving'); panel.classList.add('app-open'); unplace();
       if (!framed()) scrollTo({ top: card.getBoundingClientRect().top + scrollY - document.querySelector('header').offsetHeight - 14, behavior: 'instant' });
-    };
+    });
   }
 
   function close() {
@@ -2717,20 +2729,13 @@ CARS.apps = carousel({
     devices.classList.add('instant'); turn(deviceOf(k));
     if (reduced) { panel.classList.remove('app-open'); devices.classList.remove('instant'); return; }
     busy = true;
-    // the screens come back, zoomed in on the icon, and settle as the card shrinks into it
-    devices.style.transition = 'none'; devices.classList.add('zoomed');
     panel.classList.remove('app-open'); panel.classList.add('app-moving'); place();
-    origin(k); void devices.offsetWidth; devices.style.transition = ''; devices.classList.remove('instant');
-    requestAnimationFrame(() => devices.classList.remove('zoomed'));
-    const to = clipFor(k);
-    const a = card.animate([{ clipPath: 'inset(0px 0px 0px 0px round 10px)' }, { clipPath: to }], { duration: 460, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' });
-    const fades = parts().map((p) => p.animate([{ opacity: 1 }, { opacity: 0, offset: .45 }, { opacity: 0 }], { duration: 460, fill: 'forwards' }));
-    a.onfinish = () => {
+    devices.classList.remove('instant');
+    play(k, 'normal', () => {
       panel.classList.remove('app-moving'); unplace();
-      [a, ...fades].forEach((x) => x.cancel());
-      busy = false; icons[k].focus({ preventScroll: true });
+      icons[k].focus({ preventScroll: true });
       if (!framed()) { const r = icons[k].getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) scrollTo({ top: r.top + scrollY - innerHeight / 2, behavior: 'instant' }); }
-    };
+    });
   }
 
   // an app asked for from elsewhere (the About strip, or a project's own address) opens at once, without the growing
