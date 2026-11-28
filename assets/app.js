@@ -1116,7 +1116,7 @@ function typer(host, text, { speed = 30, lineGap = 240 } = {}) {
   const stop = text.lastIndexOf('\n');   // the four lines end here; the fifth waits for a click
   const hint = document.createElement('button');
   hint.type = 'button'; hint.className = 'reveal';
-  hint.textContent = t(matchMedia('(hover: none)').matches ? 'Tap for the last line' : 'Click for the last line');
+  hint.textContent = t(matchMedia('(hover: none)').matches ? 'Tap for the punchline' : 'Click for the punchline');
   const ghost = document.createElement('div'); ghost.className = 'ghost'; ghost.textContent = text;
   const out = document.createElement('div'); out.className = 'typed';
   const txt = document.createTextNode(''); const caret = document.createElement('span'); caret.className = 'caret';
@@ -2655,7 +2655,7 @@ function initMap() {
       return `<b>${regionName(name)}</b><span>${ps.map(p => placeName(p.name)).join(' · ')}</span><br><span>${plural(ps.length, 'place')}${LANG === 'ar' ? '، ' : ', '}${plural(vids, 'video')}</span>${playlistLink(name, '<br>')}`;
     }
     const playlistLink = (country, before = '') => (W.playlists || {})[country]
-      ? `${before}<a href="https://www.youtube.com/playlist?list=${W.playlists[country]}" target="_blank" rel="noopener">${t('Go to playlist')}</a>` : '';
+      ? `${before}<a href="https://www.youtube.com/playlist?list=${W.playlists[country]}" target="_blank" rel="noopener">${t('All the walks from here')}</a>` : '';
     const cityTip = p => `<b>${placeName(p.name)}</b><span>${regionName(p.country)} · ${plural(p.n, 'video')}</span><br>` +
       `<a href="https://www.youtube.com/watch?v=${p.v}" target="_blank" rel="noopener">${t('Watch a video')}</a>${playlistLink(p.country)}`;
     function show(html, at, pin) {
@@ -2699,7 +2699,7 @@ function initMap() {
     $('#zOut').addEventListener('click', () => svg.transition().duration(350).call(zoom.scaleBy, 1 / 1.8));
     // the map is there: its drawing from the bottom up may begin (see go)
     $('#archive').classList.add('ready');
-  }).catch(() => { $('.loading', host).textContent = t('The map could not be loaded. Please reload the page.'); $('#archive').classList.add('ready'); });
+  }).catch(() => { $('.loading', host).textContent = t('The map got lost on the way. Reload and it should find its way back.'); $('#archive').classList.add('ready'); });
 }
 
 /* ================= first visits ================= */

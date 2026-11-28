@@ -32,10 +32,10 @@ const PROJECTS = [
 
 // Strings app.js shows (passed through t() there), and the plural words it counts with.
 const JS = [
-  'Hello.', 'Good morning.', 'Good afternoon.', 'Good evening.', 'Click for the last line', 'Tap for the last line',
+  'Hello.', 'Good morning.', 'Good afternoon.', 'Good evening.', 'Click for the punchline', 'Tap for the punchline',
   'Open image: {c}', 'Image to come', 'The numbers are refreshed from the channel every day; last update {d}.',
-  'World map of {p} places documented in {c} countries', 'Not documented yet', 'Go to playlist', 'Watch a video',
-  'The map could not be loaded. Please reload the page.',
+  'World map of {p} places documented in {c} countries', 'Not documented yet', 'All the walks from here', 'Watch a video',
+  'The map got lost on the way. Reload and it should find its way back.',
   'England | UK', 'Scotland | UK', 'Wales | UK', 'Northern Ireland | UK', 'Gibraltar | UK',
 ];
 const PLURALS = ['place', 'video'];
