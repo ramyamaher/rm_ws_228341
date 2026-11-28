@@ -1111,7 +1111,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 /* ---------- Writing: the card comes in, then turns to paper, crumpled a little differently on every visit ---------- */
 #writing .glass.card{isolation:isolate}
 #writing .glass.card::before{content:""; position:absolute; inset:0; border-radius:inherit; z-index:-1; pointer-events:none;
-  background:var(--paper, none) center / cover; opacity:0}
+  background:var(--paper, none) 0 calc(-1 * var(--sy, 0px)) / 100% var(--ph, 100%) no-repeat; opacity:0}
 #writing.paper .glass.card{background-color:#f0efeb}
 #writing.paper .glass.card::before{opacity:1}
 html[data-theme="dark"] #writing.paper .glass.card{background-color:#2a2b2e}
@@ -1188,13 +1188,11 @@ html[data-theme="dark"] .ink{color:rgba(228,230,238,.3)}
 @keyframes inkSpread{0%{scale:.25; opacity:0} 15%{opacity:1} 100%{scale:1; opacity:1}}
 .ink.gone{animation-play-state:paused}
 
-/* the Museum of the 20th Century: the brick bond behind its text (drawn by app.js) */
-.slide.has-bricks{position:relative; isolation:isolate}
-/* the museum's text sits on a veil of the card colour, so it reads clearly over the bricks; the veil reaches a little
-   past the text (a spread shadow) without moving it */
-.slide.has-bricks :is(.p-head > div, .prose, .facts){--veil:color-mix(in srgb, var(--card) 45%, transparent);
-  background:var(--veil); box-shadow:0 0 0 7px var(--veil); border-radius:3px}
-.bricks{position:absolute; left:0; top:0; z-index:-1; pointer-events:none}
+/* the Museum of the 20th Century: the brick bond on the page behind its card (drawn by app.js); the body lets the page
+   colour of html show, so the bricks can lie between it and the content */
+body{background:transparent}
+.bricks-bg{position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; pointer-events:none; opacity:0; transition:opacity .6s ease}
+.bricks-bg.on{opacity:1}
 </style>
 <script>
 /* Before first paint, so a dark page never flashes white: a saved choice wins, otherwise the OS. */
@@ -1982,7 +1980,7 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=48477aed2f"></script>
-<script src="/assets/app.js?v=3abb664121"></script>
+<script src="/assets/data/places.js?v=225036f619"></script>
+<script src="/assets/app.js?v=13e18e5b22"></script>
 </body>
 </html>

@@ -79,7 +79,7 @@ function go(id, { push = true } = {}) {
   // Writing: the card comes in first, then turns to paper, crumpled differently each time
   const writing = $('#writing');
   if (writing && id === 'writing') {
-    writing.style.setProperty('--paper', paperImage()); writing.classList.add('paper');
+    writing.dataset.seed = Math.floor(Math.random() * 1e9); writingSheet(); writing.classList.add('paper');
     writing.classList.remove('enter'); void writing.offsetWidth; writing.classList.add('enter');
   }
   // Archive: its title, then its map drawn from the bottom up, every time it is opened
@@ -489,15 +489,17 @@ function placePill(still) {
 }
 addEventListener('resize', () => placePill(true));
 // a sheet of paper that was crumpled and smoothed out again: soft wrinkles, a few facets a shade lighter or darker, and a
-// fine grain; other wrinkles on every visit
-function paperImage() {
-  const R = Math.random, f = (v) => v.toFixed(1);
+// fine grain; drawn at the sheet's own proportions (w by h) so nothing is stretched, and the same sheet for one seed
+function paperImage(w = 1000, h = 1000, seed = Math.random() * 1e9) {
+  let a = seed >>> 0;
+  const R = () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const f = (v) => v.toFixed(1), H = Math.round(1000 * h / w);
   let facets = '';
-  for (let k = 0; k < 7; k++) {
-    const pts = Array.from({ length: 4 }, () => `${f(R() * 1100 - 50)},${f(R() * 1100 - 50)}`).join(' ');
+  for (let k = 0, n = Math.max(7, Math.round(7 * H / 1000)); k < n; k++) {
+    const pts = Array.from({ length: 4 }, () => `${f(R() * 1100 - 50)},${f(R() * (H + 100) - 50)}`).join(' ');
     facets += `<polygon points='${pts}' fill='${R() < .5 ? '#fff' : '#000'}' fill-opacity='${(.008 + R() * .012).toFixed(3)}'/>`;
   }
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 1000 1000' preserveAspectRatio='none'>`
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1000' height='${H}' viewBox='0 0 1000 ${H}' preserveAspectRatio='none'>`
     + `<filter id='u' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.004' numOctaves='2' seed='${Math.floor(R() * 1e4)}'/>`
     + `<feDiffuseLighting lighting-color='#fff' surfaceScale='3.2'><feDistantLight azimuth='225' elevation='46'/></feDiffuseLighting></filter>`
     + `<filter id='g' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='1' seed='${Math.floor(R() * 1e4)}'/>`
@@ -506,6 +508,28 @@ function paperImage() {
     + `<rect width='100%' height='100%' filter='url(#g)' opacity='.08'/></svg>`;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
+// Writing is one sheet: as tall as the card plus the longest scroll of its pieces. As a piece scrolls, the sheet moves
+// up with the text, so the wrinkles travel with the words
+function writingSheet() {
+  const writing = $('#writing'), card = writing && $('.glass.card', writing);
+  if (!card || !writing.dataset.seed) return;
+  const extra = Math.max(0, ...$$('.car-track > .slide', card).map((x) => x.scrollHeight - x.clientHeight));
+  const w = card.clientWidth, ph = card.clientHeight + extra;
+  if (!w || !ph || (writing._sheet === `${w}x${ph}x${writing.dataset.seed}`)) return;
+  writing._sheet = `${w}x${ph}x${writing.dataset.seed}`;
+  writing.style.setProperty('--paper', paperImage(w, ph, +writing.dataset.seed)); writing.style.setProperty('--ph', ph + 'px');
+}
+(() => {
+  const writing = $('#writing'), card = writing && $('.glass.card', writing); if (!card) return;
+  const slides = $$('.car-track > .slide', card);
+  const follow = (x) => writing.style.setProperty('--sy', x.scrollTop + 'px');
+  card.addEventListener('scroll', (e) => { if (e.target.matches && e.target.matches('.car-track > .slide') && e.target.getAttribute('aria-hidden') !== 'true') follow(e.target); }, { capture: true, passive: true });
+  // another piece: the sheet stands where that piece is scrolled to
+  new MutationObserver(() => { const on = slides.find((x) => x.getAttribute('aria-hidden') === 'false'); if (on) follow(on); })
+    .observe(card, { subtree: true, attributes: true, attributeFilter: ['aria-hidden'] });
+  let t = 0; const ro = new ResizeObserver(() => { clearTimeout(t); t = setTimeout(writingSheet, 150); });
+  ro.observe(card); slides.forEach((x) => [...x.children].forEach((c) => ro.observe(c)));
+})();
 sizeTabs();
 if (document.fonts) document.fonts.ready.then(() => { sizeTabs(); placePill(true); });
 
@@ -753,14 +777,17 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
 
 /* ================= Building 8: the mouse is sensed ================= */
 // While the Building 8 project is open, the mouse is watched the way the project watched the people in the hall: it
-// draws one continuous path, faint and in the project's red, which fades away gradually over about two and a half seconds.
+// draws one continuous path, faint and in the project's red, which fades from its tail within about a second and a half.
+// It shows only once the mouse has gone a quarter of the screen's longer side in one unbroken movement.
 // Over the animation of the motion and the 3D model of the bar it leaves nothing: those show the motion themselves
 if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
   const slide = ($('#desTrack .b8-logo') || {}).closest?.('.slide');
   if (slide) {
     const cv = document.createElement('canvas'); cv.className = 'sense-trail'; cv.setAttribute('aria-hidden', 'true'); document.body.append(cv);
-    const ctx = cv.getContext('2d'), W = 18, LIFE = 2600, pts = [];   // as wide as the pointer's dot
+    const ctx = cv.getContext('2d'), W = 18, LIFE = 1300, pts = [];   // as wide as the pointer's dot
     let raf = 0, open = false, checked = 0, brk = false;
+    // the path only shows once the mouse has gone a quarter of the screen's longer side in one unbroken movement
+    let run = 0, px = null, py = null, pt = 0;
     const size = () => { const k = devicePixelRatio || 1; cv.width = innerWidth * k; cv.height = innerHeight * k; ctx.setTransform(k, 0, 0, k, 0, 0); };
     size(); addEventListener('resize', size);
     // the project counts as open when most of it is across the screen and its tab is showing
@@ -768,22 +795,37 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
       const r = slide.getBoundingClientRect(), across = r.width ? Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0)) / r.width : 0;
       return !slide.closest('[aria-hidden="true"]') && across > .5 && r.bottom > 0 && r.top < innerHeight;
     };
-    // The path is one single stroke, with round joins and round ends, so it is the same strength everywhere (a stroke
-    // never doubles where it crosses itself) and has no seams that could flicker. It goes away gradually: its tail
-    // shortens as the oldest of it reaches its age, and once the mouse stops, the whole of it fades out smoothly
+    // Each piece of the path fades with its age, so the tail thins out gradually. Pieces are drawn on a white sheet with
+    // 'darken' (each pixel keeps the strongest piece over it, so nothing doubles where pieces meet), and the canvas is
+    // multiplied onto the page, where white leaves the page as it is. In the dark theme the same on black, with 'lighten'
+    // and 'screen'
     let last = 0;
     const draw = (now) => {
-      ctx.clearRect(0, 0, innerWidth, innerHeight);
       while (pts.length && now - pts[0][2] > LIFE) pts.shift();
+      const dark = document.documentElement.dataset.theme === 'dark';
+      cv.style.mixBlendMode = dark ? 'screen' : 'multiply';
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = dark ? '#000' : '#fff'; ctx.fillRect(0, 0, innerWidth, innerHeight);
       if (pts.length) {
-        const red = document.documentElement.dataset.theme === 'dark' ? '255,70,60' : '227,18,11';
+        const red = dark ? [255, 70, 60] : [227, 18, 11];
         const still = Math.min(1, Math.max(0, (now - last) / LIFE)), k = 1 - still * still * (3 - 2 * still);
+        ctx.globalCompositeOperation = dark ? 'lighten' : 'darken';
         ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = W;
-        ctx.strokeStyle = `rgba(${red},${(.09 * k).toFixed(3)})`;
-        ctx.beginPath();
-        pts.forEach((p, i) => { if (i === 0 || p[3] || p[2] - pts[i - 1][2] > 300) { ctx.moveTo(p[0], p[1]); ctx.lineTo(p[0] + .01, p[1]); } else ctx.lineTo(p[0], p[1]); });
-        ctx.stroke();
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i], q = i ? pts[i - 1] : null, age = Math.min(1, (now - p[2]) / LIFE);
+          const a = .09 * k * (1 - age * age * (3 - 2 * age));
+          if (a < .002) continue;
+          // the colour that, multiplied onto the page, looks like the red at this strength
+          const col = red.map((c) => Math.round(dark ? c * a : 255 - (255 - c) * a));
+          ctx.strokeStyle = `rgb(${col.join(',')})`;
+          ctx.beginPath();
+          if (!q || p[3] || p[2] - q[2] > 300) { ctx.moveTo(p[0], p[1]); ctx.lineTo(p[0] + .01, p[1]); }
+          else { ctx.moveTo(q[0], q[1]); ctx.lineTo(p[0], p[1]); }
+          ctx.stroke();
+        }
+        ctx.globalCompositeOperation = 'source-over';
       }
+      if (!pts.length) ctx.clearRect(0, 0, innerWidth, innerHeight);
       raf = pts.length ? requestAnimationFrame(draw) : 0;
     };
     addEventListener('pointermove', (e) => {
@@ -792,7 +834,11 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
       if (now - checked > 250) { open = isOpen(); checked = now; }
       if (!open) return;
       // over the animation of the motion or the 3D model the path stops, and starts afresh beyond it
-      if (e.target.closest && e.target.closest('.b8-stage, .b8-flip, .b8-build')) { brk = true; return; }
+      if (e.target.closest && e.target.closest('.b8-stage, .b8-flip, .b8-build')) { brk = true; run = 0; px = null; return; }
+      // a pause of more than 300 ms ends the movement; the distance starts again from nought
+      if (px === null || now - pt > 300) run = 0; else run += Math.hypot(e.clientX - px, e.clientY - py);
+      px = e.clientX; py = e.clientY; pt = now;
+      if (run < Math.max(innerWidth, innerHeight) / 4) { brk = true; return; }
       pts.push([e.clientX, e.clientY, now, brk]); brk = false; last = now;
       if (!raf) raf = requestAnimationFrame(draw);
     }, { passive: true });
@@ -851,25 +897,25 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
 }
 
 /* ================= the Museum of the 20th Century: open brickwork ================= */
-// Behind the museum's text lies a faint brick bond in grey, like its façade. Around the mouse the bond is laid again
-// as a perforated wall: each brick narrows in its place, so that open joints appear between the bricks,
-// and as the courses are offset by half a brick, the openings form a chequer. They stay open while the mouse stays.
-// When it moves on, the bricks it has left grow back, and halfway through, the bricks at its new place begin to narrow
+// While the museum is open, a faint brick bond in grey lies on the page behind its card, like the museum's façade.
+// Around the mouse the bond is laid again as a perforated wall: each brick narrows in its place, still resting on the
+// two below it, so open joints appear in a chequer. Over the card the wall opens at the card's edge nearest the mouse.
+// It stays open while the mouse stays; when it moves on, the bricks it has left grow back, and halfway through, the
+// bricks at its new place begin to narrow
 if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
-  const slide = ($('#archTrack .m20-logo') || {}).closest?.('.slide');
-  if (slide) {
-    const cv = document.createElement('canvas'); cv.className = 'bricks'; cv.setAttribute('aria-hidden', 'true');
-    slide.classList.add('has-bricks'); slide.prepend(cv);
+  const slide = ($('#archTrack .m20-logo') || {}).closest?.('.slide'), card = slide && slide.closest('.glass.card');
+  if (slide && card) {
+    const cv = document.createElement('canvas'); cv.className = 'bricks-bg'; cv.setAttribute('aria-hidden', 'true'); document.body.append(cv);
     const ctx = cv.getContext('2d'), BW = 26, BH = 9, GAP = 2.5, STEP = BW + GAP, HALF = STEP / 2, HEAD = HALF + 4;   // narrowed, a brick still rests 4px on each of the two below it
     const RX = 90, RY = 55, OPEN = 260, CLOSE = 420;
     const open = new Map();   // brick -> how open it is, 0 to 1
-    let raf = 0, w = 0, h = 0, last = 0, mouse = null;
+    let raf = 0, w = 0, h = 0, last = 0, mouse = null, shown = false;
     const size = () => {
-      const k = devicePixelRatio || 1; w = slide.clientWidth; h = slide.scrollHeight;
-      cv.style.width = w + 'px'; cv.style.height = h + 'px'; cv.width = w * k; cv.height = h * k; ctx.setTransform(k, 0, 0, k, 0, 0); paint();
+      const k = devicePixelRatio || 1; w = innerWidth; h = innerHeight;
+      cv.width = w * k; cv.height = h * k; ctx.setTransform(k, 0, 0, k, 0, 0); paint();
     };
     const key = (r, c) => r * 1000 + c, rc = (k) => { const r = Math.floor((k + 500) / 1000); return [r, k - r * 1000]; };
-    // how open the wall wants to be at a brick: fully under the mouse, less towards the edge of an oval round it
+    // how open the wall wants to be at a brick: fully at the point, less towards the edge of an oval round it
     const want = (r, c) => {
       if (!mouse) return 0;
       const off = r % 2 ? HALF : 0, cx = c * STEP - off + BW / 2, cy = r * (BH + GAP) + BH / 2;
@@ -878,20 +924,17 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
     };
     const paint = () => {
       ctx.clearRect(0, 0, w, h);
+      if (!shown && !open.size) return;
       const ink = document.documentElement.dataset.theme === 'dark' ? '232,232,238' : '40,40,46';
-      const face = `rgba(${ink},.045)`;
+      ctx.fillStyle = `rgba(${ink},.06)`;
       for (let r = 0, y = 0; y < h; r++, y += BH + GAP) {
         const off = r % 2 ? HALF : 0;
         for (let c = 0, x = -off; x < w; c++, x += STEP) {
-          const f = open.get(key(r, c)) || 0;
-          if (!f) { ctx.fillStyle = face; ctx.fillRect(x, y, BW, BH); continue; }
-          // the brick narrowed, centred in its place; never so narrow that it would no longer sit on the course below
-          const e = f * f * (3 - 2 * f), fw = BW - (BW - HEAD) * e;
-          ctx.fillStyle = face; ctx.fillRect(x + (BW - fw) / 2, y, fw, BH);
+          const f = open.get(key(r, c)) || 0, e = f * f * (3 - 2 * f), fw = BW - (BW - HEAD) * e;
+          ctx.fillRect(x + (BW - fw) / 2, y, fw, BH);
         }
       }
     };
-    // each frame: bricks the mouse has left grow back; once they are half closed, the bricks round the mouse narrow
     const tick = (now) => {
       const dt = last ? Math.min(64, now - last) : 16; last = now;
       let busy = false, leaving = false;
@@ -921,31 +964,47 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
       if (!raf) last = 0;
     };
     const wake = () => { if (!raf) raf = requestAnimationFrame(tick); };
-    new ResizeObserver(size).observe(slide); [...slide.children].forEach((c) => c !== cv && new ResizeObserver(size).observe(c));
-    slide.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'mouse') return;
-      const b = slide.getBoundingClientRect();
-      mouse = [e.clientX - b.left, e.clientY - b.top + slide.scrollTop]; wake();
-    });
-    slide.addEventListener('pointerleave', () => { mouse = null; wake(); });
+    size(); addEventListener('resize', size);
+    // shown while the museum is the project in front
+    const isOpen = () => {
+      const r = slide.getBoundingClientRect(), across = r.width ? Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0)) / r.width : 0;
+      return !slide.closest('[aria-hidden="true"]') && across > .5;
+    };
+    const check = () => {
+      const on = isOpen();
+      if (on !== shown) { shown = on; cv.classList.toggle('on', on); if (!on) { mouse = null; open.clear(); } paint(); }
+    };
+    setInterval(check, 300); check();
+    addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' || !shown) return;
+      // over the card, the nearest point on its edge
+      const b = card.getBoundingClientRect();
+      let x = e.clientX, y = e.clientY;
+      if (x > b.left && x < b.right && y > b.top && y < b.bottom) {
+        const dl = x - b.left, dr = b.right - x, dtp = y - b.top, db = b.bottom - y, m = Math.min(dl, dr, dtp, db);
+        if (m === dl) x = b.left; else if (m === dr) x = b.right; else if (m === dtp) y = b.top; else y = b.bottom;
+      }
+      mouse = [x, y]; wake();
+    }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', () => { mouse = null; wake(); });
     new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 }
 
 /* ================= Wandering Wayfarer: footsteps ================= */
-// While the Archive is open, the mouse walks: it leaves footprints, left and right in turn, pointing the way it goes,
-// which fade over a few seconds. Over the map itself it leaves none
-if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
-  const panel = $('#archive');
-  if (panel) {
+// While the map of the Archive rolls up, someone walks along its top from left to right, not in a straight line: footprints, left and right in
+// turn, each fading over a few seconds. The mouse leaves none
+if (!reduced) {
+  const panel = $('#archive'), map = panel && $('.map', panel);
+  if (map) {
     const cv = document.createElement('canvas'); cv.className = 'sense-trail'; cv.setAttribute('aria-hidden', 'true'); document.body.append(cv);
-    const ctx = cv.getContext('2d'), STRIDE = 30, SIDE = 7, LIFE = 2600, steps = [];
-    let raf = 0, lx = null, ly = null, left = true;
+    const ctx = cv.getContext('2d'), STRIDE = 34, SIDE = 7, LIFE = 2000, WALK = 1200, steps = [];
+    let raf = 0;
     const size = () => { const k = devicePixelRatio || 1; cv.width = innerWidth * k; cv.height = innerHeight * k; ctx.setTransform(k, 0, 0, k, 0, 0); };
     size(); addEventListener('resize', size);
     // one footprint: a sole and a heel, turned the way of walking
-    const foot = (x, y, a, alpha, ink) => {
-      ctx.save(); ctx.translate(x, y); ctx.rotate(a + Math.PI / 2); ctx.fillStyle = `rgba(${ink},${alpha.toFixed(3)})`;
+    const foot = (x, y, ang, alpha, ink) => {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(ang + Math.PI / 2); ctx.fillStyle = `rgba(${ink},${alpha.toFixed(3)})`;
       ctx.beginPath(); ctx.ellipse(0, -3.2, 3.4, 5, 0, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(0, 5.2, 2.6, 2.8, 0, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
@@ -954,22 +1013,28 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced) {
       ctx.clearRect(0, 0, innerWidth, innerHeight);
       const ink = document.documentElement.dataset.theme === 'dark' ? '235,235,242' : '35,35,40';
       while (steps.length && now - steps[0][3] > LIFE) steps.shift();
-      for (const [x, y, a, t] of steps) { const k = 1 - (now - t) / LIFE; foot(x, y, a, .22 * k * k, ink); }
+      for (const [x, y, ang, t] of steps) if (now >= t) { const k = 1 - (now - t) / LIFE; foot(x, y, ang, .22 * k * k, ink); }
       raf = steps.length ? requestAnimationFrame(draw) : 0;
     };
-    addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'mouse') return;
-      if (panel.getAttribute('aria-hidden') !== 'false' || (e.target.closest && e.target.closest('.map'))) { lx = null; return; }
-      const x = e.clientX, y = e.clientY;
-      if (lx === null) { lx = x; ly = y; return; }
-      const d = Math.hypot(x - lx, y - ly);
-      if (d < STRIDE) return;
-      // a step, to the left or the right of the way the mouse went
-      const a = Math.atan2(y - ly, x - lx), s = left ? -1 : 1;
-      steps.push([x + Math.cos(a + Math.PI / 2) * SIDE * s, y + Math.sin(a + Math.PI / 2) * SIDE * s, a, performance.now()]);
-      left = !left; lx = x; ly = y;
+    // the walk: along the top of the map, wandering up and down, from left to right; done in 1.2 seconds, well before the
+    // rolling up of the map (2.6 seconds, slow at the end) reaches the top
+    map.addEventListener('animationstart', (e) => {
+      if (e.animationName !== 'mapUp') return;
+      const r = map.getBoundingClientRect(), x0 = Math.max(16, r.left + 14), x1 = Math.min(innerWidth - 16, r.right - 14);
+      const yc = r.top + Math.min(46, r.height * .12), p1 = Math.random() * 6, p2 = Math.random() * 6, L = x1 - x0;
+      // a path that wanders: two waves of different lengths, gently up and down
+      const path = (x) => yc + 16 * Math.sin(p1 + (x - x0) / L * Math.PI * 2.2) + 7 * Math.sin(p2 + (x - x0) / L * Math.PI * 6.5);
+      // footprints at equal steps along it
+      const pts = [];
+      for (let x = x0, run = STRIDE, px = x0, py = path(x0); x <= x1; x += 2) {
+        const y = path(x); run += Math.hypot(x - px, y - py); px = x; py = y;
+        if (run >= STRIDE) { run = 0; pts.push([x, y, Math.atan2(path(x + 2) - y, 2)]); }
+      }
+      const t0 = performance.now(), n = pts.length;
+      steps.length = 0;
+      pts.forEach(([x, y, ang], i) => { const sd = i % 2 ? 1 : -1; steps.push([x + Math.cos(ang + Math.PI / 2) * SIDE * sd, y + Math.sin(ang + Math.PI / 2) * SIDE * sd, ang, t0 + WALK * i / Math.max(1, n - 1)]); });
       if (!raf) raf = requestAnimationFrame(draw);
-    }, { passive: true });
+    });
   }
 }
 

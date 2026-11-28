@@ -1111,7 +1111,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 /* ---------- Writing: the card comes in, then turns to paper, crumpled a little differently on every visit ---------- */
 #writing .glass.card{isolation:isolate}
 #writing .glass.card::before{content:""; position:absolute; inset:0; border-radius:inherit; z-index:-1; pointer-events:none;
-  background:var(--paper, none) center / cover; opacity:0}
+  background:var(--paper, none) 0 calc(-1 * var(--sy, 0px)) / 100% var(--ph, 100%) no-repeat; opacity:0}
 #writing.paper .glass.card{background-color:#f0efeb}
 #writing.paper .glass.card::before{opacity:1}
 html[data-theme="dark"] #writing.paper .glass.card{background-color:#2a2b2e}
@@ -1188,13 +1188,11 @@ html[data-theme="dark"] .ink{color:rgba(228,230,238,.3)}
 @keyframes inkSpread{0%{scale:.25; opacity:0} 15%{opacity:1} 100%{scale:1; opacity:1}}
 .ink.gone{animation-play-state:paused}
 
-/* the Museum of the 20th Century: the brick bond behind its text (drawn by app.js) */
-.slide.has-bricks{position:relative; isolation:isolate}
-/* the museum's text sits on a veil of the card colour, so it reads clearly over the bricks; the veil reaches a little
-   past the text (a spread shadow) without moving it */
-.slide.has-bricks :is(.p-head > div, .prose, .facts){--veil:color-mix(in srgb, var(--card) 45%, transparent);
-  background:var(--veil); box-shadow:0 0 0 7px var(--veil); border-radius:3px}
-.bricks{position:absolute; left:0; top:0; z-index:-1; pointer-events:none}
+/* the Museum of the 20th Century: the brick bond on the page behind its card (drawn by app.js); the body lets the page
+   colour of html show, so the bricks can lie between it and the content */
+body{background:transparent}
+.bricks-bg{position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; pointer-events:none; opacity:0; transition:opacity .6s ease}
+.bricks-bg.on{opacity:1}
 </style>
 <script>
 /* Before first paint, so a dark page never flashes white: a saved choice wins, otherwise the OS. */
@@ -1982,8 +1980,8 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=48477aed2f"></script>
+<script src="/assets/data/places.js?v=225036f619"></script>
 <script>window.I18N={"lang":"ar","locale":"ar-EG-u-nu-latn","t":{"Hello.":"أهلًا.","Good morning.":"صباح الخير.","Good afternoon.":"مساء الخير.","Good evening.":"مساء الخير.","Click for the punchline":"انقر لترى القفلة","Tap for the punchline":"المس لترى القفلة","Open image: {c}":"افتح الصورة: {c}","Image to come":"الصورة قريبًا","The numbers are refreshed from the channel every day; last update {d}.":"تُحدَّث الأرقام من القناة يوميًا؛ آخر تحديث {d}.","World map of {p} places documented in {c} countries":"خريطة العالم للأماكن الموثّقة: {p} مكانًا في {c} دولة","Not documented yet":"لم يُوثَّق بعد","All the walks from here":"كل الجولات من هنا","Watch a video":"شاهد فيديو","The map got lost on the way. Reload and it should find its way back.":"ضلّت الخريطة طريقها. أعد تحميل الصفحة وستجد طريق العودة.","England | UK":"إنجلترا | المملكة المتحدة","Scotland | UK":"اسكتلندا | المملكة المتحدة","Wales | UK":"ويلز | المملكة المتحدة","Northern Ireland | UK":"أيرلندا الشمالية | المملكة المتحدة","Gibraltar | UK":"جبل طارق | المملكة المتحدة","6th of October City":"مدينة السادس من أكتوبر","Alexandria":"ألكساندريا","Algeciras":"الجزيرة الخضراء","Almada":"ألمادا","Andorra":"أندورا","Andorra la Vella":"أندورا لا فيلا","Arles":"آرل","Arlington":"أرلينغتون","Arosa":"أروزا","Ayia Napa":"آيا نابا","Ballynahinch":"بالينهينش","Barcelona":"برشلونة","Basel":"بازل","Belgrade":"بلغراد","Berlin":"برلين","Bern":"برن","Bilbao":"بلباو","Bucharest":"بوخارست","Cabo da Roca":"كابو دا روكا","Cahir":"كاهير","Cannes":"كان","Carmel-by-the-Sea":"كارمل باي ذا سي","Clovis":"كلوفيس","Colmar":"كولمار","Cologne":"كولونيا","Cottbus":"كوتبوس","Cyprus":"قبرص","Dessau":"ديساو","Dublin":"دبلن","Döttingen":"دوتينغن","Edinburgh":"إدنبرة","Famagusta":"فاماغوستا","Faro":"فارو","Fes":"فاس","Flims Dorf":"فليمس دورف","Florence":"فلورنسا","Florida":"فلوريدا","Fort Lauderdale":"فورت لودرديل","France":"فرنسا","Galway":"غالواي","Geneva":"جنيف","Geysir":"غيسير","Gibraltar":"جبل طارق","Giza":"الجيزة","Glasgow":"غلاسكو","Gullfoss Falls":"شلالات غولفوس","Hamburg":"هامبورغ","Helsinki":"هلسنكي","Ibaraki":"إيباراكي","Iceland":"آيسلندا","Keflavík International Airport":"مطار كيفلافيك الدولي","Kraków":"كراكوف","Kyoto":"كيوتو","Lagos":"لاغوس","Liencres":"ليينكريس","Lisbon":"لشبونة","London":"لندن","Los Angeles":"لوس أنجلوس","Lucerne":"لوسيرن","Luxembourg":"لوكسمبورغ","Malibu":"ماليبو","Marrakesh":"مراكش","Marseille":"مرسيليا","Miami":"ميامي","Milan":"ميلانو","Monaco":"موناكو","Montreuil":"مونتروي","Mount Fuji":"جبل فوجي","Mulhouse":"مولوز","Munich":"ميونخ","Nantes":"نانت","Nara":"نارا","New York":"نيويورك","Newcastle upon Tyne":"نيوكاسل أبون تاين","Nicosia":"نيقوسيا","Nîmes":"نيم","Olney":"أولني","Osaka":"أوساكا","Oslo":"أوسلو","Paris":"باريس","Plovdiv":"بلوفديف","Portland":"بورتلاند","Pristina":"بريشتينا","Rabat":"الرباط","Redwood National and State Parks":"متنزهات ريدوود الوطنية","Reykjavík":"ريكيافيك","Rimini":"ريميني","Ronchamp":"رونشان","Roundstone":"راوندستون","Rovinj":"روفينيه","San Diego":"سان دييغو","San Francisco":"سان فرانسيسكو","San Marino":"سان مارينو","Santa Cruz de Bezana":"سانتا كروث دي بيثانا","Santa Monica":"سانتا مونيكا","Santander":"سانتاندير","Santoña":"سانتونيا","Secret Lagoon":"البحيرة السرية","Siwa Oasis":"واحة سيوة","Skopje":"سكوبيه","Sofia":"صوفيا","Tallinn":"تالين","Tangier":"طنجة","Thingvellir National Park":"منتزه ثينغفيلير الوطني","Tokyo":"طوكيو","Varna":"فارنا","Washington":"واشنطن","Weil am Rhein":"فايل آم راين","Wrocław":"فروتسواف","Wörthsee":"فيرتزيه","Zagreb":"زغرب","Zürich":"زيورخ"},"plurals":{"place":{"zero":"{n} مكان","one":"مكان واحد","two":"مكانان","few":"{n} أماكن","many":"{n} مكانًا","other":"{n} مكان"},"video":{"zero":"{n} فيديو","one":"فيديو واحد","two":"فيديوهان","few":"{n} فيديوهات","many":"{n} فيديو","other":"{n} فيديو"}}}</script>
-<script src="/assets/app.js?v=3abb664121"></script>
+<script src="/assets/app.js?v=13e18e5b22"></script>
 </body>
 </html>

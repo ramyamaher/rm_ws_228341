@@ -1111,7 +1111,7 @@ footer{height:var(--ftr); padding:0 clamp(16px,3vw,32px) 4px; display:flex; alig
 /* ---------- Writing: the card comes in, then turns to paper, crumpled a little differently on every visit ---------- */
 #writing .glass.card{isolation:isolate}
 #writing .glass.card::before{content:""; position:absolute; inset:0; border-radius:inherit; z-index:-1; pointer-events:none;
-  background:var(--paper, none) center / cover; opacity:0}
+  background:var(--paper, none) 0 calc(-1 * var(--sy, 0px)) / 100% var(--ph, 100%) no-repeat; opacity:0}
 #writing.paper .glass.card{background-color:#f0efeb}
 #writing.paper .glass.card::before{opacity:1}
 html[data-theme="dark"] #writing.paper .glass.card{background-color:#2a2b2e}
@@ -1188,13 +1188,11 @@ html[data-theme="dark"] .ink{color:rgba(228,230,238,.3)}
 @keyframes inkSpread{0%{scale:.25; opacity:0} 15%{opacity:1} 100%{scale:1; opacity:1}}
 .ink.gone{animation-play-state:paused}
 
-/* the Museum of the 20th Century: the brick bond behind its text (drawn by app.js) */
-.slide.has-bricks{position:relative; isolation:isolate}
-/* the museum's text sits on a veil of the card colour, so it reads clearly over the bricks; the veil reaches a little
-   past the text (a spread shadow) without moving it */
-.slide.has-bricks :is(.p-head > div, .prose, .facts){--veil:color-mix(in srgb, var(--card) 45%, transparent);
-  background:var(--veil); box-shadow:0 0 0 7px var(--veil); border-radius:3px}
-.bricks{position:absolute; left:0; top:0; z-index:-1; pointer-events:none}
+/* the Museum of the 20th Century: the brick bond on the page behind its card (drawn by app.js); the body lets the page
+   colour of html show, so the bricks can lie between it and the content */
+body{background:transparent}
+.bricks-bg{position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; pointer-events:none; opacity:0; transition:opacity .6s ease}
+.bricks-bg.on{opacity:1}
 </style>
 <script>
 /* Before first paint, so a dark page never flashes white: a saved choice wins, otherwise the OS. */
@@ -1981,8 +1979,8 @@ destined to guide.</script></section>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script src="/assets/data/places.js?v=48477aed2f"></script>
+<script src="/assets/data/places.js?v=225036f619"></script>
 <script>window.I18N={"lang":"de","locale":"de-DE","t":{"Hello.":"Hallo.","Good morning.":"Guten Morgen.","Good afternoon.":"Guten Tag.","Good evening.":"Guten Abend.","Click for the punchline":"Klicken für die Pointe","Tap for the punchline":"Tippen für die Pointe","Open image: {c}":"Bild öffnen: {c}","Image to come":"Bild folgt","The numbers are refreshed from the channel every day; last update {d}.":"Die Zahlen werden täglich aus dem Kanal übernommen; Stand: {d}.","World map of {p} places documented in {c} countries":"Weltkarte mit {p} dokumentierten Orten in {c} Ländern","Not documented yet":"Noch nicht dokumentiert","All the walks from here":"Alle Rundgänge von hier","Watch a video":"Ein Video ansehen","The map got lost on the way. Reload and it should find its way back.":"Die Karte ist unterwegs verloren gegangen. Laden Sie die Seite neu, dann findet sie zurück.","England | UK":"England | UK","Scotland | UK":"Schottland | UK","Wales | UK":"Wales | UK","Northern Ireland | UK":"Nordirland | UK","Gibraltar | UK":"Gibraltar | UK","6th of October City":"Stadt des 6. Oktober","Alexandria":"Alexandria","Algeciras":"Algeciras","Almada":"Almada","Andorra":"Andorra","Andorra la Vella":"Andorra la Vella","Arles":"Arles","Arlington":"Arlington","Arosa":"Arosa","Ayia Napa":"Ayia Napa","Ballynahinch":"Ballynahinch","Barcelona":"Barcelona","Basel":"Basel","Belgrade":"Belgrad","Berlin":"Berlin","Bern":"Bern","Bilbao":"Bilbao","Bucharest":"Bukarest","Cabo da Roca":"Cabo da Roca","Cahir":"Cahir","Cannes":"Cannes","Carmel-by-the-Sea":"Carmel-by-the-Sea","Clovis":"Clovis","Colmar":"Colmar","Cologne":"Köln","Cottbus":"Cottbus","Cyprus":"Zypern","Dessau":"Dessau","Dublin":"Dublin","Döttingen":"Döttingen","Edinburgh":"Edinburgh","Famagusta":"Famagusta","Faro":"Faro","Fes":"Fès","Flims Dorf":"Flims Dorf","Florence":"Florenz","Florida":"Florida","Fort Lauderdale":"Fort Lauderdale","France":"Frankreich","Galway":"Galway","Geneva":"Genf","Geysir":"Geysir","Gibraltar":"Gibraltar","Giza":"Gizeh","Glasgow":"Glasgow","Gullfoss Falls":"Gullfoss","Hamburg":"Hamburg","Helsinki":"Helsinki","Ibaraki":"Ibaraki","Iceland":"Island","Keflavík International Airport":"Flughafen Keflavík","Kraków":"Krakau","Kyoto":"Kyoto","Lagos":"Lagos","Liencres":"Liencres","Lisbon":"Lissabon","London":"London","Los Angeles":"Los Angeles","Lucerne":"Luzern","Luxembourg":"Luxemburg","Malibu":"Malibu","Marrakesh":"Marrakesch","Marseille":"Marseille","Miami":"Miami","Milan":"Mailand","Monaco":"Monaco","Montreuil":"Montreuil","Mount Fuji":"Fuji","Mulhouse":"Mülhausen","Munich":"München","Nantes":"Nantes","Nara":"Nara","New York":"New York","Newcastle upon Tyne":"Newcastle upon Tyne","Nicosia":"Nikosia","Nîmes":"Nîmes","Olney":"Olney","Osaka":"Osaka","Oslo":"Oslo","Paris":"Paris","Plovdiv":"Plovdiv","Portland":"Portland","Pristina":"Pristina","Rabat":"Rabat","Redwood National and State Parks":"Redwood-Nationalpark","Reykjavík":"Reykjavík","Rimini":"Rimini","Ronchamp":"Ronchamp","Roundstone":"Roundstone","Rovinj":"Rovinj","San Diego":"San Diego","San Francisco":"San Francisco","San Marino":"San Marino","Santa Cruz de Bezana":"Santa Cruz de Bezana","Santa Monica":"Santa Monica","Santander":"Santander","Santoña":"Santoña","Secret Lagoon":"Secret Lagoon","Siwa Oasis":"Oase Siwa","Skopje":"Skopje","Sofia":"Sofia","Tallinn":"Tallinn","Tangier":"Tanger","Thingvellir National Park":"Nationalpark Þingvellir","Tokyo":"Tokio","Varna":"Varna","Washington":"Washington","Weil am Rhein":"Weil am Rhein","Wrocław":"Breslau","Wörthsee":"Wörthsee","Zagreb":"Zagreb","Zürich":"Zürich"},"plurals":{"place":{"one":"{n} Ort","other":"{n} Orte"},"video":{"one":"{n} Video","other":"{n} Videos"}}}</script>
-<script src="/assets/app.js?v=3abb664121"></script>
+<script src="/assets/app.js?v=13e18e5b22"></script>
 </body>
 </html>
