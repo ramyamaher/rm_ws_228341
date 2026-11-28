@@ -37,6 +37,7 @@ const JS = [
   'World map of {p} places documented in {c} countries', 'Not documented yet', 'All the walks from here', 'Watch a video',
   'The map got lost on the way. Reload and it should find its way back.',
   'England | UK', 'Scotland | UK', 'Wales | UK', 'Northern Ireland | UK', 'Gibraltar | UK',
+  'Computer', 'Phone', 'Back to the apps',
 ];
 const PLURALS = ['place', 'video'];
 

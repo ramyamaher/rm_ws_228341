@@ -2580,6 +2580,174 @@ CARS.apps = carousel({
   count: $('#appCount'), dots: $('#appDots'),
 });
 
+/* ================= apps: a computer and a phone ================= */
+// The Apps tab as two screens, a computer and a phone, side by side. The computer holds the desktop software
+// (Revitesse, RealStage), the phone the three phone apps (the slides marked data-device="pc" go on the computer).
+// A click on a device brings it to the middle, larger; a click on an app there opens its page, which grows out of
+// the icon while the screens zoom in behind it. The back button in the card's corner, Escape, or the browser's Back
+// close it into its icon again, on its own device
+(() => {
+  const panel = document.getElementById('apps'); if (!panel) return;
+  const wrap = panel.querySelector('.wrap'), card = wrap.querySelector(':scope > .glass.card');
+  const track = document.getElementById('appTrack'), slides = [...track.children];
+  if (!card || !track || !CARS.apps) return;
+  const carShow = CARS.apps.show, index = () => CARS.apps.index, showApp = (k) => carShow(k, false);
+
+  const name = (s) => (s.querySelector('h3')?.firstChild?.textContent || '').trim();
+  const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; return e; };
+
+  // the two devices
+  const devices = el('div', 'devices');
+  const pc = el('div', 'device pc', '<div class="screen"><div class="glass-in"><div class="bar"><span class="clock"></span></div></div></div><div class="neck"></div><div class="foot"></div>');
+  const ph = el('div', 'device ph', '<div class="screen"><div class="glass-in"><div class="status"><span class="clock"></span><span class="power"><span class="pct"></span><span class="batt"><i></i></span></span></div></div></div>');
+  devices.append(pc, ph);
+  pc.setAttribute('aria-label', t('Computer')); ph.setAttribute('aria-label', t('Phone'));
+  const icons = slides.map((s, k) => {
+    const b = el('button', 'dicon'); b.type = 'button';
+    // the logo as it ends up: the animated ones as their finished drawing
+    const STILL = { Revitesse: 'revitesse.png', RealStage: 'plug.svg', Bancanca: 'bancanca.svg' };
+    let logo;
+    if (STILL[name(s)]) { logo = el('span', 'logo', `<img src="/assets/img/logos/${STILL[name(s)]}" alt="">`); }
+    else { logo = s.querySelector('.a-head .logo, .p-head .logo').cloneNode(true); logo.classList.remove('anim-logo'); logo.removeAttribute('data-player'); }
+    logo.setAttribute('aria-hidden', 'true');
+    const tag = (s.querySelector('.a-head .tag, .p-head .tag') || {}).textContent || '';
+    const txt = el('span', 'txt'); txt.append(el('span', 'name', name(s)), el('span', 'sub', tag.trim()));
+    b.append(logo, txt);
+    (s.dataset.device === 'pc' ? pc : ph).querySelector('.glass-in').append(b);
+    b.addEventListener('click', () => open(k));
+    return b;
+  });
+  card.before(devices);
+
+  // One unit for both screens: 1px of the computer's screen when the computer is the chosen one, and 1px of the
+  // phone's when the phone is, scaled so that a logo is the same size on both (and smaller on a small screen). The
+  // widths are those the CSS gives the chosen device
+  const units = () => {
+    const W = devices.clientWidth, H = devices.clientHeight; if (!W || !H) return;
+    const wide = matchMedia('(min-width: 901px)').matches;
+    const P = Math.min((wide ? .72 : .74) * W, 1.28 * H), F = Math.min((wide ? .44 : .66) * W, .44 * H);
+    // the inside of each screen: less the frame (the computer's border and margin, the phone's rim)
+    const Pi = P * .972 - 4, Fi = F - 5;
+    const k = Math.min(1, Fi / 270);   // on a small phone everything a little smaller, the same on both
+    devices.style.setProperty('--upc', (k / Pi).toFixed(6)); devices.style.setProperty('--uph', (k / Fi).toFixed(6));
+  };
+  new ResizeObserver(units).observe(devices); units();
+  panel.classList.add('devices-on');
+
+  // the time on both screens
+  const lang = document.documentElement.lang || undefined;
+  const tick = () => {
+    const d = new Date(), hm = d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
+    ph.querySelector('.clock').textContent = hm;
+    pc.querySelector('.clock').textContent = d.toLocaleDateString(lang, { weekday: 'short', day: 'numeric', month: 'short' }) + '  ' + hm;
+  };
+  tick(); setInterval(tick, 15000);
+
+  // a battery that runs down slowly while the visitor stays, and never quite runs out
+  let charge = 87;
+  const battery = () => {
+    ph.querySelector('.pct').textContent = charge + '%';
+    ph.querySelector('.batt i').style.setProperty('--b', charge / 100);
+    ph.querySelector('.batt').classList.toggle('low', charge <= 20);
+  };
+  battery(); setInterval(() => { if (charge > 9) { charge--; battery(); } }, 90000);
+
+  // turning to a device: the mouse on its way over it, a tap on it, or the keyboard on one of its icons
+  const turn = (d) => { if (d) devices.dataset.focus = d; else delete devices.dataset.focus; };
+  // a click beside both devices puts them side by side again
+  devices.addEventListener('click', (e) => { if (!e.target.closest('.device')) turn(null); });
+  pc.addEventListener('click', (e) => { if (!e.target.closest('.dicon')) turn('pc'); });
+  ph.addEventListener('click', (e) => { if (!e.target.closest('.dicon')) turn('ph'); });
+  devices.addEventListener('focusin', (e) => { const d = e.target.closest('.device'); if (d) turn(d === pc ? 'pc' : 'ph'); });
+
+  // one button at the top right of the open app, the same for every app: back to its device
+  const top = el('div', 'dev-top'), home = el('button', 'arrow dev-back', '<svg class="i" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>');
+  home.type = 'button'; home.setAttribute('aria-label', t('Back to the apps')); home.title = t('Back to the apps');
+  // on a computer it stands in the card's head where the arrow to the next app was; on a phone, whose card has its
+  // arrows at the bottom, it stays at the top right as the page scrolls
+  card.prepend(top);
+  const nav = card.querySelector('.card-head .nav');
+  const seat = () => { if (matchMedia('(min-width: 901px)').matches) nav.append(home); else top.append(home); };
+  seat(); matchMedia('(min-width: 901px)').addEventListener('change', seat);
+  const deviceOf = (k) => (pc.contains(icons[k]) ? 'pc' : 'ph');
+
+  let isOpen = false, busy = false;
+  const framed = () => matchMedia('(min-width: 901px)').matches;
+  // while it moves, the card lies over the screens, in their place
+  const place = () => {
+    card.style.top = devices.offsetTop + 'px'; card.style.left = devices.offsetLeft + 'px'; card.style.width = devices.offsetWidth + 'px';
+    card.style.height = framed() ? devices.offsetHeight + 'px' : 'auto';
+  };
+  const unplace = () => { for (const p of ['top', 'left', 'width', 'height']) card.style[p] = ''; };
+  const clipFor = (k) => {
+    const i = icons[k].querySelector('.logo').getBoundingClientRect(), c = card.getBoundingClientRect();
+    return `inset(${i.top - c.top}px ${c.right - i.right}px ${c.bottom - i.bottom}px ${i.left - c.left}px round ${i.width / 2}px)`;
+  };
+  const origin = (k) => {
+    const i = icons[k].querySelector('.logo').getBoundingClientRect(), d = devices.getBoundingClientRect();
+    devices.style.setProperty('--ox', (i.left + i.width / 2 - d.left) + 'px'); devices.style.setProperty('--oy', (i.top + i.height / 2 - d.top) + 'px');
+  };
+  const parts = () => [...card.children];
+
+  function open(k, push = true) {
+    if (isOpen || busy) return;
+    // the project, without the slide sideways
+    track.classList.add('drag'); showApp(k); void track.offsetWidth; track.classList.remove('drag');
+    isOpen = true;
+    if (push) history.pushState({ devApp: k }, '', location.href);
+    if (reduced) { panel.classList.add('app-open'); return; }
+    busy = true;
+    origin(k);
+    panel.classList.add('app-moving'); place();
+    const from = clipFor(k);
+    devices.classList.add('zoomed');
+    const a = card.animate([{ clipPath: from }, { clipPath: 'inset(0px 0px 0px 0px round 10px)' }], { duration: 520, easing: 'cubic-bezier(.3,.7,.2,1)' });
+    parts().forEach((p) => p.animate([{ opacity: 0 }, { opacity: 0, offset: .35 }, { opacity: 1 }], { duration: 520 }));
+    a.onfinish = () => {
+      panel.classList.remove('app-moving'); panel.classList.add('app-open'); unplace(); busy = false;
+      if (!framed()) scrollTo({ top: card.getBoundingClientRect().top + scrollY - document.querySelector('header').offsetHeight - 14, behavior: 'instant' });
+    };
+  }
+
+  function close() {
+    if (!isOpen || busy) return;
+    isOpen = false;
+    const k = index();
+    // back to its own device, brought forward
+    devices.classList.add('instant'); turn(deviceOf(k));
+    if (reduced) { panel.classList.remove('app-open'); devices.classList.remove('instant'); return; }
+    busy = true;
+    // the screens come back, zoomed in on the icon, and settle as the card shrinks into it
+    devices.style.transition = 'none'; devices.classList.add('zoomed');
+    panel.classList.remove('app-open'); panel.classList.add('app-moving'); place();
+    origin(k); void devices.offsetWidth; devices.style.transition = ''; devices.classList.remove('instant');
+    requestAnimationFrame(() => devices.classList.remove('zoomed'));
+    const to = clipFor(k);
+    const a = card.animate([{ clipPath: 'inset(0px 0px 0px 0px round 10px)' }, { clipPath: to }], { duration: 460, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' });
+    const fades = parts().map((p) => p.animate([{ opacity: 1 }, { opacity: 0, offset: .45 }, { opacity: 0 }], { duration: 460, fill: 'forwards' }));
+    a.onfinish = () => {
+      panel.classList.remove('app-moving'); unplace();
+      [a, ...fades].forEach((x) => x.cancel());
+      busy = false; icons[k].focus({ preventScroll: true });
+      if (!framed()) { const r = icons[k].getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) scrollTo({ top: r.top + scrollY - innerHeight / 2, behavior: 'instant' }); }
+    };
+  }
+
+  // an app asked for from elsewhere (the About strip, or a project's own address) opens at once, without the growing
+  const openNow = (k) => {
+    if (isOpen) { showApp(k); return; }
+    track.classList.add('drag'); showApp(k); void track.offsetWidth; track.classList.remove('drag');
+    isOpen = true; turn(deviceOf(k)); panel.classList.add('app-open');
+  };
+  CARS.apps.show = (k) => openNow(k);
+  const [st, sk] = (document.documentElement.dataset.start || '').split('/');
+  if (st === 'apps' && !location.hash && sk !== undefined && sk !== '') openNow(+sk);
+
+  home.addEventListener('click', () => { if (history.state && history.state.devApp != null) history.back(); else close(); });
+  addEventListener('popstate', () => { if (isOpen) close(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen && panel.getAttribute('aria-hidden') !== 'true') home.click(); });
+})();
+
 /* ================= archive: the map ================= */
 // Take me somewhere: one of the places on the map at random, and its newest video
 {

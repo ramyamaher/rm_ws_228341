@@ -429,7 +429,10 @@
   "Scotland | UK",
   "Wales | UK",
   "Northern Ireland | UK",
-  "Gibraltar | UK"
+  "Gibraltar | UK",
+  "Computer",
+  "Phone",
+  "Back to the apps"
  ],
  "plurals": [
   "place",
